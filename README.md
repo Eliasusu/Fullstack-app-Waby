@@ -4,8 +4,8 @@
 
 ## Link sitio y Diseño
 
-<a href = 'https://waby.netlify.app/'>Waby</a>
-<a href = 'https://www.figma.com/file/DGI2n58dFG3jgukQh3O7ny/Waby-%F0%9F%92%AA%F0%9F%8F%BB?type=design&t=MEUiyZyx4fiEPjWP-6'>Figma</a>
+- <a href = 'https://waby.netlify.app/'>Waby</a>
+- <a href = 'https://www.figma.com/file/DGI2n58dFG3jgukQh3O7ny/Waby-%F0%9F%92%AA%F0%9F%8F%BB?type=design&t=MEUiyZyx4fiEPjWP-6'>Figma</a>
 
 ### Comandos GIT Flow
 
