@@ -2,9 +2,10 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/a7614be9-0d4a-4a3b-a3b4-c704a0d3428f/deploy-status)](https://app.netlify.com/sites/waby/deploys)
 
-## Link sitio
+## Link sitio y Diseño
 
 <a href = 'https://waby.netlify.app/'>Waby</a>
+<a href = 'https://www.figma.com/file/DGI2n58dFG3jgukQh3O7ny/Waby-%F0%9F%92%AA%F0%9F%8F%BB?type=design&t=MEUiyZyx4fiEPjWP-6'>Figma</a>
 
 ### Comandos GIT Flow
 
