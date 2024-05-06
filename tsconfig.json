@@ -1,21 +1,25 @@
 {
   "compilerOptions": {
-    "incremental": true,
-    "target": "es2020",
-    "module": "ES2022",
-    "moduleResolution": "bundler",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "alwaysStrict": true,
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
     "skipLibCheck": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "plugins": [{"name": "@astrojs/ts-plugin"},],
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*", "**/*.ts"],
-  "exclude": ["node_modules"],
-  "extends": "astro/tsconfigs/strict",
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
