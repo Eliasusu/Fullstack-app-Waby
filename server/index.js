@@ -6,8 +6,8 @@ import wabys from './wabys.json' with { type: 'json' };
 // eslint-disable-next-line no-undef
 const port = process.env.PORT ?? 3000;
 const app = express();
-app.disable('x-powered-by');
 app.use(express.json());
+app.disable('x-powered-by');
 
 app.get('/', (req, res) => {
     res.status(200)
@@ -45,7 +45,7 @@ app.post('api/v1/wabys', (req, res) => {
 
     //Estoy guardando el estado de un waby en memoria y eso no es muy REST que digamos
     //Pero para el ejemplo, nos sirve
-    
+
     const wabyNew = {
         id: wabys.length + 1,
         nombre,
@@ -57,12 +57,11 @@ app.post('api/v1/wabys', (req, res) => {
         tipoEntrenamiento
     };
 
-    wabys.push(wabyNew);
+    console.log(wabyNew);
 
-    
+    wabys.push(wabyNew);
     res.status(201).send('Waby created');
     res.json(wabys);
-
 });
 
 

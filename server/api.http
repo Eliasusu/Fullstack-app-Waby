@@ -4,10 +4,8 @@ GET http://localhost:3000/api/v1/wabys
 ### Recuperar un Waby
 GET http://localhost:3000/api/v1/wabys/1
 
-
 ### Crear un Waby
 POST http://localhost:3000/api/v1/wabys
-
 Content-Type: application/json
 
 {  
@@ -28,5 +26,4 @@ PUT http://localhost:3000/api/v1/wabys/3
 }
 
 ### Eliminar un Waby
-
 DELETE http://localhost:3000/api/v1/wabys/2
