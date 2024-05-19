@@ -1,7 +1,7 @@
 
 [
   {
-    "id": 1,
+    "id": "1",
     "nombre": "Jonh Doe",
     "mail": "jonhdoe@gmail.com",
     "peso": 70,
@@ -11,7 +11,7 @@
     "tipoEntrenamiento": "Calistenia"
   },
   {
-    "id": 2,
+    "id": "2",
     "nombre": "Jane Smith",
     "mail": "janesmith@gmail.com",
     "peso": 65,
@@ -21,7 +21,7 @@
     "tipoEntrenamiento": "Gimnasio"
   },
   {
-    "id": 3,
+    "id": "3",
     "nombre": "Alice Johnson",
     "mail": "alicejohnson@gmail.com",
     "peso": 60,
@@ -31,7 +31,7 @@
     "tipoEntrenamiento": "Gimnasio"
   },
   {
-    "id": 4,
+    "id": "4",
     "nombre": "Bob Williams",
     "mail": "bobwilliams@gmail.com",
     "peso": 75,

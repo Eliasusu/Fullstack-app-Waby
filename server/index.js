@@ -19,7 +19,9 @@ app.get('/api/v1/wabys', (req, res) => {
     res.json(wabys);
 });
 
+//Get de un waby en particular
 app.get('/api/v1/wabys/:id', (req, res) => {
+    
     const { id } = req.params;
     const waby = wabys.find((w) => w.id === id);
     if (waby) {
@@ -29,7 +31,9 @@ app.get('/api/v1/wabys/:id', (req, res) => {
     }
 });
 
-app.post('/api/v1/wabys', (req, res) => {
+
+//Post de un waby
+app.post('api/v1/wabys', (req, res) => {
     const { 
         nombre, 
         mail, 
@@ -41,7 +45,8 @@ app.post('/api/v1/wabys', (req, res) => {
 
     //Estoy guardando el estado de un waby en memoria y eso no es muy REST que digamos
     //Pero para el ejemplo, nos sirve
-    wabys.push({
+    
+    const wabyNew = {
         id: wabys.length + 1,
         nombre,
         mail,
@@ -50,11 +55,14 @@ app.post('/api/v1/wabys', (req, res) => {
         fechaNacimiento,
         contraseña,
         tipoEntrenamiento
-    });
+    };
+
+    wabys.push(wabyNew);
 
     
     res.status(201).send('Waby created');
     res.json(wabys);
+
 });
 
 
