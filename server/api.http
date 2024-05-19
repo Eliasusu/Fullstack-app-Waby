@@ -1,0 +1,28 @@
+### Recuperar todos los Wabys
+GET http://localhost:3000/api/v1/wabys
+
+### Recuperar un Waby
+GET http://localhost:3000/api/v1/wabys/1
+
+### Crear un Waby
+POST http://localhost:3000/api/v1/wabys
+{  
+  "id": "a1b2c4",
+  "nombre": "Jean Doe",
+  "mail": "jeandoe@gmail.com",
+  "peso": 50,
+  "altura": 1.69,
+  "fechaNaciemiento": "1992-01-01",
+  "contraseña": "",
+  "tipoEntrenamiento": "Calistenia"
+}
+
+### Actualizar un Waby
+PUT http://localhost:3000/api/v1/wabys/:id
+{
+    "tipoEntrenamiento": "Gimnasio"
+}
+
+### Eliminar un Waby
+
+DELETE http://localhost:3000/api/v1/wabys/:id

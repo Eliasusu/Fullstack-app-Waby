@@ -1,0 +1,43 @@
+
+[
+  {
+    "id": 1,
+    "nombre": "Jonh Doe",
+    "mail": "jonhdoe@gmail.com",
+    "peso": 70,
+    "altura": 1.80,
+    "fechaNacimiento": "1990-01-01",
+    "contraseña": "12345678",
+    "tipoEntrenamiento": "Calistenia"
+  },
+  {
+    "id": 2,
+    "nombre": "Jane Smith",
+    "mail": "janesmith@gmail.com",
+    "peso": 65,
+    "altura": 1.75,
+    "fechaNacimiento": "1995-05-15",
+    "contraseña": "abcdefgh",
+    "tipoEntrenamiento": "Gimnasio"
+  },
+  {
+    "id": 3,
+    "nombre": "Alice Johnson",
+    "mail": "alicejohnson@gmail.com",
+    "peso": 60,
+    "altura": 1.70,
+    "fechaNacimiento": "1992-08-20",
+    "contraseña": "ijklmnop",
+    "tipoEntrenamiento": "Gimnasio"
+  },
+  {
+    "id": 4,
+    "nombre": "Bob Williams",
+    "mail": "bobwilliams@gmail.com",
+    "peso": 75,
+    "altura": 1.85,
+    "fechaNacimiento": "1988-03-10",
+    "contraseña": "qrstuvwxyz",
+    "tipoEntrenamiento": "Gimnasio"
+  }
+]
