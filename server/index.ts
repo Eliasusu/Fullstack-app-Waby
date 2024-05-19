@@ -1,16 +1,12 @@
-const express = require('express');
+import express from 'express';
 
 const app = express();
-const port = process.env.PORT ?? 3000;
-
-
+const port = 3000;
 
 app.get('/', (req, res) => {
-    res.send('Waby app');
+    res.send('¡Hola, mundo!');
 });
 
-
-
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Servidor escuchando en el puerto ${port}`);
 });
