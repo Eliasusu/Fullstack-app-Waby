@@ -32,40 +32,6 @@ app.get('/api/v1/wabys/:id', (req, res) => {
 });
 
 
-//Post de un waby
-app.post('api/v1/wabys', (req, res) => {
-    const { 
-        nombre, 
-        mail, 
-        peso, 
-        altura, 
-        fechaNacimiento, 
-        contraseña, 
-        tipoEntrenamiento } = req.body;
-
-    //Estoy guardando el estado de un waby en memoria y eso no es muy REST que digamos
-    //Pero para el ejemplo, nos sirve
-
-    const wabyNew = {
-        id: wabys.length + 1,
-        nombre,
-        mail,
-        peso,
-        altura,
-        fechaNacimiento,
-        contraseña,
-        tipoEntrenamiento
-    };
-
-    console.log(wabyNew);
-
-    wabys.push(wabyNew);
-    res.status(201).send('Waby created');
-    res.json(wabys);
-});
-
-
-
 app.listen(port, () => {
     console.log(`Servidor escuchando en el puerto http://localhost:${port}`);
 });

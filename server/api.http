@@ -8,22 +8,12 @@ GET http://localhost:3000/api/v1/wabys/1
 POST http://localhost:3000/api/v1/wabys
 Content-Type: application/json
 
-{  
-  "nombre": "Jean Doe",
-  "mail": "jeandoe@gmail.com",
+{
+  "nombre": "Juddith Doe",
+  "mail": "juddithdoe@gmail.com",
   "peso": 50,
-  "altura": 1.69,
-  "fechaNaciemiento": "1992-01-01",
-  "contraseña": "fhfgj6",
+  "altura": 1.50,
+  "fechaNacimiento": "2000-12-10",
+  "contraseña": "weihjh21",
   "tipoEntrenamiento": "Calistenia"
 }
-
-### Actualizar un Waby
-PUT http://localhost:3000/api/v1/wabys/3
-
-{
-    "tipoEntrenamiento": "Gimnasio"
-}
-
-### Eliminar un Waby
-DELETE http://localhost:3000/api/v1/wabys/2
