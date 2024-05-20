@@ -48,3 +48,7 @@ const wabySchema = z.object({
 export function validacionWaby(waby) {
     return wabySchema.safeParse(waby);
 }
+
+export function validacionParcialWaby(waby){
+    return wabySchema.partial().safeParse(waby);
+}
