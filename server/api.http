@@ -9,11 +9,24 @@ POST http://localhost:3000/api/v1/wabys
 Content-Type: application/json
 
 {
-  "nombre": "Juddith Doe",
-  "mail": "juddithdoe@gmail.com",
-  "peso": 50,
-  "altura": 1.50,
+  "nombre": "Toji Fushiguro",
+  "mail": "makidiving@gmail.com",
+  "peso": 90,
+  "altura": 1.90,
   "fechaNacimiento": "2000-12-10",
   "contraseña": "wearewabys123",
   "tipoEntrenamiento": "Calistenia"
 }
+
+### Actualizar un Waby
+PUT http://localhost:3000/api/v1/wabys/1
+Content-Type: application/json
+
+{
+  "peso": 85,
+  "tipoEntrenamiento": "Calistenia"
+}
+
+### Eliminar un Waby
+DELETE http://localhost:3000/api/v1/wabys/3
+
