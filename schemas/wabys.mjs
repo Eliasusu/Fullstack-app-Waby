@@ -10,6 +10,7 @@ const wabySchema = z.object({
         required_error: 'Mail es requerido',
         invalid_type_error: 'Mail debe ser un string',
         long_error: 'Mail debe tener menos de 30 caracteres',
+        format_error: 'Mail debe tener el formato de un mail',
     }),
     peso: z.number({
         required_error: 'Peso es requerido',
@@ -42,6 +43,8 @@ const wabySchema = z.object({
     tipoEntrenamiento: z.string(
         {
             required_error: 'Tipo de entrenamiento es requerido',
+            invalid_type_error: 'Tipo de entrenamiento debe ser un string',
+            format_error: 'Tipo de entrenamiento debe ser calistenia o gimnasio',
         }),
 });
 
@@ -52,3 +55,4 @@ export function validacionWaby(waby) {
 export function validacionParcialWaby(waby){
     return wabySchema.partial().safeParse(waby);
 }
+
