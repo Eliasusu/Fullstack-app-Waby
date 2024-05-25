@@ -1,58 +1,58 @@
 import { z } from 'zod';
 
 const wabySchema = z.object({
-    nombre: z.string({
-        required_error: 'Nombre es requerido',
-        invalid_type_error: 'Nombre debe ser un string',
-        long_error: 'Nombre debe tener menos de 20 caracteres',
+    name: z.string({
+        required_error: 'Name is required',
+        invalid_type_error: 'Name must be a string',
+        long_error: 'Name must have less than 20 characters',
     }),
     mail: z.string({
-        required_error: 'Mail es requerido',
-        invalid_type_error: 'Mail debe ser un string',
-        long_error: 'Mail debe tener menos de 30 caracteres',
-        format_error: 'Mail debe tener el formato de un mail',
+        required_error: 'Mail is required',
+        invalid_type_error: 'Mail must be a string',
+        long_error: 'Mail must have less than 30 characters',
+        format_error: 'Mail must have the format to be an email',
     }),
-    peso: z.number({
-        required_error: 'Peso es requerido',
-        invalid_type_error: 'Peso debe ser un número',
+    weight: z.number({
+        required_error: 'Weight is required',
+        invalid_type_error: 'Weight must be a number',
     }).int({
-        invalid_type_error: 'Peso debe ser un número entero',
+        invalid_type_error: 'Weight must be an integer',
     }).positive({
-        invalid_type_error: 'Peso debe ser un número positivo',
+        invalid_type_error: 'Weight must be a positive number',
     }).min(20).max(200),
-    altura: z.number({
-        required_error: 'Estatura es requerida',
-        invalid_type_error: 'Estatura debe ser un número',
+    height: z.number({
+        required_error: 'Height is required',
+        invalid_type_error: 'Height must be a number',
     }).positive({
-        invalid_type_error: 'Estatura debe ser un número positivo',
+        invalid_type_error: 'Height must be a positive number',
     }).min(1).max(2.5),
-    fechaNacimiento: z.string({
-        required_error: 'Fecha de nacimiento es requerida',
-        invalid_type_error: 'Fecha de nacimiento debe ser un string',
+    dateBorn: z.string({
+        required_error: 'Date of birth is required',
+        invalid_type_error: 'Date of birth must be a string',
     }).date('date', {
-        invalid_type_error: 'Fecha de nacimiento debe ser una fecha',
-        format_error: 'Fecha de nacimiento debe tener el formato YYYY-MM-DD',
+        invalid_type_error: 'Date of birth must be a date',
+        format_error: 'Date of birth must have the format YYYY-MM-DD',
     }),
-    contraseña: z.string(
+    password: z.string(
         {
-            required_error: 'Contraseña es requerida',
-            invalid_type_error: 'Contraseña debe ser un string',
-            long_error: 'Contraseña debe tener menos de 20 caracteres',
+            required_error: 'Password is required',
+            invalid_type_error: 'Password must be a string',
+            long_error: 'Password must have less than 20 characters',
         }
     ).min(8).max(20),
-    tipoEntrenamiento: z.string(
+    trainingType: z.string(
         {
-            required_error: 'Tipo de entrenamiento es requerido',
-            invalid_type_error: 'Tipo de entrenamiento debe ser un string',
-            format_error: 'Tipo de entrenamiento debe ser calistenia o gimnasio',
+            required_error: 'Training type is required',
+            invalid_type_error: 'Training type must be a string',
+            format_error: 'Training type must be one of the following: "Calisthenics", "Gym"',
         }),
 });
 
-export function validacionWaby(waby) {
+export function validateWaby(waby) {
     return wabySchema.safeParse(waby);
 }
 
-export function validacionParcialWaby(waby){
+export function validateParcialWaby(waby){
     return wabySchema.partial().safeParse(waby);
 }
 
