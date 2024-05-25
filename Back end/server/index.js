@@ -1,7 +1,7 @@
 import express from 'express';
 import process from 'process';
 import wabys from './wabys.json' with { type: 'json' };
-import { validacionWaby, validacionParcialWaby } from '../schemas/wabys.mjs';
+import { validateWaby, validateParcialWaby } from '../schemas/wabys.mjs';
 
 
 // eslint-disable-next-line no-undef
@@ -35,16 +35,16 @@ app.get('/api/v1/wabys/:id', (req, res) => {
 
 //Post de un waby
 app.post('/api/v1/wabys', (req, res) => {
-    const resultado = validacionWaby(req.body);
+    const result = validateWaby(req.body);
 
-    if(resultado.success){
+    if(result.success){
         //Esto se hace en base de datos
-        const waby = resultado.data;
+        const waby = result.data;
         waby.id = (wabys.length + 1).toString();
         wabys.push(waby);
         res.status(201).json(waby);
     } else{
-        res.status(400).json({ error: resultado.error });
+        res.status(400).json({ error: result.error });
     }
 });
 
@@ -54,16 +54,16 @@ app.put('/api/v1/wabys/:id', (req, res) => {
     const waby = wabys.find((w) => w.id === id);
     console.log(waby)
     if (waby) {
-        const resultado = validacionParcialWaby(req.body);
+        const result = validateParcialWaby(req.body);
 
-        if(resultado.success){
+        if(result.success){
             //Esto se hace en base de datos
-            const dato = resultado.data;
-            Object.assign(waby, dato);
+            const data = result.data;
+            Object.assign(waby, data);
             res.status(200).json(waby);
             
         } else{
-            res.status(400).json({ error: resultado.error });
+            res.status(400).json({ error: result.error });
         }
     } else {
         res.status(404).json({ error: 'Waby not found' });
@@ -89,5 +89,5 @@ app.delete('/api/v1/wabys/:id', (req, res) => {
 
 
 app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto http://localhost:${port}`);
+    console.log(`Server listening in the port http://localhost:${port}`);
 });

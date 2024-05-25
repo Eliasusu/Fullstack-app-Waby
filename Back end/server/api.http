@@ -9,13 +9,13 @@ POST http://localhost:3000/api/v1/wabys
 Content-Type: application/json
 
 {
-  "nombre": "Toji Fushiguro",
+  "name": "Toji Fushiguro",
   "mail": "makidiving@gmail.com",
-  "peso": 90,
-  "altura": 1.90,
-  "fechaNacimiento": "2000-12-10",
-  "contraseña": "wearewabys123",
-  "tipoEntrenamiento": "Calistenia"
+  "weight": 90,
+  "height": 1.90,
+  "dateBorn": "2000-12-10",
+  "password": "wearewabys123",
+  "trainingType": "Calistenia"
 }
 
 ### Actualizar un Waby
@@ -23,8 +23,8 @@ PUT http://localhost:3000/api/v1/wabys/1
 Content-Type: application/json
 
 {
-  "peso": 85,
-  "tipoEntrenamiento": "Calistenia"
+  "weight": 85,
+  "trainingType": "Calistenia"
 }
 
 ### Eliminar un Waby
