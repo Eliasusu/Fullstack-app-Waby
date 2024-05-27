@@ -1,0 +1,53 @@
+
+[
+  {
+    "id": "1",
+    "name": "Itadori Yuji",
+    "mail": "itadoriyuji@gmail",
+    "weight": 80,
+    "height": 1.73,
+    "dateBorn": "2003-05-20",
+    "password": "12345678",
+    "trainingType": "Calistenia"
+  },
+  {
+    "id": "2",
+    "name": "Megumi Fushiguro",
+    "mail": "megumitoji@gmail.com",
+    "weight": 68,
+    "height": 1.75,
+    "dateBorn": "2003-12-22",
+    "password": "abcdefgh",
+    "trainingType": "Gimnasio"
+  },
+  {
+    "id": "3",
+    "name": "Kubisaki Nobara",
+    "mail": "kubisakinoba@gmail.com",
+    "weight": 55,
+    "height": 1.60,
+    "dateBorn": "2002-08-07",
+    "password": "ijklmnop",
+    "trainingType": "Gimnasio"
+  },
+  {
+    "id": "4",
+    "name": "Satoru Gojo",
+    "mail": "saturothemoststrongest@gmail.com",
+    "weight": 78,
+    "height": 1.90,
+    "dateBorn": "1989-12-07",
+    "password": "qrstuvwxyz",
+    "trainingType": "Calistenia"
+  },
+  {
+    "id": "5",
+    "name": "Kento Nanami",
+    "mail": "kentitonana@gmail.com",
+    "weight": 80,
+    "height": 1.84,
+    "dateBorn": "1990-04-03",
+    "password": "mahitoforro",
+    "trainingType": "Gimnasio"
+  }
+]
