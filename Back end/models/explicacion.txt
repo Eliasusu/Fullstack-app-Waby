@@ -1,0 +1,2 @@
+Dentro de la carpeta models lo que se hace es el modelo de negocio.
+Esto quiere decir, la lógica utilizada para nuestro modelo de negocio
