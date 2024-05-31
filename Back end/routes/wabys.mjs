@@ -1,27 +1,17 @@
-import express from 'express';
-import process from 'process';
-import wabys from './wabys.json' with { type: 'json' };
-import { validacionWaby, validacionParcialWaby } from '../schemas/wabys.mjs';
+import { Router } from "express";
+import wabys from '../server/wabys.json' with { type: 'json' };
+import { validateWaby, validateParcialWaby } from '../schemas/wabys.mjs';
 
+export const wabysRouter = Router();
 
-// eslint-disable-next-line no-undef
-const port = process.env.PORT ?? 3000;
-const app = express();
-app.use(express.json());
-app.disable('x-powered-by');
-
-app.get('/', (req, res) => {
-    res.status(200)
-    res.send('Waby app');
-});
 
 //Get de todos los wabys
-app.get('/api/v1/wabys', (req, res) => {
+wabysRouter.get('/', (req, res) => {
     res.json(wabys);
 });
 
 //Get de un waby en particular
-app.get('/api/v1/wabys/:id', (req, res) => {
+wabysRouter.get('/:id', (req, res) => {
     
     const { id } = req.params;
     const waby = wabys.find((w) => w.id === id);
@@ -32,38 +22,37 @@ app.get('/api/v1/wabys/:id', (req, res) => {
     }
 });
 
-
 //Post de un waby
-app.post('/api/v1/wabys', (req, res) => {
-    const resultado = validacionWaby(req.body);
+wabysRouter.post('/', (req, res) => {
+    const result = validateWaby(req.body);
 
-    if(resultado.success){
+    if(result.success){
         //Esto se hace en base de datos
-        const waby = resultado.data;
+        const waby = result.data;
         waby.id = (wabys.length + 1).toString();
         wabys.push(waby);
         res.status(201).json(waby);
     } else{
-        res.status(400).json({ error: resultado.error });
+        res.status(400).json({ error: result.error });
     }
 });
 
 //Put de un waby
-app.put('/api/v1/wabys/:id', (req, res) => {
+wabysRouter.put('/:id',  (req, res) => {
     const { id } = req.params;
     const waby = wabys.find((w) => w.id === id);
     console.log(waby)
     if (waby) {
-        const resultado = validacionParcialWaby(req.body);
+        const result = validateParcialWaby(req.body);
 
-        if(resultado.success){
+        if(result.success){
             //Esto se hace en base de datos
-            const dato = resultado.data;
-            Object.assign(waby, dato);
+            const data = result.data;
+            Object.assign(waby, data);
             res.status(200).json(waby);
             
         } else{
-            res.status(400).json({ error: resultado.error });
+            res.status(400).json({ error: result.error });
         }
     } else {
         res.status(404).json({ error: 'Waby not found' });
@@ -72,7 +61,7 @@ app.put('/api/v1/wabys/:id', (req, res) => {
 });
 
 //Delete de un waby
-app.delete('/api/v1/wabys/:id', (req, res) => {
+wabysRouter.delete('/:id', (req, res) => {
     const { id } = req.params;
     const index = wabys.findIndex((w) => w.id === id);
     console.log(index)
@@ -84,10 +73,4 @@ app.delete('/api/v1/wabys/:id', (req, res) => {
     } else {
         res.status(404).json({ error: 'Waby not found' });
     }
-});
-
-
-
-app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto http://localhost:${port}`);
 });
