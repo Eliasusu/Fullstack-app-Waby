@@ -14,6 +14,6 @@ html, body, #root, .app {
   line-height: 1.5;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #0A0A0C;
+  background: linear-gradient(#0A0A0C, #191A1E);
   margin: 0 auto;
 }
