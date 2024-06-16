@@ -35,7 +35,7 @@ function Slogan({textColor, text}: {textColor: string, text: string}){
 function Login(){
     return (
     <div className="flex justify-center my-16">
-        <BoxContainer width="285" height="340">
+        <BoxContainer width="w-[285px]" height="w-[340]">
             <div className="flex flex-col items-center justify-center w-auto">
                 <div className="w-full pb-10">
                     <button className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-loginGoogle hover:bg-grey-loginGoogleHover p-2 font-normal text-sm ">Sign in with Google</button>
