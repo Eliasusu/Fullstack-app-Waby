@@ -13,10 +13,12 @@ export default {
         'grey-boxRoutine': '#2C2E33',
         'grey-boxActivity': '#51545E',
         'grey-loginGoogle': '#53565E',
+        'grey-loginGoogleHover': '#4A4D54',
+        'grey-login': '#131417',
         'white-borderbox': 'D9D9D9',
         'white-text': '#FFFFFF',
         'red':'#B4171A',
-        'red:hover':'#6B1011'
+        'redHover':'#6B1011'
       },
 
       fontFamily: {

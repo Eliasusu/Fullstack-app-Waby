@@ -1,8 +1,7 @@
+import Welcome  from './pages/Welcome/index.tsx';
 
 export function App() {
   return(
-    <div>
-      <h1>App</h1>
-    </div>
+    <Welcome  />
   )
 }
