@@ -1,7 +1,13 @@
+import NavBar from './components/NavBar.tsx';
 import Welcome  from './pages/Welcome/index.tsx';
 
 export function App() {
   return(
-    <Welcome />
+
+    <div className="flex flex-col h-screen">
+      <NavBar />
+      <Welcome />
+    </div>
+ 
   )
 }
