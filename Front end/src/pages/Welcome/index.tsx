@@ -5,8 +5,8 @@ export default function Welcome(){
         <>
 
         <Logo />
-        <Slogan textColor='Create' text='your ejercicies' />
-        <Slogan textColor='Planned' text='your routines' />
+        <Slogan textColor='Create' text='your ejercicies.' />
+        <Slogan textColor='Planned' text='your routines.' />
 
         <Login /> 
 
