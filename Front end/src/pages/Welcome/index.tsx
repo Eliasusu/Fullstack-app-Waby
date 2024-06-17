@@ -5,8 +5,10 @@ export default function Welcome(){
         <>
 
         <Logo />
-        <Slogan textColor='Create' text='your exercises.' />
-        <Slogan textColor='Planned' text='your routines.' />
+        <div className="lg:mt-5 xs:mt-4">
+            <Slogan textColor='Create' text='your exercises.' />
+            <Slogan textColor='Planned' text='your routines.' />
+        </div>
 
         <Login /> 
 
@@ -16,7 +18,7 @@ export default function Welcome(){
 
 function Logo(){
     return (
-        <div className="flex items-center justify-center pb-16 pt-3 m-auto">
+        <div className="flex items-center justify-center pb-3 pt-3 lg:mt-2 mx-auto">
             <img className="w-[50px] h-[50px] m-3" src="./public/LogoWaby.svg" />
             <p className="font-bold text-white-text text-[40px] ">Waby</p>
         </div>

@@ -5,8 +5,8 @@ export function App() {
   return(
 
     <div className="flex flex-col h-screen">
-      <NavBar />
       <Welcome />
+      <NavBar />
     </div>
  
   )

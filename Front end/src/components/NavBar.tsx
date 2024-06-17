@@ -5,7 +5,7 @@ export default function NavBar() {
     const [active, setActive] = useState(0);
 
   return (
-    <div className="xs:w-[290px] xs:h-[60px] bg-grey-nav/80 rounded-full m-auto inset-x-0 bottom-4 fixed content-center">
+    <div className="xs:w-[290px] xs:h-[60px] bg-grey-nav/80 shadow-lg backdrop-blur-[4px] rounded-full m-auto inset-x-0 bottom-4 fixed content-center">
         <nav className="flex justify-around mx-4">
             <div 
             className={`cursor-pointer ${active === 0 ? 'bg-red' : ''} w-[35px] h-[35px] rounded-xl p-2 transition duration-150`}
