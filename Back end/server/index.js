@@ -1,6 +1,6 @@
 import express from 'express';
 import process from 'process';
-import { wabysRouter } from "../routes/wabys.mjs";
+import { usersRouter } from "../routes/users.mjs";
 import { corsMiddleware } from '../middleware/cors.mjs';
 
 
@@ -11,7 +11,7 @@ app.use(express.json());
 app.disable('x-powered-by');
 
 app.use(corsMiddleware());
-app.use('/api/v1/wabys',wabysRouter);
+app.use('/api/v1/users',usersRouter);
 
 
 app.listen(port, () => {

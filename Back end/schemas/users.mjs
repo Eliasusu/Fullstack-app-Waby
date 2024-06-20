@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const wabySchema = z.object({
+const userSchema = z.object({
     name: z.string({
         required_error: 'Name is required',
         invalid_type_error: 'Name must be a string',
@@ -48,11 +48,11 @@ const wabySchema = z.object({
         }),
 });
 
-export function validateWaby(waby) {
-    return wabySchema.safeParse(waby);
+export function validateUser(user) {
+    return wabySchema.safeParse(user);
 }
 
-export function validateParcialWaby(waby){
-    return wabySchema.partial().safeParse(waby);
+export function validateParcialUser(user){
+    return wabySchema.partial().safeParse(user);
 }
 
