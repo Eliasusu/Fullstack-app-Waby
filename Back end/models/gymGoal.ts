@@ -3,7 +3,7 @@ import { GymExercise } from './GymExercise';
 import { generateId } from './common/generateId';
 
 
-export class CalisthenicsGoal {
+export class GymGoal {
     public idGoal: string | null;
     constructor(
         public user: User,

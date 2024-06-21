@@ -1,5 +1,5 @@
 import { User } from './user';
-import { ExerciseCalisthenics } from './CalisthenicsExercise';
+import { CalisthenicsExercise } from './CalisthenicsExercise';
 import { generateId } from './common/generateId';
 
 

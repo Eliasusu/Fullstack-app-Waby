@@ -1,5 +1,5 @@
 import { CalisthenicsProgressionPerSec } from "./CalisthenicsProgressionPerSec";
-import { CalisthenicsProgressionPerRep } from "./CalisthenicsProgressionPerRep";
+import { CalisthenicsProgressionPerReps } from "./CalisthenicsProgressionPerReps";
 import { CalisthenicsGoal } from "./calisthenicsGoal";
 import { User } from "./user";
 
@@ -9,12 +9,12 @@ export class CalisthenicsProgress {
         public user: User,
         public uploadDate: Date,
         public progressionPerSeg: CalisthenicsProgressionPerSec | null,
-        public progressionPerRep: CalisthenicsProgressionPerRep | null,
+        public progressionPerRep: CalisthenicsProgressionPerReps | null,
         public numberSeconds: number | null,
         public numberReps: number | null,
         public numberSets: number,
     ){
-        this.uploadDate = Date.now();
+        this.uploadDate = new Date(Date.now());
     }
     
 }

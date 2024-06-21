@@ -6,6 +6,8 @@ export class GymProgress {
         public uploadDate: Date,
         public recordedPr: number,
     ) {
-        this.uploadDate = Date.now();
+        this.uploadDate = new Date(Date.now());
     }
 }
+
+export { GymGoal } from "./gymGoal";

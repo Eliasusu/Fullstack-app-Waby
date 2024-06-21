@@ -1,11 +1,11 @@
-import { BodyWeightGoal } from './bodyWeightGoal';
+import { BodyWeightGoals } from './bodyWeightGoal';
 
 export class BodyWeightProgress {
     constructor(
-      public bodyWeightGoal: BodyWeightGoal,
+      public bodyWeightGoal: BodyWeightGoals,
       public uploadDate: Date,
       public recordedGoalWeight: number
     ){
-      this.uploadDate = Date.now();
+      this.uploadDate = new Date(Date.now());
     }
 }

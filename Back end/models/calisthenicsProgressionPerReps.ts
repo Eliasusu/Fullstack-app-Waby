@@ -1,10 +1,10 @@
-import { Exercise } from "./exercise";
+import { Exercise} from "./exercise";
 import { Training } from "./training";
 
 
 export class CalisthenicsProgressionPerReps {
     constructor(
-        exercise: Exercise,
+        exercise: Exercises,
         idProgression: number,
         training: Training | null,
         nameProgression: string,
