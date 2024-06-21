@@ -1,13 +1,20 @@
+import { User } from './user';
+import { ExerciseCalisthenics } from './CalisthenicsExercise';
+import { generateId } from './common/generateId';
+
+
 export class CalisthenicsGoal {
+    public idGoal: string | null;
     constructor(
-    idGoal: number,
-    idUser: string,
-    goalOption: string,
-    startDate: Date,
-    deadline: Date,
-    goalExercise: string,
-    numberInitialReps: number,
-    numberInitialSeg: number,
-    numberInitialSets: number,
-    )
+        public user: User,
+        public goalOption: string,
+        public startDate: Date,
+        public deadline: Date,
+        public goalExercise: CalisthenicsExercise,
+        public numberInitialReps: number | null,
+        public numberInitialSec: number | null,
+        public numberInitialSets: number,
+    ){
+        this.idGoal = generateId();
+    }
 }

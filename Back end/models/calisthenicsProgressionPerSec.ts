@@ -2,14 +2,14 @@ import { Exercise } from "./exercise";
 import { Training } from "./training";
 
 
-export class CalisthenicsProgressionPerReps {
+export class CalisthenicsProgressionPerSec {
     constructor(
         exercise: Exercise,
         idProgression: number,
         training: Training | null,
         nameProgression: string,
         orderProgression: number,
-        numberSeriesNeeded: number,
+        numberSecNeeded: number,
         numberRepsNeeded: number
     ){}
 }
