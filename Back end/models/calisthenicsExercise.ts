@@ -1,5 +1,6 @@
 import { Training } from './training';
 import { MuscleGroup } from './muscleGroup';
+import { TrainingMethod } from './trainingMethod';
 import { generateId } from './common/generateId';
 
 export class CalisthenicsExercise {
@@ -7,7 +8,7 @@ export class CalisthenicsExercise {
     constructor(
         public training: Training | null,
         public name: string,
-        public trainingMethod: string,
+        public trainingMethod: TrainingMethod,,
         public description: string,
         public videoUrl: string | null,
         public image: string | null,
