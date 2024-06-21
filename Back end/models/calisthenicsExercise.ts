@@ -8,15 +8,15 @@ export class CalisthenicsExercise {
     constructor(
         public training: Training | null,
         public name: string,
-        public trainingMethod: TrainingMethod,,
+        public trainingMethod: TrainingMethod,
         public description: string,
         public videoUrl: string | null,
         public image: string | null,
         public muscleGroups: MuscleGroup[],
         public difficulty: string,
         public typeExercise: string,
-        public date: Date        
-    ){
+        public date: Date
+    ) {
         this.idExercise = generateId();
     }
 }
