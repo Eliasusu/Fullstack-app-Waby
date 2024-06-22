@@ -3,7 +3,7 @@ import { MuscleGroup } from './muscleGroup';
 import { TrainingMethod } from './trainingMethod';
 import { generateId } from './common/generateId';
 
-export class CalisthenicsExercise {
+export class Exercise {
     public idExercise: string;
     constructor(
         public training: Training | null,

@@ -6,7 +6,6 @@ export class Training{
     constructor(
         public user: User,
         public mesocycle: Mesocycle,
-        public date: Date,
         public trainingType: string,
         public day: Date,
     ){}

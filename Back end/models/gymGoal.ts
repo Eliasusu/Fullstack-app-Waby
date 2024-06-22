@@ -1,5 +1,5 @@
 import { User } from './user';
-import { GymExercise } from './GymExercise';
+import { Exercise } from './exercise';
 import { generateId } from './common/generateId';
 
 
@@ -10,7 +10,7 @@ export class GymGoal {
         public goalOption: string,
         public startDate: Date,
         public deadline: Date,
-        public goalExercise: GymExercise,
+        public goalExercise: Exercise,
         public initialPr: number,
     ){
         this.idGoal = generateId();
