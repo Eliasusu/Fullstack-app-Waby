@@ -14,14 +14,20 @@ export class CalisthenicsExercise {
         public image: string | null,
         public muscleGroups: MuscleGroup[],
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of b2e1f5f (Cambio en el schema user)
         public difficulty: string,
         public typeExercise: string,
         public date: Date
     ) {
+<<<<<<< HEAD
 =======
         public typeExercise: string,        
     ){
 >>>>>>> parent of 44fcfeb (Auto stash before merge of "feature/usuario" and "origin/feature/usuario")
+=======
+>>>>>>> parent of b2e1f5f (Cambio en el schema user)
         this.idExercise = generateId();
     }
 }
