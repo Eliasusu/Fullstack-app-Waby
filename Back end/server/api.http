@@ -1,11 +1,11 @@
-### Recuperar todos los users
-GET http://localhost:3000/api/v1/users
+### Recuperar todos los Wabys
+GET http://localhost:3000/api/v1/wabys
 
 ### Recuperar un Waby
-GET http://localhost:3000/api/v1/users/1
+GET http://localhost:3000/api/v1/wabys/1
 
 ### Crear un Waby
-POST http://localhost:3000/api/v1/users
+POST http://localhost:3000/api/v1/wabys
 Content-Type: application/json
 
 {
@@ -14,12 +14,12 @@ Content-Type: application/json
   "weight": 90,
   "height": 1.90,
   "dateBorn": "2000-12-10",
-  "password": "weareusers123",
+  "password": "wearewabys123",
   "trainingType": "Calistenia"
 }
 
 ### Actualizar un Waby
-PUT http://localhost:3000/api/v1/users/1
+PUT http://localhost:3000/api/v1/wabys/1
 Content-Type: application/json
 
 {
@@ -28,7 +28,5 @@ Content-Type: application/json
 }
 
 ### Eliminar un Waby
-DELETE http://localhost:3000/api/v1/users/3
-
-
+DELETE http://localhost:3000/api/v1/wabys/3
 
