@@ -49,10 +49,10 @@ const userSchema = z.object({
 });
 
 export function validateUser(user) {
-    return wabySchema.safeParse(user);
+    return userSchema.safeParse(user);
 }
 
 export function validateParcialUser(user){
-    return wabySchema.partial().safeParse(user);
+    return userSchema.partial().safeParse(user);
 }
 

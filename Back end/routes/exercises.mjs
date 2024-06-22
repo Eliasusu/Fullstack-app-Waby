@@ -1,18 +1,18 @@
 import { Router } from "express";
-import users from '../server/wabys.json' with { type: 'json' };
-import { validateGymExercises, validateParcialGymExercises } from "../schemas/gymExercises.mjs";
+import exercises from '../server/db/exercises.json' with { type: 'json' };
+import { validateExercises, validateParcialExercises } from "../schemas/exercises.mjs";
 
-export const gymExercisesRouter = Router();
+export const exercisesRouter = Router();
 
 //Get de todos los ejercicios
-gymExercisesRouter.get('/', (req, res) => {
+exercisesRouter.get('/', (req, res) => {
     res.json(exercises);
 });
 
 //Get de un ejercicio en particular
-gymExercisesRouter.get('/:id', (req, res) => {
-    const { id } = req.params;
-    const exercise = exercises.find((w) => w.id === id);
+exercisesRouter.get('/:idExercise', (req, res) => {
+    const { idExercise } = req.params;
+    const exercise = exercises.find((w) => w.id === idExercise);
     if (exercise){
         res.json(exercise);
     } else {
@@ -21,8 +21,8 @@ gymExercisesRouter.get('/:id', (req, res) => {
 });
 
 //Post de un ejercicio
-gymExercisesRouter.post('/', (req, res) => {
-    const result = validateGymExercises(req.body);
+exercisesRouter.post('/', (req, res) => {
+    const result = validateExercises(req.body);
 
     if(result.success){
         //Esto se hace en base de datos
@@ -36,12 +36,12 @@ gymExercisesRouter.post('/', (req, res) => {
 });
 
 //Put de un ejercicio
-gymExercisesRouter.put('/:id',  (req, res) => {
+exercisesRouter.put('/:id',  (req, res) => {
     const { id } = req.params;
     const exercise = exercises.find((w) => w.id === id);
     console.log(exercise)
     if (exercise) {
-        const result = validateParcialGymExercises(req.body);
+        const result = validateParcialExercises(req.body);
 
         if(result.success){
             //Esto se hace en base de datos
@@ -58,7 +58,7 @@ gymExercisesRouter.put('/:id',  (req, res) => {
 });
 
 //Delete de un ejercicio
-gymExercisesRouter.delete('/:id', (req, res) => {
+exercisesRouter.delete('/:id', (req, res) => {
     const { id } = req.params;
     const exerciseIndex = exercises.findIndex((w) => w.id === id);
     if (exerciseIndex !== -1) {

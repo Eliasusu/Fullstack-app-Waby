@@ -1,10 +1,9 @@
 import { Training } from './training';
 import { MuscleGroup } from './muscleGroup';
 import { TrainingMethod } from './trainingMethod';
-import { generateId } from './common/generateId';
 
 export class Exercise {
-    public idExercise: string;
+    public idExercise: number;
     constructor(
         public training: Training | null,
         public name: string,
@@ -16,7 +15,5 @@ export class Exercise {
         public difficulty: string,
         public typeExercise: string,
         public date: Date
-    ) {
-        this.idExercise = generateId();
-    }
+    ) {}
 }

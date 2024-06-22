@@ -1,5 +1,5 @@
 import { Router } from "express";
-import users from '../server/wabys.json' with { type: 'json' };
+import users from '../server/db/wabys.json' with { type: 'json' };
 import { validateUser, validateParcialUser } from '../schemas/users.mjs';
 
 export const usersRouter = Router();

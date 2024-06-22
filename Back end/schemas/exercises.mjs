@@ -3,7 +3,7 @@ import { TrainingMethod } from '../models/trainingMethod.ts';
 import { MuscleGroup } from '../models/muscleGroup.ts';
 import { Training } from '../models/training.ts';
 
-const gymExercisesSchema = z.object({
+const excerciseSchema = z.object({
   training: z.object({
     required_error: 'Training is required',
     invalid_type_error: 'Training must be an object',
@@ -56,10 +56,9 @@ const gymExercisesSchema = z.object({
   }),
 });
 
-export function validateGymExercises(gymExercises) {
-  return gymExercisesSchema.safeParse(gymExercises);
+export function validateExercises(exercises) {
+  return exercisesSchema.safeParse(exercises)
 }
-
-export function validateParcialGymExercises(gymExercises){
-  return gymExercisesSchema.partial().safeParse(gymExercises);
+export function validateParcialExercises(exercises){
+  return exercisesSchema.partial().safeParse(exercises);
 }
