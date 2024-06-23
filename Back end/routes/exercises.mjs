@@ -4,8 +4,11 @@ import { validateExercises, validateParcialExercises } from "../schemas/exercise
 
 export const exercisesRouter = Router();
 
+console.log('Entre wacho')
+
 //Get de todos los ejercicios
 exercisesRouter.get('/', (req, res) => {
+    console.log("ENTRO TODAAAAA");
     res.json(exercises);
 });
 

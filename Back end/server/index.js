@@ -13,9 +13,9 @@ app.disable('x-powered-by');
 
 app.use(corsMiddleware());
 
-app.use('/api/v1/users',usersRouter);
+app.use('/exercises', exercisesRouter);
+app.use('/users', usersRouter);
 
-app.use('/api/v1/exercises',exercisesRouter);
 
 
 app.listen(port, () => {
