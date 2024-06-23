@@ -1,11 +1,10 @@
-import { Training } from './training';
+
 import { MuscleGroup } from './muscleGroup';
 import { TrainingMethod } from './trainingMethod';
 
 export class Exercise {
     public idExercise: number;
     constructor(
-        public training: Training | null,
         public name: string,
         public trainingMethod: TrainingMethod,
         public description: string,
@@ -14,6 +13,5 @@ export class Exercise {
         public muscleGroups: MuscleGroup[],
         public difficulty: string,
         public typeExercise: string,
-        public date: Date
     ) {}
 }

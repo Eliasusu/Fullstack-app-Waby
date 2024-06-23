@@ -1,27 +1,19 @@
 import { z } from 'zod';
-import { User } from '../models/user.ts';
-import { Mesocycle } from '../models/mesocycle.ts';
+import { mesocycleSchema } from './mesocycles.schema.mjs';
+import { userSchema } from './users.schema.mjs';
 
 const trainingSchema = z.object({
-  user: z.object({
+  user: z.userSchema({
     required_error: 'User is required',
-    invalid_type_error: 'User must be an object',
   }),
-  mesocycle: z.object({
+  mesocycle: z.mesocycleSchema({
     required_error: 'Mesocycle is required',
-    invalid_type_error: 'Mesocycle must be an object',
-  }),
-  date: z.string({
-    required_error: 'Date is required',
-    invalid_type_error: 'Date must be a string',
-  }).date('date', {
-    invalid_type_error: 'Date must be a date',
-    format_error: 'Date must have the format YYYY-MM-DD',
   }),
   trainingType: z.string({
-    required_error: 'Training type is required',
     invalid_type_error: 'Training type must be a string',
-    format_error: 'Training type must be one of the following: "Calisthenics", "Gym"',
+  }),
+  trainingName: z.string({
+    invalid_type_error: 'Training name must be a string',
   }),
   day: z.string({
     required_error: 'Day is required',
@@ -29,6 +21,13 @@ const trainingSchema = z.object({
   }).date('date', {
     invalid_type_error: 'Day must be a date',
     format_error: 'Day must have the format YYYY-MM-DD',
+  }),
+  time: z.string({
+    required_error: 'Time is required',
+    invalid_type_error: 'Time must be a string',
+  }).date('time', {
+    invalid_type_error: 'Time must be a time',
+    format_error: 'Time must have the format HH:mm',
   }),
 });
 

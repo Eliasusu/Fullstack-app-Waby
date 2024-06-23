@@ -1,1 +1,0 @@
-In this folder we will put all the components shared between the different pages.

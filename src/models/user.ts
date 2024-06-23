@@ -8,7 +8,6 @@ export class User {
         public password: string,
         public email: string,
         public name: string,
-        public surname: string,
         public birthdate: Date,
         public phone: string,
         public bodyWeight: number,
