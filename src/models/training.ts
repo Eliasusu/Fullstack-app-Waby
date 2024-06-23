@@ -6,7 +6,9 @@ export class Training{
     constructor(
         public user: User,
         public mesocycle: Mesocycle,
+        public trainingName: string,
         public trainingType: string,
         public day: Date,
+        public time: string,
     ){}
 }

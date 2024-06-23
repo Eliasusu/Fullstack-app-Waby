@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev:server": "node --watch ./server/index.js"
+    "dev:server": "node --watch ./index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

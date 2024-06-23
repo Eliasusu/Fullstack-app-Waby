@@ -1,7 +1,7 @@
 <<<<<<< HEAD:Back end/routes/trainings.mjs
 =======
 import { Router } from "express";
-import trainings from '../server/db/trainings.json' with { type: 'json' };
+import trainings from '../server/datos-temporales/trainings.json' with { type: 'json' };
 import { validateTraining, validateParcialTraining } from "../schemas/trainings.mjs";
 
 export const trainingsRouter = Router();
