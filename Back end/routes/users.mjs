@@ -3,7 +3,7 @@ import users from '../server/db/wabys.json' with { type: 'json' };
 import { validateUser, validateParcialUser } from '../schemas/users.mjs';
 
 export const usersRouter = Router();
-
+console.log('Entre PAPU')
 
 //Get de todos los user
 usersRouter.get('/', (req, res) => {

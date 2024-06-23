@@ -1,9 +1,9 @@
 import { date, z } from 'zod';
-import { TrainingMethod } from '../models/trainingMethod.ts'; 
+/*import { TrainingMethod } from '../models/trainingMethod.ts'; 
 import { MuscleGroup } from '../models/muscleGroup.ts';
-import { Training } from '../models/training.ts';
+import { Training } from '../models/training.ts';*/
 
-const excerciseSchema = z.object({
+const exerciseSchema = z.object({
   training: z.object({
     required_error: 'Training is required',
     invalid_type_error: 'Training must be an object',
@@ -37,15 +37,15 @@ const excerciseSchema = z.object({
     required_error: 'MuscleGroup is required',
     invalid_type_error: 'MuscleGroup must be an objectt',
   })),
-  difficulty: z.difficulty({
+  difficulty: z.string({
     required_error: 'Difficulty is required',
     invalid_type_error: 'Difficulty must be a string',
     format_error: 'Difficulty must be one of the following: "Beginner", "Intermediate", "Advanced"',
   }),
-  typeExcercise:z.string({
-    required_error: 'Type of excercise is required',
-    invalid_type_error: 'Type of excercise must be a string',
-    format_error: 'Type of excercise must be one of the following: "Cardio", "Strength"',
+  typeExercise:z.string({
+    required_error: 'Type of exercise is required',
+    invalid_type_error: 'Type of exercise must be a string',
+    format_error: 'Type of exercise must be one of the following: "Cardio", "Strength"',
   }),
   date: z.string({
     required_error: 'Date is required',
@@ -57,8 +57,8 @@ const excerciseSchema = z.object({
 });
 
 export function validateExercises(exercises) {
-  return exercisesSchema.safeParse(exercises)
+  return exerciseSchema.safeParse(exercises)
 }
 export function validateParcialExercises(exercises){
-  return exercisesSchema.partial().safeParse(exercises);
+  return exerciseSchema.partial().safeParse(exercises);
 }
