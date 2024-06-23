@@ -1,5 +1,5 @@
 import { User } from './user';
-import { CalisthenicsExercise } from './CalisthenicsExercise';
+import { Exercise } from './exercise';
 import { generateId } from './common/generateId';
 
 
@@ -10,7 +10,7 @@ export class CalisthenicsGoal {
         public goalOption: string,
         public startDate: Date,
         public deadline: Date,
-        public goalExercise: CalisthenicsExercise,
+        public goalExercise: Exercise,
         public numberInitialReps: number | null,
         public numberInitialSec: number | null,
         public numberInitialSets: number,

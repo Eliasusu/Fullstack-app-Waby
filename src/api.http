@@ -28,5 +28,15 @@ Content-Type: application/json
 }
 
 ### Eliminar un Waby
+<<<<<<< HEAD:Back end/server/api.http
 DELETE http://localhost:3000/api/v1/wabys/3
+=======
+DELETE http://localhost:3000/api/v1/users/6
+
+### Recuperar todos los Exercises
+GET http://localhost:3000/api/v1/exercises
+
+### Recuperar un Exercise
+GET http://localhost:3000/api/v1/exercises/1
+>>>>>>> origin/feature/usuario:src/api.http
 

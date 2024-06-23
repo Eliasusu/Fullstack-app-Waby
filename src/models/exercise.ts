@@ -1,10 +1,9 @@
 import { Training } from './training';
 import { MuscleGroup } from './muscleGroup';
 import { TrainingMethod } from './trainingMethod';
-import { generateId } from './common/generateId';
 
-export class CalisthenicsExercise {
-    public idExercise: string;
+export class Exercise {
+    public idExercise: number;
     constructor(
         public training: Training | null,
         public name: string,
@@ -29,6 +28,7 @@ export class CalisthenicsExercise {
         public difficulty: string,
         public typeExercise: string,
         public date: Date
+<<<<<<< HEAD:Back end/models/calisthenicsExercise.ts
     ) {
 <<<<<<< HEAD
 <<<<<<< 94e1d967c3ba87318dbcf68c5f849a2f42e5e051
@@ -48,4 +48,7 @@ export class CalisthenicsExercise {
 >>>>>>> origin/feature/usuario
         this.idExercise = generateId();
     }
+=======
+    ) {}
+>>>>>>> origin/feature/usuario:src/models/exercise.ts
 }

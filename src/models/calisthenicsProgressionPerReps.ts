@@ -4,7 +4,7 @@ import { Training } from "./training";
 
 export class CalisthenicsProgressionPerReps {
     constructor(
-        exercise: Exercises,
+        exercise: Exercise,
         idProgression: number,
         training: Training | null,
         nameProgression: string,

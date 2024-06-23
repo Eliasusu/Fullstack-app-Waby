@@ -1,9 +1,9 @@
 import { Router } from "express";
-import users from '../server/wabys.json' with { type: 'json' };
+import users from '../server/datos-temporales/wabys.json' with { type: 'json' };
 import { validateUser, validateParcialUser } from '../schemas/users.mjs';
 
 export const usersRouter = Router();
-
+console.log('Entre PAPU')
 
 //Get de todos los user
 usersRouter.get('/', (req, res) => {
@@ -41,7 +41,6 @@ usersRouter.post('/', (req, res) => {
 usersRouter.put('/:id',  (req, res) => {
     const { id } = req.params;
     const user = users.find((w) => w.id === id);
-    console.log(user)
     if (user) {
         const result = validateParcialUser(req.body);
 
@@ -64,10 +63,8 @@ usersRouter.put('/:id',  (req, res) => {
 usersRouter.delete('/:id', (req, res) => {
     const { id } = req.params;
     const index = users.findIndex((w) => w.id === id);
-    console.log(index)
     if (index !== -1) {
         //Esto se hace en base de datos 
-        console.log(index)
         users.splice(index, 1);
         res.status(204).json(users[index]);
     } else {
