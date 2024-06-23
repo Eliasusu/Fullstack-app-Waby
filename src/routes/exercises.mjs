@@ -1,5 +1,5 @@
 import { Router } from "express";
-import exercises from '../server/db/exercises.json' with { type: 'json' };
+import exercises from '../server/datos-temporales/exercises.json' with { type: 'json' };
 import { validateExercises, validateParcialExercises } from "../schemas/exercises.mjs";
 
 export const exercisesRouter = Router();
