@@ -4,6 +4,8 @@
     "idExercise": "1",
     "name": "Bench Press",
     "description": "The bench press is a compound exercise that builds strength and muscle in the chest and triceps. It's one of the most popular exercises in the gym.",
+    "image": "https://www.bodybuilding.com/exercises/exerciseImages/sequences/360",
+    "video": "https://www.youtube.com/watch?v=U5wZr0B22c4",
     "Training": {},
     "trainingMethod": {
         "idMethod": "1243fdvg46gs",
@@ -25,60 +27,64 @@
     "difficulty": "Medium",
     "typeExercise": "Compound"
   },
-  {
-      "idExercise": "2",
-      "name": "Squat",
-      "description": "The squat is a compound exercise that targets the muscles of the lower body, including the quadriceps, hamstrings, and glutes. It is a fundamental movement for building strength and power.",
-      "Training": {},
-      "trainingMethod": {
-              "idMethod": "1243fdvg46gs",
-              "nameMethod": "Gym",
-              "description": ""
-      },
-      "muscleGroups": [
-              {
-                      "idMuscle": "3",
-                      "name": "Quadriceps",
-                      "description": ""
-              },
-              {
-                      "idMuscle": "4",
-                      "name": "Hamstrings",
-                      "description": ""
-              },
-              {
-                      "idMuscle": "5",
-                      "name": "Glutes",
-                      "description": ""
-              }
-      ],
-      "difficulty": "Hard",
-      "typeExercise": "Compound"
-  },
-  {
-      "idExercise": "3",
-      "name": "Pull-up",
-      "description": "The pull-up is a compound exercise that primarily targets the muscles of the back, including the latissimus dorsi, rhomboids, and biceps. It is an excellent exercise for building upper body strength and improving posture.",
-      "Training": {},
-      "trainingMethod": {
-              "idMethod": "1243fdvg46gs",
-              "nameMethod": "Gym",
-              "description": ""
-      },
-      "muscleGroups": [
-              {
-                      "idMuscle": "6",
-                      "name": "Back",
-                      "description": ""
-              },
-              {
-                      "idMuscle": "7",
-                      "name": "Biceps",
-                      "description": ""
-              }
-      ],
-      "difficulty": "Medium",
-      "typeExercise": "Compound"
-  }
+{
+    "idExercise": "2",
+    "name": "Squat",
+    "description": "The squat is a compound exercise that targets the muscles of the lower body, including the quadriceps, hamstrings, and glutes. It is a fundamental movement for building strength and power.",
+    "image": "https://www.bodybuilding.com/exercises/exerciseImages/sequences/42",
+    "video": "https://www.youtube.com/watch?v=U3HlEF_E9fo",
+    "Training": {},
+    "trainingMethod": {
+            "idMethod": "1243fdvg46gs",
+            "nameMethod": "Gym",
+            "description": ""
+    },
+    "muscleGroups": [
+            {
+                    "idMuscle": "3",
+                    "name": "Quadriceps",
+                    "description": ""
+            },
+            {
+                    "idMuscle": "4",
+                    "name": "Hamstrings",
+                    "description": ""
+            },
+            {
+                    "idMuscle": "5",
+                    "name": "Glutes",
+                    "description": ""
+            }
+    ],
+    "difficulty": "Hard",
+    "typeExercise": "Compound"
+},
+{
+    "idExercise": "3",
+    "name": "Pull-up",
+    "description": "The pull-up is a compound exercise that primarily targets the muscles of the back, including the latissimus dorsi, rhomboids, and biceps. It is an excellent exercise for building upper body strength and improving posture.",
+    "image": "https://www.bodybuilding.com/exercises/exerciseImages/sequences/52",
+    "video": "https://www.youtube.com/watch?v=eGo4IYlbE5g",
+    "Training": {},
+    "trainingMethod": {
+            "idMethod": "1243fdvg46gs",
+            "nameMethod": "Gym",
+            "description": ""
+    },
+    "muscleGroups": [
+            {
+                    "idMuscle": "6",
+                    "name": "Back",
+                    "description": ""
+            },
+            {
+                    "idMuscle": "7",
+                    "name": "Biceps",
+                    "description": ""
+            }
+    ],
+    "difficulty": "Medium",
+    "typeExercise": "Compound"
+}
 ]
 
