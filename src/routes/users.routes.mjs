@@ -13,8 +13,8 @@ usersRouter.get('/', (req, res) => {
 //Get de un user en particular
 usersRouter.get('/:id', (req, res) => {
     
-    const { id } = req.params;
-    const user = users.find((w) => w.id === id);
+    const { idUser } = req.params;
+    const user = users.find((w) => w.id === idUser);
     if (user){
         res.json(user);
     } else {
@@ -29,7 +29,7 @@ usersRouter.post('/', (req, res) => {
     if(result.success){
         //Esto se hace en base de datos
         const user = result.data;
-        user.id = (users.length + 1).toString();
+        user.idUser = (users.length + 1).toString();
         users.push(user);
         res.status(201).json(user);
     } else{
@@ -39,8 +39,8 @@ usersRouter.post('/', (req, res) => {
 
 //Put de un user
 usersRouter.put('/:id',  (req, res) => {
-    const { id } = req.params;
-    const user = users.find((w) => w.id === id);
+    const { idUser } = req.params;
+    const user = users.find((w) => w.id === idUser);
     if (user) {
         const result = validateParcialUser(req.body);
 
@@ -61,8 +61,8 @@ usersRouter.put('/:id',  (req, res) => {
 
 //Delete de un user
 usersRouter.delete('/:id', (req, res) => {
-    const { id } = req.params;
-    const index = users.findIndex((w) => w.id === id);
+    const { idUser } = req.params;
+    const index = users.findIndex((w) => w.id === idUser);
     if (index !== -1) {
         //Esto se hace en base de datos 
         users.splice(index, 1);

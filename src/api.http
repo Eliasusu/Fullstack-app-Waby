@@ -9,13 +9,15 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
+  "username": "tojiGOAT",
+  "password": "elsp2456f62",
+  "email": "tojifushiguro@gmail.com",
   "name": "Toji Fushiguro",
-  "mail": "makidiving@gmail.com",
-  "weight": 90,
-  "height": 1.90,
-  "dateBorn": "2000-12-10",
-  "password": "wearewabys123",
-  "trainingType": "Calistenia"
+  "birthday": "1999-12-22",
+  "phone": "1234567890",
+  "bodyWeight": 80,
+  "height": 1.80,
+  "trainingMethod": "Calisthenics"
 }
 
 ### Actualizar un Waby
@@ -23,8 +25,8 @@ PUT http://localhost:3000/users/1
 Content-Type: application/json
 
 {
-  "weight": 85,
-  "trainingType": "Calistenia"
+  "bodyWeight": 85,
+  "trainingMethod": "Calisthenics"
 }
 
 ### Eliminar un Waby
@@ -34,8 +36,31 @@ DELETE http://localhost:3000/users/6
 GET http://localhost:3000/exercises
 
 ### Recuperar un Exercise
-GET http://localhost:3000/exercises/1
+GET http://localhost:3000/exercises/3
 
 ### Crear un Exercise
 POST http://localhost:3000/exercises
 Content-Type: application/json
+
+
+  {
+    "idExercise": "3",
+    "name": "Pull-up",
+    "description": "The pull-up is a compound exercise that primarily targets the muscles of the back",
+    "Training": {},
+    "trainingMethod": "Calisthenics",
+    "muscleGroups": [
+            {
+                    "idMuscleGroup": "6",
+                    "nameMuscleGroup": "Back",
+                    "description": ""
+            },
+            {
+                    "idMuscleGroup": "7",
+                    "nameMuscleGroup": "Biceps",
+                    "description": ""
+            }
+    ],
+    "difficulty": "intermediate",
+    "typeExercise": ""
+}

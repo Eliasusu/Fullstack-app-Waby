@@ -1,0 +1,37 @@
+[
+    {
+        "idMuscleGroup": "1",
+        "nameMuscleGroup": "Chest",
+        "description": ""
+    },
+    {
+        "idMuscleGroup": "2",
+        "nameMuscleGroup": "Triceps",
+        "description": ""
+    },
+    {
+        "idMuscleGroup": "3",
+        "nameMuscleGroup": "Quadriceps",
+        "description": ""
+    },
+    {
+        "idMuscleGroup": "4",
+        "nameMuscleGroup": "Hamstrings",
+        "description": ""
+    },
+    {
+        "idMuscleGroup": "5",
+        "nameMuscleGroup": "Glutes",
+        "description": ""
+    },
+    {
+        "idMuscleGroup": "6",
+        "nameMuscleGroup": "Back",
+        "description": ""
+    },
+    {
+        "idMuscleGroup": "7",
+        "nameMuscleGroup": "Biceps",
+        "description": ""
+    }
+]

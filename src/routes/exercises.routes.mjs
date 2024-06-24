@@ -13,9 +13,9 @@ exercisesRouter.get('/', (req, res) => {
 });
 
 //Get de un ejercicio en particular
-exercisesRouter.get('/:id', (req, res) => {
+exercisesRouter.get('/:idExercise', (req, res) => {
     const { idExercise } = req.params;
-    const exercise = exercises.find((w) => w.id === idExercise);
+    const exercise = exercises.find((w) => w.idExercise === idExercise);
     if (exercise){
         res.json(exercise);
     } else {
@@ -30,7 +30,7 @@ exercisesRouter.post('/', (req, res) => {
     if(result.success){
         //Esto se hace en base de datos
         const exercise = result.data;
-        exercise.id = (exercises.length + 1).toString();
+        exercise.idExercise = (exercises.length + 1).toString();
         exercises.push(exercise);
         res.status(201).json(exercise);
     } else{
@@ -40,8 +40,8 @@ exercisesRouter.post('/', (req, res) => {
 
 //Put de un ejercicio
 exercisesRouter.put('/:id',  (req, res) => {
-    const { id } = req.params;
-    const exercise = exercises.find((w) => w.id === id);
+    const { idExercise } = req.params;
+    const exercise = exercises.find((w) => w.id === idExercise);
     console.log(exercise)
     if (exercise) {
         const result = validateParcialExercises(req.body);
@@ -62,8 +62,8 @@ exercisesRouter.put('/:id',  (req, res) => {
 
 //Delete de un ejercicio
 exercisesRouter.delete('/:id', (req, res) => {
-    const { id } = req.params;
-    const exerciseIndex = exercises.findIndex((w) => w.id === id);
+    const { idExercise } = req.params;
+    const exerciseIndex = exercises.findIndex((w) => w.id === idExercise);
     if (exerciseIndex !== -1) {
         exercises.splice(exerciseIndex, 1);
         res.status(204).end();

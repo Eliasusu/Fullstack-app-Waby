@@ -1,53 +1,59 @@
 
 [
   {
-    "id": "1",
+    "idUser": "1",
+    "username": "itadoriyuji",
     "name": "Itadori Yuji",
-    "mail": "itadoriyuji@gmail",
-    "weight": 80,
+    "email": "itadoriyuji@gmail",
+    "bodyWeight": 80,
     "height": 1.73,
-    "dateBorn": "2003-05-20",
+    "birthDate": "2003-05-20",
     "password": "12345678",
-    "trainingType": "Calistenia"
+    "phone": "11999999999",
+    "trainingMethod": "Calisthenics"
   },
   {
-    "id": "2",
+    "idUser": "2",
     "name": "Megumi Fushiguro",
-    "mail": "megumitoji@gmail.com",
-    "weight": 68,
+    "email": "megumitoji@gmail.com",
+    "bodyWeight": 68,
     "height": 1.75,
-    "dateBorn": "2003-12-22",
+    "birthDate": "2003-12-22",
     "password": "abcdefgh",
-    "trainingType": "Gimnasio"
+    "phone": "11993299999",
+    "trainingMethod": "Gym"
   },
   {
-    "id": "3",
-    "name": "Kubisaki Nobara",
-    "mail": "kubisakinoba@gmail.com",
-    "weight": 55,
+    "idUser": "3",
+    "name": "Kugisaki Nobara",
+    "email": "kugisakinoba@gmail.com",
+    "bodyWeight": 55,
     "height": 1.60,
-    "dateBorn": "2002-08-07",
+    "birthDate": "2002-08-07",
     "password": "ijklmnop",
-    "trainingType": "Gimnasio"
+    "phone": "11999349999",
+    "trainingMethod": "Gym"
   },
   {
-    "id": "4",
+    "idUser": "4",
     "name": "Satoru Gojo",
-    "mail": "saturothemoststrongest@gmail.com",
-    "weight": 78,
+    "email": "saturothemoststrongest@gmail.com",
+    "bodyWeight": 78,
     "height": 1.90,
-    "dateBorn": "1989-12-07",
+    "birthDate": "1989-12-07",
     "password": "qrstuvwxyz",
-    "trainingType": "Calistenia"
+    "phone": "11999235999",
+    "trainingMethod": "Calisthenics"
   },
   {
-    "id": "5",
+    "idUser": "5",
     "name": "Kento Nanami",
-    "mail": "kentitonana@gmail.com",
-    "weight": 80,
+    "email": "kentitonana@gmail.com",
+    "bodyWeight": 80,
     "height": 1.84,
-    "dateBorn": "1990-04-03",
+    "birthDate": "1990-04-03",
     "password": "mahitoforro",
-    "trainingType": "Gimnasio"
+    "phone": "11112999999",
+    "trainingMethod": "Gym"
   }
 ]

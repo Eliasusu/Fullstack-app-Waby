@@ -1,20 +1,23 @@
 import { z } from 'zod';
 
-const userSchema = z.object({
+export const userSchema = z.object({
     username: z.string({
         required_error: 'Username is required',
         invalid_type_error: 'Username must be a string',
         long_error: 'Username must have less than 20 characters',
     }),
+
     password: z.string({
         password: 'Password is required',
     }),
+
     email: z.string({
         required_error: 'Mail is required',
         invalid_type_error: 'Mail must be a string',
         long_error: 'Mail must have less than 30 characters',
         format_error: 'Mail must have the format to be an email',
     }),
+
     password: z.string({
         required_error: 'Password is required',
         invalid_type_error: 'Password must be a string',
@@ -25,6 +28,7 @@ const userSchema = z.object({
         invalid_type_error: 'Name must be a string',
         long_error: 'Name must have less than 20 characters',
     }),
+
     birthday: z.string({
         required_error: 'Date of birth is required',
         invalid_type_error: 'Date of birth must be a string',
@@ -43,12 +47,14 @@ const userSchema = z.object({
     }).positive({
         invalid_type_error: 'Weight must be a positive number',
     }).min(20).max(150),
+
     height: z.number({
         required_error: 'Height is required',
         invalid_type_error: 'Height must be a number',
     }).positive({
         invalid_type_error: 'Height must be a positive number',
     }).min(1).max(2.5),
+
     trainingMethod: z.string({
         required_error: 'Training type is required',
         invalid_type_error: 'Training type must be a string',

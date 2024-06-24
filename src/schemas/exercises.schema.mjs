@@ -6,7 +6,7 @@ const exerciseSchema = z.object({
     required_error: 'Name is required',
     invalid_type_error: 'Name must be a string',
   }),
-  TrainingMethod: z.string({
+  trainingMethod: z.string({
     required_error: 'TrainingMethod is required',
     invalid_type_error: 'TrainingMethod must be a string',
     format_error: 'TrainingMethod must be one of the following: "Calisthenics", "Gym"',
@@ -25,7 +25,6 @@ const exerciseSchema = z.object({
     format_error: 'Difficulty must be one of the following: "Beginner", "Intermediate", "Advanced"',
   }),
   typeExercise: z.string({
-    required_error: 'Type of exercise is required',
     invalid_type_error: 'Type of exercise must be a string',
     format_error: 'Type of exercise must be one of the following: "Hipertrofy", "Strength"',
   }),
