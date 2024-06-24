@@ -13,7 +13,7 @@ exercisesRouter.get('/', (req, res) => {
 });
 
 //Get de un ejercicio en particular
-exercisesRouter.get('/:idExercise', (req, res) => {
+exercisesRouter.get('/:id', (req, res) => {
     const { idExercise } = req.params;
     const exercise = exercises.find((w) => w.id === idExercise);
     if (exercise){

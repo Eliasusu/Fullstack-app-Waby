@@ -1,11 +1,11 @@
 ### Recuperar todos los Wabys
-GET http://localhost:3000/api/v1/wabys
+GET http://localhost:3000/users
 
 ### Recuperar un Waby
-GET http://localhost:3000/api/v1/wabys/1
+GET http://localhost:3000/users/1
 
 ### Crear un Waby
-POST http://localhost:3000/api/v1/wabys
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Actualizar un Waby
-PUT http://localhost:3000/api/v1/wabys/1
+PUT http://localhost:3000/users/1
 Content-Type: application/json
 
 {
@@ -28,15 +28,10 @@ Content-Type: application/json
 }
 
 ### Eliminar un Waby
-<<<<<<< HEAD:Back end/server/api.http
-DELETE http://localhost:3000/api/v1/wabys/3
-=======
-DELETE http://localhost:3000/api/v1/users/6
+DELETE http://localhost:3000/users/6
 
 ### Recuperar todos los Exercises
-GET http://localhost:3000/api/v1/exercises
+GET http://localhost:3000/exercises
 
 ### Recuperar un Exercise
-GET http://localhost:3000/api/v1/exercises/1
->>>>>>> origin/feature/usuario:src/api.http
-
+GET http://localhost:3000/exercises/1
