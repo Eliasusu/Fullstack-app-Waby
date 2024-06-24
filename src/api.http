@@ -35,3 +35,7 @@ GET http://localhost:3000/exercises
 
 ### Recuperar un Exercise
 GET http://localhost:3000/exercises/1
+
+### Crear un Exercise
+POST http://localhost:3000/exercises
+Content-Type: application/json

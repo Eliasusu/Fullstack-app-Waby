@@ -1,6 +1,6 @@
 import { Router } from "express";
 import exercises from '../datos temporales/exercises.json' assert { type: "json" };
-// import { validateExercises, validateParcialExercises } from "../schemas/exercises.schema.mjs";
+import { validateExercises, validateParcialExercises } from "../schemas/exercises.schema.mjs";
 
 export const exercisesRouter = Router();
 
