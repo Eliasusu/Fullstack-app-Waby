@@ -1,8 +1,14 @@
 import express from 'express';
 import process from 'process';
+<<<<<<< HEAD
 import { usersRouter } from "./routes/users.mjs";
 import { exercisesRouter } from "./routes/exercises.mjs";
 import { corsMiddleware } from './middlewares/cors.mjs';
+=======
+import { usersRouter } from "./src/routes/users.mjs";
+import { exercisesRouter } from "./src/routes/exercises.mjs";
+import { corsMiddleware } from './src/middleware/cors.mjs';
+>>>>>>> 4f59da680f58dae1f90de75a8e8baa245eaeaa9a
 
 
 // eslint-disable-next-line no-undef
