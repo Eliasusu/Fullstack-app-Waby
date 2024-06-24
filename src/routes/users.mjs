@@ -1,6 +1,6 @@
 import { Router } from "express";
-import users from '../server/datos-temporales/wabys.json' with { type: 'json' };
-import { validateUser, validateParcialUser } from '../schemas/users.mjs';
+import users from '../datos temporales/wabys.json' assert { type: "json" };
+import { validateUser, validateParcialUser } from '../schemas/users.schema.mjs';
 
 export const usersRouter = Router();
 console.log('Entre PAPU')

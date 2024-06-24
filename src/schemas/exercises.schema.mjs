@@ -1,14 +1,5 @@
-<<<<<<< HEAD:src/schemas/exercises.mjs
-<<<<<<< HEAD:Back end/schemas/gymExercises.mjs
-=======
-import { date, z } from 'zod';
-/*import { TrainingMethod } from '../models/trainingMethod.ts'; 
-import { MuscleGroup } from '../models/muscleGroup.ts';
-import { Training } from '../models/training.ts';*/
-=======
-import { z } from 'zod';
-import { muscleGroupSchema } from './muscleGroup.schema';
->>>>>>> origin/feature/usuario:src/schemas/exercises.schema.mjs
+import { z } from 'zod'; 
+import { MuscleGroup } from '..muscleGroup.mts';
 
 const exerciseSchema = z.object({
   name: z.string({
@@ -47,4 +38,3 @@ export function validateExercises(exercises) {
 export function validateParcialExercises(exercises){
   return exerciseSchema.partial().safeParse(exercises);
 }
->>>>>>> origin/feature/usuario:src/schemas/exercises.mjs

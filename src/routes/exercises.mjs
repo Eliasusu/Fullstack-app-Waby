@@ -1,8 +1,6 @@
-<<<<<<< HEAD:Back end/routes/exercises.mjs
-=======
 import { Router } from "express";
-import exercises from '../server/datos-temporales/exercises.json' with { type: 'json' };
-import { validateExercises, validateParcialExercises } from "../schemas/exercises.mjs";
+import exercises from '../datos temporales/exercises.json' assert { type: "json" };
+// import { validateExercises, validateParcialExercises } from "../schemas/exercises.schema.mjs";
 
 export const exercisesRouter = Router();
 
@@ -72,4 +70,3 @@ exercisesRouter.delete('/:id', (req, res) => {
     } else {
         res.status(404).json({ error: 'Exercise not found' });}
 });
->>>>>>> origin/feature/usuario:src/routes/exercises.mjs
