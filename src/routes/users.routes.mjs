@@ -1,6 +1,8 @@
 import { Router } from "express";
 import users from '../datos temporales/wabys.json' assert { type: "json" };
 import { validateUser, validateParcialUser } from '../schemas/users.schema.mjs';
+import { generateId } from '../lib/generateId.js';
+
 
 export const usersRouter = Router();
 console.log('Entre PAPU')
@@ -11,12 +13,14 @@ usersRouter.get('/', (req, res) => {
 });
 
 //Get de un user en particular
-usersRouter.get('/:id', (req, res) => {
+usersRouter.get('/:idUser', (req, res) => {
     
     const { idUser } = req.params;
-    const user = users.find((w) => w.id === idUser);
+    console.log(idUser);
+    const user = users.find((w) => w.idUser === idUser);
+    console.log(user);
     if (user){
-        res.json(user);
+        res.status(201).json(user);
     } else {
         res.status(404).json({ error: 'User not found' });
     }
@@ -29,7 +33,7 @@ usersRouter.post('/', (req, res) => {
     if(result.success){
         //Esto se hace en base de datos
         const user = result.data;
-        user.idUser = (users.length + 1).toString();
+        user.idUser = generateId();
         users.push(user);
         res.status(201).json(user);
     } else{
@@ -38,9 +42,9 @@ usersRouter.post('/', (req, res) => {
 });
 
 //Put de un user
-usersRouter.put('/:id',  (req, res) => {
+usersRouter.put('/:idUser',  (req, res) => {
     const { idUser } = req.params;
-    const user = users.find((w) => w.id === idUser);
+    const user = users.find((w) => w.idUser === idUser);
     if (user) {
         const result = validateParcialUser(req.body);
 
@@ -60,13 +64,14 @@ usersRouter.put('/:id',  (req, res) => {
 });
 
 //Delete de un user
-usersRouter.delete('/:id', (req, res) => {
-    const { idUser } = req.params;
-    const index = users.findIndex((w) => w.id === idUser);
+usersRouter.delete('/:name', (req, res) => {
+    const { name } = req.params;
+    const index = users.findIndex((w) => w.name === name);
+    console.log(index);
     if (index !== -1) {
-        //Esto se hace en base de datos 
+        //Esto se hace en base de datos
         users.splice(index, 1);
-        res.status(204).json(users[index]);
+        res.status(204).end().json({ message: 'User deleted' });
     } else {
         res.status(404).json({ error: 'User not found' });
     }

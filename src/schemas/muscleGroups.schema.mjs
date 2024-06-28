@@ -8,7 +8,9 @@ export const muscleGroupSchema = z.object({
     description: z.string({
         invalid_type_error: 'Description must be a string',
     }),
-    imageMuscleGroup: z.string({}),
+    imageMuscleGroup: z.string({
+        invalid_type_error: 'Image must be a string',
+    }),
 });
 
 

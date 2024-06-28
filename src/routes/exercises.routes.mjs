@@ -23,6 +23,19 @@ exercisesRouter.get('/:idExercise', (req, res) => {
     }
 });
 
+//Get de todos los ejercicios filtrado por grupo muscular
+exercisesRouter.get(':nameMuscleGroup', (req, res) => {
+    const { nameMuscleGroup } = req.params;
+    console.log(nameMuscleGroup);
+    const exercise = exercises.filter((w) => w.nameMuscleGroup === nameMuscleGroup);
+    console.log(exercise);
+    if (exercise){
+        res.json(exercise);
+    } else {
+        res.status(404).json({ error: 'Muscle group not found' });
+    }
+});
+
 //Post de un ejercicio
 exercisesRouter.post('/', (req, res) => {
     const result = validateExercises(req.body);
@@ -39,9 +52,9 @@ exercisesRouter.post('/', (req, res) => {
 });
 
 //Put de un ejercicio
-exercisesRouter.put('/:id',  (req, res) => {
+exercisesRouter.put('/:idExercise',  (req, res) => {
     const { idExercise } = req.params;
-    const exercise = exercises.find((w) => w.id === idExercise);
+    const exercise = exercises.find((w) => w.idExercise === idExercise);
     console.log(exercise)
     if (exercise) {
         const result = validateParcialExercises(req.body);
@@ -61,9 +74,9 @@ exercisesRouter.put('/:id',  (req, res) => {
 });
 
 //Delete de un ejercicio
-exercisesRouter.delete('/:id', (req, res) => {
+exercisesRouter.delete('/:idExercise', (req, res) => {
     const { idExercise } = req.params;
-    const exerciseIndex = exercises.findIndex((w) => w.id === idExercise);
+    const exerciseIndex = exercises.findIndex((w) => w.idExercise === idExercise);
     if (exerciseIndex !== -1) {
         exercises.splice(exerciseIndex, 1);
         res.status(204).end();

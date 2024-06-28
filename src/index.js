@@ -20,8 +20,8 @@ app.disable('x-powered-by');
 
 app.use(corsMiddleware());
 
-app.use('/exercises', exercisesRouter);
-app.use('/users', usersRouter);
+app.use('/api/v1/exercises', exercisesRouter);
+app.use('/api/v1/users', usersRouter);
 //app.use('/trainings', trainingsRouter);
 //app.use('/index', indexRouter);
 //app.use('/auth', authRouter);
