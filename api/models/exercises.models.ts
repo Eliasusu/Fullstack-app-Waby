@@ -1,12 +1,12 @@
 import  exercisesData  from '../datos temporales/exercises.json' assert  { type: "json" };
-import { Exercise } from '../entity/exercise.models.ts';
+import { Exercise } from '../entity/exercise.models.js';
 const exercises = exercisesData;
 
 
 
 export class ExerciseModel {
 
-    static async getAll ({ nameMuscleGroup }){
+    static async getAll ({ nameMuscleGroup }: { nameMuscleGroup: string }) {
         if(nameMuscleGroup){
             const filteredExercises = exercises.filter(
                 w => w.muscleGroups.find((m) => m.nameMuscleGroup === nameMuscleGroup));

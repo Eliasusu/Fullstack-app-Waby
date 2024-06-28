@@ -1,8 +1,8 @@
 import express from 'express';
 import process from 'process';
-import { usersRouter } from "./routes/users.routes.mjs";
-import { exercisesRouter } from "./routes/exercises.routes.mjs";
-import { corsMiddleware } from './middlewares/cors.mjs';
+import { usersRouter } from "./routes/users.routes.js";
+import { exercisesRouter } from "./routes/exercises.routes.js";
+import { corsMiddleware } from './middlewares/cors.js';
 //import { trainingsRouter } from './routes/trainings.routes.mjs';
 //import { indexRouter } from './routes/index.routes.mjs';
 //import { authRouter } from './routes/auth.routes.mjs';
