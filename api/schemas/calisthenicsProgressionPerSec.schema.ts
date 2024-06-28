@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { exerciseSchema } from './exercise.schema.mjs';
+// import { exerciseSchema } from './exercises.schema.ts';
 
 export const calisthenicsProgressionPerSecSchema = z.object({
     idProgression: z.number(
         z.number().int().positive()
     ),
-    exercise: exerciseSchema,
+    // exercise: exerciseSchema,
     nameProgression: z.string(
         z.string().min(1).max(255)
     ),
@@ -18,4 +18,4 @@ export const calisthenicsProgressionPerSecSchema = z.object({
     numberSetsNeeded: z.number(
         z.number().int().positive()
     ),
-}),
+})

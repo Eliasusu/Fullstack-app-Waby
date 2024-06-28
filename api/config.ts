@@ -5,4 +5,4 @@ export const database = {
     user: 'root',
     password: 'eplailaasSql2002!',
     database: 'waby_db'
-};
+}

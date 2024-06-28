@@ -2,10 +2,10 @@
   "name": "fullstack-app-waby",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:server": "node --watch ./src/index.js",
+    "dev:server": "ts-node --watch ./api/index.ts",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -15,11 +15,12 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "src",
+    "api",
     "client"
   ],
-  "dependencies": {
-  },
+
   "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.2"
   }
 }

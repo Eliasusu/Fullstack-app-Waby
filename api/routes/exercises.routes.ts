@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { validateExercises, validateParcialExercises } from "../schemas/exercises.schema.mjs";
+import { validateExercises, validateParcialExercises } from "../schemas/exercises.schema.js";
 import { ExerciseModel } from "../models/exercises.models.js";
 
 export const exercisesRouter = Router();
@@ -39,9 +39,8 @@ exercisesRouter.post('/', async (req, res) => {
 exercisesRouter.put('/:idExercise',  (req, res) => {
     const { idExercise } = req.params;
     const exercise = ExerciseModel.getById(idExercise);
-    if (exercise) {
+    if (exercise !== undefined) {
         const result = validateParcialExercises(req.body);
-
         if(result.success){
             const exerciseUpdate = ExerciseModel.update(idExercise, result.data);
             res.status(200).json(exerciseUpdate);

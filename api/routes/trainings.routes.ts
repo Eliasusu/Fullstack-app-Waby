@@ -1,8 +1,6 @@
-<<<<<<< HEAD:Back end/routes/trainings.mjs
-=======
 import { Router } from "express";
-import trainings from '../server/datos-temporales/trainings.json' with { type: 'json' };
-import { validateTraining, validateParcialTraining } from "../schemas/trainings.mjs";
+import trainings from '../datos temporales/trainings.json' assert { type: 'json' };
+import { validateTraining, validateParcialTraining } from "../schemas/trainings.schema.ts";
 
 export const trainingsRouter = Router();
 
@@ -72,4 +70,3 @@ trainingsRouter.delete('/:id', (req, res) => {
 });
 
 
->>>>>>> origin/feature/usuario:src/routes/trainings.mjs

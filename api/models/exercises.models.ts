@@ -1,5 +1,7 @@
 import  exercisesData  from '../datos temporales/exercises.json' assert  { type: "json" };
+import { Exercise } from '../entity/exercise.models.ts';
 const exercises = exercisesData;
+
 
 
 export class ExerciseModel {
@@ -19,7 +21,7 @@ export class ExerciseModel {
 
     }
 
-    static async getById (idExercise){
+    static async getById (idExercise: string) {
         const exercise = exercises.find((w) => w.idExercise === idExercise);
         if (exercise){
             return exercise;
@@ -28,19 +30,23 @@ export class ExerciseModel {
         }
     }
 
-    static async create (exercise){
-        exercise.idExercise = (exercises.length + 1).toString();
-        exercises.push(exercise);
+    static async create (exercise: Exercise){
+        exercise.idExercise = (exercises.length + 1);
+        exercises.push();
         return exercise;
     }
 
-    static async update (id ,data){
+    static async update (id: string ,data: Partial<Exercise>){
         const exercise = exercises.find((w) => w.idExercise === id);
+        if (!exercise){
+            console.log('Exercise not found');
+            return;
+        }
         Object.assign(exercise, data);
         return exercise;
     }
 
-    static async delete (idExercise){
+    static async delete (idExercise: string){
         const index = exercises.findIndex((w) => w.idExercise === idExercise);
         if (index > -1){
             exercises.splice(index, 1);
