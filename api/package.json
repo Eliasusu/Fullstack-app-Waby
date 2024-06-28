@@ -9,6 +9,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "4.19.2",
+    "nanoid": "^5.0.7",
     "node": "^22.3.0",
     "react-dom": "^18.2.0",
     "zod": "3.23.8"
