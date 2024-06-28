@@ -23,18 +23,6 @@ exercisesRouter.get('/:idExercise', (req, res) => {
     }
 });
 
-//Get de todos los ejercicios filtrado por grupo muscular
-exercisesRouter.get(':nameMuscleGroup', (req, res) => {
-    const { nameMuscleGroup } = req.params;
-    console.log(nameMuscleGroup);
-    const exercise = exercises.filter((w) => w.nameMuscleGroup === nameMuscleGroup);
-    console.log(exercise);
-    if (exercise){
-        res.json(exercise);
-    } else {
-        res.status(404).json({ error: 'Muscle group not found' });
-    }
-});
 
 //Post de un ejercicio
 exercisesRouter.post('/', (req, res) => {
