@@ -1,10 +1,9 @@
 import mysql from 'mysql';
-import { promisify } from 'util';
-import { waby_db } from './config.js';
+import { database } from './config.js';
 
-export const pool = mysql.createPool(waby_db);
+export const pool = mysql.createPool(database);
 
-pool.getConnection((err, connection) => {
+pool.getConnection((err: mysql.MysqlError | null, connection: mysql.PoolConnection | undefined) => {
     if(err){
         if(err.code === 'PROTOCOL_CONNECTION_LOST'){
             console.error('Database connection was closed.')
@@ -15,7 +14,6 @@ pool.getConnection((err, connection) => {
         if(err.code === 'ECONNREFUSED'){
             console.error('Database connection was refused.')
         }   
-
     }
 
     if(connection) connection.release();
@@ -23,6 +21,3 @@ pool.getConnection((err, connection) => {
     return;
 });
 
-
-// Promisify Pool Querys
-pool.query = promisify(pool.query);
