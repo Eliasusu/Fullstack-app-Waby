@@ -1,5 +1,5 @@
 import { Router } from "express";
-import users from '../datos temporales/wabys.json' assert { type: "json" };
+import users from '../datos temporales/wabys.json' with { type: "json" };
 import { validateUser, validateParcialUser } from '../schemas/users.schema.js';
 import { generateId } from '../lib/generateId.js';
 

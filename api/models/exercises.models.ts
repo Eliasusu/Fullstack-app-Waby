@@ -1,4 +1,4 @@
-import  exercisesData  from '../datos temporales/exercises.json' assert  { type: "json" };
+import  exercisesData  from '../datos temporales/exercises.json' with { type: "json" };
 import { Exercise } from '../entity/exercise.models.js';
 const exercises = exercisesData;
 
