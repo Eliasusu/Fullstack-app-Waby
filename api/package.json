@@ -6,7 +6,8 @@
   "description": "Waby API",
   "main": "index.js",
   "scripts": {
-    "dev:server": "node --watch ./index.js"
+    "build": "tsc",
+    "dev:server": "node --watch ./dist/index.js"
   },
   "dependencies": {
     "express": "4.19.2",
