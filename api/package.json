@@ -10,14 +10,14 @@
   },
   "dependencies": {
     "express": "4.19.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "nanoid": "^5.0.7"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^17.0.15",
     "@types/mysql": "2.15.26",
     "typescript": "^5.5.2",
-    "nanoid": "^5.0.7",
     "node": "^22.3.0",
     "react-dom": "^18.2.0",
     "zod": "3.23.8",
