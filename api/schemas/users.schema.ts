@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { trainingMethodSchema } from './trainingMethod.schema';
+import { trainingMethodSchema } from './trainingMethod.schema.js';
 
 export const userSchema = z.object({
     idUser: z.string({}).min(12).max(12),
