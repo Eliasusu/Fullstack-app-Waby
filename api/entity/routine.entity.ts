@@ -1,5 +1,5 @@
-import { Training } from './training.models.ts';
-import { Exercise } from './exercise.models.ts';
+import { Training } from './training.entity.js';
+import { Exercise } from './exercise.entity.js';
 
 export class Routine {
     constructor(

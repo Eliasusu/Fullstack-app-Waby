@@ -1,4 +1,4 @@
-import { generateId } from '../lib/generateId';
+import { generateId } from '../shared/generateId.js';
 
 export class TrainingMethod {
   public idMethod: string;

@@ -1,8 +1,8 @@
 
 
 export class Mesocycle {
-    public idMesocycle: number;
     constructor( 
+        public idMesocycle: string,
         public typeMesocycle: string,
         public startDate: Date,
         public endDate: Date,

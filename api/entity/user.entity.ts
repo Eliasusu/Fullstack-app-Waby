@@ -1,5 +1,5 @@
-import { generateId } from '../lib/generateId';
-import { TrainingMethod } from './trainingMethod.models';
+import { generateId } from '../shared/generateId';
+import { TrainingMethod } from './trainingMethod.entity';
 
 export class User {
     public idUser: string;

@@ -4,22 +4,53 @@
     "idExercise": "1",
     "name": "Bench Press",
     "description": "The bench press is a compound exercise that builds strength and muscle in the chest and triceps. It's one of the most popular exercises in the gym.",
-    "Training": {},
     "trainingMethod": {
         "idMethod": "1243fdvg46gs",
         "nameMethod": "Gym",
         "description": ""
     },
+    "training": {
+        "idTraining": "1",
+        "trainingName": "Chest and Triceps",
+        "user": {
+            "idUser": "12h86gmifap6",
+            "username": "themoststrongest",
+            "name": "Satoru Gojo",
+            "email": "saturothemoststrongest@gmail.com",
+            "bodyWeight": 78,
+            "height": 1.90,
+            "birthdate": "1989-12-07",
+            "password": "qrstuvwxyz",
+            "phone": "11999235999", 
+            "trainingMethod": {
+                "idMethod": "1243fdvg46gs",
+                "nameMethod": "Gym",
+                "description": ""
+            }
+
+            },
+        "mesocycle":{
+            "idMesocycle": "1",
+            "typeMesocycle": "Strength",
+            "startDate": "2021-06-01",
+            "endDate": "2021-06-30"
+        },
+        "trainingType": "Strength",
+        "day": "06-06-2021",
+        "time": "18:00"
+    },
     "muscleGroups": [
         {
             "idMuscleGroup": "1",
             "nameMuscleGroup": "Chest",
-            "description": ""
+            "description": "",
+            "imageMuscleGroup": ""
         },
         {
             "idMuscleGroup": "2",
             "nameMuscleGroup": "Triceps",
-            "description": ""
+            "description": "",
+            "imageMuscleGroup": ""
         }
     ],
     "difficulty": "Medium",
@@ -29,7 +60,6 @@
     "idExercise": "2",
     "name": "Squat",
     "description": "The squat is a compound exercise that targets the muscles of the lower body, including the quadriceps, hamstrings, and glutes. It is a fundamental movement for building strength and power.",
-    "Training": {},
     "trainingMethod": {
             "idMethod": "1243fdvg46gs",
             "nameMethod": "Gym",
@@ -39,17 +69,20 @@
             {
                     "idMuscleGroup": "3",
                     "nameMuscleGroup": "Quadriceps",
-                    "description": ""
+                    "description": "",
+                    "imageMuscleGroup": ""
             },
             {
                     "idMuscleGroup": "4",
                     "nameMuscleGroup": "Hamstrings",
-                    "description": ""
+                    "description": "",
+                    "imageMuscleGroup": ""
             },
             {
                     "idMuscleGroup": "5",
                     "nameMuscleGroup": "Glutes",
-                    "description": ""
+                    "description": "",
+                    "imageMuscleGroup": ""
             }
     ],
     "difficulty": "Hard",

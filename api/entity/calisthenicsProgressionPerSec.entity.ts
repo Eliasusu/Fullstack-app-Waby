@@ -1,13 +1,12 @@
-import { Exercise } from "./exercise.models";
+import { Exercise } from "./exercise.entity.js";
 
-
-export class CalisthenicsProgressionPerReps {
-    public idProgression: number;
+export class CalisthenicsProgressionPerSec {
     constructor(
+        public idProgression: number,
         public exercise: Exercise,
         public nameProgression: string,
         public orderProgression: number,
-        public numberSeriesNeeded: number,
+        public numberSecNeeded: number,
         public numberRepsNeeded: number
     ){}
 }

@@ -1,9 +1,10 @@
-import { User } from './user.models';
-import { Mesocycle } from './mesocycle.models.ts';
+import { User } from './user.entity';
+import { Mesocycle } from './mesocycle.entity.js';
+import { Exercise } from './exercise.entity.js';
 
 export class Training{
-    public idTraining: number;
     constructor(
+        public idTraining:string,
         public user: User,
         public mesocycle: Mesocycle,
         public trainingName: string,
