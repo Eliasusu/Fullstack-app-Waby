@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const muscleGroupSchema = z.object({
+    idMuscleGroup: z.string({}),
     nameMuscleGroup: z.string({
         required_error: 'Name is required',
         invalid_type_error: 'Name must be a string',
@@ -13,11 +14,12 @@ export const muscleGroupSchema = z.object({
     }),
 });
 
+type MuscleGroup = z.infer<typeof muscleGroupSchema>;
 
-export function validateMuscleGroup(data) {
-    return muscleGroupSchema.safeParse(data);
+export function validateMuscleGroup(muscleGroup: MuscleGroup) {
+    return muscleGroupSchema.safeParse(muscleGroup);
 }
 
-export function validatePartialMuscleGroup(data) {
-    return muscleGroupSchema.partial().parse(data);
+export function validatePartialMuscleGroup(muscleGroup: MuscleGroup) {
+    return muscleGroupSchema.partial().parse(muscleGroup);
 }
