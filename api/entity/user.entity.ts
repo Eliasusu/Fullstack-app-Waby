@@ -1,8 +1,8 @@
-import { generateId } from '../shared/generateId';
+import { generateId } from '../shared/generateId.js';
 import { TrainingMethod } from './trainingMethod.entity';
 
 export class User {
-    public idUser: string;
+    public idUser?: string;
     constructor(
         public username: string,
         public password: string,

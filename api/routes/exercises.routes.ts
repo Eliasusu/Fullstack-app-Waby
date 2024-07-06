@@ -58,6 +58,6 @@ exercisesRouter.put('/:idExercise',  (req, res) => {
 exercisesRouter.delete('/:idExercise', async (req, res) => {
     const { idExercise } = req.params;
     const exercise = await repository.delete({id:idExercise});
-    if (exercise) return res.status(200).json(exercise);
+    if (exercise === exercise) return res.status(200).json(exercise);
     res.status(404).json({ error: 'Exercise not found' });
 });
