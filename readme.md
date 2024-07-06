@@ -3,7 +3,18 @@
 - Si yo tengo ejercicios de calistenia que tienen progresiones que pueden ser de repeticiones o segundos. A la hora de cargar una meta de calistenia, la subclase 'Meta calistenia' ¿Debería bifurcarla por 'Meta calistenia seg' y 'Meta calistenia rep'? (Fuera del alcance por el momento)
 
 ## ToDo 📃
-- [] Al crear el repository la llamadas en las rutas por los diferentes metodos han cambiado, darle el formato correcto
+- [x] Al crear el repository la llamadas en las rutas por los diferentes metodos han cambiado, darle el formato correcto
+- [x] Acomodar todos los schemas para que coincidan con entity
+- [] Hacer el repository de users
+- [] Acomodar Routes de users
+- [] Hacer repository y routes, agregar en index.ts de muscle group
+- [] Hacer repository y routes, agregar en index.ts de mesocycles
+- [] Hacer repository y routes, agregar en index.ts de trainings
+- [] Hacer repository y routes, agregar en index.ts de routines
+- [] Hacer repository y routes, agregar en index.ts de auth
+- [] Hacer repository y routes, agregar en index.ts de index
+- [] Conectar base da datos
+- [] Cambiar los accesos a base de datos de todas las entidades en routes y repository 
 
 ## Fechas de entregas 📅
 TP
