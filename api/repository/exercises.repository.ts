@@ -30,6 +30,7 @@ export class ExerciseRepository implements Repository<Exercise>{
         return exercises;
     }
 
+
     public async getOne(item: { id: string }): Promise<Exercise | undefined> {
         return exercises.find((exercise) => exercise.idExercise === item.id);
     }
