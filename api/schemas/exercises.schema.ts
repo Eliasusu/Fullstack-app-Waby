@@ -10,7 +10,7 @@ export const exercisesSchema = z.object({
     invalid_type_error: 'Name must be a string',
   }),
   trainingMethod: trainingMethodSchema,
-  training: trainingsSchema,
+  training: trainingsSchema.optional(),
   description: z.string({}),
   muscleGroups: z.array(muscleGroupSchema),
   difficulty: z.string({

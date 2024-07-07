@@ -24,6 +24,8 @@ const exercises = [
     ),
 ]
 
+
+
 export class ExerciseRepository implements Repository<Exercise>{
 
     public async getAll(): Promise<Exercise[] | undefined> {
