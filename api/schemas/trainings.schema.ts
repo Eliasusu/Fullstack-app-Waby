@@ -3,7 +3,7 @@ import { mesocyclesSchema } from './mesocycles.schema.js';
 import { userSchema } from './users.schema.js';
 
 export const trainingsSchema = z.object({
-  idTraining: z.string({}).min(1).max(1),
+  idTraining: z.string({}).min(1).max(1).optional(),
   user: userSchema,
   mesocycle: mesocyclesSchema,
   trainingName: z.string({

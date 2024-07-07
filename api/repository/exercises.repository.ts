@@ -67,13 +67,13 @@ export class ExerciseRepository implements Repository<Exercise>{
     }
 
     public async update(item: Exercise): Promise<Exercise | undefined> {
-        const exercise = exercises.find((exercise) => exercise.idExercise === item.idExercise);
-        if (!exercise) {
-            console.log('Exercise not found');
+        const index = exercises.findIndex((exercise) => exercise.idExercise === item.idExercise);
+        if (index > -1) {
+            exercises[index] = {...exercises[index], ...item};
+            return item;
+        } else {
             return;
         }
-        Object.assign(exercise, item);
-        return exercise;
     }
 
     public async delete(item: { id: string }): Promise<Exercise | undefined> {

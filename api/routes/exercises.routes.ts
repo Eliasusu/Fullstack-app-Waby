@@ -2,7 +2,6 @@
 import { NextFunction, Router, Request, Response } from "express";
 import { validateExercises, validateParcialExercises } from "../schemas/exercises.schema.js";
 import { ExerciseRepository } from "../repository/exercises.repository.js";
-import { exercisesSanitize } from "../middlewares/exercises.sanitizeInput.js";
 import { Exercise } from "../entity/exercise.entity.js";
 // import { TrainingMethod } from "../entity/trainingMethod.entity.js";
 // import { User } from "../entity/user.entity.js";
@@ -74,13 +73,23 @@ exercisesRouter.get('/:idExercise', async (req, res) => {
 
 //Create of an exercise
 exercisesRouter.post('/', async (req, res) => {
-    const output = exercisesSanitize(req.body);
-    const exercise = new Exercise(output.name, output.trainingMethod, output.description, output.muscleGroups, output.difficulty, output.typeExercise);
-    const result = validateExercises(exercise);
+    const result = validateExercises(req.body);
 
     if(result.success){ 
         //Esto se hace en base de datos
-        const newExercise = await repository.add(req.body);
+        const exerciseInput = new Exercise(
+            req.body.name,
+            req.body.trainingMethod,
+            req.body.description,
+            req.body.muscleGroups,
+            req.body.difficulty,
+            req.body.videoUrl,
+            req.body.image,
+            req.body.idExercise,
+            req.body.training,
+            req.body.date
+        );
+        const newExercise = await repository.add(exerciseInput);
         if (newExercise) return res.status(201).json(newExercise);
     } else{
         res.status(400).json({ error: result.error });
@@ -90,19 +99,21 @@ exercisesRouter.post('/', async (req, res) => {
 //Update of an exercise
 exercisesRouter.put('/:idExercise', async  (req, res) => {
     const { idExercise } = req.params;
-    const exercise = repository.getOne({id: idExercise});
-    if (exercise !== undefined) {
+    const exercise = await repository.getOne({id: idExercise});
+    if (exercise) {
         const result = validateParcialExercises(req.body);
         if(result.success){
-            const exerciseUpdate = await repository.update(req.body);
-            res.status(200).json(exerciseUpdate);
-            
+            const updatedExercise = await repository.update({
+                ...exercise,
+                ...req.body
+            });
+            if (updatedExercise) return res.json(updatedExercise);
         } else{
             res.status(400).json({ error: result.error });
         }
-    } else {
-        res.status(404).json({ error: 'Exercise not found' });
     }
+
+
 });
 
 //Delete of an exercise
