@@ -10,16 +10,39 @@ const exercises = [
     new Exercise(
         "Bench Press",
         new TrainingMethod("Gym", ""),
-        new Training("1", 
-        new User("theo", "1234", "theo@gmail.com", "Theo", new Date(), "123456", 70, 1.80, new TrainingMethod("Gym", "")),
-        new Mesocycle("1", "Strenght", new Date(), new Date()), "Chest day", "Pull", new Date(), "5:00 AM"),
         "The bench press is a compound exercise that builds strength and muscle in the chest and triceps. It's one of the most popular exercises in the gym.",
         [new MuscleGroup("1", "Chest", "", "")],
         "Medium",
         "Compound",
-        null,
-         null,
         "1",
+        new Training(
+            "1", 
+            new User(
+                "theo", 
+                "1234", 
+                "theo@gmail.com", 
+                "Theo", 
+                new Date(), 
+                "123456", 
+                70, 
+                1.80, 
+                new TrainingMethod(
+                    "Gym",
+                    ""
+                )
+            ),
+            new Mesocycle(
+                "1", 
+                "Strenght",
+                 new Date(), 
+                 new Date()), 
+                 "Chest day", 
+                 "Pull", 
+                 new Date(), 
+                 "5:00 AM"
+             ),
+        "",
+        "",
         new Date()
     ),
 ]

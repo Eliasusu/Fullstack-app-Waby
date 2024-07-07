@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { muscleGroupSchema } from './muscleGroups.schema.js';
 import { trainingMethodSchema } from './trainingMethod.schema.js';
 import { trainingsSchema } from './trainings.schema.js';
-import { deserialize } from 'v8';
 
 export const exercisesSchema = z.object({
   name: z.string({
@@ -10,7 +9,6 @@ export const exercisesSchema = z.object({
     invalid_type_error: 'Name must be a string',
   }),
   trainingMethod: trainingMethodSchema,
-  training: trainingsSchema.optional(),
   description: z.string({}),
   muscleGroups: z.array(muscleGroupSchema),
   difficulty: z.string({
@@ -20,19 +18,19 @@ export const exercisesSchema = z.object({
   typeExercise: z.string({
     invalid_type_error: 'Type of exercise must be a string',
   }),
-  videoUrl: z.string({
-    invalid_type_error: 'Video URL must be a string',
-  }),
-  image: z.string({
-    invalid_type_error: 'Image must be a string',
-  }),
   idExercise: z.string({
     invalid_type_error: 'Id of exercise must be a string',
-  }),
-  date: z.date({
+  }).optional(),
+  training: trainingsSchema.optional(),
+  videoUrl: z.string({
+    invalid_type_error: 'Video URL must be a string',
+  }).optional(),
+  image: z.string({
+    invalid_type_error: 'Image must be a string',
+  }).optional(),
+  dateCreated: z.date({
     invalid_type_error: 'Date must be a date',
-  }),
-
+  }).optional(),
 });
 
 type Exercise = z.infer<typeof exercisesSchema>;

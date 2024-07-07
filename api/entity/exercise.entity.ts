@@ -12,9 +12,9 @@ export class Exercise  {
     public difficulty: string,
     public typeExercise: string,
     public idExercise?: string,
-    public training?: Training,
-    public videoUrl?: string | null,
-    public image?: string | null,
-    public date?: Date
+    public training?: Training | undefined,
+    public videoUrl?: string,
+    public image?: string,
+    public dateCreated?: Date
     ){}
 }

@@ -4,7 +4,7 @@ export class MuscleGroup {
     constructor(
         public idMuscleGroup: string,
         public nameMuscleGroup: string,
-        public description: string | null,
-        public imageMuscleGroup: string | null
+        public description: string ,
+        public imageMuscleGroup: string
     ){}
 }
