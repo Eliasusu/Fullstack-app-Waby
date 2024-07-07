@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { trainingMethodSchema } from './trainingMethod.schema.js';
 
 export const userSchema = z.object({
-    idUser: z.string({}).min(12).max(12),
+    idUser: z.string({}).min(12).max(12).optional(),
     username: z.string({
         required_error: 'Username is required',
         invalid_type_error: 'Username must be a string',

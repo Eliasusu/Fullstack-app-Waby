@@ -1,5 +1,5 @@
-import { Exercise } from '../entity/exercise.entity.js';
 import { Repository } from '../shared/repository.js';
+import { Exercise } from '../entity/exercise.entity.js';
 import { TrainingMethod } from '../entity/trainingMethod.entity.js';
 import { Training } from '../entity/training.entity.js';
 import { Mesocycle } from '../entity/mesocycle.entity.js';
