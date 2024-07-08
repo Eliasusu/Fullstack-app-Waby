@@ -47,19 +47,19 @@ usersRouter.post('/', async  (req, res) => {
 usersRouter.put('/:idUser', async (req, res) => {
     const { idUser } = req.params;
     const user = await repository.getOne({id: idUser});
-    if (user !== undefined) {
+    if (user) {
         const result = validateParcialUser(req.body);
         if(result.success){
-            //Esto se hace en base de datos
-            const userUpdate = await repository.update(req.body);
-            res.status(200).json(user);
-            
+            const updatedUser = await repository.update({
+                ...user,
+                ...req.body
+            });
+            if (updatedUser) return res.json(updatedUser);
         } else{
             res.status(400).json({ error: result.error });
         }
-    } else {
-        res.status(404).json({ error: 'User not found' });
     }
+});
 
 });
 
