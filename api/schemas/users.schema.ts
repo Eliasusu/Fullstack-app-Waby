@@ -46,6 +46,7 @@ export function validateUser(user: User) {
 }
 
 export function validateParcialUser(user: User){
+    if(user.birthdate) user.birthdate = new Date(user.birthdate);
     return userSchema.partial().safeParse(user);
 }
 
