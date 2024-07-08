@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { trainingMethodSchema } from './trainingMethod.schema.js';
 
+
+
 export const userSchema = z.object({
     idUser: z.string({}).min(12).max(12).optional(),
     username: z.string({
@@ -39,10 +41,12 @@ export const userSchema = z.object({
 type User = z.infer<typeof userSchema>;
 
 export function validateUser(user: User) {
-    return userSchema.safeParse(user);
+    const birthdate = new Date(user.birthdate);
+    return userSchema.safeParse(user = {...user, birthdate});
 }
 
 export function validateParcialUser(user: User){
+    if(user.birthdate) user.birthdate = new Date(user.birthdate);
     return userSchema.partial().safeParse(user);
 }
 

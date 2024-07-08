@@ -39,7 +39,8 @@ const exercises = [
                  "Chest day", 
                  "Pull", 
                  new Date(), 
-                 "5:00 AM"
+                 "5:00 AM",
+                 "1"
              ),
         "",
         "",

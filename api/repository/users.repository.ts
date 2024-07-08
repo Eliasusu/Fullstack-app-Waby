@@ -57,35 +57,38 @@ export class UserRepository implements Repository<User>{
     }
 
     public async add(item: User): Promise<User | undefined> {
-        item.idUser = (users.length + 1).toString();
         users.push(item);
         return item;
     }
 
     public async update(item: User): Promise<User | undefined> {
-        const user = users.find((user) => user.idUser === item.idUser);
-        if (!user) {
-            console.log('User not found');
+        const index = users.findIndex((user) => user.idUser === item.idUser);
+        if (index > -1) {
+            users[index] = {...users[index], ...item};
+            return item;
+        } else {
             return;
         }
-        Object.assign(user, item);
-        return user;
     }
 
     public async delete(item: { id?: string, name?: string }): Promise<User | undefined> {
+        console.log('Entre al delete del repository')
+        console.log(item)
         if( item.id ){
             const index = users.findIndex((user) => user.idUser === item.id);
+            console.log(`Este es el index del if con id${index}`)
             if (index > -1) {
                 return users.splice(index, 1)[0];
             } else {
-                return;
+                return undefined;
             }
         } else {
             const index = users.findIndex((user) => user.name === item.name);
+            console.log(`Este es el index del if con name${index}`)
             if (index > -1) {
                 return users.splice(index, 1)[0];
             } else {
-                return;
+                return undefined;
             }
         }
     }
