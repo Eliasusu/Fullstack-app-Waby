@@ -1,5 +1,5 @@
 
-import { NextFunction, Router, Request, Response } from "express";
+import { Router } from "express";
 import { validateExercises, validateParcialExercises } from "../schemas/exercises.schema.js";
 import { ExerciseRepository } from "../repository/exercises.repository.js";
 import { Exercise } from "../entity/exercise.entity.js";

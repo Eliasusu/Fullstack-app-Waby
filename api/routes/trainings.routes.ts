@@ -1,11 +1,16 @@
 import { Router } from "express";
-import trainings from '../datos temporales/trainings.json' assert { type: 'json' };
-import { validateTraining, validateParcialTraining } from "../schemas/trainings.schema.ts";
+import { validateTraining, validateParcialTraining } from "../schemas/trainings.schema.js";
+import { Training } from "../entity/training.entity.js";
+import { TrainingRepository } from "../repository/trainings.repository.js";
+
 
 export const trainingsRouter = Router();
+const repository = new TrainingRepository();
 
-//Get de todos los trainings
+//Get all trainings for a user
 trainingsRouter.get('/', (req, res) => {
+    //Esto se hace en base de datos
+    const trainings = repository.getAll();
     res.json(trainings);
 });
 

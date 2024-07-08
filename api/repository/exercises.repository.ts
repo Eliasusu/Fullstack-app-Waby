@@ -15,8 +15,7 @@ const exercises = [
         "Medium",
         "Compound",
         "1",
-        new Training(
-            "1", 
+        new Training( 
             new User(
                 "theo", 
                 "1234", 
@@ -39,7 +38,8 @@ const exercises = [
                  "Chest day", 
                  "Pull", 
                  new Date(), 
-                 "5:00 AM"
+                 "5:00 AM",
+                 "1"
              ),
         "",
         "",
