@@ -3,6 +3,8 @@ import { validateUser, validateParcialUser } from '../schemas/users.schema.js';
 import { generateId } from '../shared/generateId.js';
 import { UserRepository } from "../repository/users.repository.js";
 import { TrainingMethod } from "../entity/trainingMethod.entity.js";
+import { PassThrough } from "stream";
+import { User } from "../entity/user.entity.js";
 
 
 export const usersRouter = Router();
@@ -27,17 +29,26 @@ usersRouter.get('/:idUser', async (req, res) => {
 
 //Post de un user
 usersRouter.post('/', async  (req, res) => {
-    const { birthdate, trainingMethod, ...rest } = req.body;
-    const parsedBirthdate = new Date(birthdate);
-    const parsedMethod = new TrainingMethod(trainingMethod);
-    const result = validateUser({ ...rest, birthdate: parsedBirthdate });
+    const result = validateUser(req.body);
 
-    if(result.success){
+    if(result.success){ 
         //Esto se hace en base de datos
-        const user = result.data;
-        user.idUser = generateId();
-        const newUser = await repository.add(user);
-        res.status(201).json(user);
+        const exerciseInput = new User(
+            req.body.username,
+            req.body.password,
+            req.body.email,
+            req.body.name,
+            new Date(req.body.birthdate),
+            req.body.phone,
+            req.body.bodyWeight,
+            req.body.height,
+            new TrainingMethod(
+                req.body.trainingMethod.name,
+                req.body.trainingMethod.description
+            )
+        );
+        const newExercise = await repository.add(exerciseInput);
+        if (newExercise) return res.status(201).json(newExercise);
     } else{
         res.status(400).json({ error: result.error });
     }
@@ -47,26 +58,27 @@ usersRouter.post('/', async  (req, res) => {
 usersRouter.put('/:idUser', async (req, res) => {
     const { idUser } = req.params;
     const user = await repository.getOne({id: idUser});
-    if (user !== undefined) {
+    if (user) {
         const result = validateParcialUser(req.body);
         if(result.success){
-            //Esto se hace en base de datos
-            const userUpdate = await repository.update(req.body);
-            res.status(200).json(user);
-            
+            const updatedUser = await repository.update({
+                ...user,
+                ...req.body
+            });
+            if (updatedUser) return res.json(updatedUser);
         } else{
             res.status(400).json({ error: result.error });
         }
-    } else {
-        res.status(404).json({ error: 'User not found' });
     }
-
 });
 
 //Delete de un user
 usersRouter.delete('/:name', async (req, res) => {
+    console.log('Entre al delete')
     const { name } = req.params;
+    console.log(name)
     const user = await repository.delete({name: name});
-    if (user === user) return res.status(200).json(user);  
+    console.log(user)
+    if (user) return res.status(200).json(user);  
     res.status(404).json({ error: 'User not found' });
 }); 

@@ -17,6 +17,7 @@
 - [x] Acomodar Routes de users
 - [x] Crear un sanitize input de exercise
 - [ ] Crear un Get by muscle group en 'api\routes\exercises.routes.ts'
+- [ ] Acomodar Routes de users y trainings
 - [ ] Hacer repository y routes, agregar en index.ts de muscle group
 - [ ] Hacer repository y routes, agregar en index.ts de mesocycles
 - [ ] Hacer repository y routes, agregar en index.ts de trainings

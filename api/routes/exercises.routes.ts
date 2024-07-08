@@ -71,7 +71,7 @@ exercisesRouter.get('/:idExercise', async (req, res) => {
     res.status(404).json({ error: 'Exercise not found'});
 });
 
-//Create of an exercise
+//Create an exercise
 exercisesRouter.post('/', async (req, res) => {
     const result = validateExercises(req.body);
 
@@ -96,7 +96,7 @@ exercisesRouter.post('/', async (req, res) => {
     }
 });
 
-//Update of an exercise
+//Update an exercise
 exercisesRouter.put('/:idExercise', async  (req, res) => {
     const { idExercise } = req.params;
     const exercise = await repository.getOne({id: idExercise});
@@ -112,7 +112,6 @@ exercisesRouter.put('/:idExercise', async  (req, res) => {
             res.status(400).json({ error: result.error });
         }
     }
-
 
 });
 
