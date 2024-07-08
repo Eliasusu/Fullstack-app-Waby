@@ -1,5 +1,4 @@
 import { Repository } from "../shared/repository.js";
-
 import { User } from "../entity/user.entity.js";
 import { TrainingMethod } from "../entity/trainingMethod.entity.js";
 

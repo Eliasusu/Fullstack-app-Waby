@@ -3,6 +3,7 @@ import process from 'process';
 import { usersRouter } from "./routes/users.routes.js";
 import { exercisesRouter } from "./routes/exercises.routes.js";
 import { corsMiddleware } from './middlewares/cors.js';
+import { muscleGroupsRouter } from './routes/muscleGroups.routes.js';
 //import { trainingsRouter } from './routes/trainings.routes.mjs';
 //import { indexRouter } from './routes/index.routes.mjs';
 //import { authRouter } from './routes/auth.routes.mjs';
@@ -26,7 +27,7 @@ app.use('/api/v1/users', usersRouter);
 //app.use('/index', indexRouter);
 //app.use('/auth', authRouter);
 //app.use('/routines', routinesRouter);
-//app.use('/muscleGroups', muscleGroupsRouter);
+app.use('/api/v1/muscleGroups', muscleGroupsRouter);
 //app.use('/mesocycles', mesocyclesRouter);
 
 
