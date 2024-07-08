@@ -59,8 +59,14 @@ usersRouter.put('/:idUser', async (req, res) => {
     const { idUser } = req.params;
     const user = await repository.getOne({id: idUser});
     if (user) {
+    if (user) {
         const result = validateParcialUser(req.body);
         if(result.success){
+            const updatedUser = await repository.update({
+                ...user,
+                ...req.body
+            });
+            if (updatedUser) return res.json(updatedUser);
             const updatedUser = await repository.update({
                 ...user,
                 ...req.body
