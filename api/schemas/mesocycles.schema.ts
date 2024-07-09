@@ -1,7 +1,7 @@
 import{ z } from 'zod';
 
 export const mesocyclesSchema = z.object({
-    idMesocycle: z.string({}).min(1).max(1),
+    idMesocycle: z.string({}).min(1).max(100),
     typeMesocycle: z.string({
         required_error: 'Type of mesocycle is required',
         invalid_type_error: 'Type of mesocycle must be a string',
@@ -19,9 +19,13 @@ export const mesocyclesSchema = z.object({
 type Mesocycles = z.infer<typeof mesocyclesSchema>;
 
 export function validateMesocycles(mesocycles: Mesocycles) {
-    return mesocyclesSchema.safeParse(mesocycles);
+    const startDate = new Date(mesocycles.startDate);
+    const endDate = new Date(mesocycles.endDate);
+    return mesocyclesSchema.safeParse(mesocycles = {...mesocycles, startDate, endDate});
 }
 
 export function validateParcialMesocycles(mesocycles: Mesocycles) {
+    if(mesocycles.startDate) mesocycles.startDate = new Date(mesocycles.startDate);
+    if(mesocycles.endDate) mesocycles.endDate = new Date(mesocycles.endDate);
     return mesocyclesSchema.partial().safeParse(mesocycles);
 }
