@@ -15,10 +15,9 @@
 - [x] Acomodar todos los schemas para que coincidan con entity
 - [x] Hacer el repository de users
 - [x] Acomodar Routes de users
-- [x] Crear un sanitize input de exercise
 - [ ] Crear un Get by muscle group en 'api\routes\exercises.routes.ts'
 - [ ] Acomodar Routes trainings
-- [ ] Hacer repository y routes, agregar en index.ts de muscle group
+- [x] Hacer repository y routes, agregar en index.ts de muscle group
 - [ ] Hacer repository y routes, agregar en index.ts de mesocycles
 - [ ] Hacer repository y routes, agregar en index.ts de trainings
 - [ ] Hacer repository y routes, agregar en index.ts de routines
