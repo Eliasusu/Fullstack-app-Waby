@@ -4,7 +4,7 @@ import { usersRouter } from "./routes/users.routes.js";
 import { exercisesRouter } from "./routes/exercises.routes.js";
 import { corsMiddleware } from './middlewares/cors.js';
 import { muscleGroupsRouter } from './routes/muscleGroups.routes.js';
-//import { trainingsRouter } from './routes/trainings.routes.mjs';
+import { trainingsRouter } from './routes/trainings.routes.js';
 //import { indexRouter } from './routes/index.routes.mjs';
 //import { authRouter } from './routes/auth.routes.mjs';
 //import { routinesRouter } from './routes/routines.routes.mjs';
@@ -23,7 +23,7 @@ app.use(corsMiddleware());
 
 app.use('/api/v1/exercises', exercisesRouter);
 app.use('/api/v1/users', usersRouter);
-//app.use('/trainings', trainingsRouter);
+app.use('/api/v1/trainings', trainingsRouter);
 //app.use('/index', indexRouter);
 //app.use('/auth', authRouter);
 //app.use('/routines', routinesRouter);

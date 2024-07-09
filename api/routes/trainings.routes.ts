@@ -2,76 +2,59 @@ import { Router } from "express";
 import { validateTraining, validateParcialTraining } from "../schemas/trainings.schema.js";
 import { Training } from "../entity/training.entity.js";
 import { TrainingRepository } from "../repository/trainings.repository.js";
+import { PassThrough } from "stream";
+import { User } from "../entity/user.entity.js";
 
 
 export const trainingsRouter = Router();
 const repository = new TrainingRepository();
 
-//Get all trainings for a user
-trainingsRouter.get('/', (req, res) => {
+//Get all trainings for a user --> Cuando hagamos la conexion a la base de datos se filtrara por el id del usuario
+trainingsRouter.get('/', async  (req, res) => {
     //Esto se hace en base de datos
-    const trainings = repository.getAll();
+    const trainings = await repository.getAll();
     res.json(trainings);
 });
 
 //Get de un training en particular
-trainingsRouter.get('/:id', (req, res) => {
-    const { id } = req.params;
-    const training = trainings.find((w) => w.id === id);
-    if (training){
-        res.json(training);
-    } else {
-        res.status(404).json({ error: 'Training not found' });
-    }
+trainingsRouter.get('/:idTraining', async (req, res) => {
+    const { idTraining } = req.params;
+    const training = await repository.getOne({id: idTraining});
+    if (training) return res.json(training);
+    res.status(404).json({ error: 'Training not found'});
 });
 
 //Post de un training
-trainingsRouter.post('/', (req, res) => {
+trainingsRouter.post('/', async (req, res) => {
     const result = validateTraining(req.body);
 
     if(result.success){
         //Esto se hace en base de datos
-        const training = result.data;
-        training.id = (trainings.length + 1).toString();
-        trainings.push(training);
-        res.status(201).json(training);
-    } else{
+        const trainingInput = new Training(
+            req.body.user,
+            req.body.mesocycle,
+            req.body.trainingName,
+            req.body.trainingType,
+            new Date(req.body.day),
+            req.body.time,
+            req.body.idTraining
+        );
+        const newTraining = await repository.add(trainingInput);
+        if (newTraining) return res.status(201).json(newTraining);
+        
+    } else {
         res.status(400).json({ error: result.error });
     }
 });
 
 //Put de un training
-trainingsRouter.put('/:id',  (req, res) => {
-    const { id } = req.params;
-    const training = trainings.find((w) => w.id === id);
-    console.log(training)
-    if (training) {
-        const result = validateParcialTraining(req.body);
-
-        if(result.success){
-            //Esto se hace en base de datos
-            const data = result.data;
-            Object.assign(training, data);
-            res.status(200).json(training);
-            
-        } else{
-            res.status(400).json({ error: result.error });
-        }
-    } else {
-        res.status(404).json({ error: 'Training not found' });
-    }
+trainingsRouter.put('/:idTraining',  (req, res) => {
+    PassThrough
 });
 
 //Delete de un training
-trainingsRouter.delete('/:id', (req, res) => {
-    const { id } = req.params;
-    const index = trainings.findIndex((w) => w.id === id);
-    if (index !== -1) {
-        trainings.splice(index, 1);
-        res.status(204).end();
-    } else {
-        res.status(404).json({ error: 'Training not found' });
-    }
+trainingsRouter.delete('/:idTraining', (req, res) => {
+    PassThrough
 });
 
 

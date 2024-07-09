@@ -12,4 +12,4 @@ export class Training{
         public time: string,
         public idTraining?:string,
     ){}
-}
+} 
