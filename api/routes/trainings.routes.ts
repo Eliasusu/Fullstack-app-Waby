@@ -48,13 +48,34 @@ trainingsRouter.post('/', async (req, res) => {
 });
 
 //Put de un training
-trainingsRouter.put('/:idTraining',  (req, res) => {
-    PassThrough
+trainingsRouter.put('/:idTraining',  async (req, res) => {
+    console.log('entre al put de trainings');
+    const { idTraining } = req.params;
+    console.log(idTraining);
+    const training = await repository.getOne({id: idTraining});
+    console.log(training);
+    if(training){
+        console.log('Entre al primer if de routes')
+        //Esto se hace en base de datos
+        const result = validateParcialTraining(req.body);
+        console.log(result);
+        if (result.success) {
+            const updatedTraining = await repository.update({ ...training, ...req.body });
+            if (updatedTraining && !undefined) return res.json(updatedTraining);
+        } else {
+            res.status(404).json({ error: result.error });
+        }
+    } else {
+        res.status(404).json({ error: 'Training not found'});
+        }
 });
 
 //Delete de un training
-trainingsRouter.delete('/:idTraining', (req, res) => {
-    PassThrough
+trainingsRouter.delete('/:idTraining', async (req, res) => {
+    const { idTraining } = req.params;
+    const training = await repository.delete({id:idTraining});
+    if (training === training) return res.status(200).json(training);
+    res.status(404).json({ error: 'training not found' });
 });
 
 
