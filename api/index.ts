@@ -9,7 +9,7 @@ import { trainingsRouter } from './routes/trainings.routes.js';
 //import { authRouter } from './routes/auth.routes.mjs';
 //import { routinesRouter } from './routes/routines.routes.mjs';
 //import { muscleGroupsRouter } from './routes/muscleGroups.routes.mjs';
-//import { mesocyclesRouter } from './routes/mesocycles.routes.mjs';
+import { mesocyclesRouter } from './routes/mesocycles.routes.js';
 
 
 
@@ -28,7 +28,7 @@ app.use('/api/v1/trainings', trainingsRouter);
 //app.use('/auth', authRouter);
 //app.use('/routines', routinesRouter);
 app.use('/api/v1/muscleGroups', muscleGroupsRouter);
-//app.use('/mesocycles', mesocyclesRouter);
+app.use('/api/v1/mesocycles', mesocyclesRouter);
 
 
 app.listen(port, () => {

@@ -1,5 +1,3 @@
-    
-
 export class Mesocycle {
     constructor( 
         public idMesocycle: string,
