@@ -81,7 +81,10 @@ export class TrainingRepository implements Repository<Training>{
     }
 
     public async update(item: Training): Promise<Training | undefined> {
+        console.log('entre al update de repository')
+        console.log(item);
         const index = Trainings.findIndex((Training) => Training.idTraining === item.idTraining);
+        console.log(index);
         if (index > -1) {
             Trainings[index] = {...Trainings[index], ...item};
             return item;
