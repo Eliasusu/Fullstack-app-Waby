@@ -16,7 +16,6 @@ const exercises = [
         "Compound",
         "1",
         new Training(
-            "1", 
             new User(
                 "theo", 
                 "1234", 
@@ -40,11 +39,11 @@ const exercises = [
                  "Pull", 
                  new Date(), 
                  "5:00 AM",
-                 "1"
              ),
         "",
         "",
         new Date()
+        
     ),
 ]
 
