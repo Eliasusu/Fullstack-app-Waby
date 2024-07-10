@@ -16,6 +16,8 @@
 - [x] Hacer el repository de users
 - [x] Acomodar Routes de users
 - [x] Acomodar Routes trainings
+- [ ] Cambiar a un nombre mas apropiado para Routines
+- [ ] Quitar el objeto Training de la entidad Exercises y hacer los cambios correspondientes
 - [x] Hacer repository y routes, agregar en index.ts de muscle group
 - [x] Hacer repository y routes, agregar en index.ts de mesocycles
 - [x] Hacer repository y routes, agregar en index.ts de trainings

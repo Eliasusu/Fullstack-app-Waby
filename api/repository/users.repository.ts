@@ -4,8 +4,8 @@ import { TrainingMethod } from "../entity/trainingMethod.entity.js";
 
 const users = [
     new User(
-        'todou',
-        'tadakatantodo123',
+        'todoutada',
+        'takadachantodo123',
         'todoaoi@gmail.com',
         'Todou Aoi',
         new Date(1990, 1, 1),
@@ -45,11 +45,11 @@ export class UserRepository implements Repository<User>{
         return users;
     }
 
-    public async getOne(item: { id?: string, name?: string }): Promise<User | undefined> {
+    public async getOne(item: { id?: string, username?: string }): Promise<User | undefined> {
         if (item.id) {
             return users.find((user) => user.idUser === item.id);
-        } else if (item.name) {
-            return users.find((user) => user.name === item.name);
+        } else if (item.username) {
+            return users.find((user) => user.username === item.username);
         } else {
             return undefined;
         }
