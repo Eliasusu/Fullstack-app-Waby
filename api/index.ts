@@ -7,7 +7,7 @@ import { muscleGroupsRouter } from './routes/muscleGroups.routes.js';
 import { trainingsRouter } from './routes/trainings.routes.js';
 //import { indexRouter } from './routes/index.routes.mjs';
 //import { authRouter } from './routes/auth.routes.mjs';
-//import { routinesRouter } from './routes/routines.routes.mjs';
+import { routinesRouter } from './routes/routines.routes.js';
 //import { muscleGroupsRouter } from './routes/muscleGroups.routes.mjs';
 import { mesocyclesRouter } from './routes/mesocycles.routes.js';
 
@@ -26,7 +26,7 @@ app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/trainings', trainingsRouter);
 //app.use('/index', indexRouter);
 //app.use('/auth', authRouter);
-//app.use('/routines', routinesRouter);
+app.use('/api/v1/routines', routinesRouter);
 app.use('/api/v1/muscleGroups', muscleGroupsRouter);
 app.use('/api/v1/mesocycles', mesocyclesRouter);
 

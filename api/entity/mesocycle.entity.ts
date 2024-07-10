@@ -1,3 +1,5 @@
+import { Routine } from './routine.entity';
+
 export class Mesocycle {
     constructor( 
         public idMesocycle: string,
