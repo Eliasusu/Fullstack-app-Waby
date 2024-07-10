@@ -21,8 +21,8 @@
 - [x] Hacer repository y routes, agregar en index.ts de muscle group
 - [x] Hacer repository y routes, agregar en index.ts de mesocycles
 - [x] Hacer repository y routes, agregar en index.ts de trainings
-- [ ] Hacer repository y routes, agregar en index.ts de routines
-- [ ] Hacer repository y routes, agregar en index.ts de auth
+- [x] Hacer repository y routes, agregar en index.ts de routines
+- [x] Hacer repository y routes, agregar en index.ts de auth
 - [ ] Hacer repository y routes, agregar en index.ts de index
 - [ ] Conectar base da datos
 - [ ] Cambiar los accesos a base de datos de todas las entidades en routes y repository
