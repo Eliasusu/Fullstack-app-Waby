@@ -1,5 +1,4 @@
 import { generateId } from '../shared/generateId.js';
-import { TrainingMethod } from './trainingMethod.entity';
 
 export class User {
     public idUser?: string;
@@ -12,7 +11,6 @@ export class User {
         public phone: string,
         public bodyWeight: number,
         public height: number,
-        public trainingMethod: TrainingMethod
     ) {
         this.idUser = generateId();
     }

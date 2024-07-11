@@ -18,11 +18,19 @@ usersRouter.get('/', async (req, res) => {
     res.status(200).json(users);
 });
 
-//Get de un user en particular
+//Get one user by id
 usersRouter.get('/:idUser', async (req, res) => {
     
     const { idUser } = req.params;
     const user = await repository.getOne({id: idUser});
+    if (user) return res.json(user);
+    res.status(404).json({ error: 'User not found'});
+});
+
+//Get one user by username
+usersRouter.get('/username/:username', async (req, res) => {
+    const { username } = req.params;
+    const user = await repository.getOne({username: username});
     if (user) return res.json(user);
     res.status(404).json({ error: 'User not found'});
 });
@@ -33,7 +41,7 @@ usersRouter.post('/', async  (req, res) => {
 
     if(result.success){ 
         //Esto se hace en base de datos
-        const exerciseInput = new User(
+        const userInput = new User(
             req.body.username,
             req.body.password,
             req.body.email,
@@ -42,13 +50,9 @@ usersRouter.post('/', async  (req, res) => {
             req.body.phone,
             req.body.bodyWeight,
             req.body.height,
-            new TrainingMethod(
-                req.body.trainingMethod.name,
-                req.body.trainingMethod.description
-            )
         );
-        const newExercise = await repository.add(exerciseInput);
-        if (newExercise) return res.status(201).json(newExercise);
+        const user = await repository.add(userInput);
+        if (user) return res.status(201).json(user);
     } else{
         res.status(400).json({ error: result.error });
     }

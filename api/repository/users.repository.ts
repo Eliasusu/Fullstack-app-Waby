@@ -1,63 +1,49 @@
 import { Repository } from "../shared/repository.js";
 import { User } from "../entity/user.entity.js";
-import { TrainingMethod } from "../entity/trainingMethod.entity.js";
+import { pool } from "../conn.mysql.js";
+import { RowDataPacket } from "mysql2";
+import { resourceUsage } from "process";
 
-const users = [
-    new User(
-        'todoutada',
-        'takadachantodo123',
-        'todoaoi@gmail.com',
-        'Todou Aoi',
-        new Date(1990, 1, 1),
-        '123456',
-        90,
-        1.89,
-        new TrainingMethod('Gym', '')
-    ),
-
-    new User(
-        'chihiro',
-        'chihirorokuhira123',
-        'chihirorokuhira@gmail.com',
-        'Chihiro Rokuhira',
-        new Date(1992, 1, 1),
-        '123456',
-        70,
-        1.70,
-        new TrainingMethod('Calisthenics', '')
-    ),
-
-    new User(
-        'itadori',
-        'itadoriyuji123',
-        'itadoyuji@gmail.com',
-        'Itadori Yuji',
-        new Date(1995, 1, 1),
-        '123456',
-        80,
-        1.76,
-        new TrainingMethod('Calisthenics', '')
-    ),
-]
 
 export class UserRepository implements Repository<User>{
     public async getAll(): Promise<User[] | undefined> {
-        return users;
-    }
+        try{
+            const [users] = await pool.query('SELECT * FROM users');
+            return users as User[];
+        }catch(err){
+            console.log(err);
+            return undefined;
+        }
+    };
 
     public async getOne(item: { id?: string, username?: string }): Promise<User | undefined> {
-        if (item.id) {
-            return users.find((user) => user.idUser === item.id);
-        } else if (item.username) {
-            return users.find((user) => user.username === item.username);
-        } else {
+        try{
+            if (item.id) {
+                const [users] = await pool.query<RowDataPacket[]>('SELECT * FROM users WHERE idUser = ?', [item.id]);
+                return users[0] as User;
+            } else if (item.username) {
+                const [users] = await pool.query<RowDataPacket[]>('SELECT * FROM users WHERE username = ?', [item.username]);
+                return users[0] as User;
+            }
+        }catch{
             return undefined;
         }
     }
 
     public async add(item: User): Promise<User | undefined> {
-        users.push(item);
-        return item;
+        console.log(item)
+        try{    
+            console.log('Entre al add del repository')
+            const [idUser, fullname, birthdate, phone, mail, password, username, bodyWeigth, height] = [item.idUser, item.name, item.birthdate, item.phone, item.email, item.password, item.username, item.bodyWeight, item.height];
+            const test = await pool.query('INSERT INTO users SET (idUser, fullname, birthdate, phone, mail, password, username, bodyWeigth, height) VALUES (?,?,?,?,?,?,?,?,?)', [
+                idUser, fullname, birthdate, phone, mail, password, username, bodyWeigth, height
+            ]);
+            console.log(test)
+            console.log('Despues del insert')
+            return item;
+        }catch{
+            return undefined;
+        }
     }
 
     public async update(item: User): Promise<User | undefined> {
@@ -68,6 +54,7 @@ export class UserRepository implements Repository<User>{
         } else {
             return;
         }
+        PassThrough
     }
 
     public async delete(item: { id?: string, name?: string }): Promise<User | undefined> {
@@ -90,6 +77,7 @@ export class UserRepository implements Repository<User>{
                 return undefined;
             }
         }
+        PassThrough
     }
     
 } 

@@ -1,7 +1,4 @@
 import { z } from 'zod';
-import { trainingMethodSchema } from './trainingMethod.schema.js';
-
-
 
 export const userSchema = z.object({
     idUser: z.string({}).min(12).max(12).optional(),
@@ -34,8 +31,6 @@ export const userSchema = z.object({
         required_error: 'Height is required',
         invalid_type_error: 'Height must be a number',
         }).positive({}).min(1).max(2.5),
-
-    trainingMethod: trainingMethodSchema,
 });
 
 type User = z.infer<typeof userSchema>;

@@ -17,17 +17,14 @@ authRouter.post('/register', async (req, res) => {
             result.data.password,
             result.data.email,
             result.data.name,
-            new Date(result.data.birthdate),
+            result.data.birthdate,
             result.data.phone,
             result.data.bodyWeight,
             result.data.height,
-            new TrainingMethod( 
-                    result.data.trainingMethod.nameMethod, 
-                    result.data.trainingMethod.description
-                )
         );
 
     try {
+        console.log('Entre al try del auth.routes')
         const user = await repository.add(newUser);
         res.status(200).json(user);
     } catch (error) {
