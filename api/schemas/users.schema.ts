@@ -30,7 +30,7 @@ export const userSchema = z.object({
     height: z.number({
         required_error: 'Height is required',
         invalid_type_error: 'Height must be a number',
-        }).positive({}).min(1).max(2.5),
+        }).positive({}).min(1).max(250),
 });
 
 type User = z.infer<typeof userSchema>;
