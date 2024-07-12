@@ -7,8 +7,7 @@ import { muscleGroupsRouter } from './routes/muscleGroups.routes.js';
 import { trainingsRouter } from './routes/trainings.routes.js';
 //import { indexRouter } from './routes/index.routes.js';
 import { authRouter } from './routes/auth.routes.js';
-//import { routinesRouter } from './routes/routines.routes.js';
-//import { muscleGroupsRouter } from './routes/muscleGroups.routes.js';
+import { routinesRouter } from './routes/routines.routes.js';
 import { mesocyclesRouter } from './routes/mesocycles.routes.js';
 
 
@@ -18,7 +17,6 @@ const port = process.env.PORT ?? 3000;
 const app = express();
 app.use(express.json());
 app.disable('x-powered-by');
-
 app.use(corsMiddleware());
 
 app.use('/api/v1/exercises', exercisesRouter);
