@@ -1,4 +1,4 @@
-import { Routine } from './routine.entity';
+import { Routine } from './exercise_training.entity';
 
 export class Mesocycle {
     constructor( 

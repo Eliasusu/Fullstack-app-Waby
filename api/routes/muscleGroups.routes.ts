@@ -1,10 +1,10 @@
 import {Router} from 'express';
 import { validateMuscleGroup} from '../schemas/muscleGroups.schema.js';
-import {MuscleGroupRepository} from '../repository/muscleGroup.repository.js';
+import { MuscleGroupsRepository } from '../repository/muscleGroups.repository.js';
 
 
 export const muscleGroupsRouter = Router();
-const repository = new MuscleGroupRepository();
+const repository = new MuscleGroupsRepository();
 
 muscleGroupsRouter.get('/', async (req, res) => {
     const muscleGroups = await repository.getAll();

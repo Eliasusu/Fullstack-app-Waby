@@ -18,9 +18,7 @@ export const exercisesSchema = z.object({
   typeExercise: z.string({
     invalid_type_error: 'Type of exercise must be a string',
   }),
-  idExercise: z.string({
-    invalid_type_error: 'Id of exercise must be a string',
-  }).optional(),
+  idExercise: z.number().positive().optional(),
   training: trainingsSchema.optional(),
   videoUrl: z.string({
     invalid_type_error: 'Video URL must be a string',

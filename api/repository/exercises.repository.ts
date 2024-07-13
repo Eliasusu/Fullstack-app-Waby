@@ -1,87 +1,55 @@
 import { Repository } from '../shared/repository.js';
 import { Exercise } from '../entity/exercise.entity.js';
-import { TrainingMethod } from '../entity/trainingMethod.entity.js';
-import { Training } from '../entity/training.entity.js';
-import { Mesocycle } from '../entity/mesocycle.entity.js';
-import { User } from '../entity/user.entity.js';
-import { MuscleGroup } from '../entity/muscleGroup.entity.js';
-
-const exercises = [
-    new Exercise(
-        "Bench Press",
-        new TrainingMethod("Gym", ""),
-        "The bench press is a compound exercise that builds strength and muscle in the chest and triceps. It's one of the most popular exercises in the gym.",
-        [new MuscleGroup("1", "Chest", "", "")],
-        "Medium",
-        "Compound",
-        "1",
-        new Training(
-            new User(
-                "theo", 
-                "1234", 
-                "theo@gmail.com", 
-                "Theo", 
-                new Date(), 
-                "123456", 
-                70, 
-                1.80, 
-                new TrainingMethod(
-                    "Gym",
-                    ""
-                )
-            ),
-            new Mesocycle(
-                "1", 
-                "Strenght",
-                 new Date(), 
-                 new Date()), 
-                 "Chest day", 
-                 "Pull", 
-                 new Date(), 
-                 "5:00 AM",
-             ),
-        "",
-        "",
-        new Date()
-        
-    ),
-]
-
-
+import { pool } from "../conn.mysql.js";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export class ExerciseRepository implements Repository<Exercise>{
 
     public async getAll(): Promise<Exercise[] | undefined> {
-        return exercises;
+        try {
+            const [exercises] = await pool.query('SELECT * FROM exercises');
+            return exercises as Exercise[];
+        } catch(err) {
+            return undefined;
+        }
     }
 
 
     public async getOne(item: { id: string }): Promise<Exercise | undefined> {
-        return exercises.find((exercise) => exercise.idExercise === item.id);
+        try {
+            const [exercises] = await pool.query<RowDataPacket[]>('SELECT * FROM exercises WHERE idExercise = ?', [item.id]);
+            return exercises[0] as Exercise;
+        } catch (err) {
+            return undefined;
+       }
     }
 
     public async add(item: Exercise): Promise<Exercise | undefined> {
-        item.idExercise = (exercises.length + 1).toString();
-        exercises.push(item);
-        return item;
+        try {
+            const [result] = await pool.query<ResultSetHeader>('INSERT INTO exercises SET ?', [item]);
+            return item;
+        } catch (err) {
+            return undefined;
+        }
     }
 
     public async update(item: Exercise): Promise<Exercise | undefined> {
-        const index = exercises.findIndex((exercise) => exercise.idExercise === item.idExercise);
-        if (index > -1) {
-            exercises[index] = {...exercises[index], ...item};
+        try {
+            const [result] = await pool.query('UPDATE exercises SET ? WHERE idExercise = ?', [item, item.idExercise]);
             return item;
-        } else {
-            return;
+        } catch (err) {
+            return undefined;
         }
     }
 
     public async delete(item: { id: string }): Promise<Exercise | undefined> {
-        const index = exercises.findIndex((exercise) => exercise.idExercise === item.id);
-        if (index > -1) {
-            return exercises.splice(index, 1)[0];
-        } else {
-            return;
+        const exerciseToDelete = await this.getOne(item);
+        if (!exerciseToDelete) return undefined;
+        try {
+            const [result] = await pool.query<RowDataPacket[]>('DELETE FROM exercises WHERE idExercise = ?', [item.id]);
+            return exerciseToDelete;
+        } catch (err) {
+            return undefined;
         }
     }
 

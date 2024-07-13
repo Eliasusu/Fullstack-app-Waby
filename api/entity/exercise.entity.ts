@@ -11,7 +11,7 @@ export class Exercise  {
     public muscleGroups: MuscleGroup[],
     public difficulty: string,
     public typeExercise: string,
-    public idExercise?: string,
+    public idExercise?: number,
     public training?: Training | undefined,
     public videoUrl?: string,
     public image?: string,

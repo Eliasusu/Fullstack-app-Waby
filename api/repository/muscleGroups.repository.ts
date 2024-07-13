@@ -16,7 +16,7 @@ const MuscleGroups = [
     ),
 ]
 
-export class MuscleGroupRepository implements Repository<MuscleGroup>{
+export class MuscleGroupsRepository implements Repository<MuscleGroup>{
     public async getAll(): Promise<MuscleGroup[] | undefined> {
         return MuscleGroups;
     }

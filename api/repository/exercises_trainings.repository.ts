@@ -1,4 +1,4 @@
-import {Routine} from '../entity/routine.entity.js';
+import {Routine} from '../entity/exercise_training.entity.js';
 import {Repository} from '../shared/repository.js';
 import {Training} from '../entity/training.entity.js';
 import {Mesocycle} from '../entity/mesocycle.entity.js';

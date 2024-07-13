@@ -44,14 +44,10 @@ export class UserRepository implements Repository<User>{
     }
 
     public async delete(item: { id: string }): Promise<User | undefined> {
-        console.log('Entre al deleted')
         const userToDelete = await this.getOne(item);
-        console.log(userToDelete)
         if (!userToDelete) return undefined;
         try {
-            console.log('antes de la consulta')
             const [result] = await pool.query<RowDataPacket[]>('DELETE FROM users WHERE idUser = ?', [item.id]);
-            console.log('despues de la consulta')
             return userToDelete;
         } catch (err) {
             console.log(err)

@@ -7,7 +7,7 @@ import { muscleGroupsRouter } from './routes/muscleGroups.routes.js';
 import { trainingsRouter } from './routes/trainings.routes.js';
 //import { indexRouter } from './routes/index.routes.js';
 import { authRouter } from './routes/auth.routes.js';
-import { routinesRouter } from './routes/routines.routes.js';
+import { routinesRouter } from './routes/exercises_trainings.routes.js';
 import { mesocyclesRouter } from './routes/mesocycles.routes.js';
 
 
