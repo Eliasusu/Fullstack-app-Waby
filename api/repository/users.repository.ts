@@ -2,7 +2,6 @@ import { Repository } from "../shared/repository.js";
 import { User } from "../entity/user.entity.js";
 import { pool } from "../conn.mysql.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { resourceUsage } from "process";
 
 
 export class UserRepository implements Repository<User>{
@@ -16,13 +15,31 @@ export class UserRepository implements Repository<User>{
         }
     };
 
-    public async getOne(item: { id: string }): Promise<User | undefined> {
-        try{
+    public async getOne(item: { id?: string, name?: string, other?: string }): Promise<User | undefined> {
+        if(item.name){
+            try{
+                const [users] = await pool.query<RowDataPacket[]>('SELECT * FROM users WHERE username = ?', [item.name]);
+                return users[0] as User;
+            }catch{
+                return undefined;
+            }
+        }
+        if(item.other){
+            try{
+                const [users] = await pool.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [item.other]);
+                return users[0] as User;
+            }catch{
+                return undefined;
+            }
+        } else { 
+            try{
             const [users] = await pool.query<RowDataPacket[]>('SELECT * FROM users WHERE idUser = ?', [item.id]);
             return users[0] as User;
         }catch{
             return undefined;
         }
+        }
+
     }
 
     public async add(item: User): Promise<User | undefined> {
@@ -44,7 +61,7 @@ export class UserRepository implements Repository<User>{
     }
 
     public async delete(item: { id: string }): Promise<User | undefined> {
-        const userToDelete = await this.getOne(item);
+        const userToDelete = await this.getOne({id: item.id});
         if (!userToDelete) return undefined;
         try {
             const [result] = await pool.query<RowDataPacket[]>('DELETE FROM users WHERE idUser = ?', [item.id]);
