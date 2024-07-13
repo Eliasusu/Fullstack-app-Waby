@@ -22,9 +22,7 @@ async function register(req: Request, res: Response) {
         );
 
     try {
-        console.log('Entre al try del auth.routes')
         const user = await repository.add(newUser);
-        console.log('Despues del add del repository')
         console.log(user)
         res.status(200).json(user);
     } catch (error) {
@@ -40,22 +38,31 @@ async function login(req: Request, res: Response) {
     const { username, password, email } = req.body;
     const result = validateParcialUser(req.body);
     
-    if(result.success){
-        try {
-            const user = await repository.getOne({username: username});
-            if(user && user.password === password){
+    if (result.success) {
+        if (username) {
+            try {
+            const user = await repository.getOne({name: username});
+                if(user && user.password === password){
                 res.status(200).json(user);
-            } else {
+                } else {
                 res.status(401).json({error: 'Invalid credentials'});
             }
-            if(user && user.email === email && user.password === password){
-                res.status(200).json(user);
-            } else {
-                res.status(401).json({error: 'Invalid credentials'});
+            } catch (error) {
+                res.status(500).json({error: 'Error getting user'});
             }
-        } catch (error) {
-            res.status(500).json({error: 'Error getting user'});
         }
+        if(email){
+            try {
+                const user = await repository.getOne({ other: email });
+                if (user && user.password === password) {
+                    res.status(200).json(user);
+                } else {
+                    res.status(401).json({ error: 'Invalid credentials' });
+                }
+            } catch (error) {
+                res.status(500).json({ error: 'Error getting user' });
+            }
+        } 
     } else {
         res.status(400).json(result.error);
     }
