@@ -16,16 +16,17 @@
 - [x] Hacer el repository de users
 - [x] Acomodar Routes de users
 - [x] Acomodar Routes trainings
-- [ ] Cambiar a un nombre mas apropiado para Routines
-- [ ] Quitar el objeto Training de la entidad Exercises y hacer los cambios correspondientes
+- [x] Cambiar a un nombre mas apropiado para Routines
+- [x] Quitar el objeto Training de la entidad Exercises y hacer los cambios correspondientes
 - [x] Hacer repository y routes, agregar en index.ts de muscle group
 - [x] Hacer repository y routes, agregar en index.ts de mesocycles
 - [x] Hacer repository y routes, agregar en index.ts de trainings
 - [x] Hacer repository y routes, agregar en index.ts de routines
 - [x] Hacer repository y routes, agregar en index.ts de auth
 - [ ] Hacer repository y routes, agregar en index.ts de index
-- [ ] Conectar base da datos
-- [ ] Cambiar los accesos a base de datos de todas las entidades en routes y repository
+- [x] Conectar base da datos
+- [ ] Cambiar routes, controller y repository para Muscle Groups
+- [ ] Cambiar routes, controller y repository para Mesocycles
 
 ## Fechas de entregas 📅
 
