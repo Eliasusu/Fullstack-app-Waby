@@ -8,17 +8,18 @@ export class TrainingRepository implements Repository<Training>{
 
     public async getAll(item: { id: string }): Promise<Training[] | undefined> {
         try {
-            const [trainings] = await pool.query('SELECT * FROM trainings WHERE idUser = ?', [item.id]);
-            return trainings as Training[];
+            const [trainings, _] = await pool.query('SELECT * FROM trainings WHERE idUser = ?', [item.id]) as [Training[], any];
+            if (trainings.length === 0) return undefined;
+            return trainings;
         } catch (err) {
             console.log(err); // --> Eliminar en producción
             return undefined;
         }
     }
 
-    public async getOne(item: { id: string }): Promise<Training | undefined> {
+    public async getOne(item: { id: string, other?: string }): Promise<Training | undefined> {
         try {
-            const [trainings] = await pool.query<RowDataPacket[]>('SELECT * FROM trainings WHERE idTraining = ?', [item.id]);
+            const [trainings] = await pool.query<RowDataPacket[]>('SELECT * FROM trainings WHERE idTraining = ? AND idUser = ?', [item.id, item.other]);
             return trainings[0] as Training;
         } catch(err){
             console.log(err) // --> Eliminar en producción
@@ -31,7 +32,7 @@ export class TrainingRepository implements Repository<Training>{
         console.log(trainingInput); // --> Eliminar en producción
         try {
             const [result] = await pool.query<ResultSetHeader>('INSERT INTO trainings SET ?', [trainingInput]);
-            return
+            return 
         } catch (err) {
             console.log(err); // --> Eliminar en producción
             return undefined;

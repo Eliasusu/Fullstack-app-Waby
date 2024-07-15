@@ -1,65 +1,62 @@
-import { Mesocycle } from "../entity/mesocycle.entity.js";
 import { Repository } from "../shared/repository.js";
+import { Mesocycle } from "../entity/mesocycle.entity.js";
+import { pool } from "../conn.mysql.js";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
-const Mesocycles = [    
-    new Mesocycle(
-        '1',
-        'Strength',
-        new Date('2024-01-01'),
-        new Date('2024-01-31'),
-    ),
-    new Mesocycle(
-        '2',
-        'Hypertrophy',
-        new Date('2024-02-01'),
-        new Date('2024-02-28'),
-    ),
-];
 
-export class MesocycleRepository implements Repository<Mesocycle>{
-    public async getAll(): Promise<Mesocycle[] | undefined> {
-        return Mesocycles;
+export class MesocycleRepository implements Repository<Mesocycle> {
+    public async getAll(item: { id?: string }): Promise<Mesocycle[] | undefined> {
+        try {
+            const query = 'SELECT * FROM mesocycles m JOIN trainings t ON ? = t.idTraining';
+            const [rows] = await pool.execute(query, [item.id]);
+            return rows as Mesocycle[];
+        } catch (err) {
+            console.log(err); //--> Eliminar en producción
+            return undefined;
+        }
     }
 
-    public async getOne(item: { id?: string, type?: string }): Promise<Mesocycle | undefined> {
-        if (item.id) {
-            return Mesocycles.find((mesocycle) => mesocycle.idMesocycle === item.id);
-        } else if (item.type) {
-            return Mesocycles.find((mesocycle) => mesocycle.typeMesocycle === item.type);
-        } else {return undefined;}
+    public async getOne(item: { id?: string }): Promise<Mesocycle | undefined> {
+        try {
+            const query = 'SELECT * FROM mesocycles WHERE idMesocycle = ?';
+            const [rows] = await pool.execute<RowDataPacket[]>(query, [item.id]);
+            return rows[0] as Mesocycle;
+        } catch (err) {
+            console.log(err); //--> Eliminar en producción
+            return undefined;
+        }
     }
 
     public async add(item: Mesocycle): Promise<Mesocycle | undefined> {
-        item.idMesocycle = (Mesocycles.length + 1).toString();
-        Mesocycles.push(item);
-        return undefined;
+        try {
+            const query = 'INSERT INTO mesocycles SET ?';
+            const [result] = await pool.execute<ResultSetHeader>(query, [item]);
+            return result as unknown as Mesocycle;
+        } catch (err) {
+            console.log(err); //--> Eliminar en producción
+            return undefined;
+        }
     }
 
     public async update(item: Mesocycle): Promise<Mesocycle | undefined> {
-        const mesocycle = Mesocycles.find((mesocycle) => mesocycle.idMesocycle === item.idMesocycle);
-        if (!mesocycle) {
-            console.log('Mesocycle not found');
-            return;
+        try {
+            const query = 'UPDATE mesocycles SET ? WHERE idMesocycle = ?';
+            const [result] = await pool.execute(query, [item, item.idMesocycle]);
+            return result as unknown as Mesocycle;
+        } catch (err) {
+            console.log(err); //--> Eliminar en producción
+            return undefined;
         }
-        Object.assign(mesocycle, item);
-        return mesocycle;
     }
 
-    public async delete(item: { id?: string, type?: string }): Promise<Mesocycle | undefined> {
-        if( item.id ){
-            const index = Mesocycles.findIndex((mesocycle) => mesocycle.idMesocycle === item.id);
-            if (index > -1) {
-                return Mesocycles.splice(index, 1)[0];
-            } else {
-                return;
-            }
-        } else {
-            const index = Mesocycles.findIndex((mesocycle) => mesocycle.typeMesocycle === item.type);
-            if (index > -1) {
-                return Mesocycles.splice(index, 1)[0];
-            } else {
-                return;
-            }
+    public async delete(item: { id?: string }): Promise<Mesocycle | undefined> {
+        try {
+            const query = 'DELETE FROM mesocycles WHERE idMesocycle = ?';
+            const [result] = await pool.execute(query, [item.id]);
+            return result as unknown as Mesocycle;
+        } catch (err) {
+            console.log(err); //--> Eliminar en producción
+            return undefined;
         }
     }
 }
