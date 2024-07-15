@@ -30,7 +30,7 @@ async function update (req: Request, res: Response) {
                 ...user,
                 ...req.body
             });
-            if (updatedUser) return res.status(200).json(updatedUser);
+            if (updatedUser) return res.status(202).json(updatedUser);
         } else{
             res.status(400).json({ error: 'User not updated' });
         }

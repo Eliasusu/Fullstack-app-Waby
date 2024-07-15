@@ -45,7 +45,7 @@ export class UserRepository implements Repository<User>{
     public async add(item: User): Promise<User | undefined> {
         try {
             const [result] = await pool.query<ResultSetHeader>('INSERT INTO users SET ?', [item]);
-            return
+            return item;
         } catch (err) {
             return undefined;
         }
