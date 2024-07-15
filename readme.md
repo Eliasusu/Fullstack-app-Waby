@@ -23,7 +23,7 @@
 - [x] Hacer repository y routes, agregar en index.ts de trainings
 - [x] Hacer repository y routes, agregar en index.ts de routines
 - [x] Hacer repository y routes, agregar en index.ts de auth
-- [ ] Hacer repository y routes, agregar en index.ts de index
+- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index 
 - [x] Conectar base da datos
 - [ ] Cambiar routes, controller y repository para Muscle Groups
 - [ ] Cambiar routes, controller y repository para Mesocycles

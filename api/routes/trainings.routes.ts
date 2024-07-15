@@ -4,10 +4,10 @@ import { getAll, getOne, add, update, remove } from "../controllers/trainings.co
 export const trainingsRouter = Router();
 
 //Get all trainings by user
-trainingsRouter.get('/:idUser', getAll);
+trainingsRouter.get('/user/:idUser', getAll);
 
 //Get one training by id
-trainingsRouter.get('/:idTraining', getOne);
+trainingsRouter.get('/:idTraining/user/:idUser', getOne);
 
 //Create a new training
 trainingsRouter.post('/', add);

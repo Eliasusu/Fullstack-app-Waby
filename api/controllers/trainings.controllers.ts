@@ -7,14 +7,15 @@ const repository = new TrainingRepository();
 
 async function getAll(req: Request, res: Response) {
     const { idUser } = req.params;
+    console.log(idUser);
     const trainings = await repository.getAll({ id: idUser });
     if (!trainings) return res.status(404).json({ error: 'Trainings not found' });
     res.json(trainings);
  }
 
 async function getOne(req: Request, res: Response) {
-    const { idTraining } = req.params;
-    const training = await repository.getOne({ id: idTraining });
+    const { idTraining, idUser } = req.params;
+    const training = await repository.getOne({ id: idTraining, other: idUser });
     if (training) return res.json(training);
     res.status(404).json({ error: 'Training not found' });
 }

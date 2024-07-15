@@ -3,8 +3,6 @@ import { getAll, getOne, update, remove } from "../controllers/users.controllers
 
 export const usersRouter = Router();
 
-console.log('Entre PAPU')
-
 //Get all users
 usersRouter.get('/', getAll);
 
