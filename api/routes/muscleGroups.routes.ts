@@ -1,56 +1,20 @@
 import {Router} from 'express';
-import { validateMuscleGroup} from '../schemas/muscleGroups.schema.js';
-import { MuscleGroupsRepository } from '../repository/muscleGroups.repository.js';
+import { getAll, getOne, update, remove, add } from '../controllers/muscleGroups.controller.js';
 
 
 export const muscleGroupsRouter = Router();
-const repository = new MuscleGroupsRepository();
 
-muscleGroupsRouter.get('/', async (req, res) => {
-    const muscleGroups = await repository.getAll();
-    res.status(200).json(muscleGroups);
-} );
+//Get all muscle groups
+muscleGroupsRouter.get('/', getAll);
 
-muscleGroupsRouter.get('/:idMuscleGroup', async (req, res) => {
-    const { idMuscleGroup } = req.params;
-    const muscleGroup = await repository.getOne({id: idMuscleGroup});
-    if (muscleGroup) return res.json(muscleGroup);
-    res.status(404).json({ error: 'Muscle Group not found'});
-});
+//Get one muscle group by id
+muscleGroupsRouter.get('/:idMuscleGroup', getOne);
 
-muscleGroupsRouter.post('/', async (req, res) => {
-    const result = validateMuscleGroup(req.body);
-    if(result.success){
-        const muscleGroup = result.data;
-        const newMuscleGroup = await repository.add(muscleGroup);
-        res.status(201).json(muscleGroup);
-    } else {
-        res.status(400).json({ error: result.error });
-    }
-});
+//Add a muscle group
+muscleGroupsRouter.post('/', add);
 
-muscleGroupsRouter.put('/:idMuscleGroup', async (req, res) => {
-    const { idMuscleGroup } = req.params;
-    const muscleGroup = await repository.getOne({id: idMuscleGroup});
-    if (muscleGroup) {
-        const result = validateMuscleGroup(req.body);
-        if(result.success){
-            const muscleGroupUpdate = await repository.update({
-              ...muscleGroup,
-              ...req.body
-            });
-            if (muscleGroupUpdate) return res.json(muscleGroupUpdate);
-        } else{
-            res.status(400).json({ error: result.error });
-        }
-    } else {
-        res.status(404).json({ error: 'Muscle Group not found'});
-    }
-});
+//Update a muscle group
+muscleGroupsRouter.put('/:idMuscleGroup', update);
 
-muscleGroupsRouter.delete('/:idMuscleGroup', async (req, res) => {
-    const { idMuscleGroup } = req.params;
-    const muscleGroup = await repository.delete({id: idMuscleGroup});
-    if (muscleGroup) return res.json(muscleGroup);
-    res.status(404).json({ error: 'Muscle Group not found'});
-});
+//Delete a muscle group
+muscleGroupsRouter.delete('/:idMuscleGroup', remove);

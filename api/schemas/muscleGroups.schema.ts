@@ -21,5 +21,5 @@ export function validateMuscleGroup(muscleGroup: MuscleGroup) {
 }
 
 export function validatePartialMuscleGroup(muscleGroup: MuscleGroup) {
-    return muscleGroupSchema.partial().parse(muscleGroup);
+    return muscleGroupSchema.partial().safeParse(muscleGroup);
 }
