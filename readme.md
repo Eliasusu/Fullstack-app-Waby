@@ -27,6 +27,7 @@
 - [x] Conectar base da datos
 - [ ] Cambiar routes, controller y repository para Muscle Groups
 - [ ] Cambiar routes, controller y repository para Mesocycles
+- [ ] Comprobar que funcionan todos los querys de la base de datos
 
 ## Fechas de entregas 📅
 
