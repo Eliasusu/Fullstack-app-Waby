@@ -27,6 +27,7 @@ async function add(req: Request, res: Response) {
     const result = validateMuscleGroup(req.body);
     if (result.success) {
         const muscleGroup = result.data;
+        console.log("");
         try {
             const newMuscleGroup = await repository.add(muscleGroup);
             res.status(201).json(newMuscleGroup);
@@ -45,11 +46,13 @@ async function update(req: Request, res: Response) {
     const muscleGroup = await repository.getOne({ id: idMuscleGroup });
     if (muscleGroup) {
         const result = validatePartialMuscleGroup(req.body);
+        console.log("valide el body");
         if (result.success) {
             const muscleGroupUpdate = await repository.update({
                 ...muscleGroup,
                 ...req.body
             });
+            console.log("pase el update");
             if (muscleGroupUpdate) return res.status(202).json(muscleGroupUpdate);
         } else {
             res.status(400).json({ error: result.error });
