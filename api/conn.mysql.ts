@@ -14,5 +14,3 @@ export const pool = mysql.createPool({
     enableKeepAlive: true,
     keepAliveInitialDelay: 0
 });
-
-
