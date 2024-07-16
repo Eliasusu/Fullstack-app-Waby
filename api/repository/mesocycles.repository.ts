@@ -7,7 +7,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 export class MesocycleRepository implements Repository<Mesocycle> {
     public async getAll(item: { id?: string }): Promise<Mesocycle[] | undefined> {
         try {
-            const query = 'SELECT * FROM mesocycles m JOIN trainings t ON ? = t.idTraining';
+            const query = 'SELECT * FROM trainings t JOIN mesocycles m ON ? = t.idMesocycle';
             const [rows] = await pool.execute(query, [item.id]);
             return rows as Mesocycle[];
         } catch (err) {
@@ -29,8 +29,8 @@ export class MesocycleRepository implements Repository<Mesocycle> {
 
     public async add(item: Mesocycle): Promise<Mesocycle | undefined> {
         try {
-            const query = 'INSERT INTO mesocycles SET ?';
-            const [result] = await pool.execute<ResultSetHeader>(query, [item]);
+            const [result] = await pool.execute<ResultSetHeader>('INSERT INTO mesocycles SET ?', [item]);
+            console.log(result) //--> Eliminar en producción
             return result as unknown as Mesocycle;
         } catch (err) {
             console.log(err); //--> Eliminar en producción

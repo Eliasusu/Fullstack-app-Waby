@@ -3,7 +3,8 @@ import { getAll, getOne, add, update, deleteOne } from "../controllers/mesocycle
 
 export const mesocyclesRouter = Router();
 
-mesocyclesRouter.get('/:idTraining', getAll);
+//Get all trainings from a mesocycle
+mesocyclesRouter.get('/:idMesocycle', getAll);
 
 mesocyclesRouter.get('/:idMesocycle', getOne);
 

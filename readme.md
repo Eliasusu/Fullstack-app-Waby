@@ -27,9 +27,9 @@
 - [x] Cambiar routes, controller y repository para Muscle Groups
 - [x] Cambiar routes, controller y repository para Mesocycles
 - [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index 
-- [ ] Testear auth
+- [x] Testear auth
 - [ ] Testear exercises
-- [ ] Testear users
+- [x] Testear users
 - [ ] Testear trainings
 - [ ] Testear muscleGroups
 - [ ] Testear mesocycles

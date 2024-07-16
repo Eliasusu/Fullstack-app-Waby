@@ -1,7 +1,7 @@
 import{ z } from 'zod';
 
 export const mesocyclesSchema = z.object({
-    idMesocycle: z.string({}).min(1).max(100),
+    idMesocycle: z.number().int().positive(),
     typeMesocycle: z.string({
         required_error: 'Type of mesocycle is required',
         invalid_type_error: 'Type of mesocycle must be a string',

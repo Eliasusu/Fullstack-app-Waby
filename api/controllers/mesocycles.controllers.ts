@@ -22,8 +22,7 @@ async function add(req: Request, res: Response) {
   if (result.success) {
     const mesocycle = result.data;
     const newMesocycle = await repository.add(mesocycle);
-    res.status(201).json(newMesocycle);
-  } else {
+    if(!undefined) res.status(201).json(newMesocycle);
     res.status(400).json({ error: result.error });
   }
 }
