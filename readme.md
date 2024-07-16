@@ -23,11 +23,17 @@
 - [x] Hacer repository y routes, agregar en index.ts de trainings
 - [x] Hacer repository y routes, agregar en index.ts de routines
 - [x] Hacer repository y routes, agregar en index.ts de auth
-- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index 
 - [x] Conectar base da datos
-- [ ] Cambiar routes, controller y repository para Muscle Groups
-- [ ] Cambiar routes, controller y repository para Mesocycles
-- [ ] Comprobar que funcionan todos los querys de la base de datos
+- [x] Cambiar routes, controller y repository para Muscle Groups
+- [x] Cambiar routes, controller y repository para Mesocycles
+- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index 
+- [ ] Testear auth
+- [ ] Testear exercises
+- [ ] Testear users
+- [ ] Testear trainings
+- [ ] Testear muscleGroups
+- [ ] Testear mesocycles
+- [ ] Testear exercises_trainings
 
 ## Fechas de entregas 📅
 
