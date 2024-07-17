@@ -9,7 +9,8 @@ export class ExerciseRepository implements Repository<Exercise>{
         try {
             const [exercises] = await pool.query('SELECT * FROM exercises');
             return exercises as Exercise[];
-        } catch(err) {
+        } catch (err) { 
+            console.log(err); //--> Eliminar en producción
             return undefined;
         }
     }
@@ -26,8 +27,24 @@ export class ExerciseRepository implements Repository<Exercise>{
 
     public async add(item: Exercise): Promise<Exercise | undefined> {
         try {
-            const [result] = await pool.query<ResultSetHeader>('INSERT INTO exercises SET ?', [item]);
-            return item;
+            const newExercise = [
+                item.idExercise,
+                item.training?.idTraining ?? null,
+                item.trainingMethod.idMethod,
+                item.name,
+                item.description ?? null,
+                item.image ?? null,
+                item.typeExercise,
+                item.difficulty,
+                item.dateCreated 
+            ]; 
+            console.log(newExercise); //--> Eliminar en producción
+            const [result] = await pool.query<ResultSetHeader>('INSERT INTO exercises SET ?', [newExercise]);
+            if (result.affectedRows === 1) {
+                return item;
+            } else {
+                throw new Error("Failed to add exercise to the database");
+            }
         } catch (err) {
             return undefined;
         }

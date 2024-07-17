@@ -9,7 +9,7 @@ export const exercisesSchema = z.object({
     invalid_type_error: 'Name must be a string',
   }),
   trainingMethod: trainingMethodSchema,
-  description: z.string({}),
+  description: z.string({}).nullable(),
   muscleGroups: z.array(muscleGroupSchema),
   difficulty: z.string({
     required_error: 'Difficulty is required',
@@ -19,16 +19,16 @@ export const exercisesSchema = z.object({
     invalid_type_error: 'Type of exercise must be a string',
   }),
   idExercise: z.number().positive().optional(),
-  training: trainingsSchema.optional(),
+  training: trainingsSchema.optional().nullable(),
   videoUrl: z.string({
     invalid_type_error: 'Video URL must be a string',
   }).optional(),
   image: z.string({
     invalid_type_error: 'Image must be a string',
-  }).optional(),
+  }).optional().nullable(),
   dateCreated: z.date({
     invalid_type_error: 'Date must be a date',
-  }).optional(),
+  }).optional().nullable(),
 });
 
 type Exercise = z.infer<typeof exercisesSchema>;

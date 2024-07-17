@@ -7,7 +7,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 export class MesocycleRepository implements Repository<Mesocycle> {
     public async getAll(item: { id?: string }): Promise<Mesocycle[] | undefined> {
         try {
-            const query = 'SELECT * FROM trainings t JOIN mesocycles m ON ? = t.idMesocycle';
+            const query = 'SELECT * FROM trainings t JOIN mesocycles m ON t.idMesocycle = m.idMesocycle WHEN m.idMesocycle = ?';
             const [rows] = await pool.execute(query, [item.id]);
             return rows as Mesocycle[];
         } catch (err) {

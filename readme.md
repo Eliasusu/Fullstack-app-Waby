@@ -26,10 +26,10 @@
 - [x] Conectar base da datos
 - [x] Cambiar routes, controller y repository para Muscle Groups
 - [x] Cambiar routes, controller y repository para Mesocycles
-- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index 
 - [x] Testear auth
-- [ ] Testear exercises
 - [x] Testear users
+- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index 
+- [ ] Testear exercises
 - [ ] Testear trainings
 - [ ] Testear muscleGroups
 - [ ] Testear mesocycles
