@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-conn.mysql.ts
+conectiondb
 
 # Editor directories and files
 .vscode/*

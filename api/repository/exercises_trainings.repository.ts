@@ -1,6 +1,6 @@
 import {Exercise_Training} from '../entity/exercise_training.entity.js';
 import {Repository} from '../shared/repository.js';
-import { pool } from '../conn.mysql.js';
+import { pool } from '../conectiondb/conn.mysql.js';
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { PassThrough } from 'stream';
 

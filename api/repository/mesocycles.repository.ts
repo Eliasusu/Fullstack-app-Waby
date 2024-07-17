@@ -1,6 +1,6 @@
 import { Repository } from "../shared/repository.js";
 import { Mesocycle } from "../entity/mesocycle.entity.js";
-import { pool } from "../conn.mysql.js";
+import { pool } from "../conectiondb/conn.mysql.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 

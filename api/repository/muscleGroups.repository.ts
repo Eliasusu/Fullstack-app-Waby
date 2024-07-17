@@ -1,6 +1,6 @@
 import { MuscleGroup } from "../entity/muscleGroup.entity.js";
 import { Repository } from "../shared/repository.js";
-import {pool} from "../conn.mysql.js";
+import {pool} from "../conectiondb/conn.mysql.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { query } from "express";
 

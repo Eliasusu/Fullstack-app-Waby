@@ -1,6 +1,6 @@
 import { Repository } from '../shared/repository.js';
 import { Exercise } from '../entity/exercise.entity.js';
-import { pool } from "../conn.mysql.js";
+import { pool } from "../conectiondb/conn.mysql.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export class ExerciseRepository implements Repository<Exercise>{
