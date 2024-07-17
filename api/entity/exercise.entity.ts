@@ -12,9 +12,11 @@ export class Exercise  {
     public difficulty: string,
     public typeExercise: string,
     public idExercise?: number,
-    public training?: Training | undefined,
-    public videoUrl?: string,
-    public image?: string,
+    public training?: Training | null,
+    public videoUrl?: string | null,
+    public image?: string | null,
     public dateCreated?: Date
-    ){}
+    ) {
+        dateCreated = new Date();
+    }
 }

@@ -29,6 +29,7 @@ async function create(req: Request, res: Response) {
             req.body.difficulty,
             req.body.videoUrl,
             req.body.image,
+            req.body.typeExercise,
             req.body.idExercise,
             req.body.training,
             req.body.date

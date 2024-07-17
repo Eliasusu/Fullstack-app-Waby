@@ -11,7 +11,7 @@ export const muscleGroupSchema = z.object({
     imageMuscleGroup: z.string({
         invalid_type_error: 'Image must be a string',
     }).optional(),
-    idMuscleGroup: z.string({}).optional(),
+    idMuscleGroup: z.number().positive().optional(),
 });
 
 type MuscleGroup = z.infer<typeof muscleGroupSchema>;

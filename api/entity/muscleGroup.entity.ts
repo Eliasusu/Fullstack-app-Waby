@@ -5,6 +5,6 @@ export class MuscleGroup {
         public nameMuscleGroup: string,
         public description: string ,
         public imageMuscleGroup?: string,
-        public idMuscleGroup?: string
+        public idMuscleGroup?: number,
     ){}
 }
