@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { validateUser, validateParcialUser } from "../schemas/users.schema.js";
+import { validateParcialUser } from "../schemas/users.schema.js";
 import { UserRepository } from "../repository/users.repository.js";
-import { User } from "../entity/user.entity.js";
 
 const repository = new UserRepository();
 
@@ -20,29 +19,29 @@ async function getOne(req: Request, res: Response) {
 };
 
 //Update a user
-async function update (req: Request, res: Response) {
+async function update(req: Request, res: Response) {
     const { idUser } = req.params;
-    const user = await repository.getOne({id: idUser});
-    if (user) {
+    const user = await repository.getOne({ id: idUser });
+    if (user !== undefined) {
         const result = validateParcialUser(req.body);
-        if(result.success){
+        if (result.success) {
             const updatedUser = await repository.update({
                 ...user,
                 ...req.body
             });
-            if (updatedUser) return res.status(202).json(updatedUser);
-        } else{
+            if (updatedUser !== undefined) return res.status(202).json(updatedUser);
+        } else {
             res.status(400).json({ error: 'User not updated' });
         }
+    } else {
+        res.status(404).json({ error: 'User not found' });
     }
-}
+};
 
 //Delete a user
 async function remove(req: Request, res: Response) {
     const { idUser } = req.params;
-    console.log(idUser)
     const user = await repository.delete({id: idUser});
-    console.log(user)
     if (user) return res.status(200).json(user);  
     res.status(404).json({ error: 'User not found' })
 };
