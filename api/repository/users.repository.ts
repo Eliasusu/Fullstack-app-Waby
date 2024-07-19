@@ -10,7 +10,6 @@ export class UserRepository implements Repository<User>{
             const [users] = await pool.query('SELECT * FROM users');
             return users as User[];
         }catch(err){
-            console.log(err);
             return undefined;
         }
     };
@@ -32,12 +31,12 @@ export class UserRepository implements Repository<User>{
                 return undefined;
             }
         } else { 
-            try{
-            const [users] = await pool.query<RowDataPacket[]>('SELECT * FROM users WHERE idUser = ?', [item.id]);
-            return users[0] as User;
-        }catch{
-            return undefined;
-        }
+            try {
+                const [users] = await pool.query<RowDataPacket[]>('SELECT * FROM users WHERE idUser = ?', [item.id]);
+                return users[0] as User;
+            }catch  {
+                return undefined;
+            }
         }
 
     }
@@ -53,7 +52,8 @@ export class UserRepository implements Repository<User>{
 
     public async update(item: User): Promise<User | undefined> {
         try {
-            const [result] = await pool.query('UPDATE users SET ? WHERE idUser = ?', [item, item.idUser]);
+            const [result] = await pool.query<ResultSetHeader>('UPDATE users SET ? WHERE idUser = ?', [item, item.idUser]);
+            if (result.affectedRows === 0) return undefined;
             return item;
         } catch (err) {
             return undefined;
@@ -67,7 +67,6 @@ export class UserRepository implements Repository<User>{
             const [result] = await pool.query<RowDataPacket[]>('DELETE FROM users WHERE idUser = ?', [item.id]);
             return userToDelete;
         } catch (err) {
-            console.log(err)
             return undefined;
         }
     }
