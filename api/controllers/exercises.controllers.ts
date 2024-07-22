@@ -21,18 +21,17 @@ async function create(req: Request, res: Response) {
     const result = validateExercises(req.body);
 
     if(result.success){ 
-        const exerciseInput = new Exercise(
-            req.body.name,
-            req.body.trainingMethod,
-            req.body.description,
-            req.body.muscleGroups,
-            req.body.difficulty,
-            req.body.videoUrl,
-            req.body.image,
-            req.body.typeExercise,
+        const exerciseInput = (
             req.body.idExercise,
-            req.body.training,
-            req.body.date
+            req.body.training.trainingId ?? null,
+            req.body.trainingMethod.idMethod,
+            req.body.name,
+            req.body.description ?? null,
+            req.body.image ?? null,
+            req.body.muscleGroups,
+            req.body.typeExercise,
+            req.body.difficulty,
+            req.body.dateCreated
         );
         const newExercise = await repository.add(exerciseInput);
         if (newExercise) return res.status(201).json(newExercise);
