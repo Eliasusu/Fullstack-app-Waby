@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html, body, #root, .app {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: screen;
+  
+  color-scheme: light dark;
+  line-height: 1.5;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.87);
+  background: linear-gradient(#0A0A0C, #191A1E);
+  margin: 0 auto;
+}
+
+
