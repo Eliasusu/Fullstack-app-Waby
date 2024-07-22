@@ -30,8 +30,8 @@
 <li>- [x] Testear users</li>
 <li>- [ ] Testear exercises
     <ul>
-    <li>- [] Get alls</li>
-    <li>- [] Get one </li>
+    <li>- [x] Get alls</li>
+    <li>- [x] Get one </li>
     <li>- [] Create </li>
     <li>- [] Update </li>
     <li>- [] Delete </li>
