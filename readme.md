@@ -10,31 +10,72 @@
 - El CRUD de exercises ya funciona
 
 ## ToDo 📃
+<ul> 
+<li>- [x] Al crear el repository la llamadas en las rutas por los diferentes metodos han cambiado, darle el formato correcto</li>
+<li>- [x] Acomodar todos los schemas para que coincidan con entity</li>
+<li>- [x] Hacer el repository de users</li>
+<li>- [x] Acomodar Routes de users</li>
+<li>- [x] Acomodar Routes trainings</li>
+<li>- [x] Cambiar a un nombre mas apropiado para Routines</li>
+<li>- [x] Quitar el objeto Training de la entidad Exercises y hacer los cambios correspondientes</li>
+<li>- [x] Hacer repository y routes, agregar en index.ts de muscle group</li>
+<li>- [x] Hacer repository y routes, agregar en index.ts de mesocycles</li>
+<li>- [x] Hacer repository y routes, agregar en index.ts de trainings</li>
+<li>- [x] Hacer repository y routes, agregar en index.ts de routines</li>
+<li>- [x] Hacer repository y routes, agregar en index.ts de auth</li>
+<li>- [x] Conectar base da datos</li>
+<li>- [x] Cambiar routes, controller y repository para Muscle Groups</li>
+<li>- [x] Cambiar routes, controller y repository para Mesocycles</li>
+<li>- [x] Testear auth</li>
+<li>- [x] Testear users</li>
+<li>- [ ] Testear exercises
+    <ul>
+    <li>- [] Get alls</li>
+    <li>- [] Get one </li>
+    <li>- [] Create </li>
+    <li>- [] Update </li>
+    <li>- [] Delete </li>
+    </ul>
+</li>
 
-- [x] Al crear el repository la llamadas en las rutas por los diferentes metodos han cambiado, darle el formato correcto
-- [x] Acomodar todos los schemas para que coincidan con entity
-- [x] Hacer el repository de users
-- [x] Acomodar Routes de users
-- [x] Acomodar Routes trainings
-- [x] Cambiar a un nombre mas apropiado para Routines
-- [x] Quitar el objeto Training de la entidad Exercises y hacer los cambios correspondientes
-- [x] Hacer repository y routes, agregar en index.ts de muscle group
-- [x] Hacer repository y routes, agregar en index.ts de mesocycles
-- [x] Hacer repository y routes, agregar en index.ts de trainings
-- [x] Hacer repository y routes, agregar en index.ts de routines
-- [x] Hacer repository y routes, agregar en index.ts de auth
-- [x] Conectar base da datos
-- [x] Cambiar routes, controller y repository para Muscle Groups
-- [x] Cambiar routes, controller y repository para Mesocycles
-- [x] Testear auth
-- [x] Testear users
-- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index 
-- [ ] Testear exercises
-- [ ] Testear trainings
-- [ ] Testear muscleGroups
-- [ ] Testear mesocycles
-- [ ] Testear exercises_trainings
-
+<li>- [ ] Testear trainings
+    <ul>
+    <li>- [] Get alls</li>
+    <li>- [] Get one </li>
+    <li>- [] Create </li>
+    <li>- [] Update </li>
+    <li>- [] Delete </li>
+    </ul>
+</li>
+<li>- [ ] Testear muscleGroups
+    <ul>
+    <li>- [] Get alls</li>
+    <li>- [] Get one </li>
+    <li>- [] Create </li>
+    <li>- [] Update </li>
+    <li>- [] Delete </li>
+    </ul>
+</li>
+<li>- [ ] Testear mesocycles
+    <ul>
+    <li>- [] Get alls</li>
+    <li>- [] Get one </li>
+    <li>- [] Create </li>
+    <li>- [] Update </li>
+    <li>- [] Delete </li>
+    </ul>
+</li>
+<li>- [ ] Testear exercises_trainings
+    <ul>
+    <li>- [] Get alls</li>
+    <li>- [] Get one </li>
+    <li>- [] Create </li>
+    <li>- [] Update </li>
+    <li>- [] Delete </li>
+    </ul>
+</li>
+<li>- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index</li>
+</ul>
 ## Fechas de entregas 📅
 
 TP
