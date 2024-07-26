@@ -1,5 +1,5 @@
 ## Preguntas ❓
-- 
+- Como debo crear las entitys que dentro de ellas tienen otras entitys? Porque si dentro de una entity tengo una clase, a la hora de cargar datos, por los schemas, tengo que cargar o crear todos los datos de esa clase y la base de datos solo me pide el id de esa clase que está dentro de la clase. <br> Ejemplo: <br> En la clase o entity Exercises tengo dentro de ella Musclegroups, la bd solo me pide el id del Musclegroups para cargar un nuevo pero en el repository de exercise cuando valido los datos del exercise y llega a la parte de musclegroups, en la parte de schemas me explota todo, o bien porque le estoy pasando solo un string (id) y esperaba un objeto o visceversa 
 
 ## Mensajes para el proximo dev(esclavo) 📨
 
@@ -22,56 +22,79 @@
 <li>- [x] Conectar base da datos</li>
 <li>- [x] Cambiar routes, controller y repository para Muscle Groups</li>
 <li>- [x] Cambiar routes, controller y repository para Mesocycles</li>
-<li>- [x] Testear auth</li>
-<li>- [x] Testear users</li>
-<li>- [ ] Testear exercises
-    <ul>
-    <li>- [x] Get alls</li>
-    <li>- [x] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
-    </ul>
-</li>
-
-<li>- [ ] Testear trainings
-    <ul>
-    <li>- [ ] Get alls</li>
-    <li>- [ ] Get one </li>
-    <li>- [ ] Create </li>
-    <li>- [ ] Update </li>
-    <li>- [ ] Delete </li>
-    </ul>
-</li>
-<li>- [ ] Testear muscleGroups
-    <ul>
-    <li>- [ ] Get alls</li>
-    <li>- [ ] Get one </li>
-    <li>- [ ] Create </li>
-    <li>- [ ] Update </li>
-    <li>- [ ] Delete </li>
-    </ul>
-</li>
-<li>- [ ] Testear mesocycles
-    <ul>
-    <li>- [ ] Get alls</li>
-    <li>- [ ] Get one </li>
-    <li>- [ ] Create </li>
-    <li>- [ ] Update </li>
-    <li>- [ ] Delete </li>
-    </ul>
-</li>
-<li>- [ ] Testear exercises_trainings
-    <ul>
-    <li>- [ ] Get alls</li>
-    <li>- [ ] Get one </li>
-    <li>- [ ] Create </li>
-    <li>- [ ] Update </li>
-    <li>- [ ] Delete </li>
-    </ul>
-</li>
+<details>
+    <summary>Testear auth</summary>
+        <ul>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear users</summary>
+        <ul>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear exercises</summary>
+        <ul>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>    
+</details>
+<details>
+    <summary>Testear trainings</summary>
+        <ul>
+            <li>- [ ] Get alls</li>
+            <li>- [ ] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear muscleGroups</summary>
+        <ul>
+            <li>- [ ] Get alls</li>
+            <li>- [ ] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear mesocycles</summary>
+        <ul>
+            <li>- [ ] Get alls</li>
+            <li>- [ ] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear exercises_trainings</summary>
+        <ul>
+            <li>- [ ] Get alls</li>
+            <li>- [ ] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>
+</details>
 <li>- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index</li>
 </ul>
+
 ## Fechas de entregas 📅
 
 TP
