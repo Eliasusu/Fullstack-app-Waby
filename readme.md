@@ -1,13 +1,9 @@
 ## Preguntas ❓
-
-- Puedo agregar sub carpetas dentro de schemas, models, controllers para separar Calistenia de gimnsasio?
-- Si yo tengo ejercicios de calistenia que tienen progresiones que pueden ser de repeticiones o segundos. A la hora de cargar una meta de calistenia, la subclase 'Meta calistenia' ¿Debería bifurcarla por 'Meta calistenia seg' y 'Meta calistenia rep'? (Fuera del alcance por el momento)
+- 
 
 ## Mensajes para el proximo dev(esclavo) 📨
 
-- La unica ruta que esta mal y tira errores es trainings y users
-- Los schemas ahora coinciden con las entitys
-- El CRUD de exercises ya funciona
+- Tenemos problemas con el ingreso de datos a la base de datos y nos está complicando la vida las validaciones
 
 ## ToDo 📃
 <ul> 
@@ -40,38 +36,38 @@
 
 <li>- [ ] Testear trainings
     <ul>
-    <li>- [] Get alls</li>
-    <li>- [] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
+    <li>- [ ] Get alls</li>
+    <li>- [ ] Get one </li>
+    <li>- [ ] Create </li>
+    <li>- [ ] Update </li>
+    <li>- [ ] Delete </li>
     </ul>
 </li>
 <li>- [ ] Testear muscleGroups
     <ul>
-    <li>- [] Get alls</li>
-    <li>- [] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
+    <li>- [ ] Get alls</li>
+    <li>- [ ] Get one </li>
+    <li>- [ ] Create </li>
+    <li>- [ ] Update </li>
+    <li>- [ ] Delete </li>
     </ul>
 </li>
 <li>- [ ] Testear mesocycles
     <ul>
-    <li>- [] Get alls</li>
-    <li>- [] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
+    <li>- [ ] Get alls</li>
+    <li>- [ ] Get one </li>
+    <li>- [ ] Create </li>
+    <li>- [ ] Update </li>
+    <li>- [ ] Delete </li>
     </ul>
 </li>
 <li>- [ ] Testear exercises_trainings
     <ul>
-    <li>- [] Get alls</li>
-    <li>- [] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
+    <li>- [ ] Get alls</li>
+    <li>- [ ] Get one </li>
+    <li>- [ ] Create </li>
+    <li>- [ ] Update </li>
+    <li>- [ ] Delete </li>
     </ul>
 </li>
 <li>- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index</li>
