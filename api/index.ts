@@ -1,14 +1,14 @@
 import express from 'express';
 import process from 'process';
-import { usersRouter } from "./routes/users.routes.js";
-import { exercisesRouter } from "./routes/exercises.routes.js";
+import { usersRouter } from "./users/users.routes.js";
+import { exercisesRouter } from "./exercises/exercises.routes.js";
 import { corsMiddleware } from './middlewares/cors.js';
-import { muscleGroupsRouter } from './routes/muscleGroups.routes.js';
-import { trainingsRouter } from './routes/trainings.routes.js';
+import { muscleGroupsRouter } from './muscleGroups/muscleGroups.routes.js';
+import { trainingsRouter } from './trainings/trainings.routes.js';
 //import { indexRouter } from './routes/index.routes.js';
-import { authRouter } from './routes/auth.routes.js';
-import { routinesRouter } from './routes/exercises_trainings.routes.js';
-import { mesocyclesRouter } from './routes/mesocycles.routes.js';
+import { authRouter } from './auth/auth.routes.js';
+import { routinesRouter } from './exercises_trainings/exercises_trainings.routes.js';
+import { mesocyclesRouter } from './mesocycles/mesocycles.routes.js';
 
 
 
