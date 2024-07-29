@@ -11,10 +11,10 @@ export class Exercise  {
     public muscleGroups: MuscleGroup[],
     public difficulty: string,
     public typeExercise: string,
+    public dateCreated: Date,
     public idExercise?: number | null,
     public training?: Training | null,
     public image?: string | null,
-    public dateCreated?: Date
     ) {
         dateCreated = new Date();
     }

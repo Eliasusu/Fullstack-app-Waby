@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { exercisesSchema } from './exercises.schema.js';
-import { trainingsSchema } from './trainings.schema.js';
+import { exercisesSchema } from '../exercises/exercises.schema.js';
+import { trainingsSchema } from '../trainings/trainings.schema.js';
 
-const routineSchema = z.object({
+const exercise_Training = z.object({
     training: trainingsSchema,
     exercise: exercisesSchema,
     sets: z.number({
@@ -22,12 +22,12 @@ const routineSchema = z.object({
     }),
 });
 
-type Routine = z.infer<typeof routineSchema>;
+type Exercise_Training = z.infer<typeof exercise_Training>;
 
-export function validateRoutine(routine: Routine) {
-    return routineSchema.safeParse(routine);
+export function validateRoutine(routine: Exercise_Training) {
+    return exercise_Training.safeParse(routine);
 }
 
-export function validatePartialRoutine(routine: Routine) {
-    return routineSchema.partial().safeParse(routine);
+export function validatePartialRoutine(routine: Exercise_Training) {
+    return exercise_Training.partial().safeParse(routine);
 }
