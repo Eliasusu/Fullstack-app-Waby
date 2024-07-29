@@ -1,4 +1,4 @@
-import { Training } from './training.entity.js';
+import { Training } from '../trainings/training.entity.js';
 import { Exercise } from '../exercises/exercise.entity.js';
 
 export class Exercise_Training {

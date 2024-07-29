@@ -26,56 +26,110 @@
 <li>- [x] Conectar base da datos</li>
 <li>- [x] Cambiar routes, controller y repository para Muscle Groups</li>
 <li>- [x] Cambiar routes, controller y repository para Mesocycles</li>
-<li>- [x] Testear auth</li>
-<li>- [x] Testear users</li>
-<li>- [ ] Testear exercises
+<details>
+    <summary>Testear auth</summary>
+        <ul>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear users</summary>
+        <ul>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Integrar ORM</summary>
     <ul>
-    <li>- [x] Get alls</li>
-    <li>- [x] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
+        <li>- [ ] Integrar Auth y Users </li>
+        <li>- [ ] Integrar MuscleGroups </li>
+        <li>- [ ] Integrar trainingsMethods </li>
+        <li>- [ ] Integrar exercises </li>
+        <li>- [ ] Integrar trainings </li>
+        <li>- [ ] Integrar exercises_trainings </li>
     </ul>
-</li>
-
-<li>- [ ] Testear trainings
-    <ul>
-    <li>- [] Get alls</li>
-    <li>- [] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
-    </ul>
-</li>
-<li>- [ ] Testear muscleGroups
-    <ul>
-    <li>- [] Get alls</li>
-    <li>- [] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
-    </ul>
-</li>
-<li>- [ ] Testear mesocycles
-    <ul>
-    <li>- [] Get alls</li>
-    <li>- [] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
-    </ul>
-</li>
-<li>- [ ] Testear exercises_trainings
-    <ul>
-    <li>- [] Get alls</li>
-    <li>- [] Get one </li>
-    <li>- [] Create </li>
-    <li>- [] Update </li>
-    <li>- [] Delete </li>
-    </ul>
-</li>
+</details>
+<details>
+    <summary>Testear auth</summary>
+        <ul>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear users</summary>
+        <ul>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear exercises</summary>
+        <ul>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>    
+</details>
+<details>
+    <summary>Testear trainings</summary>
+        <ul>
+            <li>- [ ] Get alls</li>
+            <li>- [ ] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear muscleGroups</summary>
+        <ul>
+            <li>- [ ] Get alls</li>
+            <li>- [ ] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear mesocycles</summary>
+        <ul>
+            <li>- [ ] Get alls</li>
+            <li>- [ ] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>
+</details>
+<details>
+    <summary>Testear exercises_trainings</summary>
+        <ul>
+            <li>- [ ] Get alls</li>
+            <li>- [ ] Get one </li>
+            <li>- [ ] Create </li>
+            <li>- [ ] Update </li>
+            <li>- [ ] Delete </li>
+        </ul>
+</details>
 <li>- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index</li>
 </ul>
+
 ## Fechas de entregas 📅
 
 TP
