@@ -1,14 +1,29 @@
 import { User } from '../users/user.entity';
-import { Mesocycle } from './mesocycle.entity.js';
+import { Mesocycle } from '../mesocycles/mesocycle.entity.js';
+import { PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
+
 
 export class Training{
-    constructor(
-        public user: User,
-        public mesocycle: Mesocycle,
-        public trainingName: string,
-        public trainingType: string,
-        public day: Date,
-        public time: string,
-        public idTraining?:string,
-    ){}
+
+    @PrimaryKey({ nullable: false })
+    idTraining?: string;
+    
+    @ManyToOne(() => User, { nullable: false })
+    user!: User;
+
+    @ManyToOne(() => Mesocycle)
+    mesocycle?: Mesocycle;
+
+    @Property({ nullable: false })
+    trainingName!: string;
+
+    @Property({ nullable: false })
+    trainingType!: string;
+
+    @Property({ nullable: false })
+    day!: Date;
+
+    @Property({ nullable: false })
+    time!: string;
+
 } 

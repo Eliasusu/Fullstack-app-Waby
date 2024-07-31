@@ -1,10 +1,12 @@
 import { generateId } from '../shared/generateId.js';
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Collection, Entity, ManyToMany, PrimaryKey, Property, Cascade, OneToMany } from '@mikro-orm/core';
+import { TrainingMethod } from '../trainingMethods/trainingMethod.entity.js';
+import { Training } from '../trainings/training.entity.js';
 
 @Entity()
 export class User {
     @PrimaryKey()
-    public idUser?: string;
+    idUser?: string;
 
     @Property({ nullable: false, unique: true })
     username!: string;
@@ -16,20 +18,33 @@ export class User {
     email!: string;
 
     @Property({ nullable: false })
-    public name!: string;
+    name!: string;
 
     @Property({ nullable: false })
-    public birthdate!: Date;
+    birthdate!: Date;
+
+    @Property({ nullable: false, unique: true })
+    phone!: string;
 
     @Property({ nullable: false })
-    public phone!: string;
+    bodyWeight!: number;
 
     @Property({ nullable: false })
-    public bodyWeight!: number;
+    height!: number;
 
-    @Property({ nullable: false })
-    public height!: number;
+    @ManyToMany(() => TrainingMethod, (trainingMethod) => trainingMethod.users, {
+        cascade: [Cascade.ALL],
+        owner: true,
+    })
+    trainingMethods!: TrainingMethod[];
 
-    constructor(){this.idUser = generateId();}
+    @OneToMany(() => Training, (training) => training.user, {
+        cascade: [Cascade.ALL],
+    })
+    trainings = new Collection<Training>(this);
+    
+    constructor() {
+        this.idUser = generateId();
+    }
 }
 

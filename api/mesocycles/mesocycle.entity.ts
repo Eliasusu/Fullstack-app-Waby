@@ -1,10 +1,24 @@
 import { Training } from "../trainings/training.entity.js";
+import { Collection, PrimaryKey, Property, Cascade, OneToMany } from '@mikro-orm/core';
 
 export class Mesocycle {
-    constructor( 
-        public idMesocycle: number,
-        public typeMesocycle: string,
-        public startDate: Date,
-        public endDate: Date,
-    ) {}
+ 
+    @PrimaryKey( { nullable: false })
+    idMesocycle!: number;
+
+    @Property({ nullable: false })
+    typeMesocycle!: string;
+
+    @Property({ nullable: false })
+    
+    @Property({ nullable: false })
+    startDate!: Date;
+
+    @Property({ nullable: false })
+    endDate!: Date;
+
+    @OneToMany(() => Training, (training) => training.mesocycle, {
+        cascade: [Cascade.ALL],
+    })
+    trainings = new Collection<Training>(this);
 }

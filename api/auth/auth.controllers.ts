@@ -10,16 +10,7 @@ async function register(req: Request, res: Response) {
     const result = validateUser(req.body);
     console.log(req.body)
     if(result.success){
-        const newUser = new User(
-            result.data.username,
-            result.data.password,
-            result.data.email,
-            result.data.name,
-            result.data.birthdate,
-            result.data.phone,
-            result.data.bodyWeight,
-            result.data.height,
-        );
+        const newUser = new User();
 
     try {
         const user = await repository.add(newUser);
