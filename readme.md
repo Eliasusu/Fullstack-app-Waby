@@ -1,5 +1,6 @@
 ## Preguntas ❓
 
+- La entidad Exercises_Trainings es una entidad que nace de una relacion de dos entidades N a M que son <br> Training y Exercise, como hago para crear su clave primaria?
 
 ## Mensajes para el proximo dev(esclavo) 📨
 

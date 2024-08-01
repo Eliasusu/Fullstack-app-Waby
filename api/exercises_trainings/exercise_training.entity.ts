@@ -1,12 +1,13 @@
 
-import { Property, Cascade, Entity, Rel, OneToMany, PrimaryKey } from '@mikro-orm/core';
+import { Property, Cascade, Entity, Rel, OneToMany, PrimaryKey, ForeignKeyConstraintViolationException } from '@mikro-orm/core';
 import { Training } from '../trainings/training.entity.js';
 import { Exercise } from '../exercises/exercise.entity.js';
 
 @Entity()
 export class Exercise_Training {
     @PrimaryKey()
-    idExercise_Training?: number;
+    idTraining!: number;
+    idExercise!: number;
 
     @OneToMany(() => Training, (training) => training.exercises_trainings, {
         cascade: [Cascade.ALL],
