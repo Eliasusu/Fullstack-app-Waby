@@ -1,6 +1,7 @@
-import { Collection, ManyToMany, PrimaryKey, Property, Cascade, ManyToOne, Rel } from '@mikro-orm/core';
+import { Collection, ManyToMany, PrimaryKey, Property, Cascade, Entity } from '@mikro-orm/core';
 import { Exercise } from '../exercises/exercise.entity.js';
 
+@Entity()
 export class MuscleGroup {
     @PrimaryKey()
     idMuscleGroup?: number;

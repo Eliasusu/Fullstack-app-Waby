@@ -1,6 +1,7 @@
 import { Training } from "../trainings/training.entity.js";
-import { Collection, PrimaryKey, Property, Cascade, OneToMany } from '@mikro-orm/core';
+import { Collection, PrimaryKey, Property, Cascade, OneToMany, Entity } from '@mikro-orm/core';
 
+@Entity()
 export class Mesocycle {
  
     @PrimaryKey( { nullable: false })

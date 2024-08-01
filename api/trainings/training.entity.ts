@@ -1,10 +1,10 @@
 import { User } from '../users/user.entity.js';
 import { Mesocycle } from '../mesocycles/mesocycle.entity.js';
-import { PrimaryKey, Property, ManyToOne, Rel, ManyToMany, Cascade, Collection } from '@mikro-orm/core';
+import { PrimaryKey, Property, ManyToOne, Rel, ManyToMany, Cascade, Collection, Entity } from '@mikro-orm/core';
 import { Exercise } from '../exercises/exercise.entity.js';
 import { Exercise_Training } from '../exercises_trainings/exercise_training.entity.js';
 
-
+@Entity()
 export class Training{
 
     @PrimaryKey()

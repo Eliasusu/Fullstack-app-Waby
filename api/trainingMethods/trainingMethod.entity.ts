@@ -2,6 +2,7 @@ import { Collection, Entity, ManyToMany, PrimaryKey, Property, Cascade } from '@
 import { generateId } from '../shared/generateId.js';
 import { User } from '../users/user.entity.js'; 
 
+@Entity()
 export class TrainingMethod {
   @PrimaryKey()
   idMethod?: string;
