@@ -2,7 +2,7 @@ import { Collection, ManyToMany, PrimaryKey, Property, Cascade, ManyToOne, Rel }
 import { Exercise } from '../exercises/exercise.entity.js';
 
 export class MuscleGroup {
-    @PrimaryKey({ autoincrement: true })
+    @PrimaryKey()
     idMuscleGroup?: number;
 
     @Property({ nullable: false })

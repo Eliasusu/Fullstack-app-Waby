@@ -5,7 +5,7 @@ import { Training } from '../trainings/training.entity.js';
 import { Exercise_Training } from '../exercises_trainings/exercise_training.entity.js';
 
 export class Exercise  {
-    @PrimaryKey({ autoincrement: true })
+    @PrimaryKey()
     idExercise?: number;
 
     @Property({ nullable: false }) 

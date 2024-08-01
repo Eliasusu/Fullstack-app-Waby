@@ -7,7 +7,7 @@ import { Exercise_Training } from '../exercises_trainings/exercise_training.enti
 
 export class Training{
 
-    @PrimaryKey({ nullable: false, autoincrement: true })
+    @PrimaryKey()
     idTraining?: number;
     
     @ManyToOne(() => User, { nullable: false })

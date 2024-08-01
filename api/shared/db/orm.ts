@@ -3,8 +3,8 @@ import { SqlHighlighter } from "@mikro-orm/sql-highlighter";
 
 
 export const orm = await MikroORM.init({
-    entities: ['./dist/**/*.entities.js'],
-    entitiesTs: ['./**/*.entities.js'],
+    entities: ['./dist/**/*.entity.js'],
+    entitiesTs: ['./**/*.entity.js'],
     dbName: 'wabydb',
     type: 'mysql',
     clientUrl: 'mysql://admin:admin@localhost:3306/waby',
