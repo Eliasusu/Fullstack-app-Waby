@@ -1,15 +1,17 @@
-import { User } from '../users/user.entity';
+import { User } from '../users/user.entity.js';
 import { Mesocycle } from '../mesocycles/mesocycle.entity.js';
-import { PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
+import { PrimaryKey, Property, ManyToOne, Rel, ManyToMany, Cascade, Collection } from '@mikro-orm/core';
+import { Exercise } from '../exercises/exercise.entity.js';
+import { Exercise_Training } from '../exercises_trainings/exercise_training.entity.js';
 
 
 export class Training{
 
-    @PrimaryKey({ nullable: false })
-    idTraining?: string;
+    @PrimaryKey({ nullable: false, autoincrement: true })
+    idTraining?: number;
     
     @ManyToOne(() => User, { nullable: false })
-    user!: User;
+    user!: Rel<User>;
 
     @ManyToOne(() => Mesocycle)
     mesocycle?: Mesocycle;
@@ -26,4 +28,12 @@ export class Training{
     @Property({ nullable: false })
     time!: string;
 
+    @ManyToMany(() => Exercise, (exercise) => exercise.trainings, {
+        cascade: [Cascade.ALL],
+        owner: true,
+    })
+    exercises = new Collection<Exercise>(this);
+
+    @ManyToOne(() => Exercise_Training, { nullable: true })
+    exercises_trainings?: Exercise_Training;
 } 

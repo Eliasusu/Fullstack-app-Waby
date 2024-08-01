@@ -30,8 +30,8 @@
         <li>- [x] Integrar trainings </li>
         <li>- [x] Integrar mesocycle </li>
         <li>- [x] Integrar trainingsMethods </li>
-        <li>- [ ] Integrar exercises </li>
-        <li>- [ ] Integrar MuscleGroups </li>
+        <li>- [x] Integrar exercises </li>
+        <li>- [x] Integrar MuscleGroups </li>
         <li>- [ ] Integrar exercises_trainings </li>\
     </ul>
 </details>

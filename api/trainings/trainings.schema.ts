@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { mesocyclesSchema } from '../mesocycles/mesocycles.schema.js';
-import { userSchema } from './users.schema.js';
+import { userSchema } from '../users/users.schema.js';
 
 export const trainingsSchema = z.object({
   idTraining: z.string({}).min(1).max(1).optional(),

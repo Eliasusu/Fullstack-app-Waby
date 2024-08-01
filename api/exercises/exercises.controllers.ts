@@ -1,67 +1,26 @@
 import { Request, Response } from "express";
 import { validateExercises, validateParcialExercises } from "./exercises.schema.js";
-import { ExerciseRepository } from "./exercises.repository.js";
 import { Exercise } from "./exercise.entity.js";
 
-const repository = new ExerciseRepository();
 
 async function getAll(req: Request, res: Response) {
-    const exercises = await repository.getAll();
-    res.json(exercises);
+    res.status(500).json({ message: 'Not implemented' });
 }
 
 async function getOne(req: Request, res: Response) {
-    const { idExercise } = req.params;
-    const exercise = await repository.getOne({id: idExercise});
-    if (exercise) return res.json(exercise);
-    res.status(404).json({ error: 'Exercise not found'});
+    res.status(500).json({ message: 'Not implemented' });
 }
 
 async function create(req: Request, res: Response) {
-    const result = validateExercises(req.body);
-
-    if(result.success){ 
-        const exerciseInput = (
-            req.body.idExercise,
-            req.body.training.trainingId ?? null,
-            req.body.trainingMethod.idMethod,
-            req.body.name,
-            req.body.description ?? null,
-            req.body.image ?? null,
-            req.body.muscleGroups,
-            req.body.typeExercise,
-            req.body.difficulty,
-            req.body.dateCreated
-        );
-        const newExercise = await repository.add(exerciseInput);
-        if (newExercise) return res.status(201).json(newExercise);
-    } else{
-        res.status(400).json({ error: result.error });
-    }
+    res.status(500).json({ message: 'Not implemented' });
 }
 
 async function update(req: Request, res: Response) {
-    const { idExercise } = req.params;
-    const exercise = await repository.getOne({id: idExercise});
-    if (exercise) {
-        const result = validateParcialExercises(req.body);
-        if(result.success){
-            const updatedExercise = await repository.update({
-                ...exercise,
-                ...req.body
-            });
-            if (updatedExercise) return res.json(updatedExercise);
-        } else{
-            res.status(400).json({ error: result.error });
-        }
-    }
+    res.status(500).json({ message: 'Not implemented' });
 }
 
 async function remove(req: Request, res: Response) {
-    const { idExercise } = req.params;
-    const exercise = await repository.delete({id:idExercise});
-    if (exercise === exercise) return res.status(200).json(exercise);
-    res.status(404).json({ error: 'Exercise not found' });
+    res.status(500).json({ message: 'Not implemented' });
 }
 
 export { getAll, getOne, create, update, remove };
