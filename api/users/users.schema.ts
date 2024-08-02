@@ -1,7 +1,9 @@
-import { z } from 'zod';
+import { z, ZodObject, ZodRawShape } from 'zod';
+import { trainingMethodSchema } from '../trainingMethods/trainingMethod.schema.js';
+import { trainingsSchema } from '../trainings/trainings.schema.js';
+import { User } from './user.entity.js';
 
-export const userSchema = z.object({
-    idUser: z.string({}).min(12).max(12),
+export const userSchema: ZodObject<ZodRawShape>  = z.object({
     username: z.string({
         required_error: 'Username is required',
         invalid_type_error: 'Username must be a string',
@@ -30,10 +32,12 @@ export const userSchema = z.object({
     height: z.number({
         required_error: 'Height is required',
         invalid_type_error: 'Height must be a number',
-        }).positive({}).min(1).max(250),
+    }).positive({}).min(1).max(250),
+
+    trainingMethods: trainingMethodSchema.array(),
+    trainings: trainingsSchema.array().optional(),
 });
 
-type User = z.infer<typeof userSchema>;
 
 export function validateUser(user: User) {
     const birthdate = new Date(user.birthdate);

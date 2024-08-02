@@ -6,7 +6,7 @@ import { Training } from '../trainings/training.entity.js';
 @Entity()
 export class User {
     @PrimaryKey()
-    idUser?: string;
+    idUser!: string;
 
     @Property({ nullable: false, unique: true })
     username!: string;

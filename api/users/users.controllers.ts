@@ -32,42 +32,41 @@ async function getOne(req: Request, res: Response) {
 
 //Update a user
 async function update(req: Request, res: Response) {
-    res.status(500).json({ message: 'Not implemented' });
-    // try {
-    //     const { idUser } = req.params;
-    //     const userFind = await em.findOne(User, { idUser });
-    //     if (userFind !== undefined) {
-    //         const result = validateParcialUser(req.body);
-    //         if (result.error) return res.status(400).json(result.error);
-    //         if (result.success) {
-    //             const user = em.getReference(User, idUser);
-    //             em.assign(user, result.data);
-    //             await em.flush();
-    //             res.status(202).json({ message: 'User updated succesfully' });
-    //         } else {
-    //             res.status(400).json({ error: 'User not updated' });
-    //         }
-    //     } else {
-    //         res.status(404).json({ error: 'User not found' });
-    //     }
-    // } catch (error: any) { 
-    //     console.log(error); // --> Eliminar en produccion
-    //     res.status(500).json({ error: 'Error updating user' }); 
-    // }
+    try {
+        const idUser = req.params.idUser;
+        const userFind = await em.findOne(User, { idUser });
+        if (userFind !== undefined) {
+            const result = validateParcialUser(req.body);
+            if (result.error) return res.status(400).json(result.error);
+            if (result.success) {
+                const user = em.getReference(User, idUser as never);
+                em.assign(user, result.data);
+                await em.flush();
+                res.status(202).json({ message: 'User updated succesfully' });
+            } else {
+                res.status(400).json({ error: 'User not updated' });
+            }
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error: any) { 
+        console.log(error); // --> Eliminar en produccion
+        res.status(500).json({ error: 'Error updating user' }); 
+    }
 };
 
 //Delete a user
 async function remove(req: Request, res: Response) {
     res.status(500).json({ message: 'Not implemented' });
-    // try {
-    //     const { idUser } = req.params;
-    //     const user = em.getReference(User, idUser);
-    //     em.removeAndFlush(user);
-    //     return res.status(200).json(user);
-    // } catch (error: any) { 
-    //     console.log(error); // --> Eliminar en produccion
-    //     res.status(500).json({ error: 'Error deleting user' }); 
-    // }
+    try {
+        const { idUser } = req.params;
+        const user = em.getReference(User, idUser as never);
+        em.removeAndFlush(user);
+        return res.status(200).json(user);
+    } catch (error: any) { 
+        console.log(error); // --> Eliminar en produccion
+        res.status(500).json({ error: 'Error deleting user' }); 
+    }
 };
 
-export { getAll, getOne, update, remove}
+export { getAll, getOne, update, remove }

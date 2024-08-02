@@ -16,7 +16,7 @@ export class TrainingMethod {
   @ManyToMany(() => User, (user) => user.trainingMethods, {
     cascade: [Cascade.ALL],
   })
-  users = new Collection<User>(this);
+  users?= new Collection<User>(this);
   
   constructor() {
     this.idMethod = generateId();

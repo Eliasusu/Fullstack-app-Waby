@@ -33,17 +33,14 @@
         <li>- [x] Integrar trainingsMethods </li>
         <li>- [x] Integrar exercises </li>
         <li>- [x] Integrar MuscleGroups </li>
-        <li>- [ ] Integrar exercises_trainings </li>\
+        <li>- [x] Integrar exercises_trainings </li>\
     </ul>
 </details>
 <details>
     <summary>Testear auth</summary>
         <ul>
-            <li>- [ ] Get alls</li>
-            <li>- [ ] Get one </li>
-            <li>- [ ] Create </li>
-            <li>- [ ] Update </li>
-            <li>- [ ] Delete </li>
+            <li>- [ ] Create/Register </li>
+            <li>- [ ] Login </li>
         </ul>
 </details>
 <details>
@@ -51,7 +48,6 @@
         <ul>
             <li>- [ ] Get alls</li>
             <li>- [ ] Get one </li>
-            <li>- [ ] Create </li>
             <li>- [ ] Update </li>
             <li>- [ ] Delete </li>
         </ul>

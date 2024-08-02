@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { mesocyclesSchema } from '../mesocycles/mesocycles.schema.js';
 import { userSchema } from '../users/users.schema.js';
+import { Training } from './training.entity.js';
 
 export const trainingsSchema = z.object({
-  idTraining: z.string({}).min(1).max(1).optional(),
-  user: userSchema,
+
   mesocycle: mesocyclesSchema,
   trainingName: z.string({
     required_error: 'Training name is required',
@@ -24,17 +24,11 @@ export const trainingsSchema = z.object({
   }),
 });
 
-type Training = z.infer<typeof trainingsSchema>;
 
 export function validateTraining(training: Training) {
-  training.day = new Date(training.day);
-  training.user.birthdate = new Date(training.user.birthdate);
-  training.mesocycle.startDate = new Date(training.mesocycle.startDate);
-  training.mesocycle.endDate = new Date(training.mesocycle.endDate);
   return trainingsSchema.safeParse(training);
 }
 
 export function validateParcialTraining(training: Training) {
-  if (training.day) training.day = new Date(training.day)
   return trainingsSchema.partial().safeParse(training);
 }
