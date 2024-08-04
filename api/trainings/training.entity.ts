@@ -14,7 +14,7 @@ export class Training{
     user!: Rel<User>;
 
     @ManyToOne(() => Mesocycle)
-    mesocycle?: Mesocycle;
+    mesocycle!: Mesocycle;
 
     @Property({ nullable: false })
     trainingName!: string;

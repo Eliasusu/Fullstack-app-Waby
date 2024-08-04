@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { exercisesSchema } from '../exercises/exercises.schema.js';
 import { trainingsSchema } from '../trainings/trainings.schema.js';
 
-const exercise_Training = z.object({
+export const exercise_Training = z.object({
     training: trainingsSchema,
     exercise: exercisesSchema,
     sets: z.number({

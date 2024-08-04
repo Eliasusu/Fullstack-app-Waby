@@ -32,10 +32,10 @@ async function register(req: Request, res: Response) {
 //Login user
 async function login(req: Request, res: Response) {
     try {
-        const { username, email, password } = req.body;
-        const user = await em.findOne(User, { username, email });
-        if (!user) return res.status(400).json({ error: 'Username, email or password incorrect' });
-        if (user.password !== password) return res.status(400).json({ error: 'Username, email or password incorrect' });
+        const { username, password } = req.body;
+        const user = await em.findOne(User, { username });
+        if (!user) return res.status(400).json({ error: 'Username incorrect' });
+        if (user.password !== password) return res.status(400).json({ error: 'Password incorrect' });
         res.status(200).json({ message: 'User logged in succesfully' });
     } catch (error: any) { 
         console.log(error); // --> Eliminar en produccion

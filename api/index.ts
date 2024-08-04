@@ -30,8 +30,8 @@ app.use('/api/v1/', authRouter);
 app.use('/api/v1/users', usersRouter);
 //app.use('/index', indexRouter);
 //app.use('/api/v1/exercises', exercisesRouter);
-//app.use('/api/v1/trainings', trainingsRouter);
-//app.use('/routines', routinesRouter);
+app.use('/api/v1/trainings', trainingsRouter);
+app.use('/routines', routinesRouter);
 app.use('/api/v1/muscleGroups', muscleGroupsRouter);
 //app.use('/api/v1/mesocycles', mesocyclesRouter);
 

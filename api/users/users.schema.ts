@@ -1,9 +1,8 @@
 import { z, ZodObject, ZodRawShape } from 'zod';
 import { trainingMethodSchema } from '../trainingMethods/trainingMethod.schema.js';
 import { trainingsSchema } from '../trainings/trainings.schema.js';
-import { User } from './user.entity.js';
 
-export const userSchema = z.object({
+export const userSchema:any = z.object({
     
     username: z.string({
         required_error: 'Username is required',
@@ -45,6 +44,8 @@ export const userSchema = z.object({
     trainings: trainingsSchema.array().optional(),
 });
 
+
+type User = z.infer<typeof userSchema>;
 
 export function validateUser(user: User) {
     const birthdate = new Date(user.birthdate);

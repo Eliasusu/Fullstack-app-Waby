@@ -28,28 +28,28 @@
     <summary>Integrar ORM</summary>
     <ul>
         <li>- [x] Integrar Auth y Users </li>
-        <li>- [x] Integrar trainings </li>
-        <li>- [x] Integrar mesocycle </li>
+        <li>- [] Integrar trainings </li>
+        <li>- [] Integrar mesocycle </li>
         <li>- [x] Integrar trainingsMethods </li>
-        <li>- [x] Integrar exercises </li>
+        <li>- [] Integrar exercises </li>
         <li>- [x] Integrar MuscleGroups </li>
-        <li>- [x] Integrar exercises_trainings </li>\
+        <li>- [] Integrar exercises_trainings </li>\
     </ul>
 </details>
 <details>
     <summary>Testear auth</summary>
         <ul>
-            <li>- [ ] Create/Register </li>
-            <li>- [ ] Login </li>
+            <li>- [x] Create/Register </li>
+            <li>- [x] Login </li>
         </ul>
 </details>
 <details>
     <summary>Testear users</summary>
         <ul>
-            <li>- [ ] Get alls</li>
-            <li>- [ ] Get one </li>
-            <li>- [ ] Update </li>
-            <li>- [ ] Delete </li>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
         </ul>
 </details>
 <details>
@@ -75,11 +75,11 @@
 <details>
     <summary>Testear muscleGroups</summary>
         <ul>
-            <li>- [ ] Get alls</li>
-            <li>- [ ] Get one </li>
-            <li>- [ ] Create </li>
-            <li>- [ ] Update </li>
-            <li>- [ ] Delete </li>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
         </ul>
 </details>
 <details>

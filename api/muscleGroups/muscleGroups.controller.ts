@@ -34,7 +34,7 @@ async function add(req: Request, res: Response) {
             return;
         }
         const muscleGroup = em.create(MuscleGroup, muscleGroupValidation.data);
-        await em.flush()
+        await em.flush();
         res.status(201).json({message: 'MuscleGroup created', muscleGroup});
     } catch(err:any){
         res.status(500).json({message: err.message})};
