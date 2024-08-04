@@ -8,7 +8,7 @@ export const orm = await MikroORM.init({
     dbName: 'wabydb',
     type: 'mysql',
     user: 'admin',
-    password: 'renalessiSql21!',
+    password: 'lunasolluna',
     clientUrl: 'mysql://admin:admin@localhost:3306/waby',
     highlighter: new SqlHighlighter(),
     debug: true,
