@@ -12,6 +12,7 @@ import { authRouter } from './auth/auth.routes.js';
 import { routinesRouter } from './exercises_trainings/exercises_trainings.routes.js';
 import { mesocyclesRouter } from './mesocycles/mesocycles.routes.js';
 import { RequestContext } from '@mikro-orm/core';
+import { trainingMethodsRouter } from './trainingMethods/trainingMethod.routes.js';
 
 
 
@@ -34,6 +35,7 @@ app.use('/api/v1/trainings', trainingsRouter);
 app.use('/routines', routinesRouter);
 app.use('/api/v1/muscleGroups', muscleGroupsRouter);
 //app.use('/api/v1/mesocycles', mesocyclesRouter);
+app.use('/api/v1/trainingMethods', trainingMethodsRouter);
 
 await syncSchema() //This will create the schema in the database if it doesn't exist yet, no need to run this in production;
 app.listen(port, () => {
