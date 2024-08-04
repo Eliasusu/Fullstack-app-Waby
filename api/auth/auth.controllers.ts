@@ -17,7 +17,8 @@ async function register(req: Request, res: Response) {
             if (await em.findOne(User, { email: req.body.email })) {
                 return res.status(400).json({ error: 'Email already exists' });
             }
-            const user = em.create(User, req.body);
+            const user = em.create(User, req.body); 
+            await em.persistAndFlush(user);
             res.status(201).json({ message: 'User created succesfully' });
         } else {
             res.status(400).json({ error: 'User not created' });

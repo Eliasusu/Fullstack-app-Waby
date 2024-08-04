@@ -5,16 +5,13 @@ import { orm } from '../shared/db/orm.js';
 
 const em = orm.em
 //Get all muscle groups
+
 async function getAll(req: Request, res: Response) {
     try{
         const muscleGroups = await em.find(MuscleGroup, {}, { populate: ['exercises'] });
-        res
-            .status(200)
-            .json({message: 'finded all muscleGroups', muscleGroups});
+        res.status(200).json({message: 'finded all muscleGroups', muscleGroups});
     }catch(err:any){
-        res
-            .status(500)
-            .json({message: err.message});
+        res.status(500).json({message: err.message});
     }
 }
 
@@ -30,8 +27,13 @@ async function getOne(req: Request, res: Response) {
 
 //Add a muscle group
 async function add(req: Request, res: Response) {
-    try{ 
-        const muscleGroup = em.create(MuscleGroup, req.body.sanitizeInput);
+    try { 
+        const muscleGroupValidation = validateMuscleGroup(req.body);
+        if (!muscleGroupValidation.success) {
+            res.status(400).json({message: muscleGroupValidation.error});
+            return;
+        }
+        const muscleGroup = em.create(MuscleGroup, muscleGroupValidation.data);
         await em.flush()
         res.status(201).json({message: 'MuscleGroup created', muscleGroup});
     } catch(err:any){
@@ -43,7 +45,7 @@ async function update(req: Request, res: Response) {
     try {
         const idMuscleGroup = Number.parseInt(req.params.idMuscleGroup);
         const muscleGroupToUpdate = await em.findOneOrFail(MuscleGroup, { idMuscleGroup });
-        em.assign(muscleGroupToUpdate, req.body.sanitizeInput);
+        em.assign(muscleGroupToUpdate, req.body);
         await em.flush();
         res.status(202).json({message: 'MuscleGroup updated succesfully'});
     } catch(err:any){

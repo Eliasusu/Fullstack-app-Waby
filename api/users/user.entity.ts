@@ -41,7 +41,7 @@ export class User {
     @OneToMany(() => Training, (training) => training.user, {
         cascade: [Cascade.ALL],
     })
-    trainings = new Collection<Training>(this);
+    trainings? = new Collection<Training>(this);
     
     constructor() {
         this.idUser = generateId();

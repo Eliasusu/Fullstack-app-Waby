@@ -3,26 +3,32 @@ import { trainingMethodSchema } from '../trainingMethods/trainingMethod.schema.j
 import { trainingsSchema } from '../trainings/trainings.schema.js';
 import { User } from './user.entity.js';
 
-export const userSchema: ZodObject<ZodRawShape>  = z.object({
+export const userSchema = z.object({
+    
     username: z.string({
         required_error: 'Username is required',
         invalid_type_error: 'Username must be a string',
     }).min(6).max(40),
+
     password: z.string({
         required_error: 'Password is required', 
     }).min(8).max(16),
+
     email: z.string({
         required_error: 'Mail is required',
         invalid_type_error: 'Mail must be a string',
     }),
+
     name: z.string({
         required_error: 'Name is required',
         invalid_type_error: 'Name must be a string',
     }).max(20),
+
     birthdate: z.date({
         required_error: 'Birthdate is required',
         invalid_type_error: 'Birthdate must be a date',
     }),
+
     phone: z.string({}),
     bodyWeight: z.number({
         required_error: 'Weight is required',
@@ -35,6 +41,7 @@ export const userSchema: ZodObject<ZodRawShape>  = z.object({
     }).positive({}).min(1).max(250),
 
     trainingMethods: trainingMethodSchema.array(),
+
     trainings: trainingsSchema.array().optional(),
 });
 

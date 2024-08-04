@@ -1,4 +1,5 @@
-import { optional, z } from 'zod';
+import { z } from 'zod';
+import { exercisesSchema } from '../exercises/exercises.schema.js';
 
 export const muscleGroupSchema = z.object({
     nameMuscleGroup: z.string({
@@ -11,7 +12,7 @@ export const muscleGroupSchema = z.object({
     imageMuscleGroup: z.string({
         invalid_type_error: 'Image must be a string',
     }).optional(),
-    idMuscleGroup: z.number().positive().optional(),
+
 });
 
 type MuscleGroup = z.infer<typeof muscleGroupSchema>;

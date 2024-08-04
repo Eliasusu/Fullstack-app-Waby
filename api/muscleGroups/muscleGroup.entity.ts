@@ -19,5 +19,5 @@ export class MuscleGroup {
         cascade: [Cascade.ALL],
         owner: true,
     })
-    exercises = new Collection<Exercise>(this);
+    exercises? = new Collection<Exercise>(this);
 }

@@ -32,7 +32,7 @@ app.use('/api/v1/users', usersRouter);
 //app.use('/api/v1/exercises', exercisesRouter);
 //app.use('/api/v1/trainings', trainingsRouter);
 //app.use('/routines', routinesRouter);
-//app.use('/api/v1/muscleGroups', muscleGroupsRouter);
+app.use('/api/v1/muscleGroups', muscleGroupsRouter);
 //app.use('/api/v1/mesocycles', mesocyclesRouter);
 
 await syncSchema() //This will create the schema in the database if it doesn't exist yet, no need to run this in production;

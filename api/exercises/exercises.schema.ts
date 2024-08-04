@@ -18,14 +18,10 @@ export const exercisesSchema = z.object({
   typeExercise: z.string({
     invalid_type_error: 'Type of exercise must be a string',
   }),
-  idExercise: z.number().positive().optional(),
-  training: z.string().optional(),
+  training: trainingsSchema.optional(),
   image: z.string({
     invalid_type_error: 'Image must be a string',
   }).optional(),
-  dateCreated: z.date({
-    invalid_type_error: 'Date must be a date',
-  }),
 });
 
 type Exercise = z.infer<typeof exercisesSchema>;
