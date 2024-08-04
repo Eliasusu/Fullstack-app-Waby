@@ -1,6 +1,7 @@
 ## Preguntas ❓
 
 - La entidad Exercises_Trainings es una entidad que nace de una relacion de dos entidades N a M que son <br> Training y Exercise, como hago para crear su clave primaria?
+- Necesitamos ayuda con las 3 entidades Trainings, exercises y exercises_Trainings ya que creemos que esta mal planteado el modelaje
 
 ## Mensajes para el proximo dev(esclavo) 📨
 
@@ -28,12 +29,12 @@
     <summary>Integrar ORM</summary>
     <ul>
         <li>- [x] Integrar Auth y Users </li>
-        <li>- [] Integrar trainings </li>
-        <li>- [] Integrar mesocycle </li>
+        <li>- [ ] Integrar trainings </li>
+        <li>- [ ] Integrar mesocycle </li>
         <li>- [x] Integrar trainingsMethods </li>
-        <li>- [] Integrar exercises </li>
+        <li>- [ ] Integrar exercises </li>
         <li>- [x] Integrar MuscleGroups </li>
-        <li>- [] Integrar exercises_trainings </li>\
+        <li>- [ ] Integrar exercises_trainings </li>\
     </ul>
 </details>
 <details>
