@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { exercisesSchema } from '../exercises/exercises.schema.js';
+import { MuscleGroup } from './muscleGroup.entity.js';
+
 
 export const muscleGroupSchema = z.object({
     nameMuscleGroup: z.string({
@@ -14,8 +16,6 @@ export const muscleGroupSchema = z.object({
     }).optional(),
 
 });
-
-type MuscleGroup = z.infer<typeof muscleGroupSchema>;
 
 export function validateMuscleGroup(muscleGroup: MuscleGroup) {
     return muscleGroupSchema.safeParse(muscleGroup);

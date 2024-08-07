@@ -32,6 +32,9 @@ export class User {
     @Property({ nullable: false })
     height!: number;
 
+    @Property({ persist: false })
+    token?: string;
+
     @ManyToMany(() => TrainingMethod, (trainingMethod) => trainingMethod.users, {
         cascade: [Cascade.ALL],
         owner: true,

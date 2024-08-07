@@ -3,6 +3,7 @@ import { muscleGroupSchema } from '../muscleGroups/muscleGroups.schema.js';
 import { trainingMethodSchema } from '../trainingMethods/trainingMethod.schema.js';
 import { trainingsSchema } from '../trainings/trainings.schema.js';
 import { exercise_Training } from '../exercises_trainings/exercises_trainings.schema.js';
+import { Exercise } from './exercise.entity.js';
 
 export const exercisesSchema:any = z.object({
   name: z.string({
@@ -20,14 +21,12 @@ export const exercisesSchema:any = z.object({
     invalid_type_error: 'Type of exercise must be a string',
   }),
   dateCreated: z.date().optional(),
-  training: trainingsSchema.optional(),
   image: z.string({
     invalid_type_error: 'Image must be a string',
   }).optional(),
   exercise_Training: exercise_Training.optional(),
 });
 
-type Exercise = z.infer<typeof exercisesSchema>;
 
 export function validateExercises(exercises: Exercise) {
   return exercisesSchema.safeParse(exercises)

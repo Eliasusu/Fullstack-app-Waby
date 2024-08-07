@@ -1,10 +1,9 @@
 import { z } from 'zod';
 import { exercisesSchema } from '../exercises/exercises.schema.js';
 import { trainingsSchema } from '../trainings/trainings.schema.js';
+import { Exercise_Training } from './exercise_training.entity.js';
 
 export const exercise_Training = z.object({
-    training: trainingsSchema,
-    exercise: exercisesSchema,
     sets: z.number({
         required_error: 'Sets is required',
     }).positive(),
@@ -22,7 +21,7 @@ export const exercise_Training = z.object({
     }),
 });
 
-type Exercise_Training = z.infer<typeof exercise_Training>;
+
 
 export function validateRoutine(routine: Exercise_Training) {
     return exercise_Training.safeParse(routine);

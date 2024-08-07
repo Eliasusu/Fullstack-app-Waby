@@ -11,7 +11,7 @@ export class Training{
     idTraining?: number;
     
     @ManyToOne(() => User, { nullable: false })
-    user!: Rel<User>;
+    user?: Rel<User>;
 
     @ManyToOne(() => Mesocycle)
     mesocycle!: Mesocycle;
@@ -30,9 +30,9 @@ export class Training{
 
     @ManyToMany(() => Exercise, (exercise) => exercise.trainings, {
         cascade: [Cascade.ALL],
-        owner: true,
-    })
-    exercises = new Collection<Exercise>(this);
+        owner: true,    
+    })  
+    exercises = new Collection<Exercise>(this)  ;
 
     @ManyToOne(() => Exercise_Training, { nullable: true })
     exercises_trainings?: Exercise_Training;

@@ -1,6 +1,7 @@
 import { z, ZodObject, ZodRawShape } from 'zod';
 import { trainingMethodSchema } from '../trainingMethods/trainingMethod.schema.js';
 import { trainingsSchema } from '../trainings/trainings.schema.js';
+import { User } from './user.entity.js';
 
 export const userSchema:any = z.object({
     
@@ -38,14 +39,8 @@ export const userSchema:any = z.object({
         required_error: 'Height is required',
         invalid_type_error: 'Height must be a number',
     }).positive({}).min(1).max(250),
-
     trainingMethods: trainingMethodSchema.array(),
-
-    trainings: trainingsSchema.array().optional(),
 });
-
-
-type User = z.infer<typeof userSchema>;
 
 export function validateUser(user: User) {
     const birthdate = new Date(user.birthdate);

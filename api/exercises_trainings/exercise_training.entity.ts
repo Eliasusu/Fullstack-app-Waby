@@ -1,23 +1,12 @@
 
-import { Property, Cascade, Entity, Rel, OneToMany, PrimaryKey, ForeignKeyConstraintViolationException } from '@mikro-orm/core';
+import { Property, Cascade, Entity, Rel, OneToMany, PrimaryKey } from '@mikro-orm/core';
 import { Training } from '../trainings/training.entity.js';
 import { Exercise } from '../exercises/exercise.entity.js';
 
 @Entity()
 export class Exercise_Training {
     @PrimaryKey()
-    idTraining!: number;
-    idExercise!: number;
-
-    @OneToMany(() => Training, (training) => training.exercises_trainings, {
-        cascade: [Cascade.ALL],
-    })
-    training!: Rel<Training>;
-
-    @OneToMany(() => Exercise, (exercise) => exercise.exercises_trainings, {
-        cascade: [Cascade.ALL],
-    })
-    exercise!: Rel<Exercise>;
+    idTraining?: number;
 
     @Property({ nullable: false })
     sets!: number;
@@ -33,4 +22,14 @@ export class Exercise_Training {
 
     @Property({ nullable: true })
     comment?: string;
+
+    @OneToMany(() => Training, (training) => training.exercises_trainings, {
+        cascade: [Cascade.ALL],
+    })
+    training!: Rel<Training>;
+
+    @OneToMany(() => Exercise, (exercise) => exercise.exercises_trainings, {
+        cascade: [Cascade.ALL],
+    })
+    exercise!: Rel<Exercise>;
 }

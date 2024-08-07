@@ -1,10 +1,9 @@
 import { z } from 'zod';
 import { mesocyclesSchema } from '../mesocycles/mesocycles.schema.js';
 import { userSchema } from '../users/users.schema.js';
-import { exercisesSchema } from '../exercises/exercises.schema.js';
-import { exercise_Training } from '../exercises_trainings/exercises_trainings.schema.js';
+import { Training } from './training.entity.js';
 
-export const trainingsSchema:any = z.object({
+export const trainingsSchema = z.object({
   user: userSchema,
   mesocycle: mesocyclesSchema,
   trainingName: z.string({
@@ -23,11 +22,8 @@ export const trainingsSchema:any = z.object({
     required_error: 'Time is required',
     invalid_type_error: 'Time must be a string',
   }),
-  exercises: exercisesSchema.array(),
-  exercise_Training: exercise_Training.optional(),
 });
 
-type Training = z.infer<typeof trainingsSchema>;
 
 export function validateTraining(training: Training) {
   return trainingsSchema.safeParse(training);
