@@ -23,13 +23,14 @@ export class Exercise_Training {
     @Property({ nullable: true })
     comment?: string;
 
+    @OneToMany(() => Exercise, (exercise) => exercise.exercises_trainings, {
+        cascade: [Cascade.ALL],
+    })
+    exercise!: Exercise;
+
     @OneToMany(() => Training, (training) => training.exercises_trainings, {
         cascade: [Cascade.ALL],
     })
     training!: Rel<Training>;
 
-    @OneToMany(() => Exercise, (exercise) => exercise.exercises_trainings, {
-        cascade: [Cascade.ALL],
-    })
-    exercise!: Rel<Exercise>;
 }
