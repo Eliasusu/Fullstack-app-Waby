@@ -1,8 +1,4 @@
 import { date, z } from 'zod'; 
-import { muscleGroupSchema } from '../muscleGroups/muscleGroups.schema.js';
-import { trainingMethodSchema } from '../trainingMethods/trainingMethod.schema.js';
-import { trainingsSchema } from '../trainings/trainings.schema.js';
-import { exercise_Training } from '../exercises_trainings/exercises_trainings.schema.js';
 import { Exercise } from './exercise.entity.js';
 
 export const exercisesSchema:any = z.object({
@@ -10,9 +6,9 @@ export const exercisesSchema:any = z.object({
     required_error: 'Name is required',
     invalid_type_error: 'Name must be a string',
   }),
-  trainingMethod: trainingMethodSchema,
+  trainingMethod: z.string({}), 
   description: z.string({}).optional(),
-  muscleGroups: z.array(muscleGroupSchema),
+  muscleGroups: z.array(z.number()),
   difficulty: z.string({
     required_error: 'Difficulty is required',
     invalid_type_error: 'Difficulty must be a string',
@@ -24,7 +20,7 @@ export const exercisesSchema:any = z.object({
   image: z.string({
     invalid_type_error: 'Image must be a string',
   }).optional(),
-  exercise_Training: exercise_Training.optional(),
+  exercise_Training: z.string({}).optional(),
 });
 
 

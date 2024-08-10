@@ -26,7 +26,7 @@ async function getOne(req: Request, res: Response) {
 
 async function create(req: Request, res: Response) {
     try{
-        const exerciseValidation = validateExercises(req.body);
+        const exerciseValidation = validateParcialExercises(req.body);
         if (!exerciseValidation.success) {
             res.status(400).json({message: exerciseValidation.error});
             return;

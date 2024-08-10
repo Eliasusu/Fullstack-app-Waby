@@ -18,7 +18,7 @@ export class Exercise  {
     trainingMethod!: Rel<TrainingMethod>;
     
     @Property({ nullable: false })
-    description!: string;
+    description?: string;
 
     @ManyToMany(() => MuscleGroup, (muscleGroup) => muscleGroup.exercises, {
         cascade: [Cascade.ALL]
@@ -32,13 +32,13 @@ export class Exercise  {
     typeExercise!: string;
 
     @Property({ nullable: false, type: 'date', defaultRaw: 'current_timestamp()'})
-    dateCreated!: Date;
+    dateCreated?: Date;
         
     @Property({ nullable: true })
     image?: string;
 
     @ManyToOne(() => Exercise_Training, { nullable: true })
-    exercises_trainings!: Rel<Exercise_Training>;
+    exercises_trainings?: Rel<Exercise_Training>;
 
     @OneToMany(() => CalisthenicsProgressionPerReps, (calisthenicsProgressionPerReps) => calisthenicsProgressionPerReps.exercise, { 
     cascade: [Cascade.ALL]
