@@ -40,7 +40,27 @@ async function create(req: Request, res: Response) {
 }
 
 async function update(req: Request, res: Response) {
-    res.status(500).json({ message: 'Not implemented' });
+    try {
+        const idExercise = Number(req.params.idExercise);
+        const exerciseFind = await em.findOne(Exercise, { idExercise }, { populate: ['muscleGroups', 'trainingMethod' ] });
+        if (exerciseFind !== undefined) {
+            const result = validateParcialExercises(req.body);
+            if (result.error) return res.status(400).json(result.error);
+            if (result.success) {
+                const exercise = em.getReference(Exercise, idExercise as never);
+                em.assign(exercise, result.data);
+                await em.flush();
+                res.status(202).json({ message: 'Exercise updated succesfully' });
+            } else {
+                res.status(400).json({ error: 'Exercise not updated' });
+            }
+        } else {
+            res.status(404).json({ error: 'Exercise not found' });
+        }
+    }   
+    catch(err:any){
+        res.status(500).json({message: err.message});
+    }
 }
 
 async function remove(req: Request, res: Response) {

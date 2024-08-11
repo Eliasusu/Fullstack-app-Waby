@@ -21,7 +21,7 @@ async function getOne(req: Request, res: Response) {
 async function add(req: Request, res: Response) { 
     // En esta funcionalidad deberia haber un middleware que valide que el usuario que esta creando el training esta logueado
     try {
-        const trainingValidation = validateTraining(req.body);
+        const trainingValidation = validateParcialTraining(req.body);
         if (!trainingValidation.success) {
             res.status(400).json({ message: trainingValidation.error });
             return;

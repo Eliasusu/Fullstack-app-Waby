@@ -10,9 +10,9 @@ export class Training{
     idTraining?: number;
     
     @ManyToOne(() => User, { nullable: false })
-    user?: Rel<User>;
+    user!: Rel<User>;
 
-    @ManyToOne(() => Mesocycle)
+    @ManyToOne(() => Mesocycle, { nullable: false })
     mesocycle!: Mesocycle;
 
     @Property({ nullable: false })

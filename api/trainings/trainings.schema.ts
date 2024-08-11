@@ -1,11 +1,9 @@
 import { z } from 'zod';
-import { mesocyclesSchema } from '../mesocycles/mesocycles.schema.js';
-import { userSchema } from '../users/users.schema.js';
 import { Training } from './training.entity.js';
 
-export const trainingsSchema = z.object({
-  user: userSchema,
-  mesocycle: mesocyclesSchema,
+export const trainingsSchema: any = z.object({
+  user: z.string({}),
+  mesocycle: z.number({}).positive({}),
   trainingName: z.string({
     required_error: 'Training name is required',
     invalid_type_error: 'Training name must be a string',
