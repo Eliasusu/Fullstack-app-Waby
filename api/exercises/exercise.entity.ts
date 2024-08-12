@@ -4,6 +4,7 @@ import { TrainingMethod } from '../trainingMethods/trainingMethod.entity.js';
 import { Exercise_Training } from '../exercises_trainings/exercise_training.entity.js';
 import { CalisthenicsProgressionPerReps } from './calisthenics/reps/calisthenicsProgressionPerReps.entity.js';
 import { CalisthenicsProgressionPerSec } from './calisthenics/secs/calisthenicsProgressionPerSec.entity.js';
+import { User } from '../users/user.entity.js';
 
 
 @Entity()
@@ -11,7 +12,7 @@ export class Exercise  {
     @PrimaryKey()
     idExercise?: number;
 
-    @Property({ nullable: false }) 
+    @Property({ nullable: false, unique: true }) 
     name!: string;
 
     @ManyToOne(() => TrainingMethod, { nullable: false })
@@ -36,6 +37,9 @@ export class Exercise  {
         
     @Property({ nullable: true })
     image?: string;
+
+    @ManyToOne(() => User, { nullable: true }) 
+    user!: Rel<User>;
 
     @ManyToOne(() => Exercise_Training, { nullable: true })
     exercises_trainings?: Rel<Exercise_Training>;

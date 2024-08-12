@@ -2,6 +2,7 @@ import { generateId } from '../shared/generateId.js';
 import { Collection, Entity, ManyToMany, PrimaryKey, Property, Cascade, OneToMany } from '@mikro-orm/core';
 import { TrainingMethod } from '../trainingMethods/trainingMethod.entity.js';
 import { Training } from '../trainings/training.entity.js';
+import { Exercise } from '../exercises/exercise.entity.js';
 
 @Entity()
 export class User {
@@ -45,7 +46,12 @@ export class User {
         cascade: [Cascade.ALL],
     })
     trainings? = new Collection<Training>(this);
-    
+
+    @OneToMany(() => Exercise, (exercise) => exercise.user, {
+        cascade: [Cascade.ALL],
+    })
+    exercises? = new Collection<Exercise>(this);
+        
     constructor() {
         this.idUser = generateId();
     }

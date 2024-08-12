@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
 import process from 'process';
+import cookieParser from 'cookie-parser';
 import { orm, syncSchema } from './shared/db/orm.js';
 import { usersRouter } from "./users/users.routes.js";
 import { exercisesRouter } from "./exercises/exercises.routes.js";
@@ -19,6 +20,7 @@ import { trainingMethodsRouter } from './trainingMethods/trainingMethod.routes.j
 // eslint-disable-next-line no-undef
 const port = process.env.PORT ?? 3000;
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 app.disable('x-powered-by');
 app.use(corsMiddleware());

@@ -57,7 +57,6 @@ async function update(req: Request, res: Response) {
 
 //Delete a user
 async function remove(req: Request, res: Response) {
-    res.status(500).json({ message: 'Not implemented' });
     try {
         const { idUser } = req.params;
         const user = em.getReference(User, idUser as never);

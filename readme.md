@@ -1,11 +1,9 @@
 ## Preguntas ❓
 
-- La entidad Exercises_Trainings es una entidad que nace de una relacion de dos entidades N a M que son <br> Training y Exercise, como hago para crear su clave primaria?
-- Necesitamos ayuda con las 3 entidades Trainings, exercises y exercises_Trainings ya que creemos que esta mal planteado el modelaje
+- A la hora de cargar exercises, routines, o una planificacion en general, como hago la autentificación mediante un token? Es decir, no puedo permitir que alguien que no esta logeado pueda hacer cualquier cosa 
+- Todavia no tenemos el token por usuario logeado, pero aun asi, cuando en la request agrego un user para crear algo, no me lo reconoce al campo user
 
 ## Mensajes para el proximo dev(esclavo) 📨
-
-- Hay que volver a cambiar todo, todos los repositorys desaparecen y se pasan al controller <br> con la estructura que tiene users
 
 
 ## ToDo 📃
@@ -56,12 +54,21 @@
 <details>
     <summary>Testear exercises</summary>
         <ul>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
+        </ul> 
+    <summary>Testear calisthenics progression</summary>
+        <ul>
             <li>- [ ] Get alls</li>
             <li>- [ ] Get one </li>
             <li>- [ ] Create </li>
             <li>- [ ] Update </li>
             <li>- [ ] Delete </li>
-        </ul>    
+        </ul> 
+    
 </details>
 <details>
     <summary>Testear trainings</summary>

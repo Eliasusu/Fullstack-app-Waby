@@ -7,7 +7,7 @@ const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
     try{
-        const exercises = await em.find(Exercise, {}, { populate: ['muscleGroups'] });
+        const exercises = await em.find(Exercise, {}, { populate: ['muscleGroups', 'trainingMethod'] });
         res.status(200).json({message: 'finded all exercises', exercises});
     }catch(err:any){
         res.status(500).json({message: err.message}); //Quitar mensaje de error en producción
@@ -17,7 +17,7 @@ async function getAll(req: Request, res: Response) {
 async function getOne(req: Request, res: Response) {
     try{
         const idExercise = Number.parseInt(req.params.idExercise);
-        const exercise = await em.findOneOrFail(Exercise, {idExercise}, { populate: ['muscleGroups'] });
+        const exercise = await em.findOneOrFail(Exercise, {idExercise}, { populate: ['muscleGroups', 'trainingMethod'] });
         res.status(200).json({message: 'finded exercise', exercise});
     }catch(err:any){
         res.status(500).json({message: err.message});
@@ -64,7 +64,17 @@ async function update(req: Request, res: Response) {
 }
 
 async function remove(req: Request, res: Response) {
-    res.status(500).json({ message: 'Not implemented' });
+    try {
+        const idExercise = Number(req.params.idExercise);
+        const exerciseFind = await em.findOne(Exercise, { idExercise });
+        if(!exerciseFind) return res.status(404).json({message: 'Exercise not found'});
+        const exercise = em.getReference(Exercise, idExercise as never);
+        em.removeAndFlush(exercise);
+        return res.status(200).json(exercise);
+    } catch (error: any) { 
+        console.log(error); // --> Eliminar en produccion
+        res.status(500).json({ error: 'Error deleting exercise' });
+    }
 }
 
 export { getAll, getOne, create, update, remove };

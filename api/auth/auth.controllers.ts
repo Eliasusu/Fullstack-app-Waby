@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import jwt from 'jsonwebtoken';
+import { KEY } from "../shared/config.js";
 import { validateUser, validateParcialUser } from "../users/users.schema.js";
 import { User } from "../users/user.entity.js";
 import { orm } from "../shared/db/orm.js";
@@ -33,8 +35,12 @@ async function register(req: Request, res: Response) {
 async function login(req: Request, res: Response) {
     try {
         const { username, password } = req.body;
-        const user = await em.findOne(User, { username });
+        const user = await em.findOne(User, { username }, { populate: ['password'] });
         if (!user) return res.status(400).json({ error: 'Username incorrect' });
+        const token = jwt.sign({ user: user.idUser, username: user.username }, KEY, {
+            expiresIn: '1h'
+        });
+        res.cookie('token', token, { httpOnly: true });
         if (user.password !== password) return res.status(400).json({ error: 'Password incorrect' });
         res.status(200).json({ message: 'User logged in succesfully' });
     } catch (error: any) { 
