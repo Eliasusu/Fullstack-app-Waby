@@ -1,14 +1,21 @@
 import { Request, Response } from "express";
-import { validateExercises, validateParcialExercises } from "./exercises.schema.js";
+import { validateParcialExercises } from "./exercises.schema.js";
 import { Exercise } from "./exercise.entity.js";
 import { orm } from "../shared/db/orm.js";
 
 const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
-    try{
+    console.log(req.cookies.user);
+    try {
+        if (req.body.muscleGroups) { 
+            const muscleGroups = req.body.muscleGroups;
+            const exercises = await em.find(Exercise, { muscleGroups }, { populate: ['muscleGroups', 'trainingMethod'] });
+            res.status(200).json({ message: 'finded all exercises', exercises });
+            return;
+        }
         const exercises = await em.find(Exercise, {}, { populate: ['muscleGroups', 'trainingMethod'] });
-        res.status(200).json({message: 'finded all exercises', exercises});
+        res.status(200).json({ message: 'finded all exercises', exercises });
     }catch(err:any){
         res.status(500).json({message: err.message}); //Quitar mensaje de error en producción
     }

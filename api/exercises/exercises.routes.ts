@@ -5,6 +5,7 @@ export const exercisesRouter = Router();
 
 //Get all exercises
 exercisesRouter.get('/', getAll);
+exercisesRouter.get('/:idMuscleGroup', getAll);
 
 //Get one exercise
 exercisesRouter.get('/:idExercise', getOne);

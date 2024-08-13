@@ -40,7 +40,7 @@ async function login(req: Request, res: Response) {
         const token = jwt.sign({ user: user.idUser, username: user.username }, KEY, {
             expiresIn: '1h'
         });
-        res.cookie('token', token, {
+        res.cookie('setToken', token, {
             httpOnly: true,
             secure: true,
             sameSite: 'strict',
@@ -66,7 +66,7 @@ async function logout(req: Request, res: Response) {
 
 async function protectedRoute(req: Request, res: Response) {
     try {
-        const user = req.body.user;
+        const user = req.cookies.user;
         if (!user) return res.status(403).json({ error: 'Unauthorized' });
         res.status(200).json({ message: 'Protected route' });
     } catch (error: any) {

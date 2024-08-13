@@ -31,22 +31,20 @@ app.use((req, res, next) => {
     RequestContext.create(orm.em, next);
 });
 
+
+app.use((req, res, next) => {
+    const token = req.cookies.token;
+    let data = null;
+    try {
+        const data = jwt.verify(token, KEY);
+        req.cookies.user = data;
+    } catch (error: any) { }
+    next();
+});
+
 app.use('/api/v1/', authRouter);
-
-// app.use((req, res, next) => {
-//     const token = req.cookies.token;
-//     if (!token) {
-//         return res.status(401).json({ error: 'Unauthorized' });
-//     }
-//     try {
-//         const data = jwt.verify(token, KEY);
-//         req.body.user = data;
-//     } catch(error: any){}
-//     next();
-// })
-
-app.use('/api/v1/users', usersRouter);
 //app.use('/index', indexRouter);
+app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/exercises', exercisesRouter);
 app.use('/api/v1/trainings', trainingsRouter);
 app.use('/routines', routinesRouter);
