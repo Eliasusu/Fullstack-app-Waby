@@ -1,11 +1,7 @@
 import { z } from 'zod';
-// import { exerciseSchema } from './exercise.schema.mjs';
 
 export const calisthenicsProgressionPerSecSchema = z.object({
-    idProgression: z.number(
-        z.number().int().positive()
-    ),
-    // exercise: exerciseSchema,
+    exercise: z.number({}).positive(),
     nameProgression: z.string(
         z.string().min(1).max(255)
     ),
@@ -19,3 +15,7 @@ export const calisthenicsProgressionPerSecSchema = z.object({
         z.number().int().positive()
     ),
 })
+
+export function validateCalisthenicsProgressionPerSec(data: any) {
+    calisthenicsProgressionPerSecSchema.safeParse(data);
+}

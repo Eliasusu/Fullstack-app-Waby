@@ -40,6 +40,8 @@
         <ul>
             <li>- [x] Create/Register </li>
             <li>- [x] Login </li>
+            <li>- [ ] Logout </li>
+            <li>- [ ] Protected route </li> 
         </ul>
 </details>
 <details>

@@ -1,4 +1,4 @@
-import { date, z } from 'zod'; 
+import { z } from 'zod'; 
 import { Exercise } from './exercise.entity.js';
 
 export const exercisesSchema:any = z.object({

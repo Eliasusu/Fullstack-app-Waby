@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login } from "./auth.controllers.js";
+import { register, login, logout, protectedRoute } from "./auth.controllers.js";
 
 export const authRouter = Router();
 
@@ -8,4 +8,11 @@ authRouter.post('/register', register);
 
 //Login user 
 authRouter.post('/login', login);
+
+//Logout user
+authRouter.post('/logout', logout);
+
+//Protected route
+authRouter.get('/protected', protectedRoute);
+
 

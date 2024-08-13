@@ -40,7 +40,12 @@ async function login(req: Request, res: Response) {
         const token = jwt.sign({ user: user.idUser, username: user.username }, KEY, {
             expiresIn: '1h'
         });
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 3600000
+        });
         if (user.password !== password) return res.status(400).json({ error: 'Password incorrect' });
         res.status(200).json({ message: 'User logged in succesfully' });
     } catch (error: any) { 
@@ -49,4 +54,25 @@ async function login(req: Request, res: Response) {
     }
 }
 
-export  { register, login }
+async function logout(req: Request, res: Response) {
+    try {
+        res.clearCookie('token');
+        res.status(200).json({ message: 'User logged out succesfully' });
+    } catch (error: any) {
+        console.log(error); // --> Eliminar en produccion
+        res.status(500).json({ error: 'Error logging out' });
+    }
+}
+
+async function protectedRoute(req: Request, res: Response) {
+    try {
+        const user = req.body.user;
+        if (!user) return res.status(403).json({ error: 'Unauthorized' });
+        res.status(200).json({ message: 'Protected route' });
+    } catch (error: any) {
+        console.log(error); // --> Eliminar en produccion
+        res.status(500).json({ error: 'Error in protected route' });
+    }
+}
+
+export  { register, login, logout, protectedRoute }

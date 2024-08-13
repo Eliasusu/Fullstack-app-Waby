@@ -9,7 +9,7 @@ export class CalisthenicsProgressionPerSec {
     @ManyToOne(() => Exercise, { nullable: false })
     exercise!: Rel<Exercise>;
 
-    @Property({ nullable: false })
+    @Property({ nullable: false, unique: true})
     nameProgression!: string;
 
     @Property({ nullable: false })
