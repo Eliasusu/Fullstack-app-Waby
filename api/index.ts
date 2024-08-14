@@ -10,7 +10,7 @@ import { exercisesRouter } from "./exercises/exercises.routes.js";
 import { corsMiddleware } from './middlewares/cors.js';
 import { muscleGroupsRouter } from './muscleGroups/muscleGroups.routes.js';
 import { trainingsRouter } from './trainings/trainings.routes.js';
-//import { indexRouter } from './routes/index.routes.js';
+import { indexRouter } from './routes/index.routes.js';
 import { authRouter } from './auth/auth.routes.js';
 import { routinesRouter } from './exercises_trainings/exercises_trainings.routes.js';
 import { mesocyclesRouter } from './mesocycles/mesocycles.routes.js';
@@ -26,6 +26,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.disable('x-powered-by');
 app.use(corsMiddleware());
+app.use(express.static('client'));
 
 app.use((req, res, next) => {
     RequestContext.create(orm.em, next);
@@ -43,7 +44,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/v1/', authRouter);
-//app.use('/index', indexRouter);
+app.use('/index', indexRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/exercises', exercisesRouter);
 app.use('/api/v1/trainings', trainingsRouter);
