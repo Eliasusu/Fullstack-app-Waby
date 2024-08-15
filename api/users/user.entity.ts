@@ -24,8 +24,8 @@ export class User {
     @Property({ nullable: false })
     birthdate!: Date;
 
-    @Property({ nullable: false, unique: true })
-    phone!: string;
+    @Property({ nullable: true, unique: true })
+    phone?: string;
 
     @Property({ nullable: false })
     bodyWeight!: number;

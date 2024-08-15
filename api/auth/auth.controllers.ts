@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import jwt from 'jsonwebtoken';
-import { KEY } from "../shared/config.js";
+import bcrypt from 'bcryptjs';
 import { validateUser, validateParcialUser } from "../users/users.schema.js";
 import { User } from "../users/user.entity.js";
 import { orm } from "../shared/db/orm.js";
+import { createToken } from "../shared/jwt.js";
 
 const em = orm.em;
 
@@ -19,8 +19,11 @@ async function register(req: Request, res: Response) {
             if (await em.findOne(User, { email: req.body.email })) {
                 return res.status(400).json({ error: 'Email already exists' });
             }
-            const user = em.create(User, req.body); 
+            req.body.password = bcrypt.hashSync(req.body.password, 10);
+            const user = em.create(User, req.body);
             await em.persistAndFlush(user);
+            const token = await createToken({ id: user.idUser, username: user.username });
+            res.cookie('token', token, { httpOnly: true });
             res.status(201).json({ message: 'User created succesfully' });
         } else {
             res.status(400).json({ error: 'User not created' });
@@ -37,16 +40,10 @@ async function login(req: Request, res: Response) {
         const { username, password } = req.body;
         const user = await em.findOne(User, { username }, { populate: ['password'] });
         if (!user) return res.status(400).json({ error: 'Username incorrect' });
-        const token = jwt.sign({ user: user.idUser, username: user.username }, KEY, {
-            expiresIn: '1h'
-        });
-        res.cookie('setToken', token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 3600000
-        });
-        if (user.password !== password) return res.status(400).json({ error: 'Password incorrect' });
+        const validPassword = bcrypt.compareSync(password, user.password);
+        if (!validPassword) return res.status(400).json({ error: 'Password incorrect' });
+        const token = await createToken({ id: user.idUser, username: user.username });
+        res.cookie('token', token, { httpOnly: true });
         res.status(200).json({ message: 'User logged in succesfully' });
     } catch (error: any) { 
         console.log(error); // --> Eliminar en produccion
@@ -64,15 +61,16 @@ async function logout(req: Request, res: Response) {
     }
 }
 
-async function protectedRoute(req: Request, res: Response) {
+async function profile(req: Request, res: Response) {
     try {
-        const user = req.cookies.user;
-        if (!user) return res.status(403).json({ error: 'Unauthorized' });
-        res.status(200).json({ message: 'Protected route' });
+        const idUser = req.body.user.id;
+        const user = await em.findOneOrFail(User, { idUser }, { populate: ['password'] });
+        if (!user) return res.status(400).json({ error: 'User not found' });
+        res.status(200).json({ message: 'User profile', id: idUser, username: user.username, email: user.email });
     } catch (error: any) {
         console.log(error); // --> Eliminar en produccion
         res.status(500).json({ error: 'Error in protected route' });
     }
 }
 
-export  { register, login, logout, protectedRoute }
+export  { register, login, logout, profile }
