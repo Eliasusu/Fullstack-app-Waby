@@ -27,7 +27,7 @@ export const userSchema:any = z.object({
         invalid_type_error: 'Birthdate must be a date',
     }),
 
-    phone: z.string({}),
+    phone: z.string({}).optional(),
     bodyWeight: z.number({
         required_error: 'Weight is required',
         invalid_type_error: 'Weight must be a number',

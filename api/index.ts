@@ -31,8 +31,8 @@ app.use((req, res, next) => {
     RequestContext.create(orm.em, next);
 });
 
-app.use('/api/v1/', authRouter);
-app.use('/index', validateToken, indexRouter);
+app.use('/api/v1/auth', authRouter);
+app.use('api/index/v1', validateToken, indexRouter);
 app.use('/api/v1/users',validateToken, usersRouter);
 app.use('/api/v1/exercises',validateToken, exercisesRouter);
 app.use('/api/v1/trainings',validateToken, trainingsRouter);

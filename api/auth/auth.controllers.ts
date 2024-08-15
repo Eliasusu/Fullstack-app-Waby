@@ -10,7 +10,12 @@ const em = orm.em;
 //Register user === Add user === Create user 
 async function register(req: Request, res: Response) { 
     try {
-        const result = validateUser(req.body);
+        const trainingMethods = [req.body.trainingMethods];
+        console.log(trainingMethods);
+        const height = Number(req.body.height);
+        const bodyWeight = Number(req.body.bodyWeight);
+        const user = { ...req.body, height, bodyWeight, trainingMethods };
+        const result = validateUser(user);
         if (result.error) return res.status(400).json(result.error);
         if (result.success) {
             if (await em.findOne(User, { username: req.body.username })) {
