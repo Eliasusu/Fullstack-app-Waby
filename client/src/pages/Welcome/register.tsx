@@ -37,11 +37,11 @@ function RegisterUser() {
                     })}>
                     <h1 className="font-bold text-3xl text-white-text m-auto pb-1">Register</h1>
                     <div className="w-full">
-                            <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="text" placeholder="Email"
+                            <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="email" placeholder="Email"
                                 {...register('email', { required: true })} />
                     </div>
                     <div>
-                            <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="text" placeholder="Password"
+                            <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="password" placeholder="Password"
                             {...register('password', {required: true})} />
                     </div>
                     <div>
