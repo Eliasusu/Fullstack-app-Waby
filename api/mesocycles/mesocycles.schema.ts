@@ -1,8 +1,7 @@
-import { z } from 'zod';
+import { optional, z } from 'zod';
 import { Mesocycle } from './mesocycle.entity.js';
 
 export const mesocyclesSchema = z.object({
-    idMesocycle: z.number().int().positive(),
     typeMesocycle: z.string({
         required_error: 'Type of mesocycle is required',
         invalid_type_error: 'Type of mesocycle must be a string',
@@ -26,5 +25,5 @@ export function validateMesocycles(mesocycles: Mesocycle) {
 export function validateParcialMesocycles(mesocycles: Mesocycle) {
     if(mesocycles.startDate) mesocycles.startDate = new Date(mesocycles.startDate);
     if(mesocycles.endDate) mesocycles.endDate = new Date(mesocycles.endDate);
-    return mesocyclesSchema.partial().safeParse(mesocycles);
+    return mesocyclesSchema.partial().safeParse(mesocycles = {...mesocycles});
 }

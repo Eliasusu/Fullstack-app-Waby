@@ -40,7 +40,7 @@ app.use('/api/v1/exercises/calisthenics/progressions/reps', calisthenicsProgress
 app.use('/api/v1/trainings',validateToken, trainingsRouter);
 app.use('/routines',validateToken, routinesRouter);
 app.use('/api/v1/muscleGroups',validateToken, muscleGroupsRouter);
-//app.use('/api/v1/mesocycles', mesocyclesRouter);
+app.use('/api/v1/mesocycles', validateToken, mesocyclesRouter);
 app.use('/api/v1/trainingMethods',validateToken, trainingMethodsRouter);
 
 await syncSchema() //This will create the schema in the database if it doesn't exist yet, no need to run this in production;

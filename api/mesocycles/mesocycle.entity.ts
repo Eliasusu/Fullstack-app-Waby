@@ -4,13 +4,11 @@ import { Collection, PrimaryKey, Property, Cascade, OneToMany, Entity } from '@m
 @Entity()
 export class Mesocycle {
  
-    @PrimaryKey( { nullable: false })
-    idMesocycle!: number;
+    @PrimaryKey()
+    idMesocycle?: number;
 
     @Property({ nullable: false })
     typeMesocycle!: string;
-
-    @Property({ nullable: false })
     
     @Property({ nullable: false })
     startDate!: Date;
