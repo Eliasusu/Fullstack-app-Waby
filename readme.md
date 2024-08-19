@@ -30,7 +30,7 @@
         <li>- [ ] Integrar trainings </li>
         <li>- [ ] Integrar mesocycle </li>
         <li>- [x] Integrar trainingsMethods </li>
-        <li>- [ ] Integrar exercises </li>
+        <li>- [x] Integrar exercises </li>
         <li>- [x] Integrar MuscleGroups </li>
         <li>- [ ] Integrar exercises_trainings </li>\
     </ul>
@@ -40,8 +40,8 @@
         <ul>
             <li>- [x] Create/Register </li>
             <li>- [x] Login </li>
-            <li>- [ ] Logout </li>
-            <li>- [ ] Protected route </li> 
+            <li>- [x] Logout </li>
+            <li>- [x] Protected route </li> 
         </ul>
 </details>
 <details>

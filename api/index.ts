@@ -15,6 +15,7 @@ import { mesocyclesRouter } from './mesocycles/mesocycles.routes.js';
 import { RequestContext } from '@mikro-orm/core';
 import { trainingMethodsRouter } from './trainingMethods/trainingMethod.routes.js';
 import { validateToken } from './middlewares/validateToken.js';
+import { calisthenicsProgressPerRepsRouter } from './exercises/calisthenics/reps/calisthenicsProgressionPerReps.routes.js';
 
 
 
@@ -34,7 +35,8 @@ app.use((req, res, next) => {
 app.use('/api/v1/auth', authRouter);
 app.use('api/index/v1', validateToken, indexRouter);
 app.use('/api/v1/users',validateToken, usersRouter);
-app.use('/api/v1/exercises',validateToken, exercisesRouter);
+app.use('/api/v1/exercises', validateToken, exercisesRouter);
+app.use('/api/v1/exercises/calisthenics/progressions/reps', calisthenicsProgressPerRepsRouter);
 app.use('/api/v1/trainings',validateToken, trainingsRouter);
 app.use('/routines',validateToken, routinesRouter);
 app.use('/api/v1/muscleGroups',validateToken, muscleGroupsRouter);

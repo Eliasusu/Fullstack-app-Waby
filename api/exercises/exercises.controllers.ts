@@ -6,7 +6,7 @@ import { orm } from "../shared/db/orm.js";
 const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
-    console.log(req.cookies.user);
+    console.log(req.body);
     try {
         if (req.body.muscleGroups) { 
             const muscleGroups = req.body.muscleGroups;
@@ -32,13 +32,17 @@ async function getOne(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
-    try{
+    try {
+        console.log(req.body);
         const exerciseValidation = validateParcialExercises(req.body);
         if (!exerciseValidation.success) {
             res.status(400).json({message: exerciseValidation.error});
             return;
         }
-        const exercise = em.create(Exercise, exerciseValidation.data);
+        const exercise = em.create(Exercise, {
+            ...exerciseValidation.data,
+            user: req.body.user.id
+            });
         await em.flush();
         res.status(201).json({message: 'Exercise created', exercise});
     }catch(err:any){

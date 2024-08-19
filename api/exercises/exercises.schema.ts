@@ -21,6 +21,8 @@ export const exercisesSchema:any = z.object({
     invalid_type_error: 'Image must be a string',
   }).optional(),
   exercise_Training: z.string({}).optional(),
+  calisthenicsProgressionPerReps: z.array(z.number()).optional(),
+  calisthenicsProgressionPerSec: z.array(z.number()).optional(),
 });
 
 

@@ -4,21 +4,21 @@ import { Exercise } from "../../exercise.entity.js";
 @Entity()
 export class CalisthenicsProgressionPerSec {
     @PrimaryKey()
-    idProgression!: number;
+    idProgression?: number;
 
     @ManyToOne(() => Exercise, { nullable: false })
     exercise!: Rel<Exercise>;
 
     @Property({ nullable: false, unique: true})
-    nameProgression!: string;
+    nameProgression?: string;
 
     @Property({ nullable: false })
-    orderProgression!: number;
+    orderProgression?: number;
 
     @Property({ nullable: false })
-    numberSecNeeded!: number;
+    numberSecNeeded?: number;
 
     @Property({ nullable: false })
-    numberRepsNeeded!: number;
+    numberRepsNeeded?: number;
 
 }

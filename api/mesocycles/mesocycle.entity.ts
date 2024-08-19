@@ -18,8 +18,8 @@ export class Mesocycle {
     @Property({ nullable: false })
     endDate!: Date;
 
-    @OneToMany(() => Training, (training) => training.mesocycle, {
+    @OneToMany(() => Training, (training) => training.mesocycle,{
         cascade: [Cascade.ALL],
     })
-    trainings = new Collection<Training>(this);
+    trainings?= new Collection<Training>(this);
 }
