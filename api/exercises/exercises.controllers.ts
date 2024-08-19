@@ -38,7 +38,9 @@ async function create(req: Request, res: Response) {
             res.status(400).json({message: exerciseValidation.error});
             return;
         }
-        const exercise = em.create(Exercise, exerciseValidation.data);
+        const exercise = em.create(Exercise, {
+            ...exerciseValidation.data
+        , user: req.cookies.user });
         await em.flush();
         res.status(201).json({message: 'Exercise created', exercise});
     }catch(err:any){
