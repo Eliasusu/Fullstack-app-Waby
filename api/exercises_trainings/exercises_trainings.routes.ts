@@ -3,10 +3,10 @@ import { getOne, add, update, remove } from "./exercises_trainings.controllers.j
 
 export const routinesRouter = Router();
 
-routinesRouter.get('/:idTraining/:idExercise', getOne);
+routinesRouter.get('/:idTraining', getOne);
 
 routinesRouter.post('/', add);
 
-routinesRouter.put('/:idTraining/:idExercise', update);
+routinesRouter.put('/:idTraining', update);
 
-routinesRouter.delete('/:idTraining/:idExercise', remove);
+routinesRouter.delete('/:idTraining', remove);

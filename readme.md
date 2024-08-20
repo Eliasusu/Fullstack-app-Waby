@@ -1,7 +1,10 @@
 ## Preguntas ❓
 
-- A la hora de cargar exercises, routines, o una planificacion en general, como hago la autentificación mediante un token? Es decir, no puedo permitir que alguien que no esta logeado pueda hacer cualquier cosa 
-- Todavia no tenemos el token por usuario logeado, pero aun asi, cuando en la request agrego un user para crear algo, no me lo reconoce al campo user
+- Es mejor relacionar a los usuarios con los mesociclos y luego los mesociclos se relacionan con entrenamientos? Porque nosotros lo tenemos que los usuarios se relacionan con muchos entrenamientos y esos entrenamientos se relacionan con solo 1 mesociclo o otros
+
+- Porque la entidad exercises_trainings no me deja ponerle otra clave primaria que no sea la de la entidad trainings?
+
+- Porque no me aparacen las foraneas de progressionsSec y progressionsReps en Exercises? Lo mismo con exercise_tranings
 
 ## Mensajes para el proximo dev(esclavo) 📨
 
@@ -27,8 +30,8 @@
     <summary>Integrar ORM</summary>
     <ul>
         <li>- [x] Integrar Auth y Users </li>
-        <li>- [ ] Integrar trainings </li>
-        <li>- [ ] Integrar mesocycle </li>
+        <li>- [x] Integrar trainings </li>
+        <li>- [x] Integrar mesocycle </li>
         <li>- [x] Integrar trainingsMethods </li>
         <li>- [x] Integrar exercises </li>
         <li>- [x] Integrar MuscleGroups </li>
@@ -64,22 +67,22 @@
         </ul> 
     <summary>Testear calisthenics progression</summary>
         <ul>
-            <li>- [ ] Get alls</li>
-            <li>- [ ] Get one </li>
-            <li>- [ ] Create </li>
-            <li>- [ ] Update </li>
-            <li>- [ ] Delete </li>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
         </ul> 
     
 </details>
 <details>
     <summary>Testear trainings</summary>
         <ul>
-            <li>- [ ] Get alls</li>
-            <li>- [ ] Get one </li>
-            <li>- [ ] Create </li>
-            <li>- [ ] Update </li>
-            <li>- [ ] Delete </li>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
         </ul>
 </details>
 <details>

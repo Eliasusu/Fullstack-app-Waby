@@ -1,12 +1,12 @@
 
-import { Property, Cascade, Entity, Rel, OneToMany, PrimaryKey } from '@mikro-orm/core';
+import { Property, Entity, Rel, PrimaryKey, ManyToOne } from '@mikro-orm/core';
 import { Training } from '../trainings/training.entity.js';
 import { Exercise } from '../exercises/exercise.entity.js';
 
 @Entity()
 export class ExerciseTraining {
-    @PrimaryKey()
-    idTraining?: number;
+    @PrimaryKey({type: 'number', autoincrement: true })
+    idTrainingExercise!: number;
 
     @Property({ nullable: false })
     sets!: number;
@@ -22,15 +22,10 @@ export class ExerciseTraining {
 
     @Property({ nullable: true })
     comment?: string;
-
-    @OneToMany(() => Exercise, (exercise) => exercise.exercisesTrainings, {
-        cascade: [Cascade.ALL],
-    })
+    
+    @ManyToOne(() => Exercise, { nullable: false }) 
     exercise!: Rel<Exercise>;
 
-    @OneToMany(() => Training, (training) => training.exercisesTrainings, {
-        cascade: [Cascade.ALL],
-    })
+    @ManyToOne(() => Training, { nullable: false })
     training!: Rel<Training>;
-
 }

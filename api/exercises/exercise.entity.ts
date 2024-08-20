@@ -2,7 +2,7 @@ import { Collection, ManyToMany, PrimaryKey, Property, Cascade, ManyToOne, Rel, 
 import { MuscleGroup } from '../muscleGroups/muscleGroup.entity.js';
 import { TrainingMethod } from '../trainingMethods/trainingMethod.entity.js';
 import { ExerciseTraining } from '../exercises_trainings/exercise_training.entity.js';
-import { ProgressionReps as RepsProgression } from './calisthenics/reps/progressionReps.entity.js';
+import { ProgressionReps } from './calisthenics/reps/progressionReps.entity.js';
 import { ProgressionSec } from './calisthenics/secs/progressionSec.entity.js';
 import { User } from '../users/user.entity.js';
 
@@ -41,15 +41,17 @@ export class Exercise  {
     @ManyToOne(() => User, { nullable: true }) 
     user!: Rel<User>;
 
-    @ManyToOne(() => ExerciseTraining, { nullable: true })
-    exercisesTrainings?: Rel<ExerciseTraining>;
+    @OneToMany(() => ExerciseTraining, (exerciseTraining) => exerciseTraining.exercise, {
+        cascade: [Cascade.ALL],
+    })
+    exercisesTrainings?: Rel<ExerciseTraining>[];
 
-    @OneToMany(() => RepsProgression, (repsProgressions) => repsProgressions.exercise, { 
+    @OneToMany(() => ProgressionReps, (progressionReps) => progressionReps.exercise, { 
         cascade: [Cascade.ALL]
     })
-    progressionReps = new Collection<RepsProgression>(this);
+    progressionReps = new Collection<ProgressionReps>(this);
     
-    @OneToMany(() => ProgressionSec, (calisthenicsProgressionPerSec) => calisthenicsProgressionPerSec.exercise, { 
+    @OneToMany(() => ProgressionSec, (progressionSec) => progressionSec.exercise, { 
         cascade: [Cascade.ALL]
     })
     progressionSec = new Collection<ProgressionSec>(this);

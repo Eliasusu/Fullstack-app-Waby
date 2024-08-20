@@ -1,6 +1,4 @@
 import { z } from 'zod';
-import { exercisesSchema } from '../exercises/exercises.schema.js';
-import { trainingsSchema } from '../trainings/trainings.schema.js';
 import { ExerciseTraining } from './exercise_training.entity.js';
 
 export const exerciseTraining = z.object({

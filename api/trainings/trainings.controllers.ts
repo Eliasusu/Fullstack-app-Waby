@@ -50,14 +50,11 @@ async function add(req: Request, res: Response) {
         if (!userCookie || !userCookie.id) {
             return res.status(401).json({ message: "User information not found in cookies" });
         }
-
         const userId = userCookie.id;
-
         const user = await em.findOne(User, { idUser: userId });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
         const trainingValidation = validateParcialTraining(req.body);
         if (!trainingValidation.success) {
             return res.status(400).json({ message: trainingValidation.error });

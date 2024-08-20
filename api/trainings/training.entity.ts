@@ -1,9 +1,7 @@
 import { User } from '../users/user.entity.js';
 import { Mesocycle } from '../mesocycles/mesocycle.entity.js';
-import { PrimaryKey, Property, ManyToOne, Rel, Entity, OneToMany } from '@mikro-orm/core';
+import { PrimaryKey, Property, ManyToOne, Rel, Entity, OneToMany, Collection, Cascade } from '@mikro-orm/core';
 import { ExerciseTraining } from '../exercises_trainings/exercise_training.entity.js';
-import { Collection, Cascade } from '@mikro-orm/core';
-import { nullable } from 'zod';
 
 @Entity()
 export class Training{
@@ -29,7 +27,8 @@ export class Training{
     @Property({ nullable: false })
     time!: string;
 
-    @ManyToOne(() => ExerciseTraining, { nullable: true })
-    exercisesTrainings?: Rel<ExerciseTraining>;
-    
-} 
+    @OneToMany(() => ExerciseTraining, (exerciseTraining) => exerciseTraining.training, {
+        cascade: [Cascade.ALL],
+    })
+    exercisesTrainings?: Rel<ExerciseTraining>[];
+}

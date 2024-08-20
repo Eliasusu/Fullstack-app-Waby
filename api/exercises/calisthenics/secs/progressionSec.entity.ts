@@ -1,4 +1,4 @@
-import { Collection, PrimaryKey, Property, ManyToOne, Rel, Entity } from '@mikro-orm/core';
+import { PrimaryKey, Property, ManyToOne, Rel, Entity } from '@mikro-orm/core';
 import { Exercise } from "../../exercise.entity.js";
 
 @Entity()
