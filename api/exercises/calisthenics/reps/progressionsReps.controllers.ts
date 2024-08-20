@@ -46,6 +46,7 @@ async function create(req: Request, res: Response) {
             exercise: exercise
         });
         await em.persistAndFlush(calisthenicsProgressionPerReps);
+        res.status(201).json({message: 'Progression created succesfully', calisthenicsProgressionPerReps});
     } catch (error: any) {
         console.log(error);//Quitar mensaje de error en producción
         return res.status(500).json({message: error.message});
@@ -71,13 +72,22 @@ async function update(req: Request, res: Response) {
             res.status(400).json({ error: 'Progression not updated' });
         }
     } catch (error: any) {
-        console.log(error);//Quitar mensaje de error en producción
         return res.status(500).json({message: error.message})
     }
 }
 
-async function remove(req: Request, res: Response) {
-    res.status(501).json({message: 'Not implemented'});
+async function remove(req: Request, res: Response){
+    try {
+        const idProgression = Number.parseInt(req.params.idProgression);
+        const progressionFind = await em.findOne(ProgressionReps, { idProgression });
+        if (!progressionFind) return res.status(404).json({message: 'Progression not found'});
+        const progression = em.getReference(ProgressionReps, idProgression as never);
+        em.removeAndFlush(progression);
+        res.status(200).json({message: 'Progression removed succesfully'});
+    } catch (error: any) {
+        console.log(error);//Quitar mensaje de error en producción
+        return res.status(500).json({message: error.message});
+    }
 }
 
 export { getAll, getOne, create, update, remove };

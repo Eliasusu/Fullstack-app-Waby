@@ -52,7 +52,7 @@ async function create(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
     try {
-        const idExercise = Number(req.params.idExercise);
+        const idExercise = Number.parseInt(req.params.idExercise);
         const exerciseFind = await em.findOne(Exercise, { idExercise }, { populate: ['muscleGroups', 'trainingMethod' ] });
         if (exerciseFind !== undefined) {
             const result = validateParcialExercises(req.body);
@@ -76,7 +76,7 @@ async function update(req: Request, res: Response) {
 
 async function remove(req: Request, res: Response) {
     try {
-        const idExercise = Number(req.params.idExercise);
+        const idExercise = Number.parseInt(req.params.idExercise);
         const exerciseFind = await em.findOne(Exercise, { idExercise });
         if(!exerciseFind) return res.status(404).json({message: 'Exercise not found'});
         const exercise = em.getReference(Exercise, idExercise as never);
