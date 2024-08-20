@@ -13,9 +13,9 @@ trainingsRouter.get('/:idTraining/user/:idUser', getOne);
 trainingsRouter.post('/', add);
 
 //Update a training
-trainingsRouter.put('/:idTraining', update);
+trainingsRouter.put('/:idTraining/user/:idUser', update);
 
 //Delete a training
-trainingsRouter.delete('/:idTraining', remove);
+trainingsRouter.delete('/:idTraining/user/:idUser', remove);
 
 
