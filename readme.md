@@ -95,11 +95,11 @@
 <details>
     <summary>Testear mesocycles</summary>
         <ul>
-            <li>- [ ] Get alls</li>
-            <li>- [ ] Get one </li>
-            <li>- [ ] Create </li>
-            <li>- [ ] Update </li>
-            <li>- [ ] Delete </li>
+            <li>- [x] Get alls</li>
+            <li>- [x] Get one </li>
+            <li>- [x] Create </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
         </ul>
 </details>
 <details>

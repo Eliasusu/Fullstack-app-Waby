@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { Training } from './training.entity.js';
 
 export const trainingsSchema: any = z.object({
-  user: z.string({}),
   mesocycle: z.number({}).positive({}),
   trainingName: z.string({
     required_error: 'Training name is required',
@@ -12,9 +11,9 @@ export const trainingsSchema: any = z.object({
     required_error: 'Training type is required',
     invalid_type_error: 'Training type must be a string',
   }),
-  day: z.date({
+  day: z.string({
     required_error: 'Day is required',
-    invalid_type_error: 'Day must be a date',
+    invalid_type_error: 'Day must be a string',
   }),
   time: z.string({
     required_error: 'Time is required',
