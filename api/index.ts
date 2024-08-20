@@ -15,7 +15,7 @@ import { mesocyclesRouter } from './mesocycles/mesocycles.routes.js';
 import { RequestContext } from '@mikro-orm/core';
 import { trainingMethodsRouter } from './trainingMethods/trainingMethod.routes.js';
 import { validateToken } from './middlewares/validateToken.js';
-import { calisthenicsProgressPerRepsRouter } from './exercises/calisthenics/reps/calisthenicsProgressionPerReps.routes.js';
+import { calisthenicsProgressPerRepsRouter } from './exercises/calisthenics/reps/progressionReps.routes.js';
 
 
 

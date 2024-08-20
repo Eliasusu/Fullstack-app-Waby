@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { validateRoutine, validatePartialRoutine } from "./exercises_trainings.schema.js";
-import { Exercise_Training } from "./exercise_training.entity.js";
+import { ExerciseTraining } from "./exercise_training.entity.js";
 
 
 async function getOne(req: Request, res: Response) { 

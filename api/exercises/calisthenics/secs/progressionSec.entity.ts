@@ -2,7 +2,7 @@ import { Collection, PrimaryKey, Property, ManyToOne, Rel, Entity } from '@mikro
 import { Exercise } from "../../exercise.entity.js";
 
 @Entity()
-export class CalisthenicsProgressionPerSec {
+export class ProgressionSec {
     @PrimaryKey()
     idProgression?: number;
 

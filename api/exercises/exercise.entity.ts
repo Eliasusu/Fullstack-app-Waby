@@ -1,9 +1,9 @@
 import { Collection, ManyToMany, PrimaryKey, Property, Cascade, ManyToOne, Rel, Entity, OneToMany } from '@mikro-orm/core';
 import { MuscleGroup } from '../muscleGroups/muscleGroup.entity.js';
 import { TrainingMethod } from '../trainingMethods/trainingMethod.entity.js';
-import { Exercise_Training } from '../exercises_trainings/exercise_training.entity.js';
-import { CalisthenicsProgressionPerReps } from './calisthenics/reps/calisthenicsProgressionPerReps.entity.js';
-import { CalisthenicsProgressionPerSec } from './calisthenics/secs/calisthenicsProgressionPerSec.entity.js';
+import { ExerciseTraining } from '../exercises_trainings/exercise_training.entity.js';
+import { ProgressionReps as RepsProgression } from './calisthenics/reps/progressionReps.entity.js';
+import { ProgressionSec } from './calisthenics/secs/progressionSec.entity.js';
 import { User } from '../users/user.entity.js';
 
 
@@ -41,17 +41,17 @@ export class Exercise  {
     @ManyToOne(() => User, { nullable: true }) 
     user!: Rel<User>;
 
-    @ManyToOne(() => Exercise_Training, { nullable: true })
-    exercises_trainings?: Rel<Exercise_Training>;
+    @ManyToOne(() => ExerciseTraining, { nullable: true })
+    exercisesTrainings?: Rel<ExerciseTraining>;
 
-    @OneToMany(() => CalisthenicsProgressionPerReps, (calisthenicsProgressionPerReps) => calisthenicsProgressionPerReps.exercise, { 
-    cascade: [Cascade.ALL]
-    })
-    calisthenicsProgressionPerReps? = new Collection<CalisthenicsProgressionPerReps>(this);
-    
-    @OneToMany(() => CalisthenicsProgressionPerSec, (calisthenicsProgressionPerSec) => calisthenicsProgressionPerSec.exercise, { 
+    @OneToMany(() => RepsProgression, (repsProgressions) => repsProgressions.exercise, { 
         cascade: [Cascade.ALL]
     })
-    calisthenicsProgressionPerSec? = new Collection<CalisthenicsProgressionPerSec>(this);
+    calisthenicsProgressionPerReps? = new Collection<RepsProgression>(this);
+    
+    @OneToMany(() => ProgressionSec, (calisthenicsProgressionPerSec) => calisthenicsProgressionPerSec.exercise, { 
+        cascade: [Cascade.ALL]
+    })
+    calisthenicsProgressionPerSec? = new Collection<ProgressionSec>(this);
 
 };

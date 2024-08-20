@@ -1,8 +1,8 @@
-import { Collection, ManyToMany, PrimaryKey, Property, ManyToOne, Rel, Entity, OneToMany } from '@mikro-orm/core';
+import { PrimaryKey, Property, ManyToOne, Rel, Entity, OneToMany } from '@mikro-orm/core';
 import { Exercise } from "../../exercise.entity.js";
 
 @Entity()
-export class CalisthenicsProgressionPerReps {
+export class ProgressionReps {
     @PrimaryKey()
     idProgression?: number;
 

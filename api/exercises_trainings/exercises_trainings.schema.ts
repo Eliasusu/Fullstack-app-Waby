@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { exercisesSchema } from '../exercises/exercises.schema.js';
 import { trainingsSchema } from '../trainings/trainings.schema.js';
-import { Exercise_Training } from './exercise_training.entity.js';
+import { ExerciseTraining } from './exercise_training.entity.js';
 
-export const exercise_Training = z.object({
+export const exerciseTraining = z.object({
     sets: z.number({
         required_error: 'Sets is required',
     }).positive(),
@@ -23,10 +23,10 @@ export const exercise_Training = z.object({
 
 
 
-export function validateRoutine(routine: Exercise_Training) {
-    return exercise_Training.safeParse(routine);
+export function validateRoutine(routine: ExerciseTraining) {
+    return exerciseTraining.safeParse(routine);
 }
 
-export function validatePartialRoutine(routine: Exercise_Training) {
-    return exercise_Training.partial().safeParse(routine);
+export function validatePartialRoutine(routine: ExerciseTraining) {
+    return exerciseTraining.partial().safeParse(routine);
 }

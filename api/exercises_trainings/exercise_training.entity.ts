@@ -4,7 +4,7 @@ import { Training } from '../trainings/training.entity.js';
 import { Exercise } from '../exercises/exercise.entity.js';
 
 @Entity()
-export class Exercise_Training {
+export class ExerciseTraining {
     @PrimaryKey()
     idTraining?: number;
 
@@ -23,12 +23,12 @@ export class Exercise_Training {
     @Property({ nullable: true })
     comment?: string;
 
-    @OneToMany(() => Exercise, (exercise) => exercise.exercises_trainings, {
+    @OneToMany(() => Exercise, (exercise) => exercise.exercisesTrainings, {
         cascade: [Cascade.ALL],
     })
-    exercise!: Exercise;
+    exercise!: Rel<Exercise>;
 
-    @OneToMany(() => Training, (training) => training.exercises_trainings, {
+    @OneToMany(() => Training, (training) => training.exercisesTrainings, {
         cascade: [Cascade.ALL],
     })
     training!: Rel<Training>;

@@ -58,8 +58,8 @@ async function update(req: Request, res: Response) {
             const result = validateParcialExercises(req.body);
             if (result.error) return res.status(400).json(result.error);
             if (result.success) {
-                const exercise = em.getReference(Exercise, idExercise as never);
-                em.assign(exercise, result.data);
+                const exerciseUpdated = em.getReference(Exercise, idExercise as never);
+                em.assign(exerciseUpdated, result.data);
                 await em.flush();
                 res.status(202).json({ message: 'Exercise updated succesfully' });
             } else {

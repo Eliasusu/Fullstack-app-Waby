@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAll, getOne, create, update, remove } from "./calisthenicsProgressionsPerReps.controllers.js";
+import { getAll, getOne, create, update, remove } from "./progressionsReps.controllers.js";
 
 export const calisthenicsProgressPerRepsRouter = Router();
 
