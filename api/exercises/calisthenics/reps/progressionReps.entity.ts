@@ -7,7 +7,7 @@ export class ProgressionReps {
     idProgression?: number;
 
     @ManyToOne(() => Exercise)
-    exercise?: Rel<Exercise>;
+    exercise!: Rel<Exercise>;
 
     @Property({ nullable: true, unique: true})
     nameProgression?: string;

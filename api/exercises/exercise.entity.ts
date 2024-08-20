@@ -47,11 +47,11 @@ export class Exercise  {
     @OneToMany(() => RepsProgression, (repsProgressions) => repsProgressions.exercise, { 
         cascade: [Cascade.ALL]
     })
-    calisthenicsProgressionPerReps? = new Collection<RepsProgression>(this);
+    progressionReps = new Collection<RepsProgression>(this);
     
     @OneToMany(() => ProgressionSec, (calisthenicsProgressionPerSec) => calisthenicsProgressionPerSec.exercise, { 
         cascade: [Cascade.ALL]
     })
-    calisthenicsProgressionPerSec? = new Collection<ProgressionSec>(this);
+    progressionSec = new Collection<ProgressionSec>(this);
 
 };
