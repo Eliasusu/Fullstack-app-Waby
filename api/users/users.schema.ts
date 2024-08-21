@@ -37,7 +37,8 @@ export const userSchema:any = z.object({
         required_error: 'Height is required',
         invalid_type_error: 'Height must be a number',
     }).positive({}).min(1).max(250),
-    trainingMethods: z.array(z.string({})),
+    
+    trainingMethods: z.array(z.string()),
 });
 
 export function validateUser(user: User) {

@@ -8,9 +8,10 @@ import { Training } from "../trainings/training.entity.js";
 const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
-  try{
-      const mesocycles = await em.find(Mesocycle, {}, { populate: ['trainings'] });
-      res.status(200).json({ message: 'finded all mesocycles', mesocycles });
+    try {
+        const mesocycles = await em.find(Mesocycle, {}, { populate: ['trainings', 'trainings.user'] });
+        const mesocyclesFiltered = mesocycles.filter((mesocycle) => mesocycle.trainings?.filter((training) => training.user.idUser === req.body.user.idUser));
+        res.status(200).json({ message: 'finded all mesocycles', mesocyclesFiltered });
   } catch(err:any){
       res.status(500).json({message: err.message}); //Quitar mensaje de error en producción
   }
@@ -19,7 +20,7 @@ async function getAll(req: Request, res: Response) {
 async function getOne(req: Request, res: Response) {
   try{
       const idMesocycle = Number.parseInt(req.params.idMesocycle);
-      const mesocycle = await em.findOneOrFail(Mesocycle, {idMesocycle}, { populate: ['trainings'] });
+      const mesocycle = await em.findOneOrFail(Mesocycle, {idMesocycle}, { populate: ['trainings', 'trainings.user'] });
       res.status(200).json({message: 'finded mesocycle', mesocycle});
   } catch(err:any){
       res.status(500).json({message: err.message});

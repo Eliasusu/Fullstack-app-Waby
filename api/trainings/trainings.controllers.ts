@@ -9,7 +9,7 @@ const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
     try {
-        const trainings = await em.find(Training, {user: req.body.user.id},{populate: ['user.idUser', 'mesocycle.idMesocycle'] });
+        const trainings = await em.find(Training, { user: req.body.user.id }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings'] });
         res.json(trainings);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -29,12 +29,9 @@ async function getOne(req: Request, res: Response) {
             return res.status(400).json({ message: 'User ID is required' });
         }
 
-        const training = await em.findOneOrFail(Training, {
-            idTraining: idTraining,
-            user: { idUser: userId } 
-        }, { populate: ['user', 'mesocycle'] });
-
+        const training = await em.findOneOrFail( Training, { idTraining: idTraining, user: { idUser: userId } }, { populate: ['user', 'mesocycle', 'exercisesTrainings'] });
         res.json(training);
+
     } catch (error: any) {
         if (error.name === 'EntityNotFoundError') {
             res.status(404).json({ message: 'Training not found' });
@@ -46,12 +43,7 @@ async function getOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
     try {
-        const userCookie = req.body.user;
-        if (!userCookie || !userCookie.id) {
-            return res.status(401).json({ message: "User information not found in cookies" });
-        }
-        const userId = userCookie.id;
-        const user = await em.findOne(User, { idUser: userId });
+        const user = await em.findOne(User, { idUser: req.body.user.id });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -59,7 +51,6 @@ async function add(req: Request, res: Response) {
         if (!trainingValidation.success) {
             return res.status(400).json({ message: trainingValidation.error });
         }
-
         const training = em.create(Training, {
             ...trainingValidation.data,
             user: user, 

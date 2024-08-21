@@ -94,9 +94,9 @@ function RegisterUser() {
                     </div>
                     <div>
                         <select  className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm" name="trainingMethod">
-                                <option value="7c32e49c08b"
+                                <option value="emr345nrpzde"
                                     {...register('trainingMethods', { required: true })}>Calisthenics</option>
-                                <option value="7afa04eafc53"
+                                <option value="ojjmdeasf32sd"
                                 {...register('trainingMethods', { required: true})}>Gym</option>
                             </select>
                     </div>
