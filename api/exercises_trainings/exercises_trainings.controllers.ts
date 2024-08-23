@@ -18,7 +18,17 @@ async function getOne(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
-    res.status(500).json({ message: 'Not implemented' });
+     try {
+        const { error } = validateRoutine(req.body);
+        if (error) return res.status(400).json({ message: error.message });
+
+        const newExerciseTraining = em.create(ExerciseTraining, req.body);
+        await em.persistAndFlush(newExerciseTraining);
+
+        res.status(201).json(newExerciseTraining);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
 async function update(req: Request, res: Response) { 

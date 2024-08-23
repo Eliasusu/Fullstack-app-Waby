@@ -4,12 +4,14 @@
 
 - Porque la entidad exercises_trainings no me deja ponerle otra clave primaria que no sea la de la entidad trainings?
 
-- Porque no me aparacen las foraneas de progressionsSec y progressionsReps en Exercises? Lo mismo con exercise_tranings
+- Porque cuando creo un training y le asigno un ejercicio no se me crea un exercise_training con las foraneas de estos 2?
+
+- Porque no me aparacen las foraneas de progressionsSec y progressionsReps en Exercises?
 
 ## Mensajes para el proximo dev(esclavo) 📨
 
-
 ## ToDo 📃
+
 <ul> 
 <li>- [x] Al crear el repository la llamadas en las rutas por los diferentes metodos han cambiado, darle el formato correcto</li>
 <li>- [x] Acomodar todos los schemas para que coincidan con entity</li>
