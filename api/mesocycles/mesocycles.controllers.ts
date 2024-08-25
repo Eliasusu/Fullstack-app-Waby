@@ -9,8 +9,9 @@ const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
     try {
+        console.log(req.body.user.id);
         const mesocycles = await em.find(Mesocycle, {}, { populate: ['trainings', 'trainings.user'] });
-        const mesocyclesFiltered = mesocycles.filter((mesocycle) => mesocycle.trainings?.filter((training) => training.user.idUser === req.body.user.idUser));
+        const mesocyclesFiltered = await em.find(Mesocycle, { user: req.body.user.id }, { populate: ['trainings', 'trainings.user'] });
         res.status(200).json({ message: 'finded all mesocycles', mesocyclesFiltered });
   } catch(err:any){
       res.status(500).json({message: err.message}); //Quitar mensaje de error en producción
@@ -34,7 +35,7 @@ async function add(req: Request, res: Response) {
           res.status(400).json({message: mesocycleValidation.error});
           return;
       }
-      const mesocycle = em.create(Mesocycle, mesocycleValidation.data);
+      const mesocycle = em.create(Mesocycle, { ...mesocycleValidation.data, user: req.body.user.id });
       await em.flush();
       res.status(201).json({message: 'Mesocycle created', mesocycle});
   } catch(err:any){

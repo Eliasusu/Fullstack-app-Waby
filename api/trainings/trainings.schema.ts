@@ -19,7 +19,7 @@ export const trainingsSchema: any = z.object({
     required_error: 'Time is required',
     invalid_type_error: 'Time must be a string',
   }),
-  exercises_trainings: z.array(z.number()),
+  exercisesTrainings: z.array(z.number({})),
 });
 
 

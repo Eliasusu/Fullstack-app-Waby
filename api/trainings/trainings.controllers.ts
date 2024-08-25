@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { validateTraining, validateParcialTraining } from "./trainings.schema.js";
 import { orm } from "../shared/db/orm.js";
 import { Training } from "./training.entity.js";
-import jwt from 'jsonwebtoken';
 import { User } from "../users/user.entity.js";
 
 const em = orm.em;
@@ -56,8 +55,8 @@ async function add(req: Request, res: Response) {
             user: user, 
         });
         await em.persistAndFlush(training);
-
         res.status(201).json({ message: 'Training created', training });
+        
     } catch (error: any) {
         console.error(error);
         res.status(500).json({ message: error.message });

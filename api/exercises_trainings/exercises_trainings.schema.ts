@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { ExerciseTraining } from './exercise_training.entity.js';
 
-export const exerciseTraining = z.object({
+export const exerciseTraining: any = z.object({
     sets: z.number({
         required_error: 'Sets is required',
     }).positive(),

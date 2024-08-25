@@ -27,6 +27,9 @@ export class Training{
     @Property({ nullable: false })
     time!: string;
 
+    @Property({ nullable: true })
+    completed?: boolean;
+
     @OneToMany(() => ExerciseTraining, (exerciseTraining) => exerciseTraining.training, {
         cascade: [Cascade.ALL],
     })

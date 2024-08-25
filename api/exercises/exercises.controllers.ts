@@ -6,7 +6,7 @@ import { orm } from "../shared/db/orm.js";
 const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
-    console.log(req.body);
+    console.log(req.body.user.id);
     try {
         if (req.body.muscleGroups) { 
             const muscleGroups = req.body.muscleGroups;
