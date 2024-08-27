@@ -23,3 +23,4 @@ trainingsRouter.put('/:idTraining/user/:idUser', update);
 trainingsRouter.delete('/:idTraining/user/:idUser', remove);
 
 
+

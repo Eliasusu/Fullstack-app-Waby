@@ -58,7 +58,7 @@ async function add(req: Request, res: Response) {
         res.status(201).json({ message: 'Training created', training });
         
     } catch (error: any) {
-        console.error(error);
+        console.error(error); // eliminar en produccion
         res.status(500).json({ message: error.message });
     }
 }
@@ -89,9 +89,7 @@ async function remove(req: Request, res: Response) {
         const idTraining = Number.parseInt(req.params.idTraining);
         const userId = req.body.user.id;
         const training = await em.findOneOrFail(Training, {idTraining, user: { idUser: userId }});
-        if (!training) {
-            return res.status(404).json({ message: 'Training not found' });
-        }
+        if (!training) return res.status(404).json({ message: 'Training not found' });
         await em.removeAndFlush(training);
         res.status(202).json({ message: 'Training removed' });
     } catch (error: any) {

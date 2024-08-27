@@ -6,26 +6,27 @@ import { orm } from "../shared/db/orm.js";
 const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
-    console.log(req.body.user.id);
     try {
-        if (req.body.muscleGroups) { 
-            const muscleGroups = req.body.muscleGroups;
-            const exercises = await em.find(Exercise, { muscleGroups }, { populate: ['muscleGroups', 'trainingMethod'] });
-            res.status(200).json({ message: 'finded all exercises', exercises });
-            return;
+        if (req.params.idMuscleGroup) {
+            const idMuscleGroup = Number.parseInt(req.params.idMuscleGroup);
+            const exercises = await em.find(Exercise, { muscleGroups: { idMuscleGroup: idMuscleGroup }, user: { idUser: req.body.user.id } }, { populate: ['muscleGroups', 'trainingMethod'] });
+            return res.status(200).json({ message: 'finded all exercises', exercises });
         }
-        const exercises = await em.find(Exercise, {}, { populate: ['muscleGroups', 'trainingMethod'] });
+        const exercises = await em.find(Exercise, { user: req.body.user.id }, { populate: ['muscleGroups', 'trainingMethod'] });
         res.status(200).json({ message: 'finded all exercises', exercises });
     }catch(err:any){
         res.status(500).json({message: err.message}); //Quitar mensaje de error en producción
     }
 }
 
+
+
 async function getOne(req: Request, res: Response) {
     try{
         const idExercise = Number.parseInt(req.params.idExercise);
-        const exercise = await em.findOneOrFail(Exercise, {idExercise}, { populate: ['muscleGroups', 'trainingMethod'] });
-        res.status(200).json({message: 'finded exercise', exercise});
+        const exercise = await em.findOneOrFail(Exercise, { idExercise, user: { idUser: req.body.user.id } }, { populate: ['muscleGroups', 'trainingMethod'] });
+        if(!exercise) return res.status(404).json({message: 'Exercise not found'});
+        res.status(200).json({ message: 'finded exercise', exercise });
     }catch(err:any){
         res.status(500).json({message: err.message});
     }
@@ -41,7 +42,7 @@ async function create(req: Request, res: Response) {
         }
         const exercise = em.create(Exercise, {
             ...exerciseValidation.data,
-            user: req.body.user.id
+                user: req.body.user.id
             });
         await em.flush();
         res.status(201).json({message: 'Exercise created', exercise});
@@ -53,7 +54,7 @@ async function create(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
     try {
         const idExercise = Number.parseInt(req.params.idExercise);
-        const exerciseFind = await em.findOne(Exercise, { idExercise }, { populate: ['muscleGroups', 'trainingMethod' ] });
+        const exerciseFind = await em.findOne(Exercise, { idExercise, user: { idUser: req.body.user.id }  }, { populate: ['muscleGroups', 'trainingMethod' ] });
         if (exerciseFind !== undefined) {
             const result = validateParcialExercises(req.body);
             if (result.error) return res.status(400).json(result.error);
@@ -77,7 +78,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
     try {
         const idExercise = Number.parseInt(req.params.idExercise);
-        const exerciseFind = await em.findOne(Exercise, { idExercise });
+        const exerciseFind = await em.findOne(Exercise, { idExercise, user: { idUser: req.body.user.id } });
         if(!exerciseFind) return res.status(404).json({message: 'Exercise not found'});
         const exercise = em.getReference(Exercise, idExercise as never);
         em.removeAndFlush(exercise);
