@@ -118,22 +118,28 @@
         </ul>
 </details>
 <li>- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index</li>
-<summary>
 <li>- [ ]  Completar parte del login </li>
 <li>- [ ]  Agregar que se muestren los errores en rojo en la parte del register y el login </li>
-<li>- [ ]  Crear Dashboard o page Dashboard </li>
-    <li>- [ ]  Colocar todos los componentes </li>
-    <li>- [ ]  Cada vez que se toque algún componente ir a una página especifica por componente o analizar si se puede hacer que los componentes se abran como una ventana central de notion </li>
-<li>- [ ]  Empezar a crear componentes </li>
-    <li>- [ ]  Activity by month, weekly or year </li>
-    <li>- [ ]  DayRoutine </li>
-        <li>- [ ]  Posibilidad de hacer un CRUD en training y en TrainingsExercises, el componente debe funcionar usando un GET ONE mostrando el training del día de la fecha mas todos los objetos TrainingsExercises </li>
-    <li>- [ ]  CalendarMesocycle by month (sigo pensando que no tiene sentido) </li>
-        <li>- [ ]  Cada día será clickeable donde aparece la opción de crear un Training C o modificar el que este hecho (GET ONE Training by user loged and this mesocycle), o sea, poder hacer un CRUD
-    <li>- [ ]  Exercises/ Exercises filtred by muscle group / Exercises filtred by Training Method and muscle group </li>
-    <li>- [ ]  Muscle group / Muscle group </li>
-        <li>- [ ]  Dentro de cada tarjeta o box de muscle group debería haber un despliegue (GET ALL )de exercises donde si tocas algún Exercises podes hacer un CRUD </li>
-</summary>
+<details>
+<summary>Crear Dashboard o page Dashboard</summary>
+    <ul>
+        <li>- [ ]  Colocar todos los componentes </li>
+        <li>- [ ]  Cada vez que se toque algún componente ir a una página especifica por componente o analizar si se puede hacer que los componentes se abran como una ventana central de notion </li>
+    </ul>
+</details>
+<details>
+    <summary>  Crear componentes </summary>
+    <ul>
+        <li>- [ ]  Activity by month, weekly or year </li>
+        <li>- [ ]  DayRoutine </li>
+            <li>- [ ]  Posibilidad de hacer un CRUD en training y en TrainingsExercises, el componente debe funcionar usando un GET ONE mostrando el training del día de la fecha mas todos los objetos TrainingsExercises </li>
+        <li>- [ ]  CalendarMesocycle by month (sigo pensando que no tiene sentido) </li>
+            <li>- [ ]  Cada día será clickeable donde aparece la opción de crear un Training C o modificar el que este hecho (GET ONE Training by user loged and this mesocycle), o sea, poder hacer un CRUD
+        <li>- [ ]  Exercises/ Exercises filtred by muscle group / Exercises filtred by Training Method and muscle group </li>
+        <li>- [ ]  Muscle group / Muscle group </li>
+            <li>- [ ]  Dentro de cada tarjeta o box de muscle group debería haber un despliegue (GET ALL )de exercises donde si tocas algún Exercises podes hacer un CRUD </li>
+    </ul>
+</details>
 </ul>
 
 ## Fechas de entregas 📅
