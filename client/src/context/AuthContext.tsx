@@ -1,10 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, ReactNode, useContext, useState } from "react";
-import { registerRequest } from "../api/auth.ts";
+import { createContext, ReactNode, useContext, useState, useEffect } from "react";
+import { registerRequest, loginRequest } from "../api/auth.ts";
 
 interface AuthState { 
     user: object | null;
     signUp: (user: object) => void;
+    signIn: (user: object) => void;
     isAuthenticated: boolean;
     errors: object | null;
 }
@@ -12,6 +13,7 @@ interface AuthState {
 const initialAuthState: AuthState = {
     user: null,
     signUp: () => { },
+    signIn: () => { },
     isAuthenticated: false,
     errors: null,  
 };
@@ -42,8 +44,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const signIn = async (user: object) => { 
+        try {
+            const res = await loginRequest(user);
+            setUser(res.data);
+            setIsAuthenticated(true);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            setErrors(error.response.data);
+        }  
+
+    }
+
+    useEffect(() => { 
+        if (errors.length > 0) { 
+            const timer = setTimeout(() => {
+                setErrors([]);
+            }, 3000);
+            return() => clearTimeout(timer)
+        }
+    }, [errors]);
+
     return (
-        <AuthContext.Provider value={{ user, signUp, isAuthenticated, errors }}>
+        <AuthContext.Provider value={{ user, signUp ,isAuthenticated, errors, signIn }}>
             {children}
         </AuthContext.Provider>
     );

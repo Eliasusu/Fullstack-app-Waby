@@ -28,7 +28,6 @@ function RegisterUser() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { signUp, isAuthenticated, errors: registerErrors } = useAuth();
     const navigate = useNavigate();
-    console.log(registerErrors);
 
     useEffect(() => { 
         if(isAuthenticated) navigate('/profile');
@@ -43,7 +42,7 @@ function RegisterUser() {
                 <div className="flex flex-col items-center justify-center w-auto">
                     {
                         Array.isArray(registerErrors) && (registerErrors).map((error: string, index: number) => (
-                            <span key={index} className="bg-red p-2 text-white">{error}</span>
+                            <div key={index} className="bg-red w-auto p-2 mb-3 text-white text-xs rounded-md " >{error}</div>
                         ))
                     
                     }

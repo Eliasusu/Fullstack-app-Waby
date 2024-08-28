@@ -1,5 +1,8 @@
 import BoxContainer from "../../components/BoxConteiner";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../context/AuthContext.tsx";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function Welcome(){
     return (
@@ -36,21 +39,41 @@ function Slogan({textColor, text}: {textColor: string, text: string}){
 }
 
 function Login() {
-    const { handleSubmit } = useForm();
-    const onSubmit = (data: unknown) => {
-        console.log(data);
-    }
+    const { handleSubmit, register, formState: { errors } } = useForm();
+    const { signIn, isAuthenticated, errors: registerErrors } = useAuth();
+    const navigate = useNavigate();
+    useEffect(() => { 
+        if(isAuthenticated) navigate('/profile');
+    }, [isAuthenticated, navigate]);
+
+    const onSubmit = handleSubmit(async (values: object) => {
+        signIn(values);
+    });
         return (
             <div className="flex justify-center my-16">
                 <BoxContainer width="w-[285px]" height="w-[340]">
                     <div className="flex flex-col items-center justify-center w-auto">
-                        <form className="w-full flex flex-col gap-3 pt-1" id="formLogin" action="/login" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                    {
+                        Array.isArray(registerErrors) && (registerErrors).map((error: string, index: number) => (
+                            <div key={index} className="bg-red w-auto p-2 mb-3 text-white text-xs rounded-md " >{error}</div>
+                        ))
+                    
+                    }
+                        <form className="w-full flex flex-col gap-3 pt-1" id="formLogin" action="/login" method="POST" onSubmit={onSubmit}>
                             <h1 className="font-bold text-3xl text-white-text m-auto pb-1">Welcome!</h1>
-                            <div className="w-full">
-                                <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="text" placeholder="Enter your email or user" id="username" name="username" />
+                            <div>
+                                <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="text" placeholder="Username"
+                                    {...register('username', { required: true })} />
+                                {
+                                    errors.username && <span className="text-red text-xs">Username is required</span>
+                                }
                             </div>
                             <div>
-                                <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="text" placeholder="Enter your password" id="password" name="password" />
+                            <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="password" placeholder="Password"
+                                    {...register('password', { required: true })} />
+                                {
+                                    errors.password && <span className="text-red text-xs">Password is required</span>
+                                }                           
                             </div>
                             <div className="flex justify-between ">
                                 <div>
