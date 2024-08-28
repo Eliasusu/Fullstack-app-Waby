@@ -1,16 +1,22 @@
 import { z } from 'zod';
 import { User } from './user.entity.js';
 
-export const userSchema:any = z.object({
+export const userSchema: any = z.object({
     
     username: z.string({
         required_error: 'Username is required',
         invalid_type_error: 'Username must be a string',
-    }).min(6).max(40),
+    }).min(6, {
+        message: 'Username must be at least 6 characters long',
+    }).max(40),
 
     password: z.string({
-        required_error: 'Password is required', 
-    }).min(8).max(16),
+        required_error: 'Password is required',
+    }).min(8, {
+        message: 'Password must be at least 8 characters long',
+    }).max(16, {
+        message: 'Password must be at most 16 characters long'
+    }),
 
     email: z.string({
         required_error: 'Mail is required',

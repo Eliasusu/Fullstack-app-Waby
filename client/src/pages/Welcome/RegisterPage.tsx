@@ -26,8 +26,9 @@ function Logo(){
 
 function RegisterUser() {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const { signUp, isAuthenticated } = useAuth();
+    const { signUp, isAuthenticated, errors: registerErrors } = useAuth();
     const navigate = useNavigate();
+    console.log(registerErrors);
 
     useEffect(() => { 
         if(isAuthenticated) navigate('/profile');
@@ -39,7 +40,13 @@ function RegisterUser() {
     return (
     <div className="flex justify-center my-16">
         <BoxContainer width="w-[285px]" height="w-[340]">
-            <div className="flex flex-col items-center justify-center w-auto">
+                <div className="flex flex-col items-center justify-center w-auto">
+                    {
+                        Array.isArray(registerErrors) && (registerErrors).map((error: string, index: number) => (
+                            <span key={index} className="bg-red p-2 text-white">{error}</span>
+                        ))
+                    
+                    }
                     <form className="w-full flex flex-col gap-3 pt-1" id="formLogin" action="/register" method="POST"
                         onSubmit={onSubmit}>
                     <h1 className="font-bold text-3xl text-white-text m-auto pb-1">Register</h1>

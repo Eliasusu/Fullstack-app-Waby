@@ -6,13 +6,14 @@ interface AuthState {
     user: object | null;
     signUp: (user: object) => void;
     isAuthenticated: boolean;
-
+    errors: object | null;
 }
 
 const initialAuthState: AuthState = {
     user: null,
     signUp: () => { },
     isAuthenticated: false,
+    errors: null,  
 };
 
 export const AuthContext = createContext(initialAuthState);
@@ -28,19 +29,21 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => { 
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [errors, setErrors] = useState([]);
 
     const signUp = async (user: object) => {
         try {
             const res = await registerRequest(user);
             setUser(res.data);
             setIsAuthenticated(true);
-        } catch (error) {
-            console.error(error); // Eliminar en produccion
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            setErrors(error.response.data);
         }
     };
 
     return (
-        <AuthContext.Provider value={{ user, signUp, isAuthenticated}}>
+        <AuthContext.Provider value={{ user, signUp, isAuthenticated, errors }}>
             {children}
         </AuthContext.Provider>
     );

@@ -16,20 +16,20 @@ async function register(req: Request, res: Response) {
         const bodyWeight = Number(req.body.bodyWeight);
         const user = { ...req.body, height, bodyWeight, trainingMethods };
         const result = validateUser(user);
-        if (result.error) return res.status(400).json(result.error);
+        if (result.error) return res.status(400).json({ error: result.error.issues.map((issue: any) => issue.message) });
         if (result.success) {
             if (await em.findOne(User, { username: req.body.username })) {
-                return res.status(400).json({ error: 'Username already exists' });
+                return res.status(400).json({ error: ['Username already exists'] });
             }
             if (await em.findOne(User, { email: req.body.email })) {
-                return res.status(400).json({ error: 'Email already exists' });
+                return res.status(400).json({ error: ['Email already exists'] });
             }
             req.body.password = bcrypt.hashSync(req.body.password, 10);
             const user = em.create(User, req.body);
             await em.persistAndFlush(user);
             const token = await createToken({ id: user.idUser, username: user.username });
             res.cookie('token', token, { httpOnly: true });
-            res.status(201).json({ message: 'User created succesfully' });
+            res.status(201).json({ error: 'User created succesfully' });
         } else {
             res.status(400).json({ error: 'User not created' });
         }
@@ -44,9 +44,9 @@ async function login(req: Request, res: Response) {
     try {
         const { username, password } = req.body;
         const user = await em.findOne(User, { username }, { populate: ['password'] });
-        if (!user) return res.status(400).json({ error: 'Username incorrect' });
+        if (!user) return res.status(400).json({ error: ['Username incorrect'] });
         const validPassword = bcrypt.compareSync(password, user.password);
-        if (!validPassword) return res.status(400).json({ error: 'Password incorrect' });
+        if (!validPassword) return res.status(400).json({ error: ['Password incorrect'] });
         const token = await createToken({ id: user.idUser, username: user.username });
         res.cookie('token', token, { httpOnly: true });
         res.status(200).json({ message: 'User logged in succesfully' });
