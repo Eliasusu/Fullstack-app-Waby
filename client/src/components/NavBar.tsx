@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export default function NavBar() {
 
-    const [active, setActive] = useState(0);
+    const [active, setActive] = useState(2);
 
   return (
     <div className="xs:w-[290px] xs:h-[60px] bg-grey-nav/80 shadow-lg backdrop-blur-[4px] rounded-full m-auto inset-x-0 bottom-4 fixed content-center">

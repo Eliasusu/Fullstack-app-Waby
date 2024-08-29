@@ -7,20 +7,10 @@ import { useNavigate } from "react-router-dom";
 export default function Register() {
     return (
         <>
-
-        <Logo />
+        <div className="m-auto"> 
         <RegisterUser /> 
-
+        </div>   
         </>
-    );
-}
-
-function Logo(){
-    return (
-        <div className="flex items-center justify-center pb-3 pt-3 lg:mt-2 mx-auto">
-            <img className="w-[50px] h-[50px] m-3" src="./public/LogoWaby.svg" />
-            <p className="font-bold text-white-text text-[40px] ">Waby</p>
-        </div>
     );
 }
 
@@ -37,7 +27,7 @@ function RegisterUser() {
         signUp(values);
     });
     return (
-    <div className="flex justify-center my-16">
+    <div className="flex justify-center my-8">
         <BoxContainer width="w-[285px]" height="w-[340]">
                 <div className="flex flex-col items-center justify-center w-auto">
                     {

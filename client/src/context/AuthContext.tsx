@@ -51,7 +51,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setIsAuthenticated(true);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            setErrors(error.response.data);
+            if (Array.isArray(error.response.data)) { 
+                return setErrors(error.response.data);
+            }
+            setErrors(error.response.data.message);
         }  
 
     }
