@@ -29,7 +29,7 @@ function Login() {
     });
         return (
             <div className="flex justify-center my-16">
-                <BoxContainer width="w-[285px]" height="w-[340]">
+                <BoxContainer width="w-[285px]" height="w-[340]" padding="p-5">
                     <div className="flex flex-col items-center justify-center w-auto">
                     {
                         Array.isArray(registerErrors) && (registerErrors).map((error: string, index: number) => (

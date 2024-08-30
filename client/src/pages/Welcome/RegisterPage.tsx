@@ -28,7 +28,7 @@ function RegisterUser() {
     });
     return (
     <div className="flex justify-center my-8">
-        <BoxContainer width="w-[285px]" height="w-[340]">
+        <BoxContainer width="w-[285px]" height="w-[340]" padding="p-5">
                 <div className="flex flex-col items-center justify-center w-auto">
                     {
                         Array.isArray(registerErrors) && (registerErrors).map((error: string, index: number) => (
@@ -108,7 +108,11 @@ function RegisterUser() {
                             Sign in with Google 
                             <img className="ml-2" src="logoGoogle.svg" alt="logoGoogle" />
                         </button>
-                    </div>
+                        </div>
+                            <div className="flex justify-center">
+                            <p className="font-normal text-sm mr-1">Do you have an account?</p>
+                            <a className="text-sm" href="/login">Sign Ip</a>
+                            </div>
 
                 </form>
             </div>
