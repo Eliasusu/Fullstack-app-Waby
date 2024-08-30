@@ -11,8 +11,8 @@ export default function Index() {
     return (
         <>
         <Header />
-            <Activity />
-            <DayRoutine />
+        <Activity />
+        <DayRoutine />
         <Calendar />
         <NavBar /> 
         </>

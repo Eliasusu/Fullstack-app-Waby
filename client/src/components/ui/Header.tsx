@@ -38,7 +38,7 @@ export default function Header() {
     return () => clearInterval(interval)
   }, [user])
   return (
-    <header className="bg-grey-nav px-4 py-2 flex items-center justify-between backdrop-blur-[6px] shadow-lg">
+    <header className="bg-grey-nav px-4 py-2 flex items-center justify-between shadow-lg backdrop-blur-[20px] sticky top-0 z-10">
       {/* Logo de la aplicación */}
       <div className="flex items-center">
         <Logo/>
@@ -53,7 +53,7 @@ export default function Header() {
 
       {/* Avatar del usuario */}
       <Avatar className="h-10 w-10">
-        <AvatarImage src="?height=40&width=40" alt="Foto de perfil del usuario" />
+        <AvatarImage src="https://i.pinimg.com/736x/ea/ab/33/eaab332d5fce88ee01b3f801e5b9c539.jpg?height=40&width=40" alt="Foto de perfil del usuario" />
         <AvatarFallback>{username.charAt(0)}</AvatarFallback>
       </Avatar>
     </header>
