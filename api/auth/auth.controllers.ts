@@ -29,7 +29,8 @@ async function register(req: Request, res: Response) {
             await em.persistAndFlush(user);
             const token = await createToken({ id: user.idUser, username: user.username });
             res.cookie('token', token, { httpOnly: true });
-            res.status(201).json({ message: 'User created succesfully' });
+            const userName = user.username;
+            res.status(201).json([userName]);
         } else {
             res.status(400).json({ error: 'User not created' });
         }
@@ -49,7 +50,8 @@ async function login(req: Request, res: Response) {
         if (!validPassword) return res.status(400).json( ['Password incorrect']);
         const token = await createToken({ id: user.idUser, username: user.username });
         res.cookie('token', token, { httpOnly: true });
-        res.status(200).json({ message: 'User logged in succesfully' });
+        const userName = user.username;
+        res.status(200).json([userName]);
     } catch (error: any) { 
         console.log(error); // --> Eliminar en produccion
         res.status(500).json({ error: 'Error loging in' });
