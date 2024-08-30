@@ -10,7 +10,7 @@ export function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-full">
           <Routes>
             <Route path='/' element={<Welcome />} />
             <Route path='/login' element={<LoginPage />} />

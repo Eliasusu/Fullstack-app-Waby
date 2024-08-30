@@ -8,6 +8,8 @@
 
 - Porque no me aparacen las foraneas de progressionsSec y progressionsReps en Exercises?
 
+- Problemas en el front: No puedo hacer que el calendar ocupe todo el espacio que tiene
+
 ## Mensajes para el proximo dev(esclavo) 📨
 
 ## ToDo 📃

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import BoxContainer  from "./BoxConteiner.tsx"
-import { CardContent, CardHeader, CardTitle } from "./card.tsx"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select.tsx"
+import BoxContainer  from "@/components/ui/BoxConteiner.tsx"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx"
 
 type ActivityDay = {
   date: Date;
@@ -92,7 +92,7 @@ export default function Activity() {
   }
 
   return (
-    <BoxContainer  width="max-w-md" height="" padding='my-5'>
+    <BoxContainer  width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding='my-5'>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-lx font-medium">Activity</CardTitle>
         <Select

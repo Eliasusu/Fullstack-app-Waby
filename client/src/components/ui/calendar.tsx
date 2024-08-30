@@ -3,8 +3,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/@/components/ui/button.tsx"
-import BoxContainer from "@/@/components/ui/BoxConteiner.tsx"
+import { buttonVariants } from "@/components/ui/button.tsx"
+import BoxContainer from "@/components/ui/BoxConteiner.tsx"
 import { CardContent, CardHeader, CardTitle } from "./card.tsx"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
@@ -16,16 +16,16 @@ function Calendar({
   ...props
 }: CalendarProps) {
   return (
-    <BoxContainer width="max-w-md" height="" padding="p-2 my-5">
+    <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="p-2 my-5">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle title="Calendar" className="text-lx font-medium">Calendar</CardTitle>
       </CardHeader>
       <CardContent className="max-w-screen-sm">
         <DayPicker
           showOutsideDays={showOutsideDays}
-          className={cn("p-2", className)}
+          className={cn("p-2 w-50", className)}
           classNames={{
-            months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+            months: "flex flex-col w-50",
             month: "space-y-4",
             caption: "flex justify-center pt-2 relative items-center",
             caption_label: "text-sm font-medium",

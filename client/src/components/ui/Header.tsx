@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Logo from './logo.tsx'
-import { Avatar, AvatarFallback, AvatarImage } from "@/@/components/ui/avatar.tsx"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx"
 import { useAuth } from "@/context/AuthContext.tsx";
 
 export default function Header() {
@@ -53,7 +53,7 @@ export default function Header() {
 
       {/* Avatar del usuario */}
       <Avatar className="h-10 w-10">
-        <AvatarImage src="https://i.pinimg.com/736x/ea/ab/33/eaab332d5fce88ee01b3f801e5b9c539.jpg?height=40&width=40" alt="Foto de perfil del usuario" />
+        <AvatarImage src="?height=40&width=40" alt="Foto de perfil del usuario" />
         <AvatarFallback>{username.charAt(0)}</AvatarFallback>
       </Avatar>
     </header>
