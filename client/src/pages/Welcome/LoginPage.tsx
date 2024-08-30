@@ -1,4 +1,4 @@
-import BoxContainer from "../../components/BoxConteiner";
+import BoxContainer from "../../@/components/ui/BoxConteiner.tsx";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext.tsx";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ function Login() {
     const { signIn, isAuthenticated, errors: registerErrors } = useAuth();
     const navigate = useNavigate();
     useEffect(() => { 
-        if(isAuthenticated) navigate('/profile');
+        if(isAuthenticated) navigate('/home');
     }, [isAuthenticated, navigate]);
 
     const onSubmit = handleSubmit(async (values: object) => {
