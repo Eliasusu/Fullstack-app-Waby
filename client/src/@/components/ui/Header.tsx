@@ -10,14 +10,14 @@ export default function Header() {
     
   useEffect(() => {
     // Función para obtener el saludo según la hora
-    const getGreeting = () => {
-      const hour = new Date().getHours()
+    function getGreeting() {
+      const hour = new Date().getHours();
       if (hour >= 5 && hour < 12) {
-        return 'Buenos días'
+        return 'Buenos días';
       } else if (hour >= 12 && hour < 20) {
-        return 'Buenas tardes'
+        return 'Buenas tardes';
       } else {
-        return 'Buenas noches'
+        return 'Buenas noches';
       }
     }
 
