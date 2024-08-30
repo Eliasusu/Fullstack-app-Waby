@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Logo from './logo.tsx'
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar.tsx"
-import { useAuth } from "../../../context/AuthContext.tsx";
+import { Avatar, AvatarFallback, AvatarImage } from "@/@/components/ui/avatar.tsx"
+import { useAuth } from "@/context/AuthContext.tsx";
 
 export default function Header() {
     const [greeting, setGreeting] = useState('')
@@ -38,7 +38,7 @@ export default function Header() {
     return () => clearInterval(interval)
   }, [user])
   return (
-    <header className="bg-grey-nav  px-4 py-2 flex items-center justify-between">
+    <header className="bg-grey-nav px-4 py-2 flex items-center justify-between backdrop-blur-[6px] shadow-lg">
       {/* Logo de la aplicación */}
       <div className="flex items-center">
         <Logo/>

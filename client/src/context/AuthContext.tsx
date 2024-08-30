@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { registerRequest, loginRequest } from "../api/auth.ts";
+import Cookie from "js-cookie";
 
 interface AuthState { 
     user: object | null;
@@ -68,6 +69,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [errors]);
 
+    useEffect(() => { 
+        const token = Cookie.get("token");
+        if (token) { 
+            setIsAuthenticated(true);
+        }
+    }, []);
+    
     return (
         <AuthContext.Provider value={{ user, signUp ,isAuthenticated, errors, signIn }}>
             {children}

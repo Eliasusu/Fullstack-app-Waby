@@ -10,7 +10,7 @@ html, body, #root, .app {
   width: 100%;
   height: screen;
   
-  color-scheme: light dark;
+  color-scheme: dark;
   line-height: 1.5;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.87);
