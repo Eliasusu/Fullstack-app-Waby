@@ -23,7 +23,7 @@ export default function NavBar() {
             </div> 
             <div className={`cursor-pointer ${active === 3 ? 'bg-red' : ''} w-[35px] h-[35px] rounded-xl p-2 transition duration-150`}
             onClick={() => setActive(3)}>
-                <img src="goals.svg" alt="goals" className="w-[20px] h-[20px] m-auto" />
+            <img src="goals.svg" alt="goals" className="w-[20px] h-[20px] m-auto" />
             </div>
             <div className={`cursor-pointer ${active === 4 ? 'bg-red' : ''} w-[35px] h-[35px] rounded-xl p-2 transition duration-150`}
             onClick={() => setActive(4)}>
@@ -31,6 +31,6 @@ export default function NavBar() {
             </div>
         </nav>
     </div>
-  );
+  );    
 }
 
