@@ -2,11 +2,12 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { registerRequest, loginRequest } from "../api/auth.ts";
 import Cookie from "js-cookie";
+import { User } from "@/types/user.type.ts";
 
 interface AuthState { 
-    user: object | null;
-    signUp: (user: object) => void;
-    signIn: (user: object) => void;
+    user: User | null;
+    signUp: (user: User) => void;
+    signIn: (user: User) => void;
     isAuthenticated: boolean;
     errors: object | null;
 }
@@ -34,18 +35,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState([]);
 
-    const signUp = async (user: object) => {
+    const signUp = async (user: User) => {
         try {
             const res = await registerRequest(user);
             setUser(res.data);
             setIsAuthenticated(true);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
+        } catch (error: any) {      
             setErrors(error.response.data);
         }
     };
 
-    const signIn = async (user: object) => { 
+    const signIn = async (user: User) => { 
         try {
             const res = await loginRequest(user);
             setUser(res.data);

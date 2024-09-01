@@ -14,8 +14,6 @@ export default function LoginPage(){
     );
 }
 
-
-
 function Login() {
     const { handleSubmit, register, formState: { errors } } = useForm();
     const { signIn, isAuthenticated, errors: registerErrors } = useAuth();
@@ -27,6 +25,10 @@ function Login() {
     const onSubmit = handleSubmit(async (values: object) => {
         signIn(values);
     });
+
+    const hangleChange = (evt: React.ChangeEvent<HTMLInputElement>) => { 
+        evt.preventDefault()
+    }
         return (
             <div className="flex justify-center my-16">
                 <BoxContainer width="w-[285px]" height="w-[340]" padding="p-5">
@@ -41,14 +43,14 @@ function Login() {
                             <h1 className="font-bold text-3xl text-white-text m-auto pb-1">Welcome!</h1>
                             <div>
                                 <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="text" placeholder="Username"
-                                    {...register('username', { required: true })} />
+                                    {...register('username', { required: true })} onChange={hangleChange}/>
                                 {
                                     errors.username && <span className="text-red text-xs">Username is required</span>
                                 }
                             </div>
                             <div>
                             <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="password" placeholder="Password"
-                                    {...register('password', { required: true })} />
+                                    {...register('password', { required: true })} onChange={hangleChange}/>
                                 {
                                     errors.password && <span className="text-red text-xs">Password is required</span>
                                 }                           

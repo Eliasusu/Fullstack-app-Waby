@@ -16,9 +16,9 @@ export class ProgressionSec {
     orderProgression?: number;
 
     @Property({ nullable: false })
-    numberSecNeeded?: number;
+    numberSetsNeeded?: number;
 
     @Property({ nullable: false })
-    numberRepsNeeded?: number;
+    numberSecNeeded?: number;
 
 }

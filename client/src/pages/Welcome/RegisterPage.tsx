@@ -1,7 +1,7 @@
 import BoxContainer from "@/components/ui/BoxConteiner.tsx";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext.tsx";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
@@ -26,6 +26,11 @@ function RegisterUser() {
     const onSubmit = handleSubmit(async (values: object) => {
         signUp(values);
     });
+    
+    const hangleChange = (evt: React.ChangeEvent<HTMLInputElement>) => { 
+        evt.preventDefault()
+    }
+
     return (
     <div className="flex justify-center my-8">
         <BoxContainer width="w-[285px]" height="w-[340]" padding="p-5">
@@ -41,21 +46,21 @@ function RegisterUser() {
                     <h1 className="font-bold text-3xl text-white-text m-auto pb-1">Register</h1>
                     <div className="w-full">
                             <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="email" placeholder="Email"
-                                {...register('email', { required: true })} /> 
+                                {...register('email', { required: true })} onChange={hangleChange}/> 
                             {
                                 errors.email && <span className="text-red text-xs">Email is required</span>
                             }
                     </div>
                     <div>
                             <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="password" placeholder="Password"
-                                {...register('password', { required: true })} />
+                                {...register('password', { required: true })} onChange={hangleChange} />
                             {
                                 errors.password && <span className="text-red text-xs">Password is required</span>
                             }                           
                     </div>
                     <div>
                             <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="text" placeholder="Username"
-                                {...register('username', { required: true })} />
+                                {...register('username', { required: true })} onChange={hangleChange}/>
                             {
                                 errors.username && <span className="text-red text-xs">Username is required</span>
                             }
@@ -69,21 +74,21 @@ function RegisterUser() {
                     </div>
                     <div>
                             <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="date" placeholder="Birthday"
-                                {...register('birthdate', { required: true })} />
+                                {...register('birthdate', { required: true })} onChange={hangleChange}/>
                             {
                                 errors.birthdate && <span className="text-red text-xs">Birthdate is required</span>
                             }
                     </div>
                     <div>
                             <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="number" placeholder="Weight"
-                                {...register('bodyWeight', { required: true })} />
+                                {...register('bodyWeight', { required: true })} onChange={hangleChange}/>
                             {  
                                 errors.bodyWeight && <span className="text-red text-xs">Weight is required</span>
                             }
                     </div>
                     <div>
                             <input className="w-full h-10 border-[1px] rounded-2xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="number" placeholder="Height"
-                                {...register('height', { required: true })} />
+                                {...register('height', { required: true })} onChange={hangleChange}/>
                             {
                                 errors.height && <span className="text-red text-xs">Height is required</span>
                             }
