@@ -1,15 +1,19 @@
 import { Router } from "express";
-import { getAll, getOne, add, update, remove } from "./trainings.controllers.js";
+import { getAll, getOne, add, update, remove, getToday } from "./trainings.controllers.js";
 import { add as addExerciseTraining } from "../exercises_trainings/exercises_trainings.controllers.js";
 
 
 export const trainingsRouter = Router();
 
 //Get all trainings by user
-trainingsRouter.get('/user/:idUser', getAll);
+trainingsRouter.get('/user', getAll);
+
+// Get today's training
+trainingsRouter.get('/today/user', getToday);
 
 //Get one training by id
-trainingsRouter.get('/:idTraining/user/:idUser', getOne);
+trainingsRouter.get('/:idTraining/user', getOne);
+
 
 //Create a new training
 trainingsRouter.post('/', add);

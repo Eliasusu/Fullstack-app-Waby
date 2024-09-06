@@ -49,7 +49,7 @@ async function login(req: Request, res: Response) {
         const validPassword = bcrypt.compareSync(password, user.password);
         if (!validPassword) return res.status(400).json( ['Password incorrect']);
         const token = await createToken({ id: user.idUser, username: user.username });
-        res.cookie('token', token, { httpOnly: true, sameSite: 'none', secure: true });
+        res.cookie('token', token, { httpOnly: true });
         const userName = user.username;
         res.status(200).json([userName]);
     } catch (error: any) { 

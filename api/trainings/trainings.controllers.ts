@@ -3,6 +3,7 @@ import { validateTraining, validateParcialTraining } from "./trainings.schema.js
 import { orm } from "../shared/db/orm.js";
 import { Training } from "./training.entity.js";
 import { User } from "../users/user.entity.js";
+import { getDateToday } from "../shared/getDateToday.js";
 
 const em = orm.em;
 
@@ -21,6 +22,7 @@ async function getOne(req: Request, res: Response) {
         const userId = req.body.user?.id;
         
         if (isNaN(idTraining)) {
+            console.log('Soy este error');
             return res.status(400).json({ message: 'Invalid training ID' });
         }
         
@@ -35,8 +37,19 @@ async function getOne(req: Request, res: Response) {
         if (error.name === 'EntityNotFoundError') {
             res.status(404).json({ message: 'Training not found' });
         } else {
-            res.status(500).json({ message: 'Internal Server Error', details: error.message });
+            res.status(500).json({ message: 'Internal Server Error'  });
         }
+    }
+}
+
+async function getToday(req: Request, res: Response) {
+    try {
+        const today = getDateToday();
+        console.log(today);
+        const training = await em.findOneOrFail(Training, { user: { idUser: req.body.user.id }, day: today })
+        res.json(training)
+    } catch (error: any) {
+        res.status(500)
     }
 }
 
@@ -97,4 +110,4 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-export { getAll, getOne, add, update, remove };
+export { getAll, getOne, getToday, add, update, remove };

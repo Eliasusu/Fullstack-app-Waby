@@ -17,7 +17,7 @@ export default function Index() {
             mode="single"
             selected={date}
             onSelect={setDate}
-            className="rounded-2xl"/>
+                className="" />
         <NavBar /> 
         </>
     );

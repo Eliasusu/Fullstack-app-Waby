@@ -5,6 +5,7 @@ import Index from './pages/Home/HomePage.tsx';
 import LoginPage from './pages/Welcome/LoginPage.tsx';
 import Welcome from './pages/Welcome/Welcome.tsx';
 import ProtectedRoute from './ProtectedRoute.tsx';
+import CreatePage from './pages/Create/CreatePage.tsx';
 
 export function App() {
   return (
@@ -17,6 +18,8 @@ export function App() {
             <Route path='/register' element={<Register />} />
             <Route element={<ProtectedRoute/>}>
               <Route path='/home' element={<Index />} />
+              <Route path='/calendar' element={<Index />} />
+              <Route path='/create' element={<CreatePage />} />
             </Route>
           </Routes>
         </div>

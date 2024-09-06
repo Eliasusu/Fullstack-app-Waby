@@ -35,7 +35,7 @@ export default function DayRoutine() {
   const [horaFin, setHoraFin] = useState("")
 
   return (
-      <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="">
+      <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex items-center space-x-2">
             <Checkbox
