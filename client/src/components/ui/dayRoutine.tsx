@@ -12,34 +12,27 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import BoxContainer from "./BoxConteiner.tsx"
+import { ExerciseTraining } from "@/types/exercisesTrainings.type.ts"
 
-type Ejercicio = {
-  nombre: string
-  comentario: string
-  series: number
-  repeticiones: number
-  peso: number
-  descanso: string
-}
 
-const ejercicios: Ejercicio[] = [
-  { nombre: "Press de banca", comentario: "Mantener codos a 45°", series: 4, repeticiones: 12, peso: 60, descanso: "2'" },
-  { nombre: "Aperturas con mancuernas", comentario: "Bajar lento", series: 3, repeticiones: 15, peso: 20, descanso: "1'30\"" },
-  { nombre: "Fondos en paralelas", comentario: "Peso corporal", series: 4, repeticiones: 10, peso: 0, descanso: "2'" },
-  { nombre: "Press inclinado con barra", comentario: "30° de inclinación", series: 3, repeticiones: 10, peso: 50, descanso: "2'" },
-  { nombre: "Pullover con mancuerna", comentario: "Estirar bien", series: 3, repeticiones: 12, peso: 25, descanso: "1'30\"" },
-  { nombre: "Fondos en paralelas", comentario: "Peso corporal", series: 4, repeticiones: 10, peso: 0, descanso: "2'" },
-  { nombre: "Aperturas con mancuernas", comentario: "Bajar lento", series: 3, repeticiones: 15, peso: 20, descanso: "1'30\"" },
-  { nombre: "Press inclinado con barra", comentario: "30° de inclinación", series: 3, repeticiones: 10, peso: 50, descanso: "2'" },
-  { nombre: "Pullover con mancuerna", comentario: "Estirar bien", series: 3, repeticiones: 12, peso: 25, descanso: "1'30\"" },
-  { nombre: "Fondos en paralelas", comentario: "Peso corporal", series: 4, repeticiones: 10, peso: 0, descanso: "2'" },
-  { nombre: "Aperturas con mancuernas", comentario: "Bajar lento", series: 3, repeticiones: 15, peso: 20, descanso: "1'30\"" },
+const exercises: ExerciseTraining[] = [
+  { exercise: "Press de banca", comment: "Mantener codos a 45°", sets: 4, reps: 12, weight: 60,rest: "2'" },
+  { exercise: "Aperturas con mancuernas", comment: "Bajar lento", sets: 3, reps: 15, weight: 20,rest: "1'30\"" },
+  { exercise: "Fondos en paralelas", comment: "Peso corporal", sets: 4, reps: 10, weight: 0, rest: "2'" },
+  { exercise: "Press inclinado con barra", comment: "30° de inclinación", sets: 3, reps: 10, weight: 50,rest: "2'" },
+  { exercise: "Pullover con mancuerna", comment: "Estirar bien", sets: 3, reps: 12, weight: 25,rest: "1'30\"" },
+  { exercise: "Fondos en paralelas", comment: "Peso corporal", sets: 4, reps: 10, weight: 0, rest: "2'" },
+  { exercise: "Aperturas con mancuernas", comment: "Bajar lento", sets: 3, reps: 15, weight: 20,rest: "1'30\"" },
+  { exercise: "Press inclinado con barra", comment: "30° de inclinación", sets: 3, reps: 10, weight: 50,rest: "2'" },
+  { exercise: "Pullover con mancuerna", comment: "Estirar bien", sets: 3, reps: 12, weight: 25,rest: "1'30\"" },
+  { exercise: "Fondos en paralelas", comment: "Peso corporal", sets: 4, reps: 10, weight: 0, rest: "2'" },
+  { exercise: "Aperturas con mancuernas", comment: "Bajar lento", sets: 3, reps: 15, weight: 20,rest: "1'30\"" },
 ]
 
 export default function DayRoutine() {
   const [rutinaCompletada, setRutinaCompletada] = useState(false)
-  const [horaInicio, setHoraInicio] = useState("17:00")
-  const [horaFin, setHoraFin] = useState("19:00")
+  const [horaInicio, setHoraInicio] = useState("")
+  const [horaFin, setHoraFin] = useState("")
 
   return (
       <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="">
@@ -78,23 +71,23 @@ export default function DayRoutine() {
             <Table>
               <TableHeader>
                 <TableRow className="border-b border-gray-500/20">
-                  <TableHead className="text-gray-400">Ejercicio</TableHead>
-                  <TableHead className="text-gray-400">Comentario</TableHead>
-                  <TableHead className="text-right text-gray-400">Series</TableHead>
+                  <TableHead className="text-gray-400">Exercise</TableHead>
+                  <TableHead className="text-gray-400">Comment</TableHead>
+                  <TableHead className="text-right text-gray-400">Sets</TableHead>
                   <TableHead className="text-right text-gray-400">Reps</TableHead>
-                  <TableHead className="text-right text-gray-400">Peso</TableHead>
-                  <TableHead className="text-right text-gray-400">Descanso</TableHead>
+                  <TableHead className="text-right text-gray-400">Weight</TableHead>
+                  <TableHead className="text-right text-gray-400">Rest</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {ejercicios.map((ejercicio, index) => (
+                {exercises.map((e, index) => (
                   <TableRow key={index} className="border-b border-gray-500/20">
-                    <TableCell className="font-medium">{ejercicio.nombre}</TableCell>
-                    <TableCell>{ejercicio.comentario}</TableCell>
-                    <TableCell className="text-right">{ejercicio.series}</TableCell>
-                    <TableCell className="text-right">{ejercicio.repeticiones}</TableCell>
-                    <TableCell className="text-right">{ejercicio.peso} kg</TableCell>
-                    <TableCell className="text-right">{ejercicio.descanso}</TableCell>
+                    <TableCell className="font-medium">{e.exercise}</TableCell>
+                    <TableCell>{e.comment}</TableCell>
+                    <TableCell className="text-right">{e.sets}</TableCell>
+                    <TableCell className="text-right">{e.reps}</TableCell>
+                    <TableCell className="text-right">{e.weight} kg</TableCell>
+                    <TableCell className="text-right">{e.rest}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

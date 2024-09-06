@@ -6,8 +6,8 @@ export interface ExerciseTraining {
     sets: number;
     reps: number;
     weight: number;
-    rest: number;
+    rest: string;
     comment?: string;
-    exercise: Exercise;
-    training: Training;
+    exercise: Exercise["name"];
+    training?: Training["trainingName"];
 }

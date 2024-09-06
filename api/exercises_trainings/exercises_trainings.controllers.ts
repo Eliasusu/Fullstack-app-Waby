@@ -10,7 +10,7 @@ const em = orm.em;
 async function getOne(req: Request, res: Response) { 
     try {
         const idTrainingExercise = parseInt(req.body.idTrainingExercise);
-        const exerciseTraining = await em.findOne(ExerciseTraining, { idExerciseTraining: idTrainingExercise, training: { user: { idUser: req.body.user.id } }}, { populate: ['exercise', 'training', 'training.user'] });
+        const exerciseTraining = await em.findOne(ExerciseTraining, { idTrainingExercise: idTrainingExercise, training: { user: { idUser: req.body.user.id } }}, { populate: ['exercise', 'training', 'training.user'] });
         if(!exerciseTraining) return res.status(404).json({ message: 'Exercise training not found' });
         if (exerciseTraining?.training.user.idUser !== req.body.user.id) return res.status(403).json({ message: 'Forbidden' });
         if (exerciseTraining?.training.user.idUser === req.body.user.id) return res.status(200).json(exerciseTraining);
@@ -22,7 +22,7 @@ async function getOne(req: Request, res: Response) {
 async function getAll(req: Request, res: Response) { 
     try {
         const idTrainingExercise = parseInt(req.body.idTrainingExercise);
-        const exerciseTraining = await em.findOne(ExerciseTraining, { idExerciseTraining: idTrainingExercise, training: { user: { idUser: req.body.user.id } }}, { populate: ['exercise', 'training', 'training.user'] });
+        const exerciseTraining = await em.findOne(ExerciseTraining, { idTrainingExercise: idTrainingExercise, training: { user: { idUser: req.body.user.id } }}, { populate: ['exercise', 'training', 'training.user'] });
         if (exerciseTraining?.training.user.idUser === req.body.user.id) {
             return res.status(200).json(exerciseTraining);
         }
@@ -58,7 +58,7 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
     try {
         const idTrainingExercise = parseInt(req.params.idTrainingExercise);
-        const exerciseTraining = await em.findOne(ExerciseTraining, { idExerciseTraining: idTrainingExercise, training: { user: { idUser: req.body.user.id } } });
+        const exerciseTraining = await em.findOne(ExerciseTraining, { idTrainingExercise: idTrainingExercise, training: { user: { idUser: req.body.user.id } } });
         if (!exerciseTraining) return res.status(404).json({ message: 'Exercise training not found' });
         const result = validatePartialRoutine(req.body);
         if (!result.success) return res.status(400).json({ message: result.error });
@@ -78,7 +78,7 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
     try {
         const idTrainingExercise = parseInt(req.params.idTrainingExercise);
-        const exerciseTraining = await em.findOne(ExerciseTraining, { idExerciseTraining: idTrainingExercise, training: { user: { idUser: req.body.user.id } } });
+        const exerciseTraining = await em.findOne(ExerciseTraining, { idTrainingExercise: idTrainingExercise, training: { user: { idUser: req.body.user.id } } });
         if (!exerciseTraining) return res.status(404).json({ message: 'Exercise training not found' });
         const exerciseTrainingRef = em.getReference(ExerciseTraining, idTrainingExercise as never);
         await em.removeAndFlush(exerciseTrainingRef);
