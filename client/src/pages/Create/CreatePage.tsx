@@ -1,11 +1,12 @@
-import NavBar from "@/components/ui/navbar.tsx";
+
+import NavBar from "@/components/ui/NavBar.tsx";
+import TrainingOfTheDay from "@/components/ui/trainingOfTheDay.tsx";
 
 
 export default function CreatePage() { 
     return (
-        <>  
-            <h1 className="m-auto">Create</h1>
-            <NavBar />
+        <>  <TrainingOfTheDay />
+            <NavBar />  
         </>
     )
 }

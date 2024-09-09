@@ -25,7 +25,10 @@ export default function NavBar() {
                 <img src="calendar.svg" alt="calendar" className="w-[20px] h-[20px] m-auto" />
             </div>
             <div className={`cursor-pointer ${active === 2 ? 'bg-red' : ''} w-[35px] h-[35px] rounded-xl p-2 transition duration-150`}
-            onClick={() => setActive(2)}>
+              onClick={() => {
+                setActive(2)
+                  navigate('/home')
+              }}>
                 <img src="home.svg" alt="home" className="w-[20px] h-[20px] m-auto" />
             </div> 
             <div className={`cursor-pointer ${active === 3 ? 'bg-red' : ''} w-[35px] h-[35px] rounded-xl p-2 transition duration-150`}
