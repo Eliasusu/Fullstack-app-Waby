@@ -3,20 +3,21 @@ import BoxContainer  from "@/components/ui/BoxConteiner.tsx"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx"
 
-type ActivityDay = {
+interface ActivityDay  {
   date: Date;
-  completed: boolean;
+  completed: boolean
 }
 
 export default function Activity() {
   const [activityData, setActivityData] = useState<ActivityDay[]>([])
   const [selectedPeriod, setSelectedPeriod] = useState("Mensual")
+ 
 
   useEffect(() => {
     generateActivityData(selectedPeriod)
   }, [selectedPeriod])
 
-  const generateActivityData = (period: string) => {
+  const generateActivityData = async (period: string) => {
     const currentDate = new Date()
     let daysToGenerate = 0
     let startDate = new Date()
@@ -37,13 +38,14 @@ export default function Activity() {
     }
 
     const newActivityData: ActivityDay[] = []
-
+    
     for (let i = 0; i < daysToGenerate; i++) {
       const date = new Date(startDate)
       date.setDate(startDate.getDate() + i)
+      
       newActivityData.push({
         date: date,
-        completed: Math.random() < 0.7 // 70% de probabilidad de completar el entrenamiento
+        completed: Math.random() < 0.7 
       })
     }
 

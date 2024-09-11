@@ -20,7 +20,7 @@ function RegisterUser() {
     const navigate = useNavigate();
 
     useEffect(() => { 
-        if(isAuthenticated) navigate('/profile');
+        if(isAuthenticated) navigate('/home');
     }, [isAuthenticated, navigate]);
 
     const onSubmit = handleSubmit(async (values: object) => {

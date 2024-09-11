@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { registerRequest, loginRequest } from "../api/auth.ts";
+import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth.ts";
 import Cookie from "js-cookie";
 import { User } from "@/types/user.type.ts";
 
@@ -71,10 +71,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     useEffect(() => { 
-        const token = Cookie.get("token");
-        if (token) { 
-            setIsAuthenticated(true);
+        const checkUser = async () => {
+            const token = Cookie.get("token");
+            if (token) {
+                try {
+                    const res = await verifyTokenRequest()
+                    console.log(res);
+                    if (res.data) {
+                        setIsAuthenticated(true);
+                        setUser(res.data);
+                    }
+                } catch (error) {
+                    setIsAuthenticated(false);
+                    setUser(null);
+                }
+            }
         }
+        checkUser();
     }, []);
     
     return (

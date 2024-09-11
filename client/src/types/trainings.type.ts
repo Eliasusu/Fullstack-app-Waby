@@ -4,12 +4,12 @@ import { Mesocycle } from "@/types/mesocycle.type.ts";
 
 export interface Training {
     idTraining?: number;
-    user: User;
-    mesocycle: Mesocycle;
-    trainingName: string;
-    trainingType: string;
-    day: Date;
-    time: string;
-    completed?: boolean;
+    user?: User;
+    mesocycle?: Mesocycle;
+    trainingName?: string;
+    trainingType?: string;
+    day?: Date;
+    time?: string;
+    completed: boolean ;
     exercisesTrainings?: ExerciseTraining[];
 }

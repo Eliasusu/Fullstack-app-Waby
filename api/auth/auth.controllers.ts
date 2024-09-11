@@ -4,6 +4,8 @@ import { validateUser, validateParcialUser } from "../users/users.schema.js";
 import { User } from "../users/user.entity.js";
 import { orm } from "../shared/db/orm.js";
 import { createToken } from "../shared/jwt.js";
+import jwt from 'jsonwebtoken';
+import { KEY } from "../shared/config.js";
 
 const em = orm.em;
 
@@ -28,7 +30,7 @@ async function register(req: Request, res: Response) {
             const user = em.create(User, req.body);
             await em.persistAndFlush(user);
             const token = await createToken({ id: user.idUser, username: user.username });
-            res.cookie('token', token, { httpOnly: true, sameSite: 'none', secure: true });
+            res.cookie('token', token, { httpOnly: false, sameSite: 'none', secure: true });
             const userName = user.username;
             res.status(201).json([userName]);
         } else {
@@ -49,7 +51,7 @@ async function login(req: Request, res: Response) {
         const validPassword = bcrypt.compareSync(password, user.password);
         if (!validPassword) return res.status(400).json( ['Password incorrect']);
         const token = await createToken({ id: user.idUser, username: user.username });
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', token, { httpOnly: false, sameSite: 'none', secure: true});
         const userName = user.username;
         res.status(200).json([userName]);
     } catch (error: any) { 
@@ -80,4 +82,19 @@ async function profile(req: Request, res: Response) {
     }
 }
 
-export  { register, login, logout, profile }
+async function verifyToken(req: Request, res: Response) {
+    const { token } = req.cookies;
+    if (!token) return res.status(401).json({ error: 'Access denied' });
+    try {
+        const payload = jwt.verify(token, KEY, (err: any, payload: any) => {
+            if (err) return res.status(401).json({ error: 'Invalid token' });
+            const userFound = em.findOne(User, { idUser: payload.id });
+            if (!userFound) return res.status(401).json({ error: 'User not found' });
+            return res.status(200).json({ id: payload.id, username: payload.username });
+        });
+    } catch (error) {
+        return res.status(400).json({ error: 'Invalid token' });
+    }
+}
+
+export  { register, login, logout, profile, verifyToken }
