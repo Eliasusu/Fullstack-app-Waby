@@ -5,7 +5,7 @@ import { Mesocycle } from '@/types/mesocycle.type';
 
 export interface User { 
     idUser?: string;
-    username?: string;
+    username: string;
     password?: string;
     email?: string;
     name?: string;

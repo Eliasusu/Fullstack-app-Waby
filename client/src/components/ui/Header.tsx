@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext.tsx";
 
 export default function Header() {
     const [greeting, setGreeting] = useState('')
-    const [username, setUsername] = useState('Usuario')
+    const [username, setUsername] = useState('')
     const { user } = useAuth();
     
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function Header() {
     // En una aplicación real, esto vendría de tu sistema de autenticación
       // eslint-disable-next-line react-hooks/rules-of-hooks
     
-      setUsername((user as string[])[0])
+      setUsername(user?.username ?? '')
 
     // Actualizar el saludo cada minuto
     const interval = setInterval(() => {
@@ -54,7 +54,7 @@ export default function Header() {
       {/* Avatar del usuario */}
       <Avatar className="h-10 w-10">
         <AvatarImage src="https://i.pinimg.com/736x/ea/ab/33/eaab332d5fce88ee01b3f801e5b9c539.jpg?height=40&width=40" alt="Foto de perfil del usuario" />
-        <AvatarFallback>{username.charAt(0)}</AvatarFallback>
+        <AvatarFallback>{username.charAt(0) ?? ''}</AvatarFallback>
       </Avatar>
     </header>
   )
