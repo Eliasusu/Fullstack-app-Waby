@@ -34,7 +34,7 @@ export class User {
     @Property({ nullable: false })
     height!: number;
 
-    @Property({ persist: false })
+    @Property({ nullable: true })
     token?: string;
 
     @ManyToMany(() => TrainingMethod, (trainingMethod) => trainingMethod.users, {

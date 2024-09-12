@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { createExercise } from "../api/exercise.ts";
+import { createExercise, getExercisesReq } from "../api/exercise.ts";
 
 interface Exercise {
     name: string;
@@ -13,20 +13,22 @@ interface Exercise {
 interface ExerciseState {
     exercises: Exercise[];
     addExercise: (exercise: Exercise) => void;
+    getExercises: () => void;
     errors: object | null;
 }
 
 const initialExerciseState: ExerciseState = {
     exercises: [],
     addExercise: () => { },
+    getExercises: () => { },
     errors: null,
 };
-console.log("Entre al context");
 export const ExerciseContext = createContext(initialExerciseState);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useExercise = () => {
     const context = useContext(ExerciseContext);
-    console.log(context);
+
     if (!context) {
         throw new Error("useExercise must be used within an ExerciseProvider");
     }
@@ -50,6 +52,12 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const getExercises = async () => {
+        const res = await getExercisesReq();
+        
+        setExercises(res.data);
+  };
+
     useEffect(() => {
         if (errors) {
             const timer = setTimeout(() => {
@@ -60,7 +68,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <ExerciseContext.Provider value={{ exercises, addExercise, errors }}>
+        <ExerciseContext.Provider value={{ exercises, addExercise, getExercises ,errors }}>
             {children}
         </ExerciseContext.Provider>
     );

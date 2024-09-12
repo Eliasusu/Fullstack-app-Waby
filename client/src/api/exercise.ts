@@ -1,5 +1,5 @@
-import axios from 'axios';
+import axios from './axios.ts';
 
-export const createExercise = (exercise: object) => axios.post('http://localhost:3000/api/v1/exercises', exercise)
+export const createExercise = (exercise: object) => axios.post('/exercises', exercise)
 
-export const getExercises = () => axios.get('http://localhost:3000/api/v1/exercises')
+export const getExercisesReq = () => axios.get('/exercises')
