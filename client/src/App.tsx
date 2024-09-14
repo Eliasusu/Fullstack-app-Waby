@@ -6,11 +6,13 @@ import LoginPage from './pages/Welcome/LoginPage.tsx';
 import Welcome from './pages/Welcome/Welcome.tsx';
 import ProtectedRoute from './ProtectedRoute.tsx';
 import CreatePage from './pages/Create/CreatePage.tsx';
+import { ExerciseProvider } from './context/ExerciseContext.tsx';
 
 export function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <ExerciseProvider>
+        <BrowserRouter>
         <div className="flex flex-col h-full">
           <Routes>
             <Route path='/' element={<Welcome />} />
@@ -23,7 +25,8 @@ export function App() {
             </Route>
           </Routes>
         </div>
-      </BrowserRouter>
+        </BrowserRouter>
+      </ExerciseProvider>
     </AuthProvider>
   );
 }

@@ -54,7 +54,6 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
 
     const getExercises = async () => {
         const res = await getExercisesReq();
-        
         setExercises(res.data);
   };
 

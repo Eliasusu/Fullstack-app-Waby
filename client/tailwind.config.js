@@ -20,6 +20,7 @@ export const theme = {
         'grey-bg': '#0A0A0C',
         'grey-nav': '#101013',
         'grey-box': '#191A1E',
+        'gray-box2': '#2C2E33',
         'grey-boxRoutine': '#2C2E33',
         'grey-boxActivity': '#51545E',
         'grey-loginGoogle': '#53565E',
