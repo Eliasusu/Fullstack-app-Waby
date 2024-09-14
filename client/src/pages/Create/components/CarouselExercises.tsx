@@ -69,7 +69,7 @@ export default function Component() {
                   <DialogTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-24 h-24 text-lg font-semibold bg-gray-box2 text-white hover:bg-grey-nav rounded-lg"
+                      className="w-24 h-24 text-lg font-semibold bg-grey-login text-white hover:bg-grey-nav rounded-lg"
                     >
                       {group}
                     </Button>
