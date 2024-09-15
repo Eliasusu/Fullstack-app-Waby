@@ -50,7 +50,7 @@ export default function Component() {
             <DialogTitle className="text-2xl font-bold">Exercises by muscle group</DialogTitle>
         </DialogHeader>
             
-                  <h3 className="text-xl font-semibold">{openDialog}</h3>
+        <h3 className="text-xl font-semibold">{openDialog}</h3>
         <div className="border rounded-md">
           <Table className="">
             <TableHeader className="">
@@ -74,8 +74,8 @@ export default function Component() {
                 </TableCell>
               </TableRow>
             </TableBody>
-                      </Table>
-                      </div>
+            </Table>
+          </div>
         </DialogContent> 
       </Dialog>
 
