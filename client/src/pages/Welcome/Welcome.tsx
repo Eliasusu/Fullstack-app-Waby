@@ -4,7 +4,7 @@ export default function Welcome(){
     return (
         <>
         <div className="m-auto">
-            <Logo />
+            <Logo  />
             <div className="lg:mt-5 xs:mt-4">
                 <Slogan textColor='Create' text='your exercises.' />
                 <Slogan textColor='Planned' text='your routines.' />

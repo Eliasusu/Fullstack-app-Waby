@@ -30,6 +30,7 @@ function RegisterUser() {
         const user: User = {
             username: values.username,
             password: values.password,
+            avatar: values.username,
             email: values.email,
             name: values.name,
             birthdate: values.birthdate,

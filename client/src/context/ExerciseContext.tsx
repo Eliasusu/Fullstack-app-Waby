@@ -1,14 +1,7 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { createExercise, getExercisesReq } from "../api/exercise.ts";
+import { Exercise } from "../types/exercise.type.ts";
 
-interface Exercise {
-    name: string;
-    trainingMethod: string;
-    description?: string;
-    muscleGroups: string[];
-    difficulty: string;
-    typeExercise: string;
-}
 
 interface ExerciseState {
     exercises: Exercise[];
@@ -54,7 +47,8 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
 
     const getExercises = async () => {
         const res = await getExercisesReq();
-        setExercises(res.data);
+        console.log(res.data.exercises);
+        setExercises(res.data.exercises);
   };
 
     useEffect(() => {

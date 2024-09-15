@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -10,6 +9,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button"
 import  BoxConteiner  from "@/components/ui/BoxConteiner.tsx"
 
+interface Props {
+  exercises: Array<{
+    name: string,
+    trainingMethod: string,
+    description: string,
+    muscleGroups: string[],
+    difficulty: string,
+    typeExercise: string
+  }>
+}
+
 const muscleGroups = [
   "Legs",
   "Arms",
@@ -19,10 +29,12 @@ const muscleGroups = [
   "Core"
 ]
 
-export default function Component() {
+export default function MuscleGroupExercisesDialog({exercises}: Props) {
   const [openDialog, setOpenDialog] = useState<string | null>(null)
   const [showAddExercise, setShowAddExercise] = useState(false)
 
+
+  
   const handleAddExercise = () => {
     setShowAddExercise(true)
   }
@@ -55,15 +67,27 @@ export default function Component() {
           <Table className="">
             <TableHeader className="">
               <TableRow className="">
-                <TableHead className="text-gray-300">Ejercicio</TableHead>
-                <TableHead className="text-gray-300">Método</TableHead>
-                <TableHead className="text-gray-300">Descripción</TableHead>
-                <TableHead className="text-gray-300">Grupos musculares</TableHead>
-              </TableRow>
+                <TableHead className="text-gray-300">Exercise</TableHead>
+                <TableHead className="text-gray-300">Description</TableHead>
+                <TableHead className="text-gray-300">Muscle Groups</TableHead>
+                <TableHead className="text-gray-300">Difficulty</TableHead>
+                <TableHead className="text-gray-300">Type exercise</TableHead>
+                </TableRow>
             </TableHeader>
             <TableBody className="">
+                <TableRow>
+                {exercises.map((e, index) => (
+                  <TableRow key={index} className="border-b border-gray-500/20">
+                    <TableCell className="font-medium">{e.name}</TableCell>
+                    <TableCell className="text-right">{e.description}</TableCell>
+                    <TableCell className="text-right">{openDialog}</TableCell>
+                    <TableCell className="text-right">{e.difficulty} kg</TableCell>
+                    <TableCell className="text-right">{e.typeExercise}</TableCell>
+                  </TableRow>
+                ))} 
+                </TableRow>
               <TableRow>
-                <TableCell colSpan={4}>
+                <TableCell colSpan={5}>
                   <button 
                     className="w-full flex items-center justify-center py-0 text-gray-400 hover:text-gray-100 transition-colors"
                     onClick={handleAddExercise}

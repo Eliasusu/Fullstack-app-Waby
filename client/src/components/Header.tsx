@@ -34,14 +34,14 @@ export default function Header() {
     }
 
     updateGreeting()
-    const interval = setInterval(updateGreeting, 60000) // Update every minute
+    const interval = setInterval(updateGreeting, 60000)
 
     return () => clearInterval(interval)
   }, [])
 
   return (
     <header className="flex justify-between items-center p-4 bg-grey-header text-white">
-      <Logo />
+      <Logo dimensions='w-[30px]'/>
       <div className="flex-grow text-center">
         <p className="text-white text-lg">
           <span className="font-light">{greeting}</span>, <span className="font-bold">{user.username}</span>
@@ -50,7 +50,7 @@ export default function Header() {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
-            <AvatarImage src="/placeholder-avatar.jpg" alt={user.username} />
+            <AvatarImage src={`https://i.pravatar.cc/150?u=${user.username}@gmail.com`} alt={user.username} />
             <AvatarFallback>{user.username.charAt(0)}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
