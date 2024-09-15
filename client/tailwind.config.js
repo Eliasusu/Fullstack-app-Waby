@@ -18,9 +18,10 @@ export const theme = {
   extend: {
         colors: {
         'grey-bg': '#0A0A0C',
-        'grey-nav': '#101013',
+        'grey-nav': '#101113',
         'grey-box': '#191A1E',
-        'gray-box2': '#2C2E33',
+      'gray-box2': '#2C2E33',
+        'gray-header': '#101013',
         'grey-boxRoutine': '#2C2E33',
         'grey-boxActivity': '#51545E',
         'grey-loginGoogle': '#53565E',

@@ -8,6 +8,7 @@ interface AuthState {
     user: User | null;
     signUp: (user: User) => void;
     signIn: (user: User) => void;
+    logout: () => void;
     isAuthenticated: boolean;
     errors: object | null;
 }
@@ -16,6 +17,7 @@ const initialAuthState: AuthState = {
     user: null,
     signUp: () => { },
     signIn: () => { },
+    logout: () => { },
     isAuthenticated: false,
     errors: null,  
 };
@@ -61,6 +63,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     }
 
+    const logout = () => { 
+        Cookie.remove("token");
+        setUser(null);
+        setIsAuthenticated(false);
+    }
+
     useEffect(() => { 
         if (errors.length > 0) { 
             const timer = setTimeout(() => {
@@ -91,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
     
     return (
-        <AuthContext.Provider value={{ user, signUp ,isAuthenticated, errors, signIn }}>
+        <AuthContext.Provider value={{ user, signUp ,isAuthenticated ,errors, signIn, logout }}>
             {children}
         </AuthContext.Provider>
     );

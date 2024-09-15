@@ -1,7 +1,7 @@
-import DayRoutine from "@/components/ui/dayRoutine.tsx";
-import Header from "@/components/ui/header.tsx";
-import NavBar from "@/components/ui/NavBar.tsx";
-import Activity from "@/components/ui/activity.tsx";
+import DayRoutine from "@/components/dayRoutine.tsx";
+import Header from "@/components/header.tsx";
+import NavBar from "@/components/NavBar.tsx";
+import Activity from "@/components/activity.tsx";
 import { CalendarHome } from "./components/Calendar.tsx";
 
 export default function Index() {
