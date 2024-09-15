@@ -7,11 +7,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
-import BoxContainer from "./BoxConteiner.tsx"
+import BoxContainer from "@/components/ui/BoxConteiner.tsx"
 import { ExerciseTraining } from "@/types/exercisesTrainings.type.ts"
 
 
@@ -79,7 +79,7 @@ export default function DayRoutine() {
                   <TableHead className="text-right text-gray-400">Rest</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="">
                 {exercises.map((e, index) => (
                   <TableRow key={index} className="border-b border-gray-500/20">
                     <TableCell className="font-medium">{e.exercise}</TableCell>
@@ -92,9 +92,9 @@ export default function DayRoutine() {
                 ))}
               </TableBody>
           </Table>
-          <ScrollBar orientation="horizontal" aria-orientation="vertical"/>
           </ScrollArea>
         </CardContent>
    </BoxContainer>
   )
 }
+
