@@ -4,6 +4,9 @@
 
 - Como hacemos para que no se generen muchas consultas en la pagina del + a la hora de filtrar los ejercicios por grupos musculares?
 
+- Pusimos que la altura sea de 100vh pero en la pagina home nos queda corto, como lo solucionamos?
+
+
 ## Mensajes para el proximo dev(esclavo) 📨
 
 ## ToDo 📃
