@@ -1,24 +1,15 @@
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { PlusIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import  BoxConteiner  from "@/components/ui/BoxConteiner.tsx"
+import ExercisesTable from "@/exercises/page.tsx"
+import { useExercise } from "@/context/ExerciseContext.tsx"
 
-interface Props {
-  exercises: Array<{
-    name: string,
-    trainingMethod: string,
-    description: string,
-    muscleGroups: string[],
-    difficulty: string,
-    typeExercise: string
-  }>
-}
 
 const muscleGroups = [
   "Legs",
@@ -29,12 +20,35 @@ const muscleGroups = [
   "Core"
 ]
 
-export default function MuscleGroupExercisesDialog({exercises}: Props) {
+export default function MuscleGroupExercisesDialog() {
   const [openDialog, setOpenDialog] = useState<string | null>(null)
   const [showAddExercise, setShowAddExercise] = useState(false)
+  const { exercises, getExercises } = useExercise();
 
+  try {
+    switch (openDialog) { 
+    case "Legs":
+      getExercises("4")
+      break;
+    case "Arms":
+      getExercises("2")
+      break;
+    case "Back":
+      getExercises("3")
+      break;
+    case "Shoulders":
+      getExercises("1")
+      break;
+    case "Chest":
+      getExercises("6")
+      break;
+    case "Core":
+      getExercises("5")
+  }
+  } catch (error) {
+    console.log(error)
+  }
 
-  
   const handleAddExercise = () => {
     setShowAddExercise(true)
   }
@@ -63,31 +77,8 @@ export default function MuscleGroupExercisesDialog({exercises}: Props) {
         </DialogHeader>
             
         <h3 className="text-xl font-semibold">{openDialog}</h3>
-        <div className="border rounded-md">
-          <Table className="">
-            <TableHeader className="">
-              <TableRow className="">
-                <TableHead className="text-gray-300">Exercise</TableHead>
-                <TableHead className="text-gray-300">Description</TableHead>
-                <TableHead className="text-gray-300">Muscle Groups</TableHead>
-                <TableHead className="text-gray-300">Difficulty</TableHead>
-                <TableHead className="text-gray-300">Type exercise</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody className="">
-                <TableRow>
-                {exercises.map((e, index) => (
-                  <TableRow key={index} className="border-b border-gray-500/20">
-                    <TableCell className="font-medium">{e.name}</TableCell>
-                    <TableCell className="text-right">{e.description}</TableCell>
-                    <TableCell className="text-right">{openDialog}</TableCell>
-                    <TableCell className="text-right">{e.difficulty} kg</TableCell>
-                    <TableCell className="text-right">{e.typeExercise}</TableCell>
-                  </TableRow>
-                ))} 
-                </TableRow>
-              <TableRow>
-                <TableCell colSpan={5}>
+          <div className="border rounded-md">
+            <ExercisesTable data={exercises} />
                   <button 
                     className="w-full flex items-center justify-center py-0 text-gray-400 hover:text-gray-100 transition-colors"
                     onClick={handleAddExercise}
@@ -95,10 +86,6 @@ export default function MuscleGroupExercisesDialog({exercises}: Props) {
                     <PlusIcon className="mr-2" />
                     Add Exercise
                   </button>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-            </Table>
           </div>
         </DialogContent> 
       </Dialog>

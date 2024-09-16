@@ -8,7 +8,7 @@ export interface Exercise {
     name: string;
     trainingMethod: string;
     description: string;
-    muscleGroups: string[];
+    muscleGroups: string;
     difficulty: string;
     typeExercise: string;
     dateCreated?: Date;

@@ -10,7 +10,16 @@ async function getAll(req: Request, res: Response) {
         if (req.params.idMuscleGroup) {
             const idMuscleGroup = Number.parseInt(req.params.idMuscleGroup);
             const exercises = await em.find(Exercise, { muscleGroups: { idMuscleGroup: idMuscleGroup }, user: { idUser: req.body.user.id } }, { populate: ['muscleGroups', 'trainingMethod'] });
-            return res.status(200).json({ message: 'finded all exercises', exercises });
+            const exercisesDestructurized = exercises.map((e) => {
+                return {
+                    name: e.name,
+                    description: e.description,
+                    muscleGroups: e.muscleGroups.map((muscleGroup) => muscleGroup.nameMuscleGroup),
+                    difficulty: e.difficulty,
+                    typeExercise: e.typeExercise
+                };
+            });
+            return res.status(200).json({ message: 'finded all exercises', exercisesDestructurized});
         }
         const exercises = await em.find(Exercise, { user: req.body.user.id }, { populate: ['muscleGroups', 'trainingMethod'] });
         res.status(200).json({ message: 'finded all exercises', exercises });

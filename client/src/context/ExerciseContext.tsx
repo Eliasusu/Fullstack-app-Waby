@@ -1,12 +1,12 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { createExercise, getExercisesReq } from "../api/exercise.ts";
+import { createExercise, getExercisesReq, getExercisesByMg } from "../api/exercise.ts";
 import { Exercise } from "../types/exercise.type.ts";
 
 
 interface ExerciseState {
     exercises: Exercise[];
     addExercise: (exercise: Exercise) => void;
-    getExercises: () => void;
+    getExercises: (mg: string) => void;
     errors: object | null;
 }
 
@@ -45,10 +45,15 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const getExercises = async () => {
+    const getExercises = async (mg: string) => {
+        if (mg) {
+            const res = await getExercisesByMg(mg);
+            setExercises(res.data.exercisesDestructurized);
+        } else { 
         const res = await getExercisesReq();
         console.log(res.data.exercises);
         setExercises(res.data.exercises);
+    }
   };
 
     useEffect(() => {
