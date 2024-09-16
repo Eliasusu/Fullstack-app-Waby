@@ -18,38 +18,18 @@ async function getAll(req: Request, res: Response) {
 
 async function getOne(req: Request, res: Response) {
     try {
-        const idTraining = Number.parseInt(req.params.idTraining);
+        console.log('Estoy en getOne del training y esta es la respuesta', req.body, req.params);
+        const dateTraining = req.params.date;
+        const trainingFind = await em.findOneOrFail(Training, { user: { idUser: req.body.user.id }, day: dateTraining });
         const userId = req.body.user?.id;
-        
-        if (isNaN(idTraining)) {
-            console.log('Soy este error');
-            return res.status(400).json({ message: 'Invalid training ID' });
-        }
-        
-        if (!userId) {
-            return res.status(400).json({ message: 'User ID is required' });
-        }
-
-        const training = await em.findOneOrFail( Training, { idTraining: idTraining, user: { idUser: userId } }, { populate: ['user', 'mesocycle', 'exercisesTrainings'] });
+        const training = await em.findOneOrFail( Training, { idTraining: trainingFind.idTraining, user: { idUser: userId } }, { populate: ['user', 'mesocycle', 'exercisesTrainings'] });
         res.json(training);
-
     } catch (error: any) {
         if (error.name === 'EntityNotFoundError') {
             res.status(404).json({ message: 'Training not found' });
         } else {
             res.status(500).json({ message: 'Internal Server Error'  });
         }
-    }
-}
-
-async function getToday(req: Request, res: Response) {
-    try {
-        const today = getDateToday();
-        console.log(today);
-        const training = await em.findOneOrFail(Training, { user: { idUser: req.body.user.id }, day: today })
-        res.json(training)
-    } catch (error: any) {
-        res.status(500)
     }
 }
 
@@ -85,7 +65,7 @@ async function update(req: Request, res: Response) {
         if (!training) {
             return res.status(404).json({ message: 'Training not found' });
         }
-        const trainingValidation = validateTraining(req.body);
+        const trainingValidation = validateParcialTraining(req.body);
         if (!trainingValidation.success) {
             return res.status(400).json({ message: trainingValidation.error });
         }
@@ -110,4 +90,4 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-export { getAll, getOne, getToday, add, update, remove };
+export { getAll, getOne, add, update, remove };

@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
 import BoxContainer  from "@/components/ui/BoxConteiner.tsx"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx"
-
+import { useTraining } from "@/context/TrainingContext.tsx"
 interface ActivityDay  {
   date: Date;
   completed: boolean
@@ -11,10 +12,25 @@ interface ActivityDay  {
 export default function Activity() {
   const [activityData, setActivityData] = useState<ActivityDay[]>([])
   const [selectedPeriod, setSelectedPeriod] = useState("Mensual")
- 
+  const { trainings, getTrainings } = useTraining()
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getTrainings()
+    }, 60 * 1000)
+
+    getTrainings()
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+  
 
   useEffect(() => {
     generateActivityData(selectedPeriod)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPeriod])
 
   const generateActivityData = async (period: string) => {
@@ -42,10 +58,12 @@ export default function Activity() {
     for (let i = 0; i < daysToGenerate; i++) {
       const date = new Date(startDate)
       date.setDate(startDate.getDate() + i)
-      
       newActivityData.push({
-        date: date,
-        completed: Math.random() < 0.7 
+        date,
+        completed: trainings.some(training => {
+          const trainingDate = new Date(training.day)
+          return trainingDate.toDateString() === date.toDateString() && training.completed
+        })
       })
     }
 

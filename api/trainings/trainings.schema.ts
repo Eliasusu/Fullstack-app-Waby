@@ -19,6 +19,10 @@ export const trainingsSchema: any = z.object({
     required_error: 'Time is required',
     invalid_type_error: 'Time must be a string',
   }),
+  completed: z.boolean({
+    required_error: 'Completed is required',
+    invalid_type_error: 'Completed must be a boolean'
+  }),
   exercisesTrainings: z.array(z.number({})),
 });
 

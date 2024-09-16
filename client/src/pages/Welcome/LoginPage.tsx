@@ -26,6 +26,7 @@ function Login() {
     const onSubmit = handleSubmit(async (values) => {
         const user: User = {
             username: values.username,
+            avatar: values.username,
             password: values.password,
             email: values.email,
             name: values.name,

@@ -3,7 +3,7 @@ import { Training } from "@/types/trainings.type.ts";
 
 export interface Mesocycle { 
     idMesocycle?: number;
-    user: User;
+    user?: User;
     typeMesocycle: string;
     startDate: Date;
     endDate: Date;

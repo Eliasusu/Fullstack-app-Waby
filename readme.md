@@ -1,14 +1,8 @@
 ## Preguntas ❓
 
-- Es mejor relacionar a los usuarios con los mesociclos y luego los mesociclos se relacionan con entrenamientos? Porque nosotros lo tenemos que los usuarios se relacionan con muchos entrenamientos y esos entrenamientos se relacionan con solo 1 mesociclo o otros
+- Cada vez que un usuario se loguea y ve su actividad, hay que recargar o cambiar de vista para que se refresque y aparezca la informacion real. Si yo me logueo con un usuario, cargo su actividad (Cantidad de entrenamientos realizados en un periodo de tiempo), luego hago un logout y inicia sesion otro usuario, queda cargado el estado anterior y tengo que refrescar para que aparezcan los datos 
 
-- Porque la entidad exercises_trainings no me deja ponerle otra clave primaria que no sea la de la entidad trainings?
-
-- Porque cuando creo un training y le asigno un ejercicio no se me crea un exercise_training con las foraneas de estos 2?
-
-- Porque no me aparacen las foraneas de progressionsSec y progressionsReps en Exercises?
-
-- Problemas en el front: No puedo hacer que el calendar ocupe todo el espacio que tiene
+- Como hacemos para que no se generen muchas consultas en la pagina del + a la hora de filtrar los ejercicios por grupos musculares?
 
 ## Mensajes para el proximo dev(esclavo) 📨
 

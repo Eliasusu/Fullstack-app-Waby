@@ -1,2 +1,5 @@
-import axios from "axios";
-export const getTrainingOfTheDay = () => axios.get("http://localhost:3000/api/v1/trainings/user");
+import axios from "@/api/axios.ts";
+
+export const getTrainingOfTheDay = (date: Date) => axios.get(`/trainings/user/${date}`);
+
+export const getAllTrainings = () => axios.get("/trainings/user");
