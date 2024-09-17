@@ -9,7 +9,7 @@ const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
     try {
-        const trainings = await em.find(Training, { user: req.body.user.id }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings'] });
+        const trainings = await em.find(Training, { user: req.body.user.id }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings.exercise'] });
         res.json(trainings);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -18,12 +18,11 @@ async function getAll(req: Request, res: Response) {
 
 async function getOne(req: Request, res: Response) {
     try {
-        console.log('Estoy en getOne del training y esta es la respuesta', req.body, req.params);
-        const dateTraining = req.params.date;
-        const trainingFind = await em.findOneOrFail(Training, { user: { idUser: req.body.user.id }, day: dateTraining });
-        const userId = req.body.user?.id;
-        const training = await em.findOneOrFail( Training, { idTraining: trainingFind.idTraining, user: { idUser: userId } }, { populate: ['user', 'mesocycle', 'exercisesTrainings'] });
-        res.json(training);
+        console.log('Este es el date que me llega', req.params.date);
+        const dateTraining = new Date(req.params.date);
+        console.log('Asi queda', dateTraining);
+        const trainingFind = await em.findOneOrFail(Training, { user: { idUser: req.body.user.id }, day: dateTraining }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings.exercise'] });
+        res.json(trainingFind);
     } catch (error: any) {
         if (error.name === 'EntityNotFoundError') {
             res.status(404).json({ message: 'Training not found' });

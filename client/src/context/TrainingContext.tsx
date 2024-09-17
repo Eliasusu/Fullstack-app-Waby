@@ -7,7 +7,7 @@ interface TrainingState {
     trainings: Training[];
     addTraining: (training: Training) => void;
     getTrainings: () => void;
-    getTrainingToDay: (date: Date) => void;
+    getTrainingToDay: (date: string) => void;
     deleteTraining: (id: string) => void;
     errors: object | null;
 }
@@ -19,7 +19,9 @@ const initialTrainingState: TrainingState = {
         trainingName: '',
         trainingType: '',
         day: new Date(),
-        time: '',
+        startHour: '',
+        endHour: '',
+        exercisesTrainings: [],
         completed: false,
     }],
     addTraining: () => { },
@@ -59,10 +61,10 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
         // }
     };
 
-    const getTrainingToDay = async (date: Date) => {
+    const getTrainingToDay = async (date: string) => {
         try {
-            console.log('Este es el date', date);
             const res = await getTrainingOfTheDay(date);
+            console.log('Estos son los entrenamientos del dia', res.data.training);
             setTrainings(res.data.training);
         } catch (error: unknown) {
             if (error instanceof Error) {

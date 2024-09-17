@@ -9,7 +9,8 @@ export interface Training {
     trainingName: string;
     trainingType: string;
     day: Date;
-    time: string;
+    startHour: string;
+    endHour: string;
     completed: boolean;
-    exercisesTrainings?: ExerciseTraining[];
+    exercisesTrainings: ExerciseTraining[];
 }

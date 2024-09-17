@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Table,
   TableBody,
@@ -12,55 +12,60 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import BoxContainer from "@/components/ui/BoxConteiner.tsx"
-import { ExerciseTraining } from "@/types/exercisesTrainings.type.ts"
+import { useTraining } from "@/context/TrainingContext.tsx"
 
-
-const exercises: ExerciseTraining[] = [
-  { exercise: "Press de banca", comment: "Mantener codos a 45°", sets: 4, reps: 12, weight: 60,rest: "2'" },
-  { exercise: "Aperturas con mancuernas", comment: "Bajar lento", sets: 3, reps: 15, weight: 20,rest: "1'30\"" },
-  { exercise: "Fondos en paralelas", comment: "Peso corporal", sets: 4, reps: 10, weight: 0, rest: "2'" },
-  { exercise: "Press inclinado con barra", comment: "30° de inclinación", sets: 3, reps: 10, weight: 50,rest: "2'" },
-  { exercise: "Pullover con mancuerna", comment: "Estirar bien", sets: 3, reps: 12, weight: 25,rest: "1'30\"" },
-  { exercise: "Fondos en paralelas", comment: "Peso corporal", sets: 4, reps: 10, weight: 0, rest: "2'" },
-  { exercise: "Aperturas con mancuernas", comment: "Bajar lento", sets: 3, reps: 15, weight: 20,rest: "1'30\"" },
-  { exercise: "Press inclinado con barra", comment: "30° de inclinación", sets: 3, reps: 10, weight: 50,rest: "2'" },
-  { exercise: "Pullover con mancuerna", comment: "Estirar bien", sets: 3, reps: 12, weight: 25,rest: "1'30\"" },
-  { exercise: "Fondos en paralelas", comment: "Peso corporal", sets: 4, reps: 10, weight: 0, rest: "2'" },
-  { exercise: "Aperturas con mancuernas", comment: "Bajar lento", sets: 3, reps: 15, weight: 20,rest: "1'30\"" },
-]
 
 export default function DayRoutine() {
-  const [rutinaCompletada, setRutinaCompletada] = useState(false)
-  const [horaInicio, setHoraInicio] = useState("")
-  const [horaFin, setHoraFin] = useState("")
+  const [completed, setCompleted] = useState(false)
+  const [starHour, setStarHour] = useState("")
+  const [endHour, setEndHour] = useState("")
+  const { trainings, getTrainingToDay } = useTraining()
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        const today = new Date()
+        const formattedDate = today.toISOString().split('T')[0]
+        
+      getTrainingToDay(formattedDate)
+      }, 60 * 1000)
+      const today = new Date()
+      const formattedDate = today.toISOString().split('T')[0]
+      getTrainingToDay(formattedDate)
+      
+
+    return () => {
+      clearInterval(interval)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
   return (
       <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex items-center space-x-2">
             <Checkbox
-              id="rutina-completada"
-              checked={rutinaCompletada}
-              onClick={() => setRutinaCompletada(!rutinaCompletada)}
+              id="completed"
+              checked={completed}
+              onClick={() => setCompleted(!completed)}
             />
             <CardTitle className="text-lx font-medium">Push day</CardTitle>
           </div>
           <div className="flex items-center space-x-2">
             <div>
               <Input
-                id="hora-inicio"
+                id="startHour"
                 type="time"
-                value={horaInicio}
-                onChange={(e) => setHoraInicio(e.target.value)}
+                value={starHour}
+                onChange={(e) => setStarHour(e.target.value)}
                 className="bg-grey-box  text-white"
               />
             </div>
             <div>
               <Input
-                id="hora-fin"
+                id="endHour"
                 type="time"
-                value={horaFin}
-                onChange={(e) => setHoraFin(e.target.value)}
+                value={endHour}
+                onChange={(e) => setEndHour(e.target.value)}
                 className="bg-grey-box  text-white"
               />
             </div>
@@ -80,15 +85,17 @@ export default function DayRoutine() {
                 </TableRow>
               </TableHeader>
               <TableBody className="">
-                {exercises.map((e, index) => (
-                  <TableRow key={index} className="border-b border-gray-500/20">
-                    <TableCell className="font-medium">{e.exercise}</TableCell>
-                    <TableCell>{e.comment}</TableCell>
-                    <TableCell className="text-right">{e.sets}</TableCell>
-                    <TableCell className="text-right">{e.reps}</TableCell>
-                    <TableCell className="text-right">{e.weight} kg</TableCell>
-                    <TableCell className="text-right">{e.rest}</TableCell>
-                  </TableRow>
+                {trainings.map((t, index) => (
+                  t.exercisesTrainings.map((et, etIndex) => (
+                    <TableRow key={`${index}-${etIndex}`} className="border-b border-gray-500/20">
+                      <TableCell className="font-medium">{et.exercise.name}</TableCell>
+                      <TableCell>{et.comment}</TableCell>
+                      <TableCell className="text-right">{et.sets}</TableCell>
+                      <TableCell className="text-right">{et.reps}</TableCell>
+                      <TableCell className="text-right">{et.weight} kg</TableCell>
+                      <TableCell className="text-right">{et.rest}</TableCell>
+                    </TableRow>
+                  ))
                 ))}
               </TableBody>
           </Table>

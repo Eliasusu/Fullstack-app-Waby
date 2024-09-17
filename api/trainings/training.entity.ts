@@ -23,9 +23,12 @@ export class Training{
 
     @Property({ nullable: false })
     day!: Date;
+    
+    @Property({ nullable: false })
+    startHour!: string;
 
     @Property({ nullable: false })
-    time!: string;
+    endHour!: string;
 
     @Property({ nullable: true })
     completed?: boolean ;
