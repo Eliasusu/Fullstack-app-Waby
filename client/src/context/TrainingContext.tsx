@@ -5,9 +5,10 @@ import { Training } from "@/types/trainings.type.ts";
 
 interface TrainingState {
     trainings: Training[];
+    training: Training | undefined;
     addTraining: (training: Training) => void;
     getTrainings: () => void;
-    getTrainingToDay: (date: string) => void;
+    getTrainingToDay: (date: string) => object;
     deleteTraining: (id: string) => void;
     errors: object | null;
 }
@@ -21,12 +22,23 @@ const initialTrainingState: TrainingState = {
         day: new Date(),
         startHour: '',
         endHour: '',
-        exercisesTrainings: [],
+        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: 0, rest: ''}],
         completed: false,
     }],
+    training: {
+        idTraining: 0,
+        user: '',
+        trainingName: '',
+        trainingType: '',
+        day: new Date(),
+        startHour: '',
+        endHour: '',
+        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: 0, rest: ''}],
+        completed: false,
+    },
     addTraining: () => { },
     getTrainings: () => { },
-    getTrainingToDay: () => { },
+    getTrainingToDay: () => ({}),
     deleteTraining: () => { },
     errors: null,
 };
@@ -44,6 +56,7 @@ export const useTraining = () => {
 
 export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     const [trainings, setTrainings] = useState<Training[]>([]);
+    const [training, setTraining] = useState<Training>();
     const [errors, setErrors] = useState<object | null>(null);
 
     const addTraining = async (training: Training) => {
@@ -64,8 +77,8 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     const getTrainingToDay = async (date: string) => {
         try {
             const res = await getTrainingOfTheDay(date);
-            console.log('Estos son los entrenamientos del dia', res.data.training);
-            setTrainings(res.data.training);
+            console.log('Training request', res.data);
+            setTraining(res.data);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setErrors({ message: error.message });
@@ -79,7 +92,6 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
         try {
             const res = await getAllTrainings();
             setTrainings(res.data);
-            console.log('Estos son los entrenamientos', res.data);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setErrors({ message: error.message });
@@ -115,7 +127,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <TrainingContext.Provider value={{ trainings, addTraining, getTrainings, getTrainingToDay, deleteTraining, errors }}>
+        <TrainingContext.Provider value={{ trainings, training ,addTraining, getTrainings, getTrainingToDay ,deleteTraining, errors }}>
             {children}
         </TrainingContext.Provider>
     );

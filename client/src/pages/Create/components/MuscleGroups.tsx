@@ -27,7 +27,8 @@ export default function MuscleGroupExercisesDialog() {
 
   try {
     switch (openDialog) { 
-    case "Legs":
+      case "Legs":
+        
       getExercises("4")
       break;
     case "Arms":

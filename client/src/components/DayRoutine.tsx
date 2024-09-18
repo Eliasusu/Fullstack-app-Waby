@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   Table,
   TableBody,
@@ -15,29 +15,15 @@ import BoxContainer from "@/components/ui/BoxConteiner.tsx"
 import { useTraining } from "@/context/TrainingContext.tsx"
 
 
-export default function DayRoutine() {
+export  const DayRoutine: React.FC =  () => {
   const [completed, setCompleted] = useState(false)
-  const [starHour, setStarHour] = useState("")
-  const [endHour, setEndHour] = useState("")
-  const { trainings, getTrainingToDay } = useTraining()
+  const [setStartHour] = useState("")
+  const [setEndHour] = useState("")
+  const { training, getTrainingToDay } = useTraining()
 
-    useEffect(() => {
-      const interval = setInterval(() => {
-        const today = new Date()
-        const formattedDate = today.toISOString().split('T')[0]
-        
-      getTrainingToDay(formattedDate)
-      }, 60 * 1000)
-      const today = new Date()
-      const formattedDate = today.toISOString().split('T')[0]
-      getTrainingToDay(formattedDate)
-      
+  const today = new Date().toISOString().split('T')[0];
+  getTrainingToDay(today)
 
-    return () => {
-      clearInterval(interval)
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
   return (
       <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
@@ -45,26 +31,26 @@ export default function DayRoutine() {
           <div className="flex items-center space-x-2">
             <Checkbox
               id="completed"
-              checked={completed}
+              checked={training?.completed}
               onClick={() => setCompleted(!completed)}
             />
-            <CardTitle className="text-lx font-medium">Push day</CardTitle>
+          <CardTitle className="text-lx font-medium">{training?.trainingName}</CardTitle>
           </div>
           <div className="flex items-center space-x-2">
             <div>
               <Input
                 id="startHour"
-                type="time"
-                value={starHour}
-                onChange={(e) => setStarHour(e.target.value)}
+                type="string"
+                value={training?.startHour}
+                onChange={(e) => setStartHour(e.target.value)}
                 className="bg-grey-box  text-white"
               />
             </div>
             <div>
               <Input
                 id="endHour"
-                type="time"
-                value={endHour}
+                type="string"
+                value={training?.endHour}
                 onChange={(e) => setEndHour(e.target.value)}
                 className="bg-grey-box  text-white"
               />
@@ -85,18 +71,18 @@ export default function DayRoutine() {
                 </TableRow>
               </TableHeader>
               <TableBody className="">
-                {trainings.map((t, index) => (
-                  t.exercisesTrainings.map((et, etIndex) => (
-                    <TableRow key={`${index}-${etIndex}`} className="border-b border-gray-500/20">
-                      <TableCell className="font-medium">{et.exercise.name}</TableCell>
+              {
+                  training?.exercisesTrainings.map((et, etIndex) => (
+                    <TableRow key={`${etIndex}`} className="border-b border-gray-500/20">
+                      <TableCell className="font-medium">{et.exercise.name ?? ''}</TableCell>
                       <TableCell>{et.comment}</TableCell>
-                      <TableCell className="text-right">{et.sets}</TableCell>
-                      <TableCell className="text-right">{et.reps}</TableCell>
-                      <TableCell className="text-right">{et.weight} kg</TableCell>
-                      <TableCell className="text-right">{et.rest}</TableCell>
+                      <TableCell className="text-right">{et.sets ?? ''}</TableCell>
+                      <TableCell className="text-right">{et.reps ?? ''}</TableCell>
+                      <TableCell className="text-right">{et.weight ?? ''} kg</TableCell>
+                      <TableCell className="text-right">{et.rest ?? ''}</TableCell>
                     </TableRow>
                   ))
-                ))}
+              }
               </TableBody>
           </Table>
           </ScrollArea>

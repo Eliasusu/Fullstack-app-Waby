@@ -1,3 +1,4 @@
+
 ## Preguntas ❓
 
 - Cada vez que un usuario se loguea y ve su actividad, hay que recargar o cambiar de vista para que se refresque y aparezca la informacion real. Si yo me logueo con un usuario, cargo su actividad (Cantidad de entrenamientos realizados en un periodo de tiempo), luego hago un logout y inicia sesion otro usuario, queda cargado el estado anterior y tengo que refrescar para que aparezcan los datos 

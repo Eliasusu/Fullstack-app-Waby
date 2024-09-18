@@ -1,4 +1,4 @@
-import DayRoutine from "@/components/DayRoutine.tsx";
+import { DayRoutine } from "@/components/DayRoutine.tsx";
 import Header from "@/components/Header.tsx";
 import NavBar from "@/components/NavBar.tsx";
 import Activity from "@/components/Activity.tsx";

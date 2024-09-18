@@ -21,7 +21,7 @@ async function getOne(req: Request, res: Response) {
         console.log('Este es el date que me llega', req.params.date);
         const dateTraining = new Date(req.params.date);
         console.log('Asi queda', dateTraining);
-        const trainingFind = await em.findOneOrFail(Training, { user: { idUser: req.body.user.id }, day: dateTraining }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings.exercise'] });
+        const trainingFind = await em.findOneOrFail(Training, { user: { idUser: req.body.user.id }, day: dateTraining }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings.exercise.name'] });
         res.json(trainingFind);
     } catch (error: any) {
         if (error.name === 'EntityNotFoundError') {

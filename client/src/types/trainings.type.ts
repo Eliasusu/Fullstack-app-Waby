@@ -8,9 +8,9 @@ export interface Training {
     mesocycle?: Mesocycle;
     trainingName: string;
     trainingType: string;
-    day: Date;
+    day: string;
     startHour: string;
     endHour: string;
     completed: boolean;
-    exercisesTrainings: ExerciseTraining[];
+    exercisesTrainings: [ExerciseTraining];
 }
