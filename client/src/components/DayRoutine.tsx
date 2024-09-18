@@ -17,8 +17,8 @@ import { useTraining } from "@/context/TrainingContext.tsx"
 
 export  const DayRoutine: React.FC =  () => {
   const [completed, setCompleted] = useState(false)
-  const [setStartHour] = useState("")
-  const [setEndHour] = useState("")
+  const [startHour, setStartHour] = useState("")
+  const [endHour, setEndHour] = useState("")
   const { training, getTrainingToDay } = useTraining()
 
   const today = new Date().toISOString().split('T')[0];
@@ -32,7 +32,7 @@ export  const DayRoutine: React.FC =  () => {
             <Checkbox
               id="completed"
               checked={training?.completed}
-              onClick={() => setCompleted(!completed)}
+              onClick={() => setCompleted(!training?.completed)}
             />
           <CardTitle className="text-lx font-medium">{training?.trainingName}</CardTitle>
           </div>
@@ -41,7 +41,8 @@ export  const DayRoutine: React.FC =  () => {
               <Input
                 id="startHour"
                 type="string"
-                value={training?.startHour}
+              value={startHour}
+              placeholder={training?.startHour}
                 onChange={(e) => setStartHour(e.target.value)}
                 className="bg-grey-box  text-white"
               />
@@ -50,7 +51,8 @@ export  const DayRoutine: React.FC =  () => {
               <Input
                 id="endHour"
                 type="string"
-                value={training?.endHour}
+              value={endHour}
+              placeholder={training?.endHour}
                 onChange={(e) => setEndHour(e.target.value)}
                 className="bg-grey-box  text-white"
               />
