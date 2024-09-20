@@ -8,6 +8,7 @@ import ProtectedRoute from './ProtectedRoute.tsx';
 import CreatePage from './pages/Create/CreatePage.tsx';
 import { ExerciseProvider } from './context/ExerciseContext.tsx';
 import { TrainingProvider } from './context/TrainingContext.tsx';
+import CronogramPAge from './pages/Cronogram/CronogramPAge.tsx';
 
 export function App() {
   return (
@@ -22,7 +23,7 @@ export function App() {
             <Route path='/register' element={<Register />} />
               <Route element={<ProtectedRoute />}>
                 <Route path='/home' element={<Index />} />
-              <Route path='/calendar' element={<Index />} />
+              <Route path='/calendar' element={<CronogramPAge />} />
               <Route path='/create' element={<CreatePage />} />
             </Route>
           </Routes>

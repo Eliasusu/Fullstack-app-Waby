@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { PlusIcon } from "lucide-react"
@@ -25,30 +25,46 @@ export default function MuscleGroupExercisesDialog() {
   const [showAddExercise, setShowAddExercise] = useState(false)
   const { exercises, getExercises } = useExercise();
 
-  try {
-    switch (openDialog) { 
-      case "Legs":
-        
-      getExercises("4")
-      break;
-    case "Arms":
-      getExercises("2")
-      break;
-    case "Back":
-      getExercises("3")
-      break;
-    case "Shoulders":
-      getExercises("1")
-      break;
-    case "Chest":
-      getExercises("6")
-      break;
-    case "Core":
-      getExercises("5")
-  }
-  } catch (error) {
-    console.log(error)
-  }
+
+
+  useEffect(() => {
+    if (openDialog) {
+      const fetchExercises = () => {
+        try {
+          switch (openDialog) {
+            case "Legs":
+              getExercises("4");
+              break;
+            case "Arms":
+              getExercises("2");
+              break;
+            case "Back":
+              getExercises("3");
+              break;
+            case "Shoulders":
+              getExercises("1");
+              break;
+            case "Chest":
+              getExercises("6");
+              break;
+            case "Core":
+              getExercises("5");
+              break;
+            default:
+              break;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchExercises();
+      const intervalId = setInterval(fetchExercises, 180000); 
+
+      return () => clearInterval(intervalId);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openDialog]);
 
   const handleAddExercise = () => {
     setShowAddExercise(true)
@@ -72,7 +88,7 @@ export default function MuscleGroupExercisesDialog() {
       </div>
 
       <Dialog open={openDialog !== null} onOpenChange={() => setOpenDialog(null)}>
-        <DialogContent className="bg-grey-bg text-gray-100 max-w-3xl">
+        <DialogContent className="bg-grey-bg text-gray-100 min-w-full">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Exercises by muscle group</DialogTitle>
         </DialogHeader>
@@ -92,7 +108,7 @@ export default function MuscleGroupExercisesDialog() {
       </Dialog>
 
       <Dialog open={showAddExercise} onOpenChange={() => setShowAddExercise(false)}>
-        <DialogContent className="bg-grey-bg text-gray-100 max-w-md">
+        <DialogContent className="bg-grey-bg text-gray-100 min-w-full">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Add a exercise</DialogTitle>
           </DialogHeader>

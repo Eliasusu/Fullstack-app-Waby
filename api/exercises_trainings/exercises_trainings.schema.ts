@@ -11,9 +11,9 @@ export const exerciseTraining: any = z.object({
     weight: z.number({
         required_error: 'Weight is required',
     }).positive(),
-    rest: z.number({
+    rest: z.string({
         required_error: 'Rest is required',
-    }).positive(),
+    }),
     comment: z.string({
         invalid_type_error: 'Comment must be a string',
     }),

@@ -18,7 +18,7 @@ export class ExerciseTraining {
     weight!: number;
 
     @Property({ nullable: false })
-    rest!: number;
+    rest!: string;
 
     @Property({ nullable: true })
     comment?: string;
