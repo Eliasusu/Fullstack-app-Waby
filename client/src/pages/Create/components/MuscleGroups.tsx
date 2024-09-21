@@ -13,8 +13,8 @@ import {useTrainingMethod} from "@/context/TrainingMethodsContext.tsx";
 
 
 const muscleGroups = ["Legs", "Arms", "Back", "Shoulders", "Chest", "Core"];
-const difficultyLevels = ["easy", "medium", "hard"];
-const exerciseTypes = ["type1", "type2"]; // Define los tipos que corresponden a tu ejercicio
+const difficultyLevels = ["Easy", "Medium", "Hard"];
+const exerciseTypes = ["Push", "Pull", "Legs", "Isometric"]; 
 
 
 export default function MuscleGroupExercisesDialog() {
@@ -68,6 +68,7 @@ export default function MuscleGroupExercisesDialog() {
       const intervalId = setInterval(fetchExercises, 180000);
 
       return () => clearInterval(intervalId);
+// eslint-disable-next-line react-hooks/exhaustive-deps
 }}, [openDialog]);
 
   useEffect(() => {
@@ -77,6 +78,7 @@ export default function MuscleGroupExercisesDialog() {
     }, 180000); // 3 minutes in milliseconds
 
     return () => clearInterval(intervalId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddExercise = () => {
@@ -100,14 +102,13 @@ export default function MuscleGroupExercisesDialog() {
           </Card>
         ))}
       </div>
-
       <Dialog open={openDialog !== null} onOpenChange={() => setOpenDialog(null)}>
         <DialogContent className="bg-grey-bg text-gray-100 min-w-full">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Exercises by muscle group</DialogTitle>
           </DialogHeader>
           <h3 className="text-xl font-semibold">{openDialog}</h3>
-          <ExercisesTable data={exercises} />
+          <ExercisesTable data={exercises}/>
           <button
             className="w-full flex items-center justify-center py-0 text-gray-400 hover:text-gray-100 transition-colors"
             onClick={() => setShowAddExercise(true)}
@@ -117,7 +118,6 @@ export default function MuscleGroupExercisesDialog() {
           </button>
         </DialogContent>
       </Dialog>
-
       <Dialog open={showAddExercise} onOpenChange={() => setShowAddExercise(false)}>
         <DialogContent className="bg-grey-bg text-gray-100 min-w-full">
           <DialogHeader>
