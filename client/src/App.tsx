@@ -8,11 +8,13 @@ import ProtectedRoute from './ProtectedRoute.tsx';
 import CreatePage from './pages/Create/CreatePage.tsx';
 import { ExerciseProvider } from './context/ExerciseContext.tsx';
 import { TrainingProvider } from './context/TrainingContext.tsx';
+import { TrainingMethodProvider } from './context/TrainingMethodsContext.tsx';
 import CronogramPage from '@/pages/Cronogram/CronogramPAge.tsx';
 
 export function App() {
   return (
     <AuthProvider>
+      <TrainingMethodProvider>
       <TrainingProvider>
       <ExerciseProvider>
         <BrowserRouter>
@@ -31,6 +33,7 @@ export function App() {
         </BrowserRouter>
         </ExerciseProvider>
         </TrainingProvider>
+        </TrainingMethodProvider>
     </AuthProvider>
   );
 }

@@ -33,17 +33,18 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     const [errors, setErrors] = useState<object | null>(null);
 
     const addExercise = async (exercise: Exercise) => {
-        try {
-            await createExercise(exercise);
-            setExercises([...exercises, exercise]);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar el ejercicio" });
-            }
+    try {
+        await createExercise(exercise);
+        const updatedExercises = await getExercisesReq(); 
+        setExercises(updatedExercises.data.exercises);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            setErrors({ message: error.message });
+        } else {
+            setErrors({ message: "Hubo un problema al guardar el ejercicio" });
         }
-    };
+    }
+};
 
     const getExercises = async (mg: string) => {
         if (mg) {
