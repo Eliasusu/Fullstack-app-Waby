@@ -40,7 +40,7 @@ export default function Header() {
   }, [])
 
   return (
-    <header className="flex justify-between items-center bg-accent-foreground p-4 text-white">
+    <header className="flex justify-between items-center bg-background p-4 text-white">
       <Logo dimensions='w-[30px]'/>
       <div className="flex-grow text-center">
         <p className="text-white text-lg">
