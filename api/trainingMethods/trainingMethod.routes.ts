@@ -7,7 +7,7 @@ export const trainingMethodsRouter = Router();
 trainingMethodsRouter.get('/', getAll);
 
 //Get one training method by id
-trainingMethodsRouter.get('/:idMethod', getOne);
+trainingMethodsRouter.get('/:nameMethod', getOne);
 
 //Add a training method
 trainingMethodsRouter.post('/', add);
