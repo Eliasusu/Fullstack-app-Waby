@@ -114,7 +114,7 @@ export default function Activity() {
   return (
     <BoxContainer  width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding='my-5'>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-lx font-medium">Activity</CardTitle>
+        <CardTitle className="text-2xl font-medium">Activity</CardTitle>
         <Select
           value={selectedPeriod}
           onValueChange={setSelectedPeriod}

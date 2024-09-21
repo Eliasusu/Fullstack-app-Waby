@@ -17,8 +17,8 @@ function Calendar({
 }: CalendarProps) {
   return (
     <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
-      <CardHeader>
-        <CardTitle>Calendar</CardTitle>
+      <CardHeader className="my-0 pt-5 pb-1">
+        <CardTitle className="text-2xl font-medium">Calendar</CardTitle>
       </CardHeader>
       <CardContent className="flex justify-center items-center m-0">
     <DayPicker

@@ -72,7 +72,7 @@ export default function MuscleGroupExercisesDialog() {
 
   return (
     <BoxConteiner width="w-[400px] md:w-[500px] lg:w-[600px]" height="h-[300px] p-5" padding="my-5">
-      <h2 className="text-2xl font-bold mb-4 text-gray-100">Grupos musculares</h2>
+      <h2 className="text-2xl font-medium mb-4 text-gray-100">Grupos musculares</h2>
       <div className="grid grid-cols-3 md:grid-cols-3 gap-5 m-0 p">
         {muscleGroups.map((group) => (
           <Card 

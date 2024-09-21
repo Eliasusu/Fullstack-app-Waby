@@ -58,7 +58,7 @@ export  const DayRoutine: React.FC =  () => {
               checked={completed}
               onClick={() => setCompleted(!completed)}
             />
-          <CardTitle className="text-lx font-medium">{training?.trainingName || 'Empty'}</CardTitle>
+          <CardTitle className="text-xl font-medium">{training?.trainingName || 'Empty'}</CardTitle>
           </div>
         <div className="flex items-center space-x-2">
           <div id="day" className="font-light text-white/75 text-xs">
