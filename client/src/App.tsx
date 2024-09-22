@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './pages/Welcome/RegisterPage.tsx';
-import { AuthProvider } from './context/AuthContext.tsx';
+import { AuthProvider } from './users/auth.context.tsx';
 import Index from './pages/Home/HomePage.tsx';
 import LoginPage from './pages/Welcome/LoginPage.tsx';
 import Welcome from './pages/Welcome/Welcome.tsx';
-import ProtectedRoute from './ProtectedRoute.tsx';
+import ProtectedRoute from './lib/ProtectedRoute.tsx';
 import CreatePage from './pages/Create/CreatePage.tsx';
-import { ExerciseProvider } from './context/ExerciseContext.tsx';
-import { TrainingProvider } from './context/TrainingContext.tsx';
-import { TrainingMethodProvider } from './context/TrainingMethodsContext.tsx';
-import CronogramPage from '@/pages/Cronogram/CronogramPAge.tsx';
+import { ExerciseProvider } from '@/exercises/exercise.context.tsx';
+import { TrainingProvider } from './trainings/training.context.tsx';
+import { TrainingMethodProvider } from './trainingMethods/training-method.context.tsx';
+import CronogramPage from '@/pages/Cronogram/CronogramPage.tsx';
 
 export function App() {
   return (

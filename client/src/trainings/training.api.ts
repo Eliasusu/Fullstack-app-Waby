@@ -1,4 +1,4 @@
-import axios from "@/api/axios.ts";
+import axios from "@/lib/axios";
 
 export const getTrainingOfTheDay = (date: string) => axios.get(`/trainings/${date}/user`);
 

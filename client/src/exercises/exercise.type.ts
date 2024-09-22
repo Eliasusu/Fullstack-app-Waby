@@ -1,5 +1,5 @@
-import { User } from "@/types/user.type.ts"
-import { ExerciseTraining } from "@/types/exercisesTrainings.type.ts";
+import { User } from "@/users/user.type"
+import { ExerciseTraining } from "@/exercises_trainings/exercisesTrainings.type";
 import { ProgressionRep } from "@/types/progressions/progressionRep.type.ts";
 import { ProgressionSec } from "@/types/progressions/progressionSec.type.ts";
 

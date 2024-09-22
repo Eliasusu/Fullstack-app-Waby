@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import BoxConteiner from "@/components/ui/BoxConteiner.tsx";
 import ExercisesTable from "@/exercises/page.tsx";
 import { useExercise } from "@/context/ExerciseContext.tsx";
-import {useTrainingMethod} from "@/context/TrainingMethodsContext.tsx";
+import {useTrainingMethod} from "@/trainingMethods/TrainingMethodsContext";
 
 
 const muscleGroups = ["Legs", "Arms", "Back", "Shoulders", "Chest", "Core"];

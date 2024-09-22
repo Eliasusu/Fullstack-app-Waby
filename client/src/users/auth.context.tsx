@@ -1,8 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth.ts";
+import { registerRequest, loginRequest, verifyTokenRequest } from "@/users/auth.api.ts";
 import Cookie from "js-cookie";
-import { User } from "@/types/user.type.ts";
+import { User } from "@/users/user.type.ts";
 
 interface AuthState { 
     user: User | null;

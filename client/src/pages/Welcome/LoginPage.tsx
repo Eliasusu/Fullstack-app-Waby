@@ -1,9 +1,9 @@
 import BoxContainer from "@/components/ui/BoxConteiner.tsx";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/context/AuthContext.tsx";
+import { useAuth } from "@/users/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { User } from "@/types/user.type.ts";
+import { User } from "@/users/user.type";
 
 export default function LoginPage(){
     return (

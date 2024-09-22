@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import BoxContainer  from "@/components/ui/BoxConteiner.tsx"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx"
-import { useTraining } from "@/context/TrainingContext.tsx"
+import { useTraining } from "@/trainings/TrainingContext"
 interface ActivityDay  {
   date: Date;
   completed: boolean

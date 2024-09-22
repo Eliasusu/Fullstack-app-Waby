@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { getOneTrainingMethod, getTrainingMethods } from "@/api/trainingMethods.ts";
-import { TrainingMethod } from "@/types/trainingMethod.type.ts";
+import { getOneTrainingMethod, getTrainingMethods } from "@/trainingMethods/training-method.api.ts";
+import { TrainingMethod } from "@/trainingMethods/trainingMethod.type";
 
 interface TrainingMethodState {
     trainingMethod: TrainingMethod;

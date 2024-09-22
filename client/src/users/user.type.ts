@@ -1,7 +1,7 @@
-import { TrainingMethod } from '@/types/trainingMethod.type';
-import { Training } from '@/types//trainings.type';
+import { TrainingMethod } from '@/trainingMethods/trainingMethod.type';
+import { Training } from '@/trainings/trainings.type';
 import { Exercise } from '@/types/exercise.type';
-import { Mesocycle } from '@/types/mesocycle.type';
+import { Mesocycle } from '@/mesocycles/mesocycle.type';
 
 export interface User { 
     idUser?: string;

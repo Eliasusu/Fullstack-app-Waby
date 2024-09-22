@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { getTrainingOfTheDay, getAllTrainings } from "@/api/training.ts";
-import { Training } from "@/types/trainings.type.ts";
+import { getTrainingOfTheDay, getAllTrainings } from "@/trainings/training.api.ts";
+import { Training } from "@/trainings/trainings.type";
 
 
 interface TrainingState {
@@ -19,7 +19,7 @@ const initialTrainingState: TrainingState = {
         user: '',
         trainingName: '',
         trainingType: '',
-        day: new Date(),
+        day: '',
         startHour: '',
         endHour: '',
         exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: 0, rest: ''}],
@@ -30,7 +30,7 @@ const initialTrainingState: TrainingState = {
         user: '',
         trainingName: '',
         trainingType: '',
-        day: new Date(),
+        day: '',
         startHour: '',
         endHour: '',
         exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: 0, rest: ''}],

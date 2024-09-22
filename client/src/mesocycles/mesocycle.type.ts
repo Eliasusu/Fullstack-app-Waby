@@ -1,5 +1,5 @@
-import { User } from "@/types/user.type.ts"
-import { Training } from "@/types/trainings.type.ts";
+import { User } from "@/users/user.type"
+import { Training } from "@/trainings/trainings.type";
 
 export interface Mesocycle { 
     idMesocycle?: number;

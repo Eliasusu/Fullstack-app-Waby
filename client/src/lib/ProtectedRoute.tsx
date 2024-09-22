@@ -1,4 +1,4 @@
-import { useAuth } from "./context/AuthContext.tsx";
+import { useAuth } from "../users/auth.context.tsx";
 import { Navigate, Outlet } from "react-router-dom";
 
 

@@ -1,6 +1,6 @@
 
-import { ExerciseTraining } from "@/types/exercisesTrainings.type.ts";
-import { Mesocycle } from "@/types/mesocycle.type.ts";
+import { ExerciseTraining } from "@/exercises_trainings/exercisesTrainings.type";
+import { Mesocycle } from "@/mesocycles/mesocycle.type";
 
 export interface Training {
     idTraining?: number;

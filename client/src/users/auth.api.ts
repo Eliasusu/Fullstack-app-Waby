@@ -1,4 +1,4 @@
-import axios from './axios.ts';
+import axios from '@/lib/axios.ts';
 
 
 export const registerRequest = (user: object) => axios.post('auth/register', user)

@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Logo from './ui/logo.tsx'
 import Cookie from "js-cookie";
-import { useAuth } from '@/context/AuthContext.tsx';
+import { useAuth } from '@/users/AuthContext.tsx';
 
 
 // Funcion que del token extrae los datos del user que se logueo

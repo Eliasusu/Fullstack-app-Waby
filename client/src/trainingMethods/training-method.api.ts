@@ -1,4 +1,4 @@
-import axios from './axios.ts';
+import axios from '@/lib/axios';
 
 export const getOneTrainingMethod = (id: string) => axios.get(`/trainingMethods/${id}`)
 

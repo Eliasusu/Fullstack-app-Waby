@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { createExercise, getExercisesReq, getExercisesByMg } from "../api/exercise.ts";
-import { Exercise } from "../types/exercise.type.ts";
+import { createExercise, getExercisesReq, getExercisesByMg } from "@/exercises/exercise.api.ts";
+import { Exercise } from "@/exercises/exercise.type.ts";
 
 
 interface ExerciseState {

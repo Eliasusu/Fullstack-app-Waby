@@ -1,4 +1,4 @@
-import axios from './axios.ts';
+import axios from '@/lib/axios';
 
 export const createExercise = (exercise: object) => axios.post('/exercises', exercise)
 

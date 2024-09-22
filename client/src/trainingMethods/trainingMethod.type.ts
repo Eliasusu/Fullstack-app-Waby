@@ -1,4 +1,4 @@
-import { User } from '@/types/user.type';
+import { User } from '@/users/user.type';
 
 export interface TrainingMethod { 
     idMethod: string;
