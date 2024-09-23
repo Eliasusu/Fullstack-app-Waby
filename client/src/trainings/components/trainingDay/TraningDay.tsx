@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { X } from 'lucide-react'
+import { X, PlusIcon } from 'lucide-react'
 import {
   Table,
   TableBody,
@@ -35,7 +35,18 @@ import { useExercise } from "@/exercises/exercise.context.tsx"
 export const TrainingDay: React.FC = () => {
   const { training, getTrainingToDay, updateTraining } = useTraining()
     const [localTraining, setLocalTraining] = useState<Training | null>(null)
-    const { exercises, updateExercise } = useExercise()
+    const { exercises, updateExercise, getAllExercises } = useExercise()
+
+  useEffect(() => { 
+    const fetchExercises = () => { 
+      getAllExercises() 
+    }
+    fetchExercises()
+    const intervalId = setInterval(fetchExercises, 180000)
+    return () => clearInterval(intervalId)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
 
   useEffect(() => {
     const fetchTraining = () => {
@@ -48,7 +59,8 @@ export const TrainingDay: React.FC = () => {
     const intervalId = setInterval(fetchTraining, 180000)
 
     return () => clearInterval(intervalId)
-  }, [getTrainingToDay])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (training) {
@@ -261,6 +273,7 @@ export const TrainingDay: React.FC = () => {
           className="w-full text-gray-400 hover:text-gray-200 hover:bg-gray-700 mt-4"
           onClick={addExercise}
         >
+          <PlusIcon className="mr-2" />
           Add exercise
         </Button>
       </CardContent>

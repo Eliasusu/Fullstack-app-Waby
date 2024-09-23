@@ -23,7 +23,7 @@ const initialTrainingState: TrainingState = {
         day: '',
         startHour: '',
         endHour: '',
-        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: ''}],
+        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: '', idExerciseTraining: 0}],
         completed: false,
     }],
     training: {
@@ -34,7 +34,7 @@ const initialTrainingState: TrainingState = {
         day: '',
         startHour: '',
         endHour: '',
-        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: ''}],
+        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: '', idExerciseTraining: 0}],
         completed: false,
     },
     addTraining: () => { },
@@ -90,7 +90,6 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     const getTrainingToDay = async (date: string) => {
         try {
             const res = await getTrainingOfTheDay(date);
-            console.log('Training request', res.data);
             setTraining(res.data);
         } catch (error: unknown) {
             if (error instanceof Error) {

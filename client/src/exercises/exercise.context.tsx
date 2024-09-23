@@ -8,6 +8,7 @@ interface ExerciseState {
     addExercise: (exercise: Exercise) => void;
     updateExercise: (exercise: Exercise) => void;
     getExercises: (mg: string) => void;
+    getAllExercises: () => void;
     errors: object | null;
 }
 
@@ -16,6 +17,7 @@ const initialExerciseState: ExerciseState = {
     addExercise: () => { },
     updateExercise: () => { },
     getExercises: () => { },
+    getAllExercises: () => { },
     errors: null,
 };
 export const ExerciseContext = createContext(initialExerciseState);
@@ -62,6 +64,11 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const getAllExercises = async () => { 
+        const res = await getExercisesReq();
+        setExercises(res.data.exercises);
+    }
+
     const getExercises = async (mg: string) => {
         if (mg) {
             const res = await getExercisesByMg(mg);
@@ -83,7 +90,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <ExerciseContext.Provider value={{ exercises, addExercise, updateExercise, getExercises ,errors }}>
+        <ExerciseContext.Provider value={{ exercises, addExercise, updateExercise, getExercises, getAllExercises ,errors }}>
             {children}
         </ExerciseContext.Provider>
     );
