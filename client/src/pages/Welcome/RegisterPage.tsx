@@ -1,6 +1,6 @@
 import BoxContainer from "@/components/ui/BoxConteiner.tsx";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/users/AuthContext";
+import { useAuth } from "@/users/auth.context.tsx";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "@/users/user.type";

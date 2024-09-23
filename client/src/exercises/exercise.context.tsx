@@ -6,6 +6,7 @@ import { Exercise } from "@/exercises/exercise.type.ts";
 interface ExerciseState {
     exercises: Exercise[];
     addExercise: (exercise: Exercise) => void;
+    updateExercise: (exercise: Exercise) => void;
     getExercises: (mg: string) => void;
     errors: object | null;
 }
@@ -13,6 +14,7 @@ interface ExerciseState {
 const initialExerciseState: ExerciseState = {
     exercises: [],
     addExercise: () => { },
+    updateExercise: () => { },
     getExercises: () => { },
     errors: null,
 };
@@ -44,7 +46,21 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
             setErrors({ message: "Hubo un problema al guardar el ejercicio" });
         }
     }
-};
+    };
+    
+    const updateExercise = async (exercise: Exercise) => { 
+        try {
+            await updateExercise(exercise);
+            const updatedExercises = await getExercisesReq();
+            setExercises(updatedExercises.data.exercises);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setErrors({ message: error.message });
+            } else {
+                setErrors({ message: "Hubo un problema al guardar el ejercicio" });
+            }
+        }
+    }
 
     const getExercises = async (mg: string) => {
         if (mg) {
@@ -67,7 +83,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <ExerciseContext.Provider value={{ exercises, addExercise, getExercises ,errors }}>
+        <ExerciseContext.Provider value={{ exercises, addExercise, updateExercise, getExercises ,errors }}>
             {children}
         </ExerciseContext.Provider>
     );

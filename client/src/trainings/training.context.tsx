@@ -1,12 +1,13 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { getTrainingOfTheDay, getAllTrainings } from "@/trainings/training.api.ts";
-import { Training } from "@/trainings/trainings.type";
+import { getTrainingOfTheDay, getAllTrainings, createTraining, updateTrainingReq } from "@/trainings/training.api.ts";
+import  Training  from "@/trainings/trainings.type";
 
 
 interface TrainingState {
     trainings: Training[];
     training: Training | undefined;
     addTraining: (training: Training) => void;
+    updateTraining: (training: Training) => void;
     getTrainings: () => void;
     getTrainingToDay: (date: string) => object;
     deleteTraining: (id: string) => void;
@@ -22,7 +23,7 @@ const initialTrainingState: TrainingState = {
         day: '',
         startHour: '',
         endHour: '',
-        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: 0, rest: ''}],
+        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: ''}],
         completed: false,
     }],
     training: {
@@ -33,10 +34,11 @@ const initialTrainingState: TrainingState = {
         day: '',
         startHour: '',
         endHour: '',
-        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: 0, rest: ''}],
+        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: ''}],
         completed: false,
     },
     addTraining: () => { },
+    updateTraining: () => { },
     getTrainings: () => { },
     getTrainingToDay: () => ({}),
     deleteTraining: () => { },
@@ -60,18 +62,29 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     const [errors, setErrors] = useState<object | null>(null);
 
     const addTraining = async (training: Training) => {
-        console.log('Training request', training);
-        console.log('not implemented yet :(');
-        // try {
-        //     await createTraining(training);
-        //     setTrainings([...trainings, training]);
-        // } catch (error: unknown) {
-        //     if (error instanceof Error) {
-        //         setErrors({ message: error.message });
-        //     } else {
-        //         setErrors({ message: "Hubo un problema al guardar el ejercicio" });
-        //     }
-        // }
+        try {
+            await createTraining(training);
+            setTrainings([...trainings, training]);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setErrors({ message: error.message });
+            } else {
+                setErrors({ message: "Hubo un problema al guardar el ejercicio" });
+            }
+        }
+    };
+
+    const updateTraining = async (training: Training) => {
+        try {
+            await updateTrainingReq(training);
+            setTrainings(trainings.map((training) => (training.idTraining === training.idTraining ? training : training)));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setErrors({ message: error.message });
+            } else {
+                setErrors({ message: "Hubo un problema al actualizar el ejercicio" });
+            }
+        }
     };
 
     const getTrainingToDay = async (date: string) => {
@@ -127,7 +140,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <TrainingContext.Provider value={{ trainings, training ,addTraining, getTrainings, getTrainingToDay ,deleteTraining, errors }}>
+        <TrainingContext.Provider value={{ trainings, training ,addTraining, updateTraining ,getTrainings, getTrainingToDay ,deleteTraining, errors }}>
             {children}
         </TrainingContext.Provider>
     );
