@@ -18,7 +18,7 @@ async function getAll(req: Request, res: Response) {
 
 async function getOne(req: Request, res: Response) {
     try {
-        const trainingFind = await em.findOneOrFail(Training, { user: { idUser: req.body.user.id }, day: req.params.date }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings.exercise.name'] });
+        const trainingFind = await em.findOne(Training, { user: { idUser: req.body.user.id }, day: req.params.date }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings.exercise.name'] });
         res.json(trainingFind);
     } catch (error: any) {
         if (error.name === 'EntityNotFoundError') {

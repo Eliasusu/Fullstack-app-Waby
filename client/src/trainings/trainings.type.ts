@@ -3,7 +3,7 @@ import { Mesocycle } from "@/mesocycles/mesocycle.type";
 
 export default interface Training {
     idTraining?: number;
-    user: string;
+    user:string;
     mesocycle?: Mesocycle;
     trainingName: string;
     trainingType: string;
