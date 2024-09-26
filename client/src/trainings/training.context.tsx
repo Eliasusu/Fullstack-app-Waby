@@ -22,11 +22,7 @@ const initialTrainingState: TrainingState = {
         day: '',
         startHour: '',
         endHour: '',
-<<<<<<< HEAD
         exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: '', idExerciseTraining: 0}],
-=======
-        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: 0, rest: ''}],
->>>>>>> parent of 4297058 (c)
         completed: false,
     }],
     training: {
@@ -37,11 +33,7 @@ const initialTrainingState: TrainingState = {
         day: '',
         startHour: '',
         endHour: '',
-<<<<<<< HEAD
         exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: '', idExerciseTraining: 0}],
-=======
-        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: 0, rest: ''}],
->>>>>>> parent of 4297058 (c)
         completed: false,
     },
     addTraining: () => { },
