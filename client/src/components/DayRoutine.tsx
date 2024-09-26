@@ -11,7 +11,7 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import BoxContainer from "@/components/ui/BoxConteiner.tsx"
-import { useTraining } from "@/trainings/TrainingContext"
+import { useTraining } from "@/trainings/training.context.tsx"
 
 
 export  const DayRoutine: React.FC =  () => {

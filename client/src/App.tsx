@@ -9,7 +9,7 @@ import CreatePage from './pages/Create/CreatePage.tsx';
 import { ExerciseProvider } from '@/exercises/exercise.context.tsx';
 import { TrainingProvider } from './trainings/training.context.tsx';
 import { TrainingMethodProvider } from './trainingMethods/training-method.context.tsx';
-import CronogramPage from '@/pages/Cronogram/CronogramPage.tsx';
+import CronogramPage from '@/pages/Cronogram/CronogramPAge.tsx';
 
 export function App() {
   return (
