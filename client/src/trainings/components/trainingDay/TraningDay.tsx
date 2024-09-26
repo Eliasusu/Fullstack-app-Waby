@@ -34,14 +34,15 @@ import { useExercise } from "@/exercises/exercise.context.tsx"
 
 interface TrainingDayProps {
   date: string;
-  trainings: Training[];
 }
 
-export const TrainingDay: React.FC<TrainingDayProps> = ({ date, trainings }) => {
-  const { updateTraining } = useTraining();
+export const TrainingDay: React.FC<TrainingDayProps> = ({ date }) => {
+  const { updateTraining, getTrainingToDay } = useTraining();
   const [localTraining, setLocalTraining] = useState<Training | null>(null);
   const { exercises, updateExercise, getAllExercises } = useExercise();
 
+  
+  
   useEffect(() => {
     const fetchExercises = () => {
       getAllExercises();
@@ -52,25 +53,6 @@ export const TrainingDay: React.FC<TrainingDayProps> = ({ date, trainings }) => 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    const trainingForDate = trainings.find((training) => training.day === date);
-    if (trainingForDate) {
-      setLocalTraining(trainingForDate);
-    } else {
-      const emptyTraining: Training = {
-        idTraining: 0,
-        trainingName: '',
-        user: '',
-        trainingType: '',
-        day: date,
-        startHour: '',
-        endHour: '',
-        completed: false,
-        exercisesTrainings: [],
-      };
-      setLocalTraining(emptyTraining);
-    }
-  }, [date, trainings]);
 
   const formatDay = (dateString: string) => {
     const date = new Date(dateString);
@@ -78,6 +60,15 @@ export const TrainingDay: React.FC<TrainingDayProps> = ({ date, trainings }) => 
     const month = date.toLocaleString('default', { month: 'short' });
     return `${day} ${month}`;
   };
+
+  useEffect(() => {
+    const fetchTraining = async () => {
+      const training = getTrainingToDay(date);
+      console.log(training)
+      setLocalTraining(training as Training);
+    };
+    fetchTraining();
+  });
 
   const handleUpdate = (field: keyof Training, value: unknown) => {
     if (localTraining) {

@@ -23,7 +23,7 @@ export  const DayRoutine: React.FC =  () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchTraining = () => {
-      const today = new Date().toISOString().split('T')[0];
+      const today = new Date('2024-09-23 00:00:00').toISOString().split('T')[0];
       console.log(today)
       getTrainingToDay(today);
       setCompleted(training?.completed || false);

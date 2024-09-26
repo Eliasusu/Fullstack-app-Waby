@@ -9,24 +9,27 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { addDays, format } from "date-fns"
 import { TrainingDay } from '@/trainings/components/trainingDay/TraningDay.tsx'
+import { Exercise } from '@/exercises/exercise.type.ts'
+import { useTraining } from '@/trainings/training.context.tsx'
 
-type Exercise = {
-  id: string
-  name: string
-  muscleGroup: string
-}
 
 type TrainingItem = {
   exercise: Exercise
   sets: number
   reps: number
-  weight: number
+  weight: string
+  rest: string
 }
 
+
 type Training = {
-  id: string
-  title: string
-  date: Date
+  idTraining: number
+  trainingName: string
+  trainingType: string
+  day: string
+  startHour: string
+  endHour: string
+  completed: boolean
   recurrence: 'none' | 'daily' | 'weekly' | 'monthly'
   trainingItems: TrainingItem[]
 }
@@ -35,28 +38,30 @@ export default function TrainingCalendar() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [trainings, setTrainings] = useState<Training[]>([])
   const [newTraining, setNewTraining] = useState<Training>({
-    id: '',
-    title: '',
-    date: new Date(),
+    idTraining: 0,
+    trainingName: '',
+    trainingType: '',
+    day: '',
+    startHour: '',
+    endHour: '',
+    completed: false,
     recurrence: 'none',
     trainingItems: []
   })
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-  // Mock exercises data
-  const exercises: Exercise[] = [
-    { id: '1', name: 'Push-ups', muscleGroup: 'Chest' },
-    { id: '2', name: 'Pull-ups', muscleGroup: 'Back' },
-    { id: '3', name: 'Squats', muscleGroup: 'Legs' },
-  ]
+  const { getTrainingToDay } = useTraining()
 
   const handleAddTraining = () => {
     const trainingWithId = { ...newTraining, id: Date.now().toString() }
     setTrainings([...trainings, trainingWithId])
     setNewTraining({
-      id: '',
-      title: '',
-      date: new Date(),
+      idTraining: 0,
+      trainingName: '',
+      trainingType: '',
+      day: '',
+      startHour: '',
+      endHour: '',
+      completed: false,
       recurrence: 'none',
       trainingItems: []
     })
@@ -68,7 +73,7 @@ export default function TrainingCalendar() {
       ...newTraining,
       trainingItems: [
         ...newTraining.trainingItems,
-        { exercise: exercises[0], sets: 0, reps: 0, weight: 0 }
+        { exercise: exercises[0], sets: 0, reps: 0, weight: '', rest: '' }
       ]
     })
   }
@@ -94,9 +99,9 @@ export default function TrainingCalendar() {
         mode="single"
         selected={date}
         onSelect={setDate}
-        className="rounded-md border mb-4"
+        className="rounded-md  mb-4"
           />
-          <TrainingDay date={date} trainings={getTrainingsForDate(date)} />
+          <TrainingDay date={date} trainings={getTrainingToDay(date?.toString())} />
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button className="w-full mt-4">Create Training</Button>
@@ -110,8 +115,8 @@ export default function TrainingCalendar() {
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
-                value={newTraining.title}
-                onChange={(e) => setNewTraining({ ...newTraining, title: e.target.value })}
+                value={newTraining.trainingName}
+                onChange={(e) => setNewTraining({ ...newTraining, trainingName: e.target.value })}
               />
             </div>
             <div className="grid items-center gap-4">
@@ -144,7 +149,7 @@ export default function TrainingCalendar() {
                   <Select 
                     onValueChange={(value) => {
                       const updatedItems = [...newTraining.trainingItems]
-                      updatedItems[index].exercise = exercises.find(e => e.id === value) || exercises[0]
+                      updatedItems[index].exercise = exercises.find(e => e.idExercise === Number(value)) || exercises[0]
                       setNewTraining({ ...newTraining, trainingItems: updatedItems })
                     }}
                   >
@@ -153,7 +158,7 @@ export default function TrainingCalendar() {
                     </SelectTrigger>
                     <SelectContent>
                       {exercises.map((exercise) => (
-                        <SelectItem key={exercise.id} value={exercise.id}>{exercise.name} ({exercise.muscleGroup})</SelectItem>
+                        <SelectItem key={exercise.idExercise} value={exercise.idExercise?.toString() || ''}>{exercise.name} ({exercise.muscleGroups})</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -178,12 +183,12 @@ export default function TrainingCalendar() {
                     }}
                   />
                   <Input
-                    type="number"
+                    type="string"
                     placeholder="Weight"
                     value={item.weight}
                     onChange={(e) => {
                       const updatedItems = [...newTraining.trainingItems]
-                      updatedItems[index].weight = parseFloat(e.target.value)
+                      updatedItems[index].weight = parseFloat(e.target.value).toString()
                       setNewTraining({ ...newTraining, trainingItems: updatedItems })
                     }}
                   />
