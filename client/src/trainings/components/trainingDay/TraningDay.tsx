@@ -27,7 +27,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { toast } from "@/hooks/use-toast.ts"
-import Training  from "@/trainings/trainings.type.ts"
+import { Training }  from "@/trainings/trainings.type.ts"
 import { ExerciseTraining } from "@/exercises_trainings/exercisesTrainings.type.ts"
 import { useExercise } from "@/exercises/exercise.context.tsx"
 

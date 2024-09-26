@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { getTrainingOfTheDay, getAllTrainings } from "@/trainings/training.api.ts";
+import { getTrainingOfTheDay, getAllTrainings, createTraining, deleteTrainingReq } from "@/trainings/training.api.ts";
 import { Training } from "@/trainings/trainings.type";
 
 
@@ -9,7 +9,8 @@ interface TrainingState {
     addTraining: (training: Training) => void;
     getTrainings: () => void;
     getTrainingToDay: (date: string) => object;
-    deleteTraining: (id: string) => void;
+    updateTraining: (training: Training) => void;
+    deleteTraining: (id: number) => void;
     errors: object | null;
 }
 
@@ -39,6 +40,7 @@ const initialTrainingState: TrainingState = {
     addTraining: () => { },
     getTrainings: () => { },
     getTrainingToDay: () => ({}),
+    updateTraining: () => { },
     deleteTraining: () => { },
     errors: null,
 };
@@ -60,18 +62,16 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     const [errors, setErrors] = useState<object | null>(null);
 
     const addTraining = async (training: Training) => {
-        console.log('Training request', training);
-        console.log('not implemented yet :(');
-        // try {
-        //     await createTraining(training);
-        //     setTrainings([...trainings, training]);
-        // } catch (error: unknown) {
-        //     if (error instanceof Error) {
-        //         setErrors({ message: error.message });
-        //     } else {
-        //         setErrors({ message: "Hubo un problema al guardar el ejercicio" });
-        //     }
-        // }
+        try {
+            await createTraining(training);
+            setTrainings([...trainings, training]);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setErrors({ message: error.message });
+            } else {
+                setErrors({ message: "Hubo un problema al guardar el ejercicio" });
+            }
+        }
     };
 
     const getTrainingToDay = async (date: string) => {
@@ -100,21 +100,34 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     
         }
     };
+
+    const updateTraining = async (training: Training) => { 
+        try {
+            await createTraining(training);
+            const updatedTrainings = await getAllTrainings();
+            setTrainings(updatedTrainings.data.trainings);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setErrors({ message: error.message });
+            } else {
+                setErrors({ message: "Hubo un problema al guardar el ejercicio" });
+            }
+        }
+    };
     
-    const deleteTraining = async (id: string) => { 
-        console.log('Training request', id);
-        console.log('not implemented yet :(');
-        // try {
-        //     await deleteTraining(id);
-        //     setTrainings(trainings.filter((training) => training.id !== id));
-        // } catch (error: unknown) {
-        //     if (error instanceof Error) {
-        //         setErrors({ message: error.message });
-        //     } else {
-        //         setErrors({ message: "Hubo un problema al eliminar el ejercicio" });
-        //     }
-        //
-    }
+    const deleteTraining = async (id: number) => {
+        try {
+            await deleteTrainingReq(id);
+            setTrainings(trainings.filter((training) => training.idTraining !== id));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setErrors({ message: error.message });
+            } else {
+                setErrors({ message: "Hubo un problema al eliminar el ejercicio" });
+            }
+    
+        }
+    };
 
     useEffect(() => {
         if (errors) {
@@ -126,7 +139,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <TrainingContext.Provider value={{ trainings, training ,addTraining, getTrainings, getTrainingToDay ,deleteTraining, errors }}>
+        <TrainingContext.Provider value={{ trainings, training ,addTraining, updateTraining ,getTrainings, getTrainingToDay, deleteTraining, errors }}>
             {children}
         </TrainingContext.Provider>
     );
