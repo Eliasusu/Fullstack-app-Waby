@@ -6,6 +6,7 @@
 @tailwind utilities;
 
 
+
 html, body, #root, .app {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   width: 100vw;
@@ -14,8 +15,8 @@ html, body, #root, .app {
   color-scheme: dark;
   line-height: 1.5;
   font-weight: 600;
-  margin: 0 auto;
   background: linear-gradient(#0A0A0C, #191A1E);
+  margin: 0 auto;
 }
 
 

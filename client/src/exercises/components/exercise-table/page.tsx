@@ -1,5 +1,5 @@
 import { columns } from "./columns"
-import { DataTable } from "@/lib/data-table.tsx"
+import { DataTable } from "../lib/data-table"
 
 
 interface Props {

@@ -1,10 +1,10 @@
-import { Exercise } from "@/exercises/exercise.type.ts";
+import { Exercise } from "./exercise.type.ts";
 
 export interface ExerciseTraining { 
-    idExerciseTraining: number;
+    idExerciseTraining?: number;
     sets: number;
     reps: number;
-    weight: string;
+    weight: number;
     rest: string;
     comment?: string;
     exercise: Exercise;

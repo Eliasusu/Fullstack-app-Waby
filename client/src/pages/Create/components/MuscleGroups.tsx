@@ -7,9 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import BoxConteiner from "@/components/ui/BoxConteiner.tsx";
-import ExercisesTable from "@/exercises/components/exercise-table/page.tsx";
-import { useExercise } from "@/exercises/exercise.context.tsx";
-import {useTrainingMethod} from "@/trainingMethods/training-method.context.tsx";
+import ExercisesTable from "@/exercises/page.tsx";
+import { useExercise } from "@/context/ExerciseContext.tsx";
+import {useTrainingMethod} from "@/trainingMethods/TrainingMethodsContext";
 
 
 const muscleGroups = ["Legs", "Arms", "Back", "Shoulders", "Chest", "Core"];

@@ -1,7 +1,7 @@
 import { User } from "@/users/user.type"
 import { ExerciseTraining } from "@/exercises_trainings/exercisesTrainings.type";
-import { ProgressionRep } from "@/exercises/progressions/progressionRep.type.ts";
-import { ProgressionSec } from "@/exercises/progressions/progressionSec.type.ts";
+import { ProgressionRep } from "@/types/progressions/progressionRep.type.ts";
+import { ProgressionSec } from "@/types/progressions/progressionSec.type.ts";
 
 export interface Exercise {
     idExercise?: number;
