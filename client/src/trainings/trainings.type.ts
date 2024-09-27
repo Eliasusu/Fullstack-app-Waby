@@ -12,5 +12,5 @@ export interface Training {
     startHour: string;
     endHour: string;
     completed: boolean;
-    exercisesTrainings: [ExerciseTraining];
+    exercisesTrainings: ExerciseTraining[];
 }
