@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ExerciseTraining } from './exercise_training.entity.js';
+import { trainingItem } from './trainingItems.entity.js';
 
 export const exerciseTraining: any = z.object({
     sets: z.number({
@@ -8,9 +8,9 @@ export const exerciseTraining: any = z.object({
     reps: z.number({
         required_error: 'Reps is required',
     }).positive(),
-    weight: z.number({
+    weight: z.string({
         required_error: 'Weight is required',
-    }).positive(),
+    }),
     rest: z.string({
         required_error: 'Rest is required',
     }),
@@ -21,10 +21,10 @@ export const exerciseTraining: any = z.object({
 
 
 
-export function validateRoutine(routine: ExerciseTraining) {
+export function validateRoutine(routine: trainingItem) {
     return exerciseTraining.safeParse(routine);
 }
 
-export function validatePartialRoutine(routine: ExerciseTraining) {
+export function validatePartialRoutine(routine: trainingItem) {
     return exerciseTraining.partial().safeParse(routine);
 }

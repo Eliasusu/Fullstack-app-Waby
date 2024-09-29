@@ -124,13 +124,13 @@ function RegisterUser() {
                     <button className="w-full h-10 rounded-xl bg-red p-2 hover:bg-redHover transition font-bold" type="submit">Sign Up</button>
                     <div className="w-full">
                         <button className="w-full h-10 border-[1px] rounded-xl border-white/60 bg-grey-loginGoogle hover:bg-grey-loginGoogleHover transition p-2 font-normal text-sm flex items-center justify-center">
-                            Sign up with Google 
+                            Or sign up with Google 
                             <img className="ml-2" src="logoGoogle.svg" alt="logoGoogle" />
                         </button>
                         </div>
                             <div className="flex justify-center">
                             <p className="font-normal text-sm mr-1">Do you have an account?</p>
-                            <a className="text-sm" href="/login">Sign Ip</a>
+                            <a className="text-sm" href="/login">Sign In</a>
                             </div>
 
                 </form>

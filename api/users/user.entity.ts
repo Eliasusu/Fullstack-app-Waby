@@ -3,7 +3,6 @@ import { Collection, Entity, ManyToMany, PrimaryKey, Property, Cascade, OneToMan
 import { TrainingMethod } from '../trainingMethods/trainingMethod.entity.js';
 import { Training } from '../trainings/training.entity.js';
 import { Exercise } from '../exercises/exercise.entity.js';
-import { Mesocycle } from '../mesocycles/mesocycle.entity.js';
 
 @Entity()
 export class User {
@@ -34,9 +33,6 @@ export class User {
     @Property({ nullable: false })
     height!: number;
 
-    @Property({ nullable: true })
-    token?: string;
-
     @ManyToMany(() => TrainingMethod, (trainingMethod) => trainingMethod.users, {
         cascade: [Cascade.ALL],
         owner: true,
@@ -52,11 +48,6 @@ export class User {
         cascade: [Cascade.ALL],
     })
     exercises? = new Collection<Exercise>(this);
-
-    @OneToMany(() => Mesocycle, (mesocycle) => mesocycle.user, {
-        cascade: [Cascade.ALL],
-    })
-    mesocycles? = new Collection<Mesocycle>(this);
         
     constructor() {
         this.idUser = generateId();

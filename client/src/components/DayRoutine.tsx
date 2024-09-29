@@ -14,18 +14,23 @@ import BoxContainer from "@/components/ui/BoxConteiner.tsx"
 import { useTraining } from "@/trainings/training.context.tsx"
 
 
-export  const DayRoutine: React.FC =  () => {
+export const DayRoutine: React.FC<{ date: Date }> = ({ date }) => {
   const [completed, setCompleted] = useState(false)
   const [startHour, setStartHour] = useState("")
   const [endHour, setEndHour] = useState("")
+  //Traigo de useTraining el training y getTrainingToDay
   const { training, getTrainingToDay } = useTraining()
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  
+  //useEffect para traer el training del día, actualizarlo cada 3 minutos
+  //Utilizo los diferentes estados para actualizar el training
+  //Si no hay training, se muestra "Empty"
   useEffect(() => {
     const fetchTraining = () => {
-      const today = new Date('2024-09-23 00:00:00').toISOString().split('T')[0];
-      console.log(today)
-      getTrainingToDay(today);
+      //Obtengo el training del día
+      getTrainingToDay(date);
+
+      //Actualizo los estados del training
       setCompleted(training?.completed || false);
       setStartHour(training?.startHour || "");
       setEndHour(training?.endHour || "");
@@ -36,18 +41,23 @@ export  const DayRoutine: React.FC =  () => {
     const intervalId = setInterval(fetchTraining, 180000); 
 
     return () => clearInterval(intervalId); 
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  },[]);
 
-
+  
+  //Funcion para formatear la fecha en formato "dd MMM"
   const formatDay = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate();
     const month = date.toLocaleString('default', { month: 'short' });
     return `${day} ${month}`;
   };
-
-  const formattedDay = training?.day ? formatDay(training.day) : "";
+  
+  //Guardo la fecha en formato string
+  const dateFormat = date.toString();
+  //Guardo la fecha formateada
+  const formattedDay = formatDay(dateFormat);
 
   return (
       <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
@@ -99,13 +109,13 @@ export  const DayRoutine: React.FC =  () => {
               </TableHeader>
               <TableBody>
               {
-                  training?.exercisesTrainings.map((et, etIndex) => (
+                  training?.trainingItems.map((et, etIndex) => (
                     <TableRow key={`${etIndex}`} className="border-b border-white/30">
                       <TableCell className="font-medium text-gray-400">{et.exercise.name ?? ''}</TableCell>
                       <TableCell className="font-medium text-gray-400">{et.comment}</TableCell>
                       <TableCell className="text-right text-gray-400">{et.sets ?? ''}</TableCell>
                       <TableCell className="text-right text-gray-400">{et.reps ?? ''}</TableCell>
-                      <TableCell className="text-right text-gray-400">{et.weight ?? ''} kg</TableCell>
+                      <TableCell className="text-right text-gray-400">{et.weight ?? ''}</TableCell>
                       <TableCell className="text-right text-gray-400">{et.rest ?? ''}</TableCell>
                     </TableRow>
                   ))

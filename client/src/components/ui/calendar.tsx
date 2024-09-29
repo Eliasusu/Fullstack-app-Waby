@@ -1,7 +1,6 @@
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker } from "react-day-picker"
-import BoxContainer from "./BoxConteiner.tsx"
 import { CardContent, CardHeader, CardTitle } from "./card.tsx"
 
 import { cn } from "@/lib/utils"
@@ -16,7 +15,7 @@ function Calendar({
   ...props
 }: CalendarProps) {
   return (
-    <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
+    <div>
       <CardHeader className="my-0 pt-5 pb-1">
         <CardTitle className="text-2xl font-medium">Calendar</CardTitle>
       </CardHeader>
@@ -66,7 +65,7 @@ function Calendar({
       {...props}
         />
         </CardContent>
-      </BoxContainer>
+    </div>
   )
 }
 Calendar.displayName = "Calendar"

@@ -1,7 +1,7 @@
 import { Exercise } from "@/exercises/exercise.type.ts";
 
-export interface ExerciseTraining { 
-    idExerciseTraining?: number;
+export interface TrainingItem { 
+    idTrainingItem?: number;
     sets: number;
     reps: number;
     weight: string;

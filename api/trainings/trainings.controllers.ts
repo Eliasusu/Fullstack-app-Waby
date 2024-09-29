@@ -9,7 +9,7 @@ const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
     try {
-        const trainings = await em.find(Training, { user: req.body.user.id }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings.exercise'] });
+        const trainings = await em.find(Training, { user: req.body.user.id }, { populate: ['user.idUser', 'trainingItems.exercise'] });
         res.json(trainings);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -18,7 +18,7 @@ async function getAll(req: Request, res: Response) {
 
 async function getOne(req: Request, res: Response) {
     try {
-        const trainingFind = await em.findOne(Training, { user: { idUser: req.body.user.id }, day: req.params.date }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings.exercise.name'] });
+        const trainingFind = await em.findOne(Training, { user: { idUser: req.body.user.id }, day: req.params.date }, { populate: ['user.idUser', 'trainingItems.exercise.name'] });
         res.json(trainingFind);
     } catch (error: any) {
         if (error.name === 'EntityNotFoundError') {

@@ -1,16 +1,14 @@
 
-import { ExerciseTraining } from "@/exercises_trainings/exercisesTrainings.type";
-import { Mesocycle } from "@/mesocycles/mesocycle.type";
+import { TrainingItem } from "@/trainingItem/trainingItems.type.ts";
 
 export interface Training {
     idTraining?: number;
-    user:string;
-    mesocycle?: Mesocycle;
+    user: string;
     trainingName: string;
     trainingType: string;
-    day: string;
+    day: Date;
     startHour: string;
     endHour: string;
     completed: boolean;
-    exercisesTrainings: ExerciseTraining[];
+    trainingItems: TrainingItem[];
 }

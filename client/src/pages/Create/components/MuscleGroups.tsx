@@ -39,22 +39,22 @@ export default function MuscleGroupExercisesDialog() {
         try {
           switch (openDialog) {
             case "Legs":
-              getExercises("4");
+              getExercises("5");
               break;
             case "Arms":
-              getExercises("2");
-              break;
-            case "Back":
               getExercises("3");
               break;
-            case "Shoulders":
+            case "Back":
               getExercises("1");
               break;
+            case "Shoulders":
+              getExercises("4");
+              break;
             case "Chest":
-              getExercises("6");
+              getExercises("2");
               break;
             case "Core":
-              getExercises("5");
+              getExercises("6");
               break;
             default:
               break;

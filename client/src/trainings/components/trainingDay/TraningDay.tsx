@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { X, PlusIcon } from 'lucide-react'
+import { X } from 'lucide-react'
 import {
   Table,
   TableBody,
@@ -20,6 +20,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command"
 import {
   Popover,
@@ -27,141 +28,156 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { toast } from "@/hooks/use-toast.ts"
-import { Training }  from "@/trainings/trainings.type.ts"
-import { ExerciseTraining } from "@/exercises_trainings/exercisesTrainings.type.ts"
+import {Training}  from "@/trainings/trainings.type.ts"
+import { TrainingItem } from "@/trainingItem/trainingItems.type.ts"
 import { useExercise } from "@/exercises/exercise.context.tsx"
+import { Calendar } from "@/components/ui/calendar"
 
-
-interface TrainingDayProps {
-  date: string;
-}
-
-export const TrainingDay: React.FC<TrainingDayProps> = ({ date }) => {
-  const { updateTraining, getTrainingToDay } = useTraining();
-  const [localTraining, setLocalTraining] = useState<Training | null>(null);
-  const { exercises, updateExercise, getAllExercises } = useExercise();
-
-  
-  
-  useEffect(() => {
-    const fetchExercises = () => {
-      getAllExercises();
-    };
-    fetchExercises();
-    const intervalId = setInterval(fetchExercises, 180000);
-    return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-
-  const formatDay = (dateString: string) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'short' });
-    return `${day} ${month}`;
-  };
+export const TrainingDay: React.FC = () => {
+  const { training ,getTrainingToDay, updateTraining } = useTraining()
+  const [localTraining, setLocalTraining] = useState<Training | null>(null)
+  const { exercises, updateExercise, getAllExercises } = useExercise()
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
 
   useEffect(() => {
     const fetchTraining = async () => {
-      const training = getTrainingToDay(date);
-      console.log(training)
-      setLocalTraining(training as Training);
-    };
-    fetchTraining();
-  });
+      if (!date) {
+        const today = new Date()
+        getTrainingToDay(today)
+      } else {
+        getTrainingToDay(date)
+      }
+    }
+
+    fetchTraining()
+
+    const intervalId = setInterval(fetchTraining, 180000)
+
+    return () => clearInterval(intervalId)
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  
+  useEffect(() => { 
+    getAllExercises()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  
+  console.log(exercises)
+
+  useEffect(() => {
+    if (!training) setLocalTraining(null)
+    if (training) setLocalTraining(training)
+  }, [setLocalTraining, training])
+  
+
+  const formatDay = (dateString: Date) => {
+    const date = new Date(dateString)
+    const day = date.getDate()
+    const month = date.toLocaleString('default', { month: 'short' })
+    return `${day} ${month}`
+  }
 
   const handleUpdate = (field: keyof Training, value: unknown) => {
     if (localTraining) {
-      const updatedTraining = { ...localTraining, [field]: value };
-      setLocalTraining(updatedTraining);
-      updateTraining(updatedTraining);
+      const updatedTraining = { ...localTraining, [field]: value }
+      setLocalTraining(updatedTraining)
+      updateTraining(updatedTraining)
       toast({
         title: "Cambios guardados",
         description: "Los cambios se han guardado correctamente.",
-      });
+      })
     }
-  };
+  }
 
-  const handleExerciseUpdate = (index: number, field: keyof ExerciseTraining, value: unknown) => {
+  const handleExerciseUpdate = (index: number, field: keyof TrainingItem, value: unknown) => {
     if (localTraining) {
-      const updatedExercises = [...localTraining.exercisesTrainings];
-      updatedExercises[index] = { ...updatedExercises[index], [field]: value };
-      const updatedTraining = { ...localTraining, exercisesTrainings: updatedExercises };
-      setLocalTraining(updatedTraining);
-      updateTraining(updatedTraining);
+      const updatedExercises = [...localTraining.trainingItems]
+      updatedExercises[index] = { ...updatedExercises[index], [field]: value }
+      const updatedTraining = { ...localTraining, exercisesTrainings: updatedExercises }
+      setLocalTraining(updatedTraining)
+      updateTraining(updatedTraining)
       toast({
         title: "Cambios guardados",
         description: "Los cambios se han guardado correctamente.",
-      });
+      })
     }
-  };
+  }
 
   const handleDelete = (index: number) => {
     if (localTraining) {
-      const updatedExercises = localTraining.exercisesTrainings.filter((_, i) => i !== index);
-      const updatedTraining = { ...localTraining, exercisesTrainings: updatedExercises };
-      setLocalTraining(updatedTraining);
-      updateTraining(updatedTraining);
+      const updatedExercises = localTraining.trainingItems.filter((_, i) => i !== index)
+      const updatedTraining = { ...localTraining, exercisesTrainings: updatedExercises }
+      setLocalTraining(updatedTraining)
+      updateTraining(updatedTraining)
       toast({
         title: "Ejercicio eliminado",
         description: "El ejercicio se ha eliminado correctamente.",
-      });
+      })
     }
-  };
+  }
 
   const addExercise = () => {
     if (localTraining) {
-      const newExercise: ExerciseTraining = {
-        idExerciseTraining: 0,
+        const newExercise: TrainingItem = {
         exercise: { idExercise: 0, name: 'New Exercise', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise: '' },
         comment: '',
         sets: 0,
         reps: 0,
-        weight: '',
-        rest: '',
-      };
-      const updatedExercises = [...localTraining.exercisesTrainings, newExercise];
-      const updatedTraining = { ...localTraining, exercisesTrainings: updatedExercises };
-      setLocalTraining(updatedTraining);
-      updateTraining(updatedTraining);
+        weight:'',
+        rest: ''
+      }
+      const updatedExercises = [...localTraining.trainingItems, newExercise]
+      const updatedTraining = { ...localTraining, trainingItems: updatedExercises }
+      setLocalTraining(updatedTraining)
+      updateTraining(updatedTraining)
       toast({
         title: "Ejercicio añadido",
         description: "Se ha añadido un nuevo ejercicio.",
-      });
+      })
     }
-  };
-
-  if (!localTraining) return null;
+  }
 
   return (
     <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
+      <div>
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          className="rounded-md shadow"
+        />
+      </div>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center space-x-2">
           <Checkbox
             id="completed"
-            checked={localTraining.completed}
-            onCheckedChange={(checked) => handleUpdate('completed', checked)} />
-          <CardTitle className="text-xl font-medium">{localTraining.trainingName || 'Empty'}</CardTitle>
+            checked={localTraining?.completed}
+            onCheckedChange={(checked) => handleUpdate('completed', checked)}
+          />
+          <CardTitle className="text-xl font-medium">{localTraining?.trainingName || 'Empty'}</CardTitle>
         </div>
         <div className="flex items-center space-x-2">
           <div id="day" className="font-light text-white/75 text-xs">
-            <p>{formatDay(localTraining.day)}</p>
+            <p>{formatDay(localTraining?.day || new Date())}</p>
           </div>
           <div>
             <Input
               id="startHour"
               type="time"
-              value={localTraining.startHour}
+              value={localTraining?.startHour}
               onChange={(e) => handleUpdate('startHour', e.target.value)}
-              className="bg-grey-box text-white" />
+              className="bg-grey-box text-white"
+            />
           </div>
           <div>
             <Input
               id="endHour"
               type="time"
-              value={localTraining.endHour}
+              value={localTraining?.endHour}
               onChange={(e) => handleUpdate('endHour', e.target.value)}
-              className="bg-grey-box text-white" />
+              className="bg-grey-box text-white"
+            />
           </div>
         </div>
       </CardHeader>
@@ -179,11 +195,11 @@ export const TrainingDay: React.FC<TrainingDayProps> = ({ date }) => {
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
-          <TableBody>
-            {localTraining.exercisesTrainings.map((et, index) => (
-              <TableRow key={index} className="border-b border-white/30">
-                <TableCell className="font-medium text-gray-400">
-                  <Popover>
+            <TableBody>
+              {localTraining?.trainingItems?.map((et, index) => (
+                <TableRow key={index} className="border-b border-white/30">
+                  <TableCell className="font-medium text-gray-400">
+                    <Popover>
                     <PopoverTrigger asChild>
                       <Button variant="ghost" className="w-full justify-start p-0 h-auto font-normal">
                         <Checkbox className="mr-2" />
@@ -191,8 +207,9 @@ export const TrainingDay: React.FC<TrainingDayProps> = ({ date }) => {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0">
-                      <Command>
+                        <Command>
                         <CommandInput placeholder="Search exercise..." />
+                        <CommandList>
                         <CommandEmpty>No exercise found.</CommandEmpty>
                         <CommandGroup>
                           {exercises.map((exercise) => (
@@ -203,67 +220,72 @@ export const TrainingDay: React.FC<TrainingDayProps> = ({ date }) => {
                               {exercise.name}
                             </CommandItem>
                           ))}
-                        </CommandGroup>
+                          </CommandGroup>
+                          </CommandList>
                       </Command>
                     </PopoverContent>
                   </Popover>
-                </TableCell>
-                <TableCell className="font-medium text-gray-400">
-                  <Input
-                    value={et.comment}
-                    onChange={(e) => handleExerciseUpdate(index, 'comment', e.target.value)}
-                    className="bg-gray-700 border-gray-600" />
-                </TableCell>
-                <TableCell className="text-right text-gray-400">
-                  <Input
-                    type="number"
-                    value={et.sets}
-                    onChange={(e) => handleExerciseUpdate(index, 'sets', parseInt(e.target.value))}
-                    className="bg-gray-700 border-gray-600 w-16 text-center" />
-                </TableCell>
-                <TableCell className="text-right text-gray-400">
-                  <Input
-                    type="number"
-                    value={et.reps}
-                    onChange={(e) => handleExerciseUpdate(index, 'reps', parseInt(e.target.value))}
-                    className="bg-gray-700 border-gray-600 w-16 text-center" />
-                </TableCell>
-                <TableCell className="text-right text-gray-400">
-                  <Input
-                    value={et.weight}
-                    onChange={(e) => handleExerciseUpdate(index, 'weight', e.target.value)}
-                    className="bg-gray-700 border-gray-600 w-24 text-center" />
-                </TableCell>
-                <TableCell className="text-right text-gray-400">
-                  <Input
-                    value={et.rest}
-                    onChange={(e) => handleExerciseUpdate(index, 'rest', e.target.value)}
-                    className="bg-gray-700 border-gray-600 w-24 text-center" />
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDelete(index)}
-                    className="h-8 w-8 p-0"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-      </div>
-      <Button
-      variant="ghost"
-      className="w-full text-gray-400 hover:text-gray-200 hover:bg-gray-700 mt-4"
-      onClick={addExercise}
-    >
-        <PlusIcon className="mr-2" />
-        Add exercise
-      </Button>
+                  </TableCell>
+                  <TableCell className="font-medium text-gray-400">
+                    <Input
+                      value={et.comment}
+                      onChange={(e) => handleExerciseUpdate(index, 'comment', e.target.value)}
+                      className="bg-grey-box border-gray-600"
+                    />
+                  </TableCell>
+                  <TableCell className="text-right text-gray-400">
+                    <Input
+                      type="number"
+                      value={et.sets}
+                      onChange={(e) => handleExerciseUpdate(index, 'sets', parseInt(e.target.value))}
+                      className="bg-grey-box border-gray-600 w-16 text-center"
+                    />
+                  </TableCell>
+                  <TableCell className="text-right text-gray-400">
+                    <Input
+                      type="number"
+                      value={et.reps}
+                      onChange={(e) => handleExerciseUpdate(index, 'reps', parseInt(e.target.value))}
+                      className="bg-grey-box border-gray-600 w-16 text-center"
+                    />
+                  </TableCell>
+                  <TableCell className="text-right text-gray-400">
+                    <Input
+                      value={et.weight}
+                      onChange={(e) => handleExerciseUpdate(index, 'weight', e.target.value)}
+                      className="bg-grey-box border-gray-600 w-24 text-center"
+                    />
+                  </TableCell>
+                  <TableCell className="text-right text-gray-400">
+                    <Input
+                      value={et.rest}
+                      onChange={(e) => handleExerciseUpdate(index, 'rest', e.target.value)}
+                      className="bg-grey-box border-gray-600 w-24 text-center"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDelete(index)}
+                      className="h-8 w-8 p-0"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        <Button 
+          variant="ghost" 
+          className="w-full text-gray-100 bg-primary hover:text-gray-200 hover:bg-redHover mt-4"
+          onClick={addExercise}
+        >
+          Add exercise
+        </Button>
       </CardContent>
     </BoxContainer>
-  );
-};
+  )
+}

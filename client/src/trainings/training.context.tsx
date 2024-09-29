@@ -8,7 +8,7 @@ interface TrainingState {
     training: Training | undefined;
     addTraining: (training: Training) => void;
     getTrainings: () => void;
-    getTrainingToDay: (date: string) => object;
+    getTrainingToDay: (date: Date) => object;
     updateTraining: (training: Training) => void;
     deleteTraining: (id: number) => void;
     errors: object | null;
@@ -20,10 +20,13 @@ const initialTrainingState: TrainingState = {
         user: '',
         trainingName: '',
         trainingType: '',
-        day: '',
+        day: new Date(),
         startHour: '',
         endHour: '',
-        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: '', idExerciseTraining: 0}],
+        trainingItems: [{ exercise: {
+            name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise: '',
+            idExercise: 0
+        }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0}],
         completed: false,
     }],
     training: {
@@ -31,10 +34,13 @@ const initialTrainingState: TrainingState = {
         user: '',
         trainingName: '',
         trainingType: '',
-        day: '',
+        day: new Date(),
         startHour: '',
         endHour: '',
-        exercisesTrainings: [{ exercise: { name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise:'' }, sets: 0, reps: 0, weight: '', rest: '', idExerciseTraining: 0}],
+        trainingItems: [{ exercise: {
+            name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise: '',
+            idExercise: 0
+        }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0}],
         completed: false,
     },
     addTraining: () => { },
@@ -74,9 +80,13 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const getTrainingToDay = async (date: string) => {
+    const getTrainingToDay = async (date: Date) => {
         try {
-            const res = await getTrainingOfTheDay(date);
+            console.log('Este es el date que me llega', date)
+            const dateString = date.toISOString().split("T")[0];
+            console.log(dateString)
+            const res = await getTrainingOfTheDay(dateString);
+            console.log('Este es el training que devuelvo', res.data)
             setTraining(res.data);
         } catch (error: unknown) {
             if (error instanceof Error) {

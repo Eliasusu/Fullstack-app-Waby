@@ -4,9 +4,9 @@ import { Training } from '../trainings/training.entity.js';
 import { Exercise } from '../exercises/exercise.entity.js';
 
 @Entity()
-export class ExerciseTraining {
+export class trainingItem {
     @PrimaryKey({type: 'number', autoincrement: true })
-    idTrainingExercise?: number;
+    idTrainingItem?: number;
 
     @Property({ nullable: false })
     sets!: number;
@@ -15,7 +15,7 @@ export class ExerciseTraining {
     reps!: number;
 
     @Property({ nullable: false })
-    weight!: number;
+    weight!: string;
 
     @Property({ nullable: false })
     rest!: string;
