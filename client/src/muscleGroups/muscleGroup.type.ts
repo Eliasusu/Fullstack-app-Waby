@@ -1,7 +1,7 @@
 
 
 export interface MuscleGroup {
-    idMuscleGroup?: number;
+    idMuscleGroup: number;
     nameMuscleGroup: string;
     description: string;
     imageMuscleGroup?: string;

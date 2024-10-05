@@ -10,10 +10,12 @@ import CronogramPage from '@/pages/Cronogram/CronogramPage.tsx';
 import { ExerciseProvider } from '@/exercises/exercise.context.tsx';
 import { TrainingProvider } from '@/trainings/training.context.tsx';
 import { TrainingMethodProvider } from './trainingMethods/training-method.context.tsx';
+import { MuscleGroupProvider } from './muscleGroups/muscle-group.context.tsx';
 
 export function App() {
   return (
     <AuthProvider>
+      <MuscleGroupProvider>
       <TrainingMethodProvider>
       <TrainingProvider>
       <ExerciseProvider>
@@ -34,6 +36,7 @@ export function App() {
         </ExerciseProvider>
         </TrainingProvider>
         </TrainingMethodProvider>
+        </MuscleGroupProvider>
     </AuthProvider>
   );
 }

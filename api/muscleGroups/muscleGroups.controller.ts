@@ -64,4 +64,17 @@ async function remove(req: Request, res: Response) {
     };
 }
 
-export { getAll, getOne, add, update, remove }
+//Get one muscle group by nameMuscleGroup
+
+async function getOneByName(req: Request, res: Response) {
+    try{
+        const nameMuscleGroup = req.params.nameMuscleGroup;
+        const muscleGroup = await em.findOneOrFail(MuscleGroup, {nameMuscleGroup}, { populate: ['exercises'] });
+        res.status(200).json({message: 'finded muscleGroup', muscleGroup});
+    }
+    catch(err:any){
+        res.status(500).json({message: err.message});
+    }
+}
+
+export { getAll, getOne, add, update, remove, getOneByName };

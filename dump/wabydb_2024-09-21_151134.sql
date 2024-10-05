@@ -142,27 +142,7 @@ INSERT INTO `exercise_training` VALUES (1,4,8,60,'75','',1,2),(2,4,8,60,'75','',
 --
 
 DROP TABLE IF EXISTS `mesocycle`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `mesocycle` (
-  `id_mesocycle` int unsigned NOT NULL AUTO_INCREMENT,
-  `type_mesocycle` varchar(255) NOT NULL,
-  `start_date` datetime NOT NULL,
-  `end_date` datetime NOT NULL,
-  `user_id_user` varchar(255) NOT NULL,
-  PRIMARY KEY (`id_mesocycle`),
-  KEY `mesocycle_user_id_user_index` (`user_id_user`),
-  CONSTRAINT `mesocycle_user_id_user_foreign` FOREIGN KEY (`user_id_user`) REFERENCES `user` (`id_user`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `mesocycle`
---
-
-/*!40000 ALTER TABLE `mesocycle` DISABLE KEYS */;
-INSERT INTO `mesocycle` VALUES (1,'Power','2024-02-29 21:00:00','2024-05-30 21:00:00',''),(2,'Hipertrophy','2024-02-29 21:00:00','2024-05-30 21:00:00','555e136e68b9');
-/*!40000 ALTER TABLE `mesocycle` ENABLE KEYS */;
 
 --
 -- Table structure for table `muscle_group`

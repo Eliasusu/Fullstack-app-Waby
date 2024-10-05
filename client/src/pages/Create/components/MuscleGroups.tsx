@@ -10,9 +10,12 @@ import BoxConteiner from "@/components/ui/BoxConteiner.tsx";
 import ExercisesTable from "@/exercises/components/exercise-table/page.tsx";
 import { useExercise } from "@/exercises/exercise.context.tsx";
 import {useTrainingMethod} from "@/trainingMethods/training-method.context.tsx";
+import { useMuscleGroup } from "@/muscleGroups/muscle-group.context.tsx";
 
 
-const muscleGroups = ["Legs", "Arms", "Back", "Shoulders", "Chest", "Core"];
+
+
+//const muscleGroups = ["Legs", "Arms", "Back", "Shoulders", "Chest", "Core"];
 const difficultyLevels = ["Easy", "Medium", "Hard"];
 const exerciseTypes = ["Push", "Pull", "Legs", "Isometric"]; 
 
@@ -22,16 +25,28 @@ export default function MuscleGroupExercisesDialog() {
   const [showAddExercise, setShowAddExercise] = useState(false);
   const { exercises, getExercises, addExercise } = useExercise();
   const { trainingMethods, getAllTrainingMethods } = useTrainingMethod();
+ const { muscleGroups, getAllMGS } = useMuscleGroup();
 
   const [newExercise, setNewExercise] = useState({
     name: "",
     trainingMethod: "",
     description: "",
-    muscleGroups: [""] as [string],
+    muscleGroups: [] as number[],
     difficulty: "",
     typeExercise: "",
-    dateCreated: new Date(),
+    //dateCreated: new Date(),
   });
+
+useEffect(() => {
+    getAllMGS();
+    const intervalId = setInterval(() => {
+      getAllMGS();
+    }, 180000); // 3 minutes in milliseconds
+
+    return () => clearInterval(intervalId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  console.log(muscleGroups);
 
   useEffect(() => {
     if (openDialog) {
@@ -39,22 +54,22 @@ export default function MuscleGroupExercisesDialog() {
         try {
           switch (openDialog) {
             case "Legs":
-              getExercises("5");
+              getExercises("1");
               break;
             case "Arms":
-              getExercises("3");
+              getExercises("2");
               break;
             case "Back":
-              getExercises("1");
+              getExercises("3");
               break;
             case "Shoulders":
               getExercises("4");
               break;
             case "Chest":
-              getExercises("2");
+              getExercises("6");
               break;
             case "Core":
-              getExercises("6");
+              getExercises("5");
               break;
             default:
               break;
@@ -70,6 +85,8 @@ export default function MuscleGroupExercisesDialog() {
       return () => clearInterval(intervalId);
 // eslint-disable-next-line react-hooks/exhaustive-deps
 }}, [openDialog]);
+
+  
 
   useEffect(() => {
     getAllTrainingMethods();
@@ -92,12 +109,12 @@ export default function MuscleGroupExercisesDialog() {
       <div className="grid grid-cols-3 md:grid-cols-3 gap-5 m-0 p">
         {muscleGroups.map((group) => (
           <Card
-            key={group}
+            key={group.idMuscleGroup}
             className="bg-gray-box2 h-24 border-white/40 transition-all duration-300 hover:bg-grey-boxActivity hover:scale-105 cursor-pointer"
-            onClick={() => setOpenDialog(group)}
+            onClick={() => setOpenDialog(group.nameMuscleGroup)}
           >
             <CardContent className="p-4 flex items-center justify-center h-24">
-              <p className="text-lg font-medium text-gray-100">{group}</p>
+              <p className="text-lg font-medium text-gray-100">{group.nameMuscleGroup}</p>
             </CardContent>
           </Card>
         ))}
@@ -169,7 +186,7 @@ export default function MuscleGroupExercisesDialog() {
               <Label htmlFor="muscleGroup">Grupo Muscular</Label>
               <Select
                 onValueChange={(value) =>
-                  setNewExercise({ ...newExercise, muscleGroups: [value] })
+                  setNewExercise({ ...newExercise, muscleGroups: [Number(value)] })
                 }
               >
                 <SelectTrigger className="bg-grey-box border-gray-600">
@@ -177,8 +194,8 @@ export default function MuscleGroupExercisesDialog() {
                 </SelectTrigger>
                 <SelectContent className="bg-grey-boxRoutine">
                   {muscleGroups.map((group) => (
-                    <SelectItem key={group} className="text-white" value={group}>
-                      {group}
+                    <SelectItem key={group.idMuscleGroup} className="text-white" value={group.idMuscleGroup.toString()}>
+                      {group.nameMuscleGroup}
                     </SelectItem>
                   ))}
                 </SelectContent>
