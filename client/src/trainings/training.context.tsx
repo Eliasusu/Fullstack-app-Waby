@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { getTrainingOfTheDay, getAllTrainings, createTraining, deleteTrainingReq } from "@/trainings/training.api.ts";
+import { getTrainingOfTheDay, getAllTrainings, createTraining, deleteTrainingReq, updateTrainingReq } from "@/trainings/training.api.ts";
 import { Training } from "@/trainings/trainings.type";
 
 
@@ -24,7 +24,7 @@ const initialTrainingState: TrainingState = {
         startHour: '',
         endHour: '',
         trainingItems: [{ exercise: {
-            name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise: '',
+            name: '', trainingMethod: '', description: '', muscleGroups: [0], difficulty: '', typeExercise: '',
             idExercise: 0
         }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0}],
         completed: false,
@@ -38,7 +38,7 @@ const initialTrainingState: TrainingState = {
         startHour: '',
         endHour: '',
         trainingItems: [{ exercise: {
-            name: '', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise: '',
+            name: '', trainingMethod: '', description: '', muscleGroups: [0], difficulty: '', typeExercise: '',
             idExercise: 0
         }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0}],
         completed: false,
@@ -82,11 +82,8 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
 
     const getTrainingToDay = async (date: Date) => {
         try {
-            console.log('Este es el date que me llega', date)
             const dateString = date.toISOString().split("T")[0];
-            console.log(dateString)
             const res = await getTrainingOfTheDay(dateString);
-            console.log('Este es el training que devuelvo', res.data)
             setTraining(res.data);
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -113,7 +110,20 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
 
     const updateTraining = async (training: Training) => { 
         try {
-            await createTraining(training);
+            const lastTrainingItem = training.trainingItems[training.trainingItems.length - 1];
+            const updatedTraining = {
+                ...training,
+                trainingItems: [{
+                    exercise: lastTrainingItem.exercise.idExercise,
+                    sets: lastTrainingItem.sets,
+                    reps: lastTrainingItem.reps,
+                    weight: lastTrainingItem.weight,
+                    rest: lastTrainingItem.rest,
+                    comment: lastTrainingItem.comment
+                }]
+            };
+            console.log(updatedTraining);
+            await updateTrainingReq(updatedTraining);
             const updatedTrainings = await getAllTrainings();
             setTrainings(updatedTrainings.data.trainings);
         } catch (error: unknown) {

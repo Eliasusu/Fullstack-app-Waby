@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { X } from 'lucide-react'
 import {
@@ -36,9 +37,11 @@ import { Calendar } from "@/components/ui/calendar"
 export const TrainingDay: React.FC = () => {
   const { training ,getTrainingToDay, updateTraining } = useTraining()
   const [localTraining, setLocalTraining] = useState<Training | null>(null)
-  const { exercises, updateExercise, getAllExercises } = useExercise()
+  const { exercises, getAllExercises } = useExercise()
   const [date, setDate] = React.useState<Date | undefined>(new Date())
 
+ console.log('Local training', localTraining)
+  
   useEffect(() => {
     const fetchTraining = async () => {
       if (!date) {
@@ -48,22 +51,17 @@ export const TrainingDay: React.FC = () => {
         getTrainingToDay(date)
       }
     }
-
-    fetchTraining()
-
-    const intervalId = setInterval(fetchTraining, 180000)
-
-    return () => clearInterval(intervalId)
-  
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    
+    fetchTraining
+    
+    if (!localTraining) {
+      fetchTraining()
+    }
   }, [])
   
   useEffect(() => { 
     getAllExercises()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  
-  console.log(exercises)
+  },[])
 
   useEffect(() => {
     if (!training) setLocalTraining(null)
@@ -119,12 +117,12 @@ export const TrainingDay: React.FC = () => {
 
   const addExercise = () => {
     if (localTraining) {
-        const newExercise: TrainingItem = {
-        exercise: { idExercise: 0, name: 'New Exercise', trainingMethod: '', description: '', muscleGroups: [''], difficulty: '', typeExercise: '' },
+      const newExercise: TrainingItem = {
+        exercise: { idExercise: 0, name: 'New Exercise', trainingMethod: '', description: '', muscleGroups: [1], difficulty: '', typeExercise: '' },
         comment: '',
         sets: 0,
         reps: 0,
-        weight:'',
+        weight: '',
         rest: ''
       }
       const updatedExercises = [...localTraining.trainingItems, newExercise]
@@ -159,7 +157,7 @@ export const TrainingDay: React.FC = () => {
         </div>
         <div className="flex items-center space-x-2">
           <div id="day" className="font-light text-white/75 text-xs">
-            <p>{formatDay(localTraining?.day || new Date())}</p>
+            <p>{formatDay(date || new Date())}</p>
           </div>
           <div>
             <Input
@@ -215,7 +213,7 @@ export const TrainingDay: React.FC = () => {
                           {exercises.map((exercise) => (
                             <CommandItem
                               key={exercise.idExercise}
-                              onSelect={() => updateExercise(exercise)}
+                              onSelect={() => handleExerciseUpdate(index, 'exercise', exercise)}
                             >
                               {exercise.name}
                             </CommandItem>

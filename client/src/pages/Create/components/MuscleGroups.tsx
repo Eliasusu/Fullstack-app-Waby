@@ -25,7 +25,7 @@ export default function MuscleGroupExercisesDialog() {
   const [showAddExercise, setShowAddExercise] = useState(false);
   const { exercises, getExercises, addExercise } = useExercise();
   const { trainingMethods, getAllTrainingMethods } = useTrainingMethod();
- const { muscleGroups, getAllMGS } = useMuscleGroup();
+ const { muscleGroups, getAllMGS} = useMuscleGroup();
 
   const [newExercise, setNewExercise] = useState({
     name: "",
@@ -54,22 +54,46 @@ useEffect(() => {
         try {
           switch (openDialog) {
             case "Legs":
-              getExercises("1");
+              muscleGroups.map((group) => {
+                if (group.nameMuscleGroup === "Legs") {
+                  getExercises(group.idMuscleGroup.toString());
+                }
+              })
               break;
             case "Arms":
-              getExercises("2");
+              muscleGroups.map((group) => { 
+                if (group.nameMuscleGroup === "Arms") {
+                  getExercises(group.idMuscleGroup.toString());
+                }
+              });
               break;
             case "Back":
-              getExercises("3");
+              muscleGroups.map((group) => {
+                if (group.nameMuscleGroup === "Back") {
+                  getExercises(group.idMuscleGroup.toString());
+                }
+              });
               break;
             case "Shoulders":
-              getExercises("4");
+              muscleGroups.map((group) => {
+                if (group.nameMuscleGroup === "Shoulders") {
+                  getExercises(group.idMuscleGroup.toString());
+                }
+              });
               break;
             case "Chest":
-              getExercises("6");
+              muscleGroups.map((group) => {
+                if (group.nameMuscleGroup === "Chest") {
+                  getExercises(group.idMuscleGroup.toString());
+                }
+              });
               break;
             case "Core":
-              getExercises("5");
+              muscleGroups.map((group) => {
+                if (group.nameMuscleGroup === "Core") {
+                  getExercises(group.idMuscleGroup.toString());
+                }
+              });
               break;
             default:
               break;
