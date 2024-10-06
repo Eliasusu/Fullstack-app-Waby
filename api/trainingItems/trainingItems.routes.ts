@@ -3,8 +3,8 @@ import { getOne, add, update, remove } from "./trainingItems.controllers.js";
 
 export const routinesRouter = Router();
 
-routinesRouter.get('/:idTrainingExercise', getOne);
+routinesRouter.get('/:idTrainingItem', getOne);
 
-routinesRouter.put('/:idTrainingExercise', update);
+routinesRouter.put('/:idTrainingItem', update);
 
-routinesRouter.delete('/:idTrainingExercise', remove);
+routinesRouter.delete('/:idTrainingItem', remove);

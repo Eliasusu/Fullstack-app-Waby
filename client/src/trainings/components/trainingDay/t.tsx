@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { X } from 'lucide-react'
 import {
@@ -42,15 +41,13 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import { toast } from "@/hooks/use-toast.ts"
-import {Training}  from "@/trainings/trainings.type.ts"
+import { Training } from "@/trainings/trainings.type.ts"
 import { TrainingItem } from "@/trainingItem/trainingItems.type.ts"
 import { useExercise } from "@/exercises/exercise.context.tsx"
 import { Calendar } from "@/components/ui/calendar"
-import { useAuth } from "@/users/auth.context.tsx"
 
 export const TrainingDay: React.FC = () => {
-  const { training ,getTrainingToDay, updateTraining, deleteTraining, addTraining ,updateTrainingItem, addTrainingItem, deleteTrainingItem } = useTraining()
-  const { user } = useAuth()
+  const { training, getTrainingToDay, updateTraining, updateTrainingItem, createTraining, deleteTraining } = useTraining()
   const [localTraining, setLocalTraining] = useState<Training | null>(null)
   const { exercises, getAllExercises } = useExercise()
   const [date, setDate] = React.useState<Date | undefined>(new Date())
@@ -62,11 +59,35 @@ export const TrainingDay: React.FC = () => {
     weight: '',
     rest: ''
   })
-
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [isModifyDialogOpen, setIsModifyDialogOpen] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedDates, setSelectedDates] = useState<Date[]>([])
+  const [newTraining, setNewTraining] = useState<Omit<Training, 'idTraining' | 'trainingDate'>>({
+    trainingName: '',
+    startHour: '',
+    endHour: '',
+    completed: false,
+    trainingItems: []
+  })
 
+  useEffect(() => {
+    const fetchTraining = async () => {
+      if (!date) {
+        const today = new Date()
+        getTrainingToDay(today)
+      } else {
+        getTrainingToDay(date)
+      }
+    }
+    
+    fetchTraining()
+    
+    if (!localTraining) {
+      fetchTraining()
+    }
+  }, [])
+  
   useEffect(() => { 
     getAllExercises()
   },[])
@@ -75,7 +96,6 @@ export const TrainingDay: React.FC = () => {
     if (!training) setLocalTraining(null)
     if (training) setLocalTraining(training)
   }, [setLocalTraining, training])
-  
 
   const formatDay = (dateString: Date) => {
     const date = new Date(dateString)
@@ -100,10 +120,9 @@ export const TrainingDay: React.FC = () => {
     if (localTraining) {
       const updatedExercises = [...localTraining.trainingItems]
       updatedExercises[index] = { ...updatedExercises[index], [field]: value }
-      console.log('updatedExercises', updatedExercises[index])
-      const updatedTraining = { ...localTraining, exercisesTrainings: updatedExercises }
+      const updatedTraining = { ...localTraining, trainingItems: updatedExercises }
       setLocalTraining(updatedTraining)
-      updateTrainingItem(updatedExercises[index], localTraining.idTraining || 0)
+      updateTrainingItem(updatedExercises[index], localTraining.idTraining)
       toast({
         title: "Cambios guardados",
         description: "Los cambios se han guardado correctamente.",
@@ -114,12 +133,9 @@ export const TrainingDay: React.FC = () => {
   const handleDelete = (index: number) => {
     if (localTraining) {
       const updatedExercises = localTraining.trainingItems.filter((_, i) => i !== index)
-      const updatedTraining = { ...localTraining, exercisesTrainings: updatedExercises }
+      const updatedTraining = { ...localTraining, trainingItems: updatedExercises }
       setLocalTraining(updatedTraining)
-      const idTrainingItem = localTraining.trainingItems[index].idTrainingItem;
-      if (idTrainingItem !== undefined) {
-        deleteTrainingItem(idTrainingItem, localTraining.idTraining || 0);
-      }
+      updateTraining(updatedTraining)
       toast({
         title: "Ejercicio eliminado",
         description: "El ejercicio se ha eliminado correctamente.",
@@ -136,12 +152,11 @@ export const TrainingDay: React.FC = () => {
       const updatedExercises = [...localTraining.trainingItems, newExercise]
       const updatedTraining = { ...localTraining, trainingItems: updatedExercises }
       setLocalTraining(updatedTraining)
-      addTrainingItem(newExercise, localTraining.idTraining || 0)
+      updateTrainingItem(newExercise, localTraining.idTraining)
       toast({
         title: "Ejercicio añadido",
         description: "Se ha añadido un nuevo ejercicio.",
       })
-      // Reset the newExercise state
       setNewExercise({
         exercise: { idExercise: 0, name: '', trainingMethod: '', description: '', muscleGroups: [0], difficulty: '', typeExercise: '' },
         comment: '',
@@ -154,44 +169,50 @@ export const TrainingDay: React.FC = () => {
   }
 
   const handleCreateTraining = () => {
-    console.log(setIsCreateDialogOpen)
-    if (selectedDate) {
-      const newTraining: Training = {
-        trainingName: 'New Training',
-        day: selectedDate,
-        startHour: '09:00',
-        endHour: '10:00',
-        completed: false,
-        trainingItems: [],
-        user: user?.username || '',
-        trainingType: ""
+    selectedDates.forEach(date => {
+      const newTrainingWithDate: Training = {
+        ...newTraining,
+        idTraining: 0, // This will be set by the backend
+        trainingDate: date,
       }
-      addTraining(newTraining)
-      setIsCreateDialogOpen(false)
-      toast({
-        title: "Entrenamiento creado",
-        description: "Se ha creado un nuevo entrenamiento.",
-      })
-    }
+      createTraining(newTrainingWithDate)
+    })
+    setIsCreateDialogOpen(false)
+    setSelectedDates([])
+    setNewTraining({
+      trainingName: '',
+      startHour: '',
+      endHour: '',
+      completed: false,
+      trainingItems: []
+    })
+    toast({
+      title: "Entrenamientos creados",
+      description: `Se han creado ${selectedDates.length} nuevos entrenamientos.`,
+    })
   }
 
   const handleModifyTraining = () => {
-    console.log(setIsModifyDialogOpen)
     if (localTraining) {
-      console.log('idTraining en el handleModify', localTraining.idTraining)
-      updateTraining(localTraining)
+      selectedDates.forEach(date => {
+        const modifiedTraining: Training = {
+          ...localTraining,
+          trainingDate: date,
+        }
+        updateTraining(modifiedTraining)
+      })
       setIsModifyDialogOpen(false)
+      setSelectedDates([])
       toast({
-        title: "Entrenamiento modificado",
-        description: "Se han guardado los cambios en el entrenamiento.",
+        title: "Entrenamientos modificados",
+        description: `Se han modificado ${selectedDates.length} entrenamientos.`,
       })
     }
   }
 
   const handleDeleteTraining = () => {
     if (localTraining) {
-      console.log('idTraining en el handleDelete', localTraining.idTraining)
-      deleteTraining(localTraining.idTraining || 0)
+      deleteTraining(localTraining.idTraining)
       setLocalTraining(null)
       toast({
         title: "Entrenamiento eliminado",
@@ -199,11 +220,15 @@ export const TrainingDay: React.FC = () => {
       })
     }
   }
-  
+
+  const handleNewTrainingChange = (field: keyof typeof newTraining, value: unknown) => {
+    setNewTraining(prev => ({ ...prev, [field]: value }))
+  }
+
   return (
     <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
       <div>
-         <ContextMenu>
+        <ContextMenu>
           <ContextMenuTrigger>
             <Calendar
               mode="single"
@@ -211,12 +236,11 @@ export const TrainingDay: React.FC = () => {
               onSelect={(newDate) => {
                 setDate(newDate)
                 setSelectedDate(newDate)
-                }}
-                onDayClick={(day) => getTrainingToDay(day)}
-                className="rounded-md shadow"
+              }}
+              className="rounded-md shadow"
             />
           </ContextMenuTrigger>
-           <ContextMenuContent>
+          <ContextMenuContent>
             <ContextMenuItem onSelect={() => setIsCreateDialogOpen(true)}>
               Crear entrenamiento
             </ContextMenuItem>
@@ -250,7 +274,7 @@ export const TrainingDay: React.FC = () => {
             <Input
               id="startHour"
               type="time"
-              value={localTraining?.startHour || ''}
+              value={localTraining?.startHour}
               onChange={(e) => handleUpdate('startHour', e.target.value)}
               className="bg-grey-box text-white"
             />
@@ -259,7 +283,7 @@ export const TrainingDay: React.FC = () => {
             <Input
               id="endHour"
               type="time"
-              value={localTraining?.endHour || ''}
+              value={localTraining?.endHour}
               onChange={(e) => handleUpdate('endHour', e.target.value)}
               className="bg-grey-box text-white"
             />
@@ -285,32 +309,31 @@ export const TrainingDay: React.FC = () => {
                 <TableRow key={index} className="border-b border-white/30">
                   <TableCell className="font-medium text-gray-400">
                     <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="ghost" className="w-full justify-start p-0 h-auto font-normal">
-                        <Checkbox className="mr-2" />
-                        {et.exercise.name}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
+                      <PopoverTrigger asChild>
+                        <Button variant="ghost" className="w-full justify-start p-0 h-auto font-normal">
+                          <Checkbox className="mr-2" />
+                          {et.exercise.name}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0">
                         <Command>
-                        <CommandInput placeholder="Search exercise..." />
-                        <CommandList>
-                        <CommandEmpty>No exercise found.</CommandEmpty>
-                        <CommandGroup>
-                          {exercises.map((exercise) => (
-                            <CommandItem
-                              key={exercise.idExercise}
-                              onSelect={() => handleExerciseUpdate(index, 'exercise', exercise)}
-                              onClick={() => handleExerciseUpdate(index, 'exercise', exercise)}
-                            >
-                              {exercise.name}
-                            </CommandItem>
-                          ))}
-                          </CommandGroup>
+                          <CommandInput placeholder="Search exercise..." />
+                          <CommandList>
+                            <CommandEmpty>No exercise found.</CommandEmpty>
+                            <CommandGroup>
+                              {exercises.map((exercise) => (
+                                <CommandItem
+                                  key={exercise.idExercise}
+                                  onSelect={() => handleExerciseUpdate(index, 'exercise', exercise)}
+                                >
+                                  {exercise.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
                           </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </TableCell>
                   <TableCell className="font-medium text-gray-400">
                     <Input
@@ -364,8 +387,7 @@ export const TrainingDay: React.FC = () => {
             </TableBody>
           </Table>
         </div>
-        <div>
-          <Dialog>
+        <Dialog>
           <DialogTrigger asChild>
             <Button 
               variant="ghost" 
@@ -413,7 +435,7 @@ export const TrainingDay: React.FC = () => {
                   id="comment"
                   value={newExercise.comment}
                   onChange={(e) => handleNewExerciseChange('comment', e.target.value)}
-                  className="col-span-3 bg-grey-box border-gray-600 w-full"
+                  className="col-span-3"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -423,7 +445,7 @@ export const TrainingDay: React.FC = () => {
                   type="number"
                   value={newExercise.sets}
                   onChange={(e) => handleNewExerciseChange('sets', parseInt(e.target.value))}
-                  className="col-span-3 bg-grey-box border-gray-600 w-full"
+                  className="col-span-3"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -433,16 +455,16 @@ export const TrainingDay: React.FC = () => {
                   type="number"
                   value={newExercise.reps}
                   onChange={(e) => handleNewExerciseChange('reps', parseInt(e.target.value))}
-                  className="col-span-3 bg-grey-box border-gray-600 w-full"
+                  className="col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4 ">
+              <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="weight" className="text-right">Weight</label>
                 <Input
                   id="weight"
                   value={newExercise.weight}
                   onChange={(e) => handleNewExerciseChange('weight', e.target.value)}
-                  className="col-span-3 bg-grey-box border-gray-600 w-full"
+                  className="col-span-3"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -451,20 +473,19 @@ export const TrainingDay: React.FC = () => {
                   id="rest"
                   value={newExercise.rest}
                   onChange={(e) => handleNewExerciseChange('rest', e.target.value)}
-                  className="col-span-3 bg-grey-box border-gray-600 w-full"
+                  className="col-span-3"
                 />
               </div>
-          </div>
+            </div>
             <DialogTrigger asChild>
               <Button onClick={addExercise}>Add Exercise</Button>
             </DialogTrigger>
           </DialogContent>
         </Dialog>
-        </div>
       </CardContent>
-      
+
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[625px]">
           <DialogHeader>
             <DialogTitle>Create New Training</DialogTitle>
           </DialogHeader>
@@ -473,8 +494,8 @@ export const TrainingDay: React.FC = () => {
               <label htmlFor="trainingName" className="text-right">Name</label>
               <Input
                 id="trainingName"
-                value={localTraining?.trainingName || ''}
-                onChange={(e) => handleUpdate('trainingName', e.target.value)}
+                value={newTraining.trainingName}
+                onChange={(e) => handleNewTrainingChange('trainingName', e.target.value)}
                 className="col-span-3"
               />
             </div>
@@ -483,8 +504,8 @@ export const TrainingDay: React.FC = () => {
               <Input
                 id="startHour"
                 type="time"
-                value={localTraining?.startHour || ''}
-                onChange={(e) => handleUpdate('startHour', e.target.value)}
+                value={newTraining.startHour}
+                onChange={(e) => handleNewTrainingChange('startHour', e.target.value)}
                 className="col-span-3"
               />
             </div>
@@ -493,10 +514,21 @@ export const TrainingDay: React.FC = () => {
               <Input
                 id="endHour"
                 type="time"
-                value={localTraining?.endHour || ''}
-                onChange={(e) => handleUpdate('endHour', e.target.value)}
+                value={newTraining.endHour}
+                onChange={(e) => handleNewTrainingChange('endHour', e.target.value)}
                 className="col-span-3"
               />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label className="text-right">Select Dates</label>
+              <div className="col-span-3">
+                <Calendar
+                  mode="multiple"
+                  selected={selectedDates}
+                  onSelect={setSelectedDates}
+                  className="rounded-md border"
+                />
+              </div>
             </div>
           </div>
           <Button onClick={handleCreateTraining}>Create Training</Button>
@@ -504,7 +536,7 @@ export const TrainingDay: React.FC = () => {
       </Dialog>
 
       <Dialog open={isModifyDialogOpen} onOpenChange={setIsModifyDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[625px]">
           <DialogHeader>
             <DialogTitle>Modify Training</DialogTitle>
           </DialogHeader>
@@ -538,10 +570,25 @@ export const TrainingDay: React.FC = () => {
                 className="col-span-3"
               />
             </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label className="text-right">Select Dates</label>
+              <div className="col-span-3">
+                <Calendar
+                  mode="multiple"
+                  selected={selectedDates}
+                  onSelect={setSelectedDates}
+                  className="rounded-md border"
+                />
+              </div>
+            </div>
           </div>
           <Button onClick={handleModifyTraining}>Save Changes</Button>
         </DialogContent>
       </Dialog>
     </BoxContainer>
   )
-}
+}import { toLocaleString } from "assert"
+import { getDate } from "date-fns"
+import { type } from "os"
+import { title } from "process"
+import { FC } from "react"

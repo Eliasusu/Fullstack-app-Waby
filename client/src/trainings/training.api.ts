@@ -7,6 +7,6 @@ export const getAllTrainings = () => axios.get("/trainings/user");
 
 export const createTraining = (training: Training) => axios.post("/trainings", training);
 
-export const updateTrainingReq = (training: Training) => axios.put(`/trainings/${training.idTraining}/exercise`, training.trainingItems);
+export const updateTrainingReq = (training: Training) => axios.put(`/trainings/${training.idTraining}`, training);
 
 export const deleteTrainingReq = (id: number) => axios.delete(`/trainings/${id}`);
