@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { getAll, getOne, update, remove, add } from './muscleGroups.controller.js';
+import { getAll, getOne, update, remove, add, getOneByName } from './muscleGroups.controller.js';
 
 
 export const muscleGroupsRouter = Router();
@@ -18,3 +18,6 @@ muscleGroupsRouter.put('/:idMuscleGroup', update);
 
 //Delete a muscle group
 muscleGroupsRouter.delete('/:idMuscleGroup', remove);
+
+//Get one by name 
+muscleGroupsRouter.get('/name/:name', getOneByName);

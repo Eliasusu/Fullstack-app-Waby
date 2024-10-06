@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { createExercise, getExercisesReq, getExercisesByMg } from "@/exercises/exercise.api.ts";
+import { createExercise, getExercisesReq, getExercisesByMg, deleteExercise } from "@/exercises/exercise.api.ts";
 import { Exercise } from "@/exercises/exercise.type.ts";
 
 
@@ -9,6 +9,7 @@ interface ExerciseState {
     getExercises: (mg: string) => void;
     updateExercise: (exercise: Exercise) => void;
     getAllExercises: () => void;
+    removeExercise: (idExcercise: number) => void;
     errors: object | null;
 }
 
@@ -18,6 +19,7 @@ const initialExerciseState: ExerciseState = {
     getExercises: () => { },
     updateExercise: () => { },
     getAllExercises: () => { },
+    removeExercise: () => { },
     errors: null,
 };
 export const ExerciseContext = createContext(initialExerciseState);
@@ -80,6 +82,21 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+    const removeExercise = async (idExercise: number) => {
+        try {
+            await deleteExercise(idExercise);
+            const updatedExercises = await getExercisesReq();
+            setExercises(updatedExercises.data.exercises);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setErrors({ message: error.message });
+            } else {
+                setErrors({ message: "Hubo un problema al eliminar el ejercicio" });
+            }
+        }
+    };
+    
+
     useEffect(() => {
         if (errors) {
             const timer = setTimeout(() => {
@@ -90,7 +107,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <ExerciseContext.Provider value={{ exercises, addExercise, updateExercise, getExercises, getAllExercises ,errors }}>
+        <ExerciseContext.Provider value={{ exercises, addExercise, updateExercise, getExercises, getAllExercises, removeExercise, errors }}>
             {children}
         </ExerciseContext.Provider>
     );

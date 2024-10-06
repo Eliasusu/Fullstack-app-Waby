@@ -28,6 +28,7 @@ export default function MuscleGroupExercisesDialog() {
  const { muscleGroups, getAllMGS} = useMuscleGroup();
 
   const [newExercise, setNewExercise] = useState({
+    idExercise: 0,
     name: "",
     trainingMethod: "",
     description: "",

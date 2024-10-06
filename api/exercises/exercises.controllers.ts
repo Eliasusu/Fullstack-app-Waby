@@ -12,6 +12,7 @@ async function getAll(req: Request, res: Response) {
             const exercises = await em.find(Exercise, { muscleGroups: { idMuscleGroup: idMuscleGroup }, user: { idUser: req.body.user.id } }, { populate: ['muscleGroups', 'trainingMethod'] });
             const exercisesDestructurized = exercises.map((e) => {
                 return {
+                    idExercise: e.idExercise,
                     name: e.name,
                     description: e.description,
                     muscleGroups: e.muscleGroups.map((muscleGroup) => muscleGroup.nameMuscleGroup),
@@ -21,8 +22,8 @@ async function getAll(req: Request, res: Response) {
             });
             return res.status(200).json({ message: 'finded all exercises', exercisesDestructurized});
         }
-        const exercises = await em.find(Exercise, { user: req.body.user.id }, { populate: ['muscleGroups', 'trainingMethod'] });
-        res.status(200).json({ message: 'finded all exercises', exercises });
+        else {const exercises = await em.find(Exercise, { user: req.body.user.id }, { populate: ['muscleGroups', 'trainingMethod'] });
+        res.status(200).json({ message: 'finded all exercises', exercises });}
     }catch(err:any){
         res.status(500).json({message: err.message}); //Quitar mensaje de error en producción
     }

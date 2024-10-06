@@ -4,7 +4,7 @@ import { ProgressionRep } from "@/exercises/progressions/progressionRep.type.ts"
 import { ProgressionSec } from "@/exercises/progressions/progressionSec.type.ts";
 
 export interface Exercise {
-    idExercise?: number;
+    idExercise: number;
     name: string;
     trainingMethod: string;
     description: string;
