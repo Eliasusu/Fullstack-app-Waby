@@ -1,5 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button";
+import { X } from 'lucide-react'
 
 
 export type Exercise = {
@@ -42,20 +43,21 @@ export const columns = ({ removeExercise }: { removeExercise: (idExcercise: numb
 
   {
     id: "actions",
-    header: "Actions",
     cell: ({ row }) => {
       const exercise = row.original;
       return (
         <Button
-          variant="destructive"
+          variant="ghost"
+          size="icon"
           onClick={() => {
             if (window.confirm(`Are you sure you want to delete ${exercise.name}?`)) {
               console.log("delete", exercise.idExercise);
               removeExercise(exercise.idExercise);
             }
           }}
+          className="h-8 w-8 p-0"
         >
-          Delete
+          <X className="h-4 w-4" />
         </Button>
       );
     },
