@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -25,7 +26,7 @@ export default function MuscleGroupExercisesDialog() {
   const [showAddExercise, setShowAddExercise] = useState(false);
   const { exercises, getExercises, addExercise } = useExercise();
   const { trainingMethods, getAllTrainingMethods } = useTrainingMethod();
- const { muscleGroups, getAllMGS} = useMuscleGroup();
+ const { muscleGroups, getAllMGS } = useMuscleGroup();
 
   const [newExercise, setNewExercise] = useState({
     idExercise: 0,
@@ -42,12 +43,10 @@ useEffect(() => {
     getAllMGS();
     const intervalId = setInterval(() => {
       getAllMGS();
-    }, 180000); // 3 minutes in milliseconds
+    }, 180000);
 
     return () => clearInterval(intervalId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(muscleGroups);
 
   useEffect(() => {
     if (openDialog) {
@@ -108,7 +107,6 @@ useEffect(() => {
       const intervalId = setInterval(fetchExercises, 180000);
 
       return () => clearInterval(intervalId);
-// eslint-disable-next-line react-hooks/exhaustive-deps
 }}, [openDialog]);
 
   
@@ -117,13 +115,16 @@ useEffect(() => {
     getAllTrainingMethods();
     const intervalId = setInterval(() => {
       getAllTrainingMethods();
-    }, 180000); // 3 minutes in milliseconds
+    }, 180000); 
 
     return () => clearInterval(intervalId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddExercise = () => {
+    //Agregar en exercise context un nuevo metodo que
+    // Agregue un nuevo ejercicio pero por grupo muscular
+    // De esta forma cuando en la tabla se muestren los ejercicios 
+    // Seran solo los del grupo muscular seleccionado
     addExercise(newExercise);
     setShowAddExercise(false);
   };

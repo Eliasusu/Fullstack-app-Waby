@@ -202,46 +202,45 @@ export const TrainingDay: React.FC = () => {
   
   return (
     <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
-      <div>
-         <ContextMenu>
-          <ContextMenuTrigger>
+        <ContextMenu>
+        <ContextMenuTrigger>
             <Calendar
               mode="single"
               selected={date}
               onSelect={(newDate) => {
-                setDate(newDate)
-                setSelectedDate(newDate)
-                }}
-                onDayClick={(day) => getTrainingToDay(day)}
-                className="rounded-md shadow"
+                setDate(newDate);
+                setSelectedDate(newDate);
+              }}
+              onDayClick={(day) => getTrainingToDay(day)}
+              className="rounded-md shadow"
             />
-          </ContextMenuTrigger>
-           <ContextMenuContent>
-            <ContextMenuItem onSelect={() => setIsCreateDialogOpen(true)}>
-              Crear entrenamiento
-            </ContextMenuItem>
-            {localTraining && (
-              <>
-                <ContextMenuItem onSelect={() => setIsModifyDialogOpen(true)}>
-                  Modificar entrenamiento
-                </ContextMenuItem>
-                <ContextMenuItem onSelect={handleDeleteTraining}>
-                  Eliminar entrenamiento
-                </ContextMenuItem>
-              </>
-            )}
-          </ContextMenuContent>
-        </ContextMenu>
-      </div>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="flex items-center space-x-2">
-          <Checkbox
+
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem onSelect={() => setIsCreateDialogOpen(true)}>
+            Crear entrenamiento
+          </ContextMenuItem>
+          {localTraining && (
+            <>
+              <ContextMenuItem onSelect={() => setIsModifyDialogOpen(true)}>
+                Modificar entrenamiento
+              </ContextMenuItem>
+              <ContextMenuItem onSelect={handleDeleteTraining}>
+                Eliminar entrenamiento
+              </ContextMenuItem>
+            </>
+          )}
+        </ContextMenuContent>
+      </ContextMenu>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div className="flex items-center space-x-2">
+            <Checkbox
             id="completed"
             checked={localTraining?.completed}
             onCheckedChange={(checked) => handleUpdate('completed', checked)}
-          />
-          <CardTitle className="text-xl font-medium">{localTraining?.trainingName || 'Empty'}</CardTitle>
-        </div>
+            />
+            <CardTitle className="text-xl font-medium">{localTraining?.trainingName || 'Empty'}</CardTitle>
+          </div>
         <div className="flex items-center space-x-2">
           <div id="day" className="font-light text-white/75 text-xs">
             <p>{formatDay(date || new Date())}</p>
@@ -455,14 +454,15 @@ export const TrainingDay: React.FC = () => {
                 />
               </div>
           </div>
-            <DialogTrigger asChild>
-              <Button onClick={addExercise}>Add Exercise</Button>
+              <DialogTrigger asChild>
+                <div>
+                    <Button onClick={addExercise}>Add Exercise</Button>
+                  </div>
             </DialogTrigger>
           </DialogContent>
         </Dialog>
         </div>
       </CardContent>
-      
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -499,12 +499,14 @@ export const TrainingDay: React.FC = () => {
               />
             </div>
           </div>
-          <Button onClick={handleCreateTraining}>Create Training</Button>
+            <div>
+              <Button onClick={handleCreateTraining}>Create Training</Button>
+            </div>
         </DialogContent>
       </Dialog>
 
       <Dialog open={isModifyDialogOpen} onOpenChange={setIsModifyDialogOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby="modify-training-description">
           <DialogHeader>
             <DialogTitle>Modify Training</DialogTitle>
           </DialogHeader>
