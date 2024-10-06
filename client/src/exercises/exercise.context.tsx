@@ -38,10 +38,12 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [errors, setErrors] = useState<object | null>(null);
 
+    // Se puede crear otro metodo llamado addExerciseByMg o directamente usamos este 
+    // Pero hay que modificarlo y agregarlo en el controller
     const addExercise = async (exercise: Exercise) => {
     try {
         await createExercise(exercise);
-        const updatedExercises = await getExercisesReq(); 
+        const updatedExercises = await getExercisesReq();
         setExercises(updatedExercises.data.exercises);
     } catch (error: unknown) {
         if (error instanceof Error) {
@@ -77,7 +79,6 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
             setExercises(res.data.exercisesDestructurized);
         } else { 
         const res = await getExercisesReq();
-        console.log(res.data.exercises);
         setExercises(res.data.exercises);
     }
   };

@@ -6,6 +6,8 @@ import { orm } from "../shared/db/orm.js";
 const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
+    console.log(req.body);
+    console.log(req.params);
     try {
         if (req.params.idMuscleGroup) {
             const idMuscleGroup = Number.parseInt(req.params.idMuscleGroup);
@@ -22,9 +24,11 @@ async function getAll(req: Request, res: Response) {
             });
             return res.status(200).json({ message: 'finded all exercises', exercisesDestructurized});
         }
-        else {const exercises = await em.find(Exercise, { user: req.body.user.id }, { populate: ['muscleGroups', 'trainingMethod'] });
-        res.status(200).json({ message: 'finded all exercises', exercises });}
-    }catch(err:any){
+        else {
+            const exercises = await em.find(Exercise, { user: req.body.user.id }, { populate: ['muscleGroups', 'trainingMethod'] });
+            res.status(200).json({ message: 'finded all exercises', exercises });}
+    
+    } catch (err: any) {
         res.status(500).json({message: err.message}); //Quitar mensaje de error en producción
     }
 }
