@@ -43,8 +43,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     const addExercise = async (exercise: Exercise) => {
     try {
         await createExercise(exercise);
-        const updatedExercises = await getExercisesReq();
-        setExercises(updatedExercises.data.exercises);
+        setExercises([...exercises, exercise]);
     } catch (error: unknown) {
         if (error instanceof Error) {
             setErrors({ message: error.message });
@@ -78,9 +77,9 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
             const res = await getExercisesByMg(mg);
             setExercises(res.data.exercisesDestructurized);
         } else { 
-        const res = await getExercisesReq();
-        setExercises(res.data.exercises);
-    }
+            const res = await getExercisesReq();
+            setExercises(res.data.exercises);
+        }
   };
 
     const removeExercise = async (idExercise: number) => {
