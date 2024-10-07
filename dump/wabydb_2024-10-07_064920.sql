@@ -94,7 +94,7 @@ CREATE TABLE `exercise` (
   KEY `exercise_user_id_user_index` (`user_id_user`),
   CONSTRAINT `exercise_training_method_id_method_foreign` FOREIGN KEY (`training_method_id_method`) REFERENCES `training_method` (`id_method`) ON UPDATE CASCADE,
   CONSTRAINT `exercise_user_id_user_foreign` FOREIGN KEY (`user_id_user`) REFERENCES `user` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +102,7 @@ CREATE TABLE `exercise` (
 --
 
 /*!40000 ALTER TABLE `exercise` DISABLE KEYS */;
-INSERT INTO `exercise` VALUES (1,'Press plano','ojjmdeasf32sd','','Hard','Push','2024-08-25 19:10:06',NULL,'555e136e68b9'),(2,'Press inclinado','ojjmdeasf32sd','','Hard','Push','2024-08-25 19:10:26',NULL,'555e136e68b9'),(3,'Front lever','emr345nrpzde','','Hard','Isometric','2024-08-27 07:01:44',NULL,'26d1da4438fd'),(4,'Sentadillas','ojjmdeasf32sd',' ','Medium','Push','2024-09-20 00:00:00',NULL,'555e136e68b9');
+INSERT INTO `exercise` VALUES (1,'Press plano','ojjmdeasf32sd','','Medium','Push','2024-09-29 18:53:35',NULL,'c3cf6fd48800'),(4,'Push up','emr345nrpzde','Ejercicio de empuje ','Easy','Push','2024-10-05 17:30:41',NULL,'c3cf6fd48800'),(5,'Pull up weighted','ojjmdeasf32sd','.','Hard','Pull','2024-10-05 17:42:54',NULL,'c3cf6fd48800'),(7,'Kroc Row','ojjmdeasf32sd','.','Easy','Pull','2024-10-06 18:04:33',NULL,'c3cf6fd48800'),(8,'Press militar','ojjmdeasf32sd','.','Medium','Push','2024-10-06 18:14:37',NULL,'c3cf6fd48800');
 /*!40000 ALTER TABLE `exercise` ENABLE KEYS */;
 
 --
@@ -126,7 +126,7 @@ CREATE TABLE `exercise_training` (
   KEY `exercise_training_training_id_training_index` (`training_id_training`),
   CONSTRAINT `exercise_training_exercise_id_exercise_foreign` FOREIGN KEY (`exercise_id_exercise`) REFERENCES `exercise` (`id_exercise`) ON UPDATE CASCADE,
   CONSTRAINT `exercise_training_training_id_training_foreign` FOREIGN KEY (`training_id_training`) REFERENCES `training` (`id_training`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,15 +134,7 @@ CREATE TABLE `exercise_training` (
 --
 
 /*!40000 ALTER TABLE `exercise_training` DISABLE KEYS */;
-INSERT INTO `exercise_training` VALUES (1,4,8,60,'75','',1,2),(2,4,8,60,'75','',2,2),(3,4,8,60,'2\'','',4,6);
 /*!40000 ALTER TABLE `exercise_training` ENABLE KEYS */;
-
---
--- Table structure for table `mesocycle`
---
-
-DROP TABLE IF EXISTS `mesocycle`;
-
 
 --
 -- Table structure for table `muscle_group`
@@ -165,7 +157,7 @@ CREATE TABLE `muscle_group` (
 --
 
 /*!40000 ALTER TABLE `muscle_group` DISABLE KEYS */;
-INSERT INTO `muscle_group` VALUES (1,'Shoulders','.',NULL),(2,'Arms','.',NULL),(3,'Back','.',NULL),(4,'Legs','.',NULL),(5,'Core','.',NULL),(6,'Chest','.',NULL);
+INSERT INTO `muscle_group` VALUES (1,'Back','.',NULL),(2,'Chest','.',NULL),(3,'Arms','.',NULL),(4,'Shoulders','.',NULL),(5,'Legs','.',NULL),(6,'Core','.',NULL);
 /*!40000 ALTER TABLE `muscle_group` ENABLE KEYS */;
 
 --
@@ -191,7 +183,7 @@ CREATE TABLE `muscle_group_exercises` (
 --
 
 /*!40000 ALTER TABLE `muscle_group_exercises` DISABLE KEYS */;
-INSERT INTO `muscle_group_exercises` VALUES (3,3),(5,3),(6,1),(6,2);
+INSERT INTO `muscle_group_exercises` VALUES (1,5),(1,7),(2,1),(2,4),(4,8);
 /*!40000 ALTER TABLE `muscle_group_exercises` ENABLE KEYS */;
 
 --
@@ -234,8 +226,8 @@ CREATE TABLE `progression_sec` (
   `exercise_id_exercise` int unsigned NOT NULL,
   `name_progression` varchar(255) NOT NULL,
   `order_progression` int NOT NULL,
-  `number_sec_needed` int NOT NULL,
   `number_sets_needed` int NOT NULL,
+  `number_sec_needed` int NOT NULL,
   PRIMARY KEY (`id_progression`),
   UNIQUE KEY `progression_sec_name_progression_unique` (`name_progression`),
   KEY `progression_sec_exercise_id_exercise_index` (`exercise_id_exercise`),
@@ -260,19 +252,16 @@ DROP TABLE IF EXISTS `training`;
 CREATE TABLE `training` (
   `id_training` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id_user` varchar(255) NOT NULL,
-  `mesocycle_id_mesocycle` int unsigned NOT NULL,
   `training_name` varchar(255) NOT NULL,
   `training_type` varchar(255) NOT NULL,
   `day` datetime NOT NULL,
   `start_hour` varchar(255) NOT NULL,
-  `completed` tinyint(1) DEFAULT NULL,
   `end_hour` varchar(255) NOT NULL,
+  `completed` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id_training`),
   KEY `training_user_id_user_index` (`user_id_user`),
-  KEY `training_mesocycle_id_mesocycle_index` (`mesocycle_id_mesocycle`),
-  CONSTRAINT `training_mesocycle_id_mesocycle_foreign` FOREIGN KEY (`mesocycle_id_mesocycle`) REFERENCES `mesocycle` (`id_mesocycle`) ON UPDATE CASCADE,
   CONSTRAINT `training_user_id_user_foreign` FOREIGN KEY (`user_id_user`) REFERENCES `user` (`id_user`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -280,8 +269,40 @@ CREATE TABLE `training` (
 --
 
 /*!40000 ALTER TABLE `training` DISABLE KEYS */;
-INSERT INTO `training` VALUES (1,'26d1da4438fd',1,'Front lever day','Pull','2024-09-06 00:00:00','9:00 AM',0,'10:00 AM'),(2,'555e136e68b9',2,'Push day','Push','2024-09-06 00:00:00','9:00 AM',1,'12:00 AM'),(3,'555e136e68b9',1,'Pull day','Pull','2024-09-18 21:00:00','9:00 AM ',1,'11:30 AM'),(4,'555e136e68b9',1,'Pull day','Pull','2024-09-16 21:00:00','9:00 AM ',1,'10:30 AM'),(5,'555e136e68b9',1,'Pull day','Pull','2024-09-17 21:00:00','9:00 AM',1,'12:30 AM'),(6,'555e136e68b9',1,'Leg day','Push','2024-09-19 21:00:00','9:00 AM',1,'11:00 AM');
+INSERT INTO `training` VALUES (2,'c3cf6fd48800','Push day','Push','2024-09-29 00:00:00','09:00','11:00',0),(3,'c3cf6fd48800','Push day','Push','2024-09-11 00:00:00','9:00 ','11:00',1),(138,'c3cf6fd48800','New Training','','2024-09-22 00:00:00','09:00','10:00',0),(139,'c3cf6fd48800','New Training','','2024-09-22 00:00:00','09:00','10:00',0),(140,'c3cf6fd48800','New Training','','2024-09-29 00:00:00','09:00','10:00',0);
 /*!40000 ALTER TABLE `training` ENABLE KEYS */;
+
+--
+-- Table structure for table `training_item`
+--
+
+DROP TABLE IF EXISTS `training_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `training_item` (
+  `id_training_item` int unsigned NOT NULL AUTO_INCREMENT,
+  `sets` int NOT NULL,
+  `reps` int NOT NULL,
+  `weight` varchar(255) NOT NULL,
+  `rest` varchar(255) NOT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  `exercise_id_exercise` int unsigned NOT NULL,
+  `training_id_training` int unsigned NOT NULL,
+  PRIMARY KEY (`id_training_item`),
+  KEY `training_item_exercise_id_exercise_index` (`exercise_id_exercise`),
+  KEY `training_item_training_id_training_index` (`training_id_training`),
+  CONSTRAINT `training_item_exercise_id_exercise_foreign` FOREIGN KEY (`exercise_id_exercise`) REFERENCES `exercise` (`id_exercise`) ON UPDATE CASCADE,
+  CONSTRAINT `training_item_training_id_training_foreign` FOREIGN KEY (`training_id_training`) REFERENCES `training` (`id_training`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `training_item`
+--
+
+/*!40000 ALTER TABLE `training_item` DISABLE KEYS */;
+INSERT INTO `training_item` VALUES (6,23,2,'3','4','',1,2),(7,3,10,'25','1\'','',7,2);
+/*!40000 ALTER TABLE `training_item` ENABLE KEYS */;
 
 --
 -- Table structure for table `training_method`
@@ -304,7 +325,7 @@ CREATE TABLE `training_method` (
 --
 
 /*!40000 ALTER TABLE `training_method` DISABLE KEYS */;
-INSERT INTO `training_method` VALUES ('emr345nrpzde','Calisthenics','Calisthenics promote strength, endurance, flexibility, and coordination and augment the body\'s general well-being by placing controllable, regular demands upon the cardiovascular system.'),('ojjmdeasf32sd','Gym','one\'s ability to execute daily activities with optimal performance, endurance, and strength with the management of disease, fatigue, and stress and reduced sedentary behavior');
+INSERT INTO `training_method` VALUES ('emr345nrpzde','Calistenia','Conjunto de ejercicios que conducen al desarrollo de la agilidad y fuerza física.'),('ojjmdeasf32sd','Gimnasio',' lugar especialmente diseñado y equipado para que acudas a realizar una actividad física en diversas intensidades');
 /*!40000 ALTER TABLE `training_method` ENABLE KEYS */;
 
 --
@@ -324,7 +345,6 @@ CREATE TABLE `user` (
   `phone` varchar(255) DEFAULT NULL,
   `body_weight` int NOT NULL,
   `height` int NOT NULL,
-  `token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_user`),
   UNIQUE KEY `user_username_unique` (`username`),
   UNIQUE KEY `user_password_unique` (`password`),
@@ -338,7 +358,7 @@ CREATE TABLE `user` (
 --
 
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('26d1da4438fd','narutouzu','$2a$10$juCvWjersB5jNAqfV6pU1u//lCT9j52dd8fynGNLI0wsai/d271/i','narutouzumaki@gmail.com','Naruto Uzumaki','1993-05-13 21:00:00','332562369',70,190,NULL),('555e136e68b9','tojizenin','$2a$10$7ig6N/UukthEoIDxrLXhE.Z1xcGXgtEPA0ujGftkaLuH9nKzXk6T.','zenintoji@gmail.com','Toji Zenin','1992-10-05 21:00:00','564357685',90,180,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU1NWUxMzZlNjhiOSIsInVzZXJuYW1lIjoidG9qaXplbmluIiwiaWF0IjoxNzI2MTM4MTUzLCJleHAiOjE3MjYxNDE3NTN9.xSd-f3DuL3gT3PVZVQXjUpM64w_bpEEl487-gHPsULQ'),('c346acf94c11','itadori','$2a$10$MN3OTVHD.c9.ImmFvwvhG.RgFZTK2kVw7W/a34s51P8pNmGLr6bbS','itadoriyuji@gmail.com','Yuji Itadori','2003-12-13 21:00:00','464579769',80,174,NULL);
+INSERT INTO `user` VALUES ('64b623b3903a','itadori','$2a$10$faCEh71z97Z9K699FlTjSessZxBHOACmyQBjvIASeI/zNoPiZl5yq','itadoriyuji@gmail.com','Yuji Itadori','2003-12-13 21:00:00','464579769',80,174),('c3cf6fd48800','tojizenin','$2a$10$RzbOJz7eXMo.lI5x.nN3cO7NCk7LXwSnPW7K3bBMa8eqnfTo9JG6y','zenintoji@gmail.com','Toji Zenin','1992-10-05 21:00:00','564357685',90,180),('efd0fe450f4c','narutouzu','$2a$10$CNsAMjsu51M9ZY8aHdDPZOYeGHVWxiBAbCXcc/RKyYCdK3tE/K11i','narutouzumaki@gmail.com','Naruto Uzumaki','1993-05-13 21:00:00','332562369',70,190);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 --
@@ -379,4 +399,4 @@ CREATE TABLE `user_training_methods` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-21 15:11:37
+-- Dump completed on 2024-10-07  6:49:24
