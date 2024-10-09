@@ -7,10 +7,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { addDays, format } from "date-fns"
+import { format } from "date-fns"
 import { TrainingDay } from '@/trainings/components/trainingDay/TraningDay.tsx'
 import { Exercise } from '@/exercises/exercise.type.ts'
-import { useTraining } from '@/trainings/training.context.tsx'
+import { useExercise } from '@/exercises/exercise.context.tsx'
 
 
 type TrainingItem = {
@@ -37,6 +37,7 @@ type Training = {
 export default function TrainingCalendar() {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [trainings, setTrainings] = useState<Training[]>([])
+  const { exercises } = useExercise()
   const [newTraining, setNewTraining] = useState<Training>({
     idTraining: 0,
     trainingName: '',
@@ -49,7 +50,6 @@ export default function TrainingCalendar() {
     trainingItems: []
   })
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const { getTrainingToDay } = useTraining()
 
   const handleAddTraining = () => {
     const trainingWithId = { ...newTraining, id: Date.now().toString() }
@@ -78,19 +78,6 @@ export default function TrainingCalendar() {
     })
   }
 
-  const getTrainingsForDate = (date: Date) => {
-    return trainings.filter(training => {
-      if (training.recurrence === 'none') {
-        return training.date.toDateString() === date.toDateString()
-      } else if (training.recurrence === 'daily') {
-        return training.date <= date
-      } else if (training.recurrence === 'weekly') {
-        return training.date <= date && training.date.getDay() === date.getDay()
-      } else if (training.recurrence === 'monthly') {
-        return training.date <= date && training.date.getDate() === date.getDate()
-      }
-    })
-  }
 
   return (
     <div className="container mx-auto p-4 max-w-md">
@@ -101,7 +88,7 @@ export default function TrainingCalendar() {
         onSelect={setDate}
         className="rounded-md  mb-4"
           />
-          <TrainingDay date={date} trainings={getTrainingToDay(date?.toString())} />
+          <TrainingDay />
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button className="w-full mt-4">Create Training</Button>
@@ -124,8 +111,8 @@ export default function TrainingCalendar() {
               <Input
                 id="date"
                 type="date"
-                value={format(newTraining.date, 'yyyy-MM-dd')}
-                onChange={(e) => setNewTraining({ ...newTraining, date: new Date(e.target.value) })}
+                value={format(newTraining.day, 'yyyy-MM-dd')}
+                onChange={(e) => setNewTraining({ ...newTraining, day: e.target.value })}
               />
             </div>
             <div className="grid items-center gap-4">
