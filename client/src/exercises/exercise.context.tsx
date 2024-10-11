@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { createExercise, getExercisesReq, getExercisesByMg, deleteExercise } from "@/exercises/exercise.api.ts";
+import { createExercise, getExercisesReq, getExercisesByMg, deleteExercise, updateExercise } from "@/exercises/exercise.api.ts";
 import { Exercise } from "@/exercises/exercise.type.ts";
 
 
@@ -7,7 +7,7 @@ interface ExerciseState {
     exercises: Exercise[];
     addExercise: (exercise: Exercise) => void;
     getExercises: (mg: string) => void;
-    updateExercise: (exercise: Exercise) => void;
+    editarExercise: (exercise: Exercise) => void;
     getAllExercises: () => void;
     removeExercise: (idExcercise: number) => void;
     errors: object | null;
@@ -17,7 +17,7 @@ const initialExerciseState: ExerciseState = {
     exercises: [],
     addExercise: () => { },
     getExercises: () => { },
-    updateExercise: () => { },
+    editarExercise: () => { },
     getAllExercises: () => { },
     removeExercise: () => { },
     errors: null,
@@ -53,9 +53,9 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     }
     };    
     
-    const updateExercise = async (exercise: Exercise) => {
+    const editarExercise = async (exercise: Exercise) => {
         try {
-            await createExercise(exercise);
+            await updateExercise(exercise);
             const updatedExercises = await getExercisesReq();
             setExercises(updatedExercises.data.exercises);
         } catch (error: unknown) {
@@ -107,7 +107,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <ExerciseContext.Provider value={{ exercises, addExercise, updateExercise, getExercises, getAllExercises, removeExercise, errors }}>
+        <ExerciseContext.Provider value={{ exercises, addExercise, editarExercise, getExercises, getAllExercises, removeExercise, errors }}>
             {children}
         </ExerciseContext.Provider>
     );
