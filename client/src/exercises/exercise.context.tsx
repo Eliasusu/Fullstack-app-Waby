@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { createExercise, getExercisesReq, getExercisesByMg, deleteExercise, updateExercise } from "@/exercises/exercise.api.ts";
 import { Exercise } from "@/exercises/exercise.type.ts";
+import { useMuscleGroup } from "@/muscleGroups/muscle-group.context.tsx";
 
 
 interface ExerciseState {
@@ -37,6 +38,7 @@ export const useExercise = () => {
 export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [errors, setErrors] = useState<object | null>(null);
+    const { muscleGroups } = useMuscleGroup();
 
     // Se puede crear otro metodo llamado addExerciseByMg o directamente usamos este 
     // Pero hay que modificarlo y agregarlo en el controller
@@ -55,9 +57,17 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     
     const editarExercise = async (exercise: Exercise) => {
         try {
-            await updateExercise(exercise);
-            const updatedExercises = await getExercisesReq();
-            setExercises(updatedExercises.data.exercises);
+            const mg = exercise.muscleGroups[0].toString(); 
+            const muscleGroupMatch = muscleGroups.find(muscleGroup => muscleGroup.nameMuscleGroup === mg);
+            const muscleGroupId = muscleGroupMatch ? muscleGroupMatch.idMuscleGroup : null;
+            const exerciseUpdated = { 
+                ...exercise, 
+                muscleGroups: muscleGroupId !== null ? [muscleGroupId] : [] 
+            };
+            console.log(exerciseUpdated);
+            await updateExercise(exerciseUpdated);
+            const updatedExercises = await getExercisesByMg(muscleGroupId?.toString() || "");
+            setExercises(updatedExercises.data.exercisesDestructurized);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setErrors({ message: error.message });

@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { ScrollArea } from "@radix-ui/react-scroll-area"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -30,6 +31,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (
+    <ScrollArea className="w-screen">
     <div className="rounded-md border">
       <Table>
         <TableHeader>
@@ -73,6 +75,7 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-    </div>
+      </div>
+      </ScrollArea>
   )
 }

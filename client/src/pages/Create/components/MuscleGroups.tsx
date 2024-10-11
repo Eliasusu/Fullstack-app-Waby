@@ -151,7 +151,7 @@ useEffect(() => {
             <DialogTitle className="text-2xl font-bold">Exercises by muscle group</DialogTitle>
           </DialogHeader>
           <h3 className="text-xl font-semibold">{openDialog}</h3>
-          <ExercisesTable data={exercises}/>
+            <ExercisesTable data={exercises} />
           <button
             className="w-full flex items-center justify-center py-0 text-gray-400 hover:text-gray-100 transition-colors"
             onClick={() => setShowAddExercise(true)}

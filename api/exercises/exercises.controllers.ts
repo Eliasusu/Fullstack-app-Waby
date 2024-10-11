@@ -2,12 +2,11 @@ import { Request, Response } from "express";
 import { validateParcialExercises } from "./exercises.schema.js";
 import { Exercise } from "./exercise.entity.js";
 import { orm } from "../shared/db/orm.js";
+import { MuscleGroup } from "../muscleGroups/muscleGroup.entity.js";
 
 const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
-    console.log(req.body);
-    console.log(req.params);
     try {
         if (req.params.idMuscleGroup) {
             const idMuscleGroup = Number.parseInt(req.params.idMuscleGroup);
@@ -48,7 +47,6 @@ async function getOne(req: Request, res: Response) {
 
 async function create(req: Request, res: Response) {
     try {
-        console.log(req.body);
         const exerciseValidation = validateParcialExercises(req.body);
         if (!exerciseValidation.success) {
             res.status(400).json({message: exerciseValidation.error});
