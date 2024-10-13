@@ -34,7 +34,7 @@ async function getAll(req: Request, res: Response) {
 async function add(req: Request, res: Response) {
     try {
         console.log('El trainingItem que llega', req.body);
-        const findExercise = await em.findOne(Exercise, { idExercise: req.body.exercise.idExercise, user: { idUser: req.body.user.id } });
+        const findExercise = await em.findOne(Exercise, { idExercise: req.body.exercise, user: { idUser: req.body.user.id } });
         console.log('1')
         if (!findExercise) return res.status(404).json({ message: 'Exercise not found' });
 

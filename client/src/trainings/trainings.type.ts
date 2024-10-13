@@ -3,9 +3,9 @@ import { TrainingItem } from "@/trainingItem/trainingItems.type.ts";
 
 export interface Training {
     idTraining?: number;
-    user: string;
+    user?: string;
     trainingName: string;
-    trainingType: string;
+    trainingType?: string;
     day: Date;
     startHour: string;
     endHour: string;

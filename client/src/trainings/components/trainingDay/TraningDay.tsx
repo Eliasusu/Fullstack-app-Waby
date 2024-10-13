@@ -76,10 +76,6 @@ export const TrainingDay: React.FC = () => {
     if (!training) setLocalTraining(null)
     if (training) setLocalTraining(training)
   }, [setLocalTraining, training]);
-  
-  console.log('isCreateDialogOpen', isCreateDialogOpen)
-  console.log('isModifyDialogOpen', isModifyDialogOpen)
-  console.log('localTraining', localTraining)
 
   const formatDay = (dateString: Date) => {
     const date = new Date(dateString)
@@ -102,16 +98,9 @@ export const TrainingDay: React.FC = () => {
   }
 
   const handleCreate = async (field: keyof Training, value: unknown) => {
-    if (localTraining) {
-      const updatedTraining = { ...localTraining, [field]: value }
-      setLocalTraining(updatedTraining)
-      addTraining(updatedTraining)
-      setIsCreateDialogOpen(false)
-      toast({
-        title: "Entrenamiento creado",
-        description: "Se ha creado un nuevo entrenamiento."
-      })
-    }
+    let createdTraining = { ...localTraining, [field]: value } as Training
+    createdTraining = { ...createdTraining, user: user?.username || '', trainingType: "", trainingName: createdTraining.trainingName || '' } as Training
+    setLocalTraining(createdTraining)
   }
 
   const handleExerciseUpdate = (index: number, field: keyof TrainingItem, value: unknown) => {
@@ -183,29 +172,10 @@ export const TrainingDay: React.FC = () => {
     }
   }
 
-  const handleCreateTraining = () => {
-    if (selectedDate) {
-      const newTraining: Training = {
-        trainingName: 'New Training',
-        day: selectedDate,
-        startHour: '00:00',
-        endHour: '00:00',
-        completed: false,
-        trainingItems: [],
-        user: user?.username || '',
-        trainingType: ""
-      }
-      addTraining(newTraining)
-      setIsCreateDialogOpen(false)
-      toast({
-        title: "Entrenamiento creado",
-        description: "Se ha creado un nuevo entrenamiento.",
-      })
-    }
-  }
 
   const handleModifyTraining = () => {
     if (localTraining) {
+      setLocalTraining(localTraining)
       updateTraining(localTraining)
       setIsModifyDialogOpen(false)
       toast({
@@ -515,7 +485,7 @@ export const TrainingDay: React.FC = () => {
                       className="col-span-3" />
                   </div>
                 </div>
-                <Button onClick={handleUpdate}>Save Changes</Button>
+                <Button onClick={handleModifyTraining}>Save Changes</Button>
               </DialogContent></>
             )}
         </Dialog>
@@ -537,7 +507,7 @@ export const TrainingDay: React.FC = () => {
                     <label htmlFor="trainingName" className="text-right">Name</label>
                     <Input
                       id="trainingName"
-                      onChange={(e) => handleCreate('trainingName', e.target.value)}
+                      onBlur={(e) => handleCreate('trainingName', e.target.value)}
                       className="col-span-3" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -545,7 +515,7 @@ export const TrainingDay: React.FC = () => {
                     <Input
                       id="startHour"
                       type="time"
-                      onChange={(e) => handleCreate('startHour', e.target.value)}
+                      onBlur={(e) => handleCreate('startHour', e.target.value)}
                       className="col-span-3" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -553,11 +523,11 @@ export const TrainingDay: React.FC = () => {
                     <Input
                       id="endHour"
                       type="time"
-                      onChange={(e) => handleCreate('endHour', e.target.value)}
+                      onBlur={(e) => handleCreate('endHour', e.target.value)}
                       className="col-span-3" />
                   </div>
                 </div>
-                <Button onClick={handleCreateTraining}> Create Training </Button>
+                <Button>Create Training</Button>
               </DialogContent></>
             )}
       </Dialog>
