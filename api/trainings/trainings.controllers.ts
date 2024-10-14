@@ -39,8 +39,16 @@ async function add(req: Request, res: Response) {
         if (!trainingValidation.success) {
             return res.status(400).json({ message: trainingValidation.error });
         }
+
+        let date = new Date(trainingValidation.data.day);
+
+        date.setUTCHours(0, 0, 0, 0); 
+
+        const formatDay = date.toISOString().split('T')[0];
+
         const training = em.create(Training, {
             ...trainingValidation.data,
+            day: formatDay,
             user: user, 
         });
         await em.persistAndFlush(training);

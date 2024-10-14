@@ -18,8 +18,8 @@ export const exerciseTraining: any = z.object({
     comment: z.string({
         invalid_type_error: 'Comment must be a string',
     }),
+    commpleteExercise: z.boolean({})
 });
-
 
 
 export function validateRoutine(routine: trainingItem) {

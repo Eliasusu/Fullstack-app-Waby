@@ -1,5 +1,5 @@
 import { User } from '../users/user.entity.js';
-import { PrimaryKey, Property, ManyToOne, Rel, Entity, OneToMany, Collection, Cascade } from '@mikro-orm/core';
+import { PrimaryKey, Property, ManyToOne, Rel, Entity, OneToMany, Collection, Cascade, DateType } from '@mikro-orm/core';
 import { trainingItem } from '../trainingItems/trainingItems.entity.js';
 
 @Entity()

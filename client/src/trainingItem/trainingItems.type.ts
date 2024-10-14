@@ -9,6 +9,7 @@ export interface TrainingItem {
     comment?: string;
     exercise: Exercise;
     training?: string;
+    completeExercise?: boolean;
 }
 
 

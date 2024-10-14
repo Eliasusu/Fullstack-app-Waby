@@ -118,6 +118,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     const getTrainingToDay = async (date: Date) => {
         try {
             const dateString = date.toISOString().split("T")[0];
+            console.log('dateString', dateString);
             const res = await getTrainingOfTheDay(dateString);
             setTraining(res.data);
         } catch (error: unknown) {
@@ -163,11 +164,12 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
             const id = idTraining.toString();
             const idTItem = trainingItem.idTrainingItem.toString();
             const refacTrainingItem = {
-                exercise: trainingItem.exercise,
+                exercise: trainingItem.exercise.idExercise,
                 sets: trainingItem.sets,
                 reps: trainingItem.reps,
                 weight: trainingItem.weight,
                 rest: trainingItem.rest,
+                completeExercise: trainingItem.completeExercise,
             }
             console.log('trainingItem', refacTrainingItem);
             await updateTrainingItemReq(refacTrainingItem, id, idTItem);

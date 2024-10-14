@@ -85,6 +85,7 @@ export const TrainingDay: React.FC = () => {
   const [newTraining, setNewTraining] = useState<Training>(initialTraining)
   const [newTrainingItem, setNewTrainingItem] = useState<TrainingItem>(initialTrainingItem)
 
+
   useEffect(() => {
     getAllExercises()
   }, [])
@@ -99,9 +100,14 @@ export const TrainingDay: React.FC = () => {
 
 
   const handleChangeUpdateTraining = async (field: keyof Training, value: unknown) => {
+    if (field === 'completed') {
+      const updatedTraining = { ...localTraining, [field]: value as boolean }
+      updateTraining(updatedTraining)
+    }
     if (localTraining) {
       const updatedTraining = { ...localTraining, [field]: value }
       setLocalTraining(updatedTraining)
+      console.log(localTraining)
     }
   }
 
@@ -118,12 +124,15 @@ export const TrainingDay: React.FC = () => {
   const handleChangeCreateTraining = async (field: keyof Training, value: unknown) => {
     const createdTraining = { ...newTraining, [field]: value } as Training
     setNewTraining(createdTraining)
+    console.log('como van llegando los datos', newTraining)
   }
 
   const handleSubmitCreateTraining = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (newTraining) {
       addTraining(newTraining)
+      setNewTraining(newTraining)
+      console.log('El training que se envio al back', newTraining)
       setIsCreateDialogOpen(false)
     }
   }
@@ -133,7 +142,14 @@ export const TrainingDay: React.FC = () => {
       const updatedExercises = [...localTraining.trainingItems]
       updatedExercises[index] = { ...updatedExercises[index], exercise: value as Exercise }
       const updatedTraining = { ...localTraining, exercisesTrainings: updatedExercises }
-      console.log(updatedExercises[index])
+      updateTrainingItem(updatedExercises[index], localTraining.idTraining || 0)
+      setLocalTraining(updatedTraining)
+    }
+    if (field === 'completeExercise') { 
+      console.log('completeExercise', value)
+      const updatedExercises = [...localTraining.trainingItems]
+      updatedExercises[index] = { ...updatedExercises[index], completeExercise: value as boolean }
+      const updatedTraining = { ...localTraining, exercisesTrainings: updatedExercises }
       updateTrainingItem(updatedExercises[index], localTraining.idTraining || 0)
       setLocalTraining(updatedTraining)
     }
@@ -205,7 +221,7 @@ return (
         <Checkbox
           id="completed"
           checked={localTraining?.completed}
-          onCheckedChange={(checked) => handleChangeUpdateTraining('completed', checked)}
+          onClick={() => handleChangeUpdateTraining('completed', !localTraining?.completed)}
         />
         <CardTitle className="text-xl font-medium">{localTraining?.trainingName || 'Empty'}</CardTitle>
       </div>
@@ -251,7 +267,11 @@ return (
             {localTraining?.trainingItems?.map((et, index) => (
               <TableRow key={index} className="border-b border-white/30">
                 <TableCell className="font-medium text-gray-400">
-                  <Checkbox className="mr-2" />
+                  <Checkbox
+                    id="completeExercise"
+                    checked={localTraining.trainingItems[index].completeExercise}
+                    onClick={() => handleChangeUpdateTItem(index, 'completeExercise', !et.completeExercise)}
+                  />
                 </TableCell>
                 <TableCell className="font-medium text-gray-400">
                   <Popover>
@@ -506,20 +526,23 @@ return (
               <div className="grid gap-4 py-4">
                 <form
                   className="grid gap-4 py-4"
-                  onSubmit={() => { handleSubmitCreateTraining }}>
+            
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    handleSubmitCreateTraining(e)
+                  }}>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <label htmlFor="trainingName" className="text-right">Name</label>
                     <Input
                       id="trainingName"
-                      onBlur={(e) => handleChangeCreateTraining('trainingName', e.target.value)}
+                      onChange={(e) => handleChangeCreateTraining('trainingName', e.target.value)}
                       className="col-span-3 w-full" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <label htmlFor="trainingType" className="text-right">Type</label>
                     <Input
                       id="trainingType"
-                      value={localTraining?.trainingType || ''}
-                      onChange={(e) => handleChangeUpdateTraining('trainingType', e.target.value)}
+                      onChange={(e) => handleChangeCreateTraining('trainingType', e.target.value)}
                       className="col-span-3 w-full" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -527,7 +550,7 @@ return (
                     <Input
                       id="startHour"
                       type="time"
-                      onBlur={(e) => handleChangeCreateTraining('startHour', e.target.value)}
+                      onChange={(e) => handleChangeCreateTraining('startHour', e.target.value)}
                       className="col-span-3 w-full" />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -535,7 +558,7 @@ return (
                     <Input
                       id="endHour"
                       type="time"
-                      onBlur={(e) => handleChangeCreateTraining('endHour', e.target.value)}
+                      onChange={(e) => handleChangeCreateTraining('endHour', e.target.value)}
                       className="col-span-3 w-full" />
                   </div>
                   <Button>Create Training</Button>

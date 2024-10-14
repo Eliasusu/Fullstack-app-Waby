@@ -8,7 +8,7 @@ export const trainingsRouter = Router();
 //Get all trainings by user
 trainingsRouter.get('/user', getAll);
 
-//Get one training by id
+//Get one training by date
 trainingsRouter.get('/:date/user', getOne);
 
 //Create a new training

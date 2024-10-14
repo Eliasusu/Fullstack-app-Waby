@@ -22,6 +22,9 @@ export class trainingItem {
 
     @Property({ nullable: true })
     comment?: string;
+
+    @Property({ nullable: true })
+    completeExercise?: boolean;
     
     @ManyToOne(() => Exercise, { nullable: false }) 
     exercise!: Rel<Exercise>;
