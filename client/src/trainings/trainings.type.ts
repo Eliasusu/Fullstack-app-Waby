@@ -1,4 +1,3 @@
-
 import { TrainingItem } from "@/trainingItem/trainingItems.type.ts";
 
 export interface Training {
@@ -12,3 +11,4 @@ export interface Training {
     completed: boolean;
     trainingItems: TrainingItem[];
 }
+

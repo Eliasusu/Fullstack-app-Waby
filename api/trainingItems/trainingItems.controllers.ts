@@ -74,7 +74,7 @@ async function update(req: Request, res: Response) {
             const routineUpdated = em.getReference(trainingItem, idTrainingItem as never);
             em.assign(routineUpdated, result.data);
             await em.flush();
-            res.status(202).json({ message: 'Exercise updated succesfully' });
+            res.status(202).json({ message: 'Exercise updated succesfully', routineUpdated });
         } else {
             res.status(400).json({ error: 'Exercise not updated' });
         }

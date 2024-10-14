@@ -4,6 +4,8 @@ import { Training } from "@/trainings/trainings.type";
 import { TrainingItem } from "@/trainingItem/trainingItems.type";
 import { createTrainingItemReq, deleteTrainingItemReq, updateTrainingItemReq } from "@/trainingItem/trainingItem.api.ts";
 
+
+
 interface TrainingState {
     trainings: Training[];
     training: Training | undefined;
@@ -12,11 +14,12 @@ interface TrainingState {
     getTrainings: () => void;
     getTrainingToDay: (date: Date) => object;
     updateTraining: (training: Training) => void;
-    updateTrainingItem: (trainingItem: TrainingItem, idTraining:number) => void;
+    updateTrainingItem: (trainingItem: TrainingItem, idTraining: number) => void;
     deleteTraining: (id: number) => void;
     deleteTrainingItem: (id: number, idTraining:number) => void;
     errors: object | null;
 }
+
 
 const initialTrainingState: TrainingState = {
     trainings: [{
@@ -89,11 +92,19 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
 
     const addTrainingItem = async (trainingItem: TrainingItem, idTraining: number) => {
         try {
-            console.log('trainingItem', trainingItem);
+            const refacTrainingItem = {
+                exercise: trainingItem.exercise.idExercise,
+                sets: trainingItem.sets,
+                reps: trainingItem.reps,
+                weight: trainingItem.weight,
+                rest: trainingItem.rest,
+            }
+            console.log('refac', refacTrainingItem);
             console.log('idTraining', idTraining);
             const id = idTraining.toString();
-            await createTrainingItemReq(trainingItem, id);
+            await createTrainingItemReq(refacTrainingItem, id);
             const updatedTrainings = await getAllTrainings();
+            console.log('updatedTrainings', updatedTrainings);
             setTrainings(updatedTrainings.data.trainings);
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -148,10 +159,18 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
 
     const updateTrainingItem = async (trainingItem: TrainingItem, idTraining: number) => {
         try {
-            console.log('trainingItem', trainingItem);
-            console.log('idTraining', idTraining);
+            if(trainingItem.idTrainingItem === undefined) return;
             const id = idTraining.toString();
-            await updateTrainingItemReq(trainingItem, id);
+            const idTItem = trainingItem.idTrainingItem.toString();
+            const refacTrainingItem = {
+                exercise: trainingItem.exercise,
+                sets: trainingItem.sets,
+                reps: trainingItem.reps,
+                weight: trainingItem.weight,
+                rest: trainingItem.rest,
+            }
+            console.log('trainingItem', refacTrainingItem);
+            await updateTrainingItemReq(refacTrainingItem, id, idTItem);
             const updatedTrainings = await getAllTrainings();
             setTrainings(updatedTrainings.data.trainings);
         } catch (error: unknown) {

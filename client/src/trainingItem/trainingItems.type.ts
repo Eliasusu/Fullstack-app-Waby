@@ -10,3 +10,12 @@ export interface TrainingItem {
     exercise: Exercise;
     training?: string;
 }
+
+
+export interface TrainingItemProps {
+    exercise: number,
+    sets: number;
+    reps: number;
+    weight: string;
+    rest: string;
+}
