@@ -17,7 +17,7 @@ export class Training{
     @Property({ nullable: false })
     trainingType!: string;
 
-    @Property({ nullable: false })
+    @Property({ type: DateType, nullable: false })
     day!: Date;
     
     @Property({ nullable: false })

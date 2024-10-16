@@ -98,6 +98,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
                 reps: trainingItem.reps,
                 weight: trainingItem.weight,
                 rest: trainingItem.rest,
+                comment: trainingItem.comment,
             }
             console.log('refac', refacTrainingItem);
             console.log('idTraining', idTraining);
@@ -163,12 +164,14 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
             if(trainingItem.idTrainingItem === undefined) return;
             const id = idTraining.toString();
             const idTItem = trainingItem.idTrainingItem.toString();
+            console.log('completeExercise', trainingItem.completeExercise);
             const refacTrainingItem = {
                 exercise: trainingItem.exercise.idExercise,
                 sets: trainingItem.sets,
                 reps: trainingItem.reps,
                 weight: trainingItem.weight,
                 rest: trainingItem.rest,
+                comment: trainingItem.comment,
                 completeExercise: trainingItem.completeExercise,
             }
             console.log('trainingItem', refacTrainingItem);

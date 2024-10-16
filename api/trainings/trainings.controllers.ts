@@ -18,6 +18,7 @@ async function getAll(req: Request, res: Response) {
 
 async function getOne(req: Request, res: Response) {
     try {
+
         const trainingFind = await em.findOne(Training, { user: { idUser: req.body.user.id }, day: req.params.date }, { populate: ['user.idUser', 'trainingItems.exercise.name'] });
         res.json(trainingFind);
     } catch (error: any) {
@@ -62,7 +63,8 @@ async function add(req: Request, res: Response) {
 
 
 async function update(req: Request, res: Response) {
-    try{
+    try {
+        console.log(req.body);
         const idTraining = Number.parseInt(req.params.idTraining);
         const userId = req.body.user.id;
         const training = await em.findOneOrFail(Training, {idTraining, user: { idUser: userId }});
@@ -73,6 +75,7 @@ async function update(req: Request, res: Response) {
         if (!trainingValidation.success) {
             return res.status(400).json({ message: trainingValidation.error });
         }
+        console.log(trainingValidation.data);
         em.assign(training, trainingValidation.data);
         await em.flush();
         res.status(202).json({ message: 'Training updated' });

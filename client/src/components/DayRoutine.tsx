@@ -12,14 +12,28 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import BoxContainer from "@/components/ui/BoxConteiner.tsx"
 import { useTraining } from "@/trainings/training.context.tsx"
+import { Training } from "@/trainings/trainings.type.ts"
 
 
-export const DayRoutine: React.FC<{ date: Date }> = ({ date }) => {
-  const [completed, setCompleted] = useState(false)
+const initialTraining: Training = {
+  idTraining: -1,
+  trainingName: '',
+  startHour: '',
+  endHour: '',
+  day: new Date(),
+  completed: false,
+  user: '',
+  trainingType: '',
+  trainingItems: []
+}
+
+
+export const DayRoutine = ({ date }: { date: Date }) => {
   const [startHour, setStartHour] = useState("")
   const [endHour, setEndHour] = useState("")
+  const [localTraining, setLocalTraining] = useState<Training>(initialTraining)
   //Traigo de useTraining el training y getTrainingToDay
-  const { training, getTrainingToDay } = useTraining()
+  const { training, getTrainingToDay, updateTraining } = useTraining()
 
   
   //useEffect para traer el training del día, actualizarlo cada 3 minutos
@@ -31,54 +45,61 @@ export const DayRoutine: React.FC<{ date: Date }> = ({ date }) => {
       getTrainingToDay(date);
 
       //Actualizo los estados del training
-      setCompleted(training?.completed || false);
       setStartHour(training?.startHour || "");
       setEndHour(training?.endHour || "");
+      setLocalTraining(training || initialTraining);
     };
 
-    fetchTraining(); 
+    fetchTraining();
 
-    const intervalId = setInterval(fetchTraining, 180000); 
+    const intervalId = setInterval(fetchTraining, 180000);
 
-    return () => clearInterval(intervalId); 
+    return () => clearInterval(intervalId);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  const handleChangeUpdateTraining = async (field: keyof Training, value: string | boolean) => {
+    if (field === 'completed') {
+      const updatedTraining = { ...localTraining, [field]: value as boolean }
+      updateTraining(updatedTraining)
+      setLocalTraining(updatedTraining)
+    }
+  }
   
-  //Funcion para formatear la fecha en formato "dd MMM"
-  const formatDay = (dateString: string) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'short' });
-    return `${day} ${month}`;
-  };
+    //Funcion para formatear la fecha en formato "dd MMM"
+    const formatDay = (dateString: string) => {
+      const date = new Date(dateString);
+      const day = date.getDate();
+      const month = date.toLocaleString('default', { month: 'short' });
+      return `${day} ${month}`;
+    };
   
-  //Guardo la fecha en formato string
-  const dateFormat = date.toString();
-  //Guardo la fecha formateada
-  const formattedDay = formatDay(dateFormat);
+    //Guardo la fecha en formato string
+    const dateFormat = date.toString();
+    //Guardo la fecha formateada
+    const formattedDay = formatDay(dateFormat);
 
-  return (
+    return (
       <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex items-center space-x-2">
             <Checkbox
               id="completed"
-              checked={completed}
-              onClick={() => setCompleted(!completed)}
+              checked={localTraining?.completed}
+              onClick={() => handleChangeUpdateTraining('completed', !localTraining?.completed)}
             />
-          <CardTitle className="text-xl font-medium">{training?.trainingName || 'Empty'}</CardTitle>
+            <CardTitle className="text-xl font-medium">{training?.trainingName || 'Empty'}</CardTitle>
           </div>
-        <div className="flex items-center space-x-2">
-          <div id="day" className="font-light text-white/75 text-xs">
-            <p>{formattedDay}</p>
-          </div>
+          <div className="flex items-center space-x-2">
+            <div id="day" className="font-light text-white/75 text-xs">
+              <p>{formattedDay}</p>
+            </div>
             <div>
               <Input
                 id="startHour"
                 type="string"
-              value={startHour}
+                value={startHour}
                 onChange={(e) => setStartHour(e.target.value)}
                 className="bg-grey-box  text-white"
               />
@@ -87,15 +108,15 @@ export const DayRoutine: React.FC<{ date: Date }> = ({ date }) => {
               <Input
                 id="endHour"
                 type="string"
-              value={endHour}
+                value={endHour}
                 onChange={(e) => setEndHour(e.target.value)}
                 className="bg-grey-box  text-white"
               />
             </div>
           </div>
         </CardHeader>
-      <CardContent className="">
-        <div className="border border-white/30 rounded-xl">
+        <CardContent className="">
+          <div className="border border-white/30 rounded-xl">
             <Table className="">
               <TableHeader>
                 <TableRow className="border-b border-white/20">
@@ -108,7 +129,7 @@ export const DayRoutine: React.FC<{ date: Date }> = ({ date }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-              {
+                {
                   training?.trainingItems.map((et, etIndex) => (
                     <TableRow key={`${etIndex}`} className="border-b border-white/30">
                       <TableCell className="font-medium text-gray-400">{et.exercise.name ?? ''}</TableCell>
@@ -119,12 +140,11 @@ export const DayRoutine: React.FC<{ date: Date }> = ({ date }) => {
                       <TableCell className="text-right text-gray-400">{et.rest ?? ''}</TableCell>
                     </TableRow>
                   ))
-              }
-            </TableBody>
-          </Table>
+                }
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
-   </BoxContainer>
-  )
-}
-
+      </BoxContainer>
+    )
+  }

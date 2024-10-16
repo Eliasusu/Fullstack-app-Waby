@@ -6,6 +6,7 @@ import { useMuscleGroup } from "@/muscleGroups/muscle-group.context.tsx";
 
 interface ExerciseState {
     exercises: Exercise[];
+    allExercises: Exercise[];
     addExercise: (exercise: Exercise) => void;
     getExercises: (mg: string) => void;
     editarExercise: (exercise: Exercise) => void;
@@ -16,6 +17,7 @@ interface ExerciseState {
 
 const initialExerciseState: ExerciseState = {
     exercises: [],
+    allExercises: [],
     addExercise: () => { },
     getExercises: () => { },
     editarExercise: () => { },
@@ -37,6 +39,7 @@ export const useExercise = () => {
 
 export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     const [exercises, setExercises] = useState<Exercise[]>([]);
+    const [allExercises, setAllExercises] = useState<Exercise[]>([]);
     const [errors, setErrors] = useState<object | null>(null);
     const { muscleGroups } = useMuscleGroup();
 
@@ -80,6 +83,8 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     const getAllExercises = async () => { 
         const res = await getExercisesReq();
         setExercises(res.data.exercises);
+        setAllExercises(res.data.exercises);
+        return res.data.exercises;
     }
 
     const getExercises = async (mg: string) => {
@@ -117,7 +122,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <ExerciseContext.Provider value={{ exercises, addExercise, editarExercise, getExercises, getAllExercises, removeExercise, errors }}>
+        <ExerciseContext.Provider value={{ exercises, allExercises,addExercise, editarExercise, getExercises, getAllExercises, removeExercise, errors }}>
             {children}
         </ExerciseContext.Provider>
     );

@@ -3,6 +3,10 @@ import { trainingItem } from './trainingItems.entity.js';
 
 export const exerciseTraining: any = z.object({
     exercise: z.number({}),
+    completeExercise: z.boolean({
+        required_error: 'Completed is required',
+        invalid_type_error: 'Completed must be a boolean'
+    }),
     sets: z.number({
         required_error: 'Sets is required',
     }).positive(),
@@ -18,7 +22,6 @@ export const exerciseTraining: any = z.object({
     comment: z.string({
         invalid_type_error: 'Comment must be a string',
     }),
-    commpleteExercise: z.boolean({})
 });
 
 

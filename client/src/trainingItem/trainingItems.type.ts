@@ -19,4 +19,6 @@ export interface TrainingItemProps {
     reps: number;
     weight: string;
     rest: string;
+    comment?: string;
+    completeExercise?: boolean;
 }
