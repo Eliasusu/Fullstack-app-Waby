@@ -94,7 +94,7 @@ CREATE TABLE `exercise` (
   KEY `exercise_user_id_user_index` (`user_id_user`),
   CONSTRAINT `exercise_training_method_id_method_foreign` FOREIGN KEY (`training_method_id_method`) REFERENCES `training_method` (`id_method`) ON UPDATE CASCADE,
   CONSTRAINT `exercise_user_id_user_foreign` FOREIGN KEY (`user_id_user`) REFERENCES `user` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +102,7 @@ CREATE TABLE `exercise` (
 --
 
 /*!40000 ALTER TABLE `exercise` DISABLE KEYS */;
-INSERT INTO `exercise` VALUES (1,'Press plano','ojjmdeasf32sd','','Medium','Push','2024-09-29 18:53:35',NULL,'c3cf6fd48800'),(4,'Push up','emr345nrpzde','Ejercicio de empuje ','Easy','Push','2024-10-05 17:30:41',NULL,'c3cf6fd48800'),(5,'Pull up weighted','ojjmdeasf32sd','.','Hard','Pull','2024-10-05 17:42:54',NULL,'c3cf6fd48800'),(7,'Kroc Row','ojjmdeasf32sd','.','Easy','Pull','2024-10-06 18:04:33',NULL,'c3cf6fd48800'),(8,'Press militar','ojjmdeasf32sd','.','Medium','Push','2024-10-06 18:14:37',NULL,'c3cf6fd48800');
+INSERT INTO `exercise` VALUES (1,'Press plano','ojjmdeasf32sd','.','Medium','Push','2024-09-29 18:53:35',NULL,'c3cf6fd48800'),(4,'Push up','emr345nrpzde','Funcionooo','Easy','Push','2024-10-05 17:30:41',NULL,'c3cf6fd48800'),(5,'Pull up weighted','ojjmdeasf32sd','.','Hard','Pull','2024-10-05 17:42:54',NULL,'c3cf6fd48800'),(7,'Kroc Row','ojjmdeasf32sd','.','Easy','Pull','2024-10-06 18:04:33',NULL,'c3cf6fd48800'),(8,'Press militar','ojjmdeasf32sd','.','Medium','Push','2024-10-06 18:14:37',NULL,'c3cf6fd48800'),(9,'Sit up','emr345nrpzde','.','Easy','Isometric','2024-10-07 16:09:02',NULL,'c3cf6fd48800'),(10,'Curl biceps','ojjmdeasf32sd','Hola','Hard','Pull','2024-10-07 16:10:59',NULL,'c3cf6fd48800'),(11,'Squat','ojjmdeasf32sd','','Medium','Legs','2024-10-16 07:59:13',NULL,'c3cf6fd48800'),(12,'Deadlift','ojjmdeasf32sd','','Hard','Pull','2024-10-16 08:14:20',NULL,'c3cf6fd48800');
 /*!40000 ALTER TABLE `exercise` ENABLE KEYS */;
 
 --
@@ -183,7 +183,7 @@ CREATE TABLE `muscle_group_exercises` (
 --
 
 /*!40000 ALTER TABLE `muscle_group_exercises` DISABLE KEYS */;
-INSERT INTO `muscle_group_exercises` VALUES (1,5),(1,7),(2,1),(2,4),(4,8);
+INSERT INTO `muscle_group_exercises` VALUES (1,4),(1,5),(1,7),(2,1),(3,10),(4,8),(5,11),(5,12),(6,9);
 /*!40000 ALTER TABLE `muscle_group_exercises` ENABLE KEYS */;
 
 --
@@ -254,14 +254,14 @@ CREATE TABLE `training` (
   `user_id_user` varchar(255) NOT NULL,
   `training_name` varchar(255) NOT NULL,
   `training_type` varchar(255) NOT NULL,
-  `day` datetime NOT NULL,
+  `day` date NOT NULL,
   `start_hour` varchar(255) NOT NULL,
   `end_hour` varchar(255) NOT NULL,
   `completed` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id_training`),
   KEY `training_user_id_user_index` (`user_id_user`),
   CONSTRAINT `training_user_id_user_foreign` FOREIGN KEY (`user_id_user`) REFERENCES `user` (`id_user`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=180 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,7 +269,7 @@ CREATE TABLE `training` (
 --
 
 /*!40000 ALTER TABLE `training` DISABLE KEYS */;
-INSERT INTO `training` VALUES (2,'c3cf6fd48800','Push day','Push','2024-09-29 00:00:00','09:00','11:00',0),(3,'c3cf6fd48800','Push day','Push','2024-09-11 00:00:00','9:00 ','11:00',1),(138,'c3cf6fd48800','New Training','','2024-09-22 00:00:00','09:00','10:00',0),(139,'c3cf6fd48800','New Training','','2024-09-22 00:00:00','09:00','10:00',0),(140,'c3cf6fd48800','New Training','','2024-09-29 00:00:00','09:00','10:00',0);
+INSERT INTO `training` VALUES (178,'c3cf6fd48800','Leg day','Quads, hamstrings','2024-10-14','18:00','19:00',0);
 /*!40000 ALTER TABLE `training` ENABLE KEYS */;
 
 --
@@ -288,12 +288,13 @@ CREATE TABLE `training_item` (
   `comment` varchar(255) DEFAULT NULL,
   `exercise_id_exercise` int unsigned NOT NULL,
   `training_id_training` int unsigned NOT NULL,
+  `complete_exercise` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id_training_item`),
   KEY `training_item_exercise_id_exercise_index` (`exercise_id_exercise`),
   KEY `training_item_training_id_training_index` (`training_id_training`),
   CONSTRAINT `training_item_exercise_id_exercise_foreign` FOREIGN KEY (`exercise_id_exercise`) REFERENCES `exercise` (`id_exercise`) ON UPDATE CASCADE,
-  CONSTRAINT `training_item_training_id_training_foreign` FOREIGN KEY (`training_id_training`) REFERENCES `training` (`id_training`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `training_item_training_id_training_foreign` FOREIGN KEY (`training_id_training`) REFERENCES `training` (`id_training`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -301,7 +302,6 @@ CREATE TABLE `training_item` (
 --
 
 /*!40000 ALTER TABLE `training_item` DISABLE KEYS */;
-INSERT INTO `training_item` VALUES (6,23,2,'3','4','',1,2),(7,3,10,'25','1\'','',7,2);
 /*!40000 ALTER TABLE `training_item` ENABLE KEYS */;
 
 --
@@ -399,4 +399,4 @@ CREATE TABLE `user_training_methods` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-07  6:49:24
+-- Dump completed on 2024-10-17 10:17:33
