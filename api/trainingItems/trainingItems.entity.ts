@@ -29,6 +29,6 @@ export class trainingItem {
     @ManyToOne(() => Exercise, { nullable: false }) 
     exercise!: Rel<Exercise>;
 
-    @ManyToOne(() => Training, { nullable: false })
+    @ManyToOne(() => Training, { nullable: false, onDelete: 'cascade' })
     training!: Rel<Training>;
 }

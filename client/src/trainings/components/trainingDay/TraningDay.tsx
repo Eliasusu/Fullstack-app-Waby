@@ -142,8 +142,8 @@ export const TrainingDay = () => {
   const handleSubmitCreateTraining = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (newTraining) {
+      setLocalTraining(newTraining)
       addTraining(newTraining)
-      setNewTraining(newTraining)
       setIsCreateDialogOpen(false)
     }
   }
@@ -201,7 +201,6 @@ export const TrainingDay = () => {
 
   const handleChangeCreateTItem = (field: keyof TrainingItem, value: string | number | Exercise) => {
     setNewTrainingItem(prev => ({ ...prev, [field]: value }))
-
   }
 
   const handleSubmitCreateTItem = (e: React.FormEvent<HTMLFormElement>) => {
@@ -286,6 +285,9 @@ export const TrainingDay = () => {
           </div>
         </div>
       </CardHeader>
+      <div className="ml-5 mb-6">
+        <p className="font-normal text-sm text-white-text/70">{localTraining.trainingType}</p>
+      </div>
       <CardContent>
         <div className="border border-white/30 rounded-xl">
           <Table>
@@ -306,6 +308,7 @@ export const TrainingDay = () => {
                   <TableCell className="font-medium text-gray-400">
                     <Checkbox
                       id="completeExercise"
+                      value={et.completeExercise ? "true" : "false"}
                       checked={et.completeExercise}
                       onClick={() => handleChangeUpdateTItem(index, 'completeExercise', !et.completeExercise)}
                     />

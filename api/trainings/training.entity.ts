@@ -31,6 +31,8 @@ export class Training{
 
     @OneToMany(() => trainingItem, (trainingItems) => trainingItems.training, {
         cascade: [Cascade.ALL],
+        orphanRemoval: true,
+        
     })
     trainingItems?: Rel<trainingItem>[];
 }
