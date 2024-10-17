@@ -16,6 +16,14 @@ import { Button } from "@/components/ui/button"
 import BoxContainer from "@/components/ui/BoxConteiner"
 import { useTraining } from "@/trainings/training.context"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -142,7 +150,6 @@ export const TrainingDay = () => {
 
   const handleChangeUpdateTItem = (index: number, field: keyof TrainingItem, value: string | number | boolean | Exercise) => {
     setIsEditedTitem(true)
-    console.log(`Entre al handleChangeUpdateTItem con este index: ${index} y este field: ${field} y este value: ${value}`)
     if (field === 'exercise') {
       const updatedExercises = [...localTraining.trainingItems]
       updatedExercises[index] = { ...updatedExercises[index], exercise: value as Exercise }
@@ -180,24 +187,34 @@ export const TrainingDay = () => {
   const handleSubmitDeleteTItem = (index: number) => {
     if (localTraining) {
       const idTrainingItem = localTraining.trainingItems[index].idTrainingItem;
-      console.log(`idTrainingItem : ${idTrainingItem} y idTraining: ${localTraining.idTraining}`);
       if (idTrainingItem !== undefined) {
         deleteTrainingItem(idTrainingItem, localTraining.idTraining || 0);
+        setLocalTraining({ ...localTraining, trainingItems: localTraining.trainingItems.filter((_, i) => i !== index) })
+        toast({
+          title: "Exercise deleted",
+          description: "The exercise has been deleted successfully.",
+        })
+
       }
     }
   }
 
   const handleChangeCreateTItem = (field: keyof TrainingItem, value: string | number | Exercise) => {
-    console.log(`Entre al handleChangeCreateTItem con este field: ${field} y este value: ${value}`)
     setNewTrainingItem(prev => ({ ...prev, [field]: value }))
-    console.log(`Este es el newTrainingItem: ${newTrainingItem}`)
+
   }
 
   const handleSubmitCreateTItem = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (newTraining) {
       addTrainingItem(newTrainingItem, localTraining.idTraining || 0)
+      setNewTrainingItem(initialTrainingItem)
+      setLocalTraining({ ...localTraining, trainingItems: [...localTraining.trainingItems, newTrainingItem] })
       setIsCreateDialogOpen(false)
+      toast({
+        title: "Exercise added",
+        description: "The exercise has been added successfully.",
+      });
     }
   }
 
@@ -205,6 +222,10 @@ export const TrainingDay = () => {
     if (localTraining) {
       deleteTraining(localTraining.idTraining || 0)
       setLocalTraining(initialTraining)
+      toast({
+        title: "Training deleted",
+        description: "The training has been deleted successfully.",
+      });
     }
   }
 
@@ -359,10 +380,6 @@ export const TrainingDay = () => {
                       size="icon"
                       onClick={() => {
                         handleSubmitDeleteTItem(index);
-                        toast({
-                          title: "Exercise deleted",
-                          description: "The exercise has been deleted successfully.",
-                        });
                       }}
                       className="h-8 w-8 p-0"
                     >
@@ -419,31 +436,30 @@ export const TrainingDay = () => {
                       onSubmit={handleSubmitCreateTItem}>
                       <div className="grid grid-cols-4 items-center gap-4">
                         <label htmlFor="exercise" className="text-right">Exercise</label>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button variant="outline" className="col-span-3">
-                              {newTrainingItem.exercise.name || "Select exercise"}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-[200px] p-0">
-                            <Command>
-                              <CommandInput placeholder="Search exercise..." />
-                              <CommandList>
-                                <CommandEmpty>No exercise found.</CommandEmpty>
-                                <CommandGroup>
-                                  {exercises.map((exercise) => (
-                                    <CommandItem
-                                      key={exercise.idExercise}
-                                      onClickCapture={() => handleChangeCreateTItem('exercise', exercise)}
-                                    >
-                                      {exercise.name}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
+                        <div className="col-span-3">
+                          <Select
+                            onValueChange={(value) => {
+                              const selectedExercise = exercises.find(ex => ex.name.toString() === value)
+                              if (selectedExercise) {
+                                handleChangeCreateTItem('exercise', selectedExercise)
+                              }
+                            }}
+                          >
+                            <SelectTrigger className="">
+                              <SelectValue placeholder='Select a exercise' />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {exercises.map((exercise) => (
+                                <SelectItem
+                                  key={exercise.idExercise}
+                                  value={exercise.name}
+                                >
+                                  {exercise.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                       <div className="grid grid-cols-4 items-center gap-4">
                         <label htmlFor="comment" className="text-right">Comment</label>
@@ -487,14 +503,7 @@ export const TrainingDay = () => {
                           onChange={(e) => handleChangeCreateTItem('rest', e.target.value)}
                           className="col-span-3 bg-grey-box border-gray-600 w-full" />
                       </div>
-                      <Button
-                        variant={"outline"}
-                        onClick={() =>
-                          toast({
-                            title: "Exercise added",
-                            description: "The exercise has been added successfully.",
-                          })}
-                      >Add Exercise</Button>
+                      <Button>Add Exercise</Button>
                     </form>
                   </div>
                   <DialogTrigger asChild>
