@@ -58,6 +58,14 @@ import { Exercise } from "@/exercises/exercise.type.ts"
 import { useToast } from "@/hooks/use-toast.ts"
 
 
+type TrainingCreate = {
+  trainingName: '',
+  startHour: '',
+  endHour: '',
+  trainingType: '',
+  frecuency: Date[]
+}
+
 const initialTraining: Training = {
   idTraining: -1,
   trainingName: '',
@@ -68,6 +76,14 @@ const initialTraining: Training = {
   user: '',
   trainingType: '',
   trainingItems: []
+}
+
+const initialTrainingCreate: TrainingCreate = {
+  trainingName: '',
+  startHour: '',
+  endHour: '',
+  trainingType: '',
+  frecuency: []
 }
 
 const initialTrainingItem: TrainingItem = {
@@ -92,16 +108,14 @@ export const TrainingDay = () => {
   const { toast } = useToast()
 
   const [localTraining, setLocalTraining] = useState<Training>(initialTraining)
-  const [newTraining, setNewTraining] = useState<Training>(initialTraining)
+  const [newTraining, setNewTraining] = useState<TrainingCreate>(initialTrainingCreate)
   const [newTrainingItem, setNewTrainingItem] = useState<TrainingItem>(initialTrainingItem)
 
-  console.log(newTrainingItem)
 
   useEffect(() => {
     getAllExercises()
   }, [])
 
-  console.log(exercises)
 
   useEffect(() => {
     if (!training) {
@@ -134,17 +148,47 @@ export const TrainingDay = () => {
     setIsModifyDialogOpen(false)
   }
 
-  const handleChangeCreateTraining = async (field: keyof Training, value: string) => {
-    const createdTraining = { ...newTraining, [field]: value } as Training
+  const handleChangeCreateTraining = async (field: keyof TrainingCreate, value: string) => {
+    const createdTraining = { ...newTraining, [field]: value } as TrainingCreate
     setNewTraining(createdTraining)
+    console.log(createdTraining)
   }
 
   const handleSubmitCreateTraining = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    console.log(newTraining)
     if (newTraining) {
-      setLocalTraining(newTraining)
-      addTraining(newTraining)
-      setIsCreateDialogOpen(false)
+      const today = new Date().toDateString();
+      const filteredFrecuency = newTraining.frecuency.filter(date => new Date(date).toDateString() === today);
+
+      if (filteredFrecuency.length === 0) {
+        setNewTraining(initialTrainingCreate);
+      } else {
+        const newTraining2 = { ...localTraining, ...newTraining }
+        setLocalTraining(newTraining2);
+      }
+      const newTraining2 = { ...localTraining, ...newTraining }
+
+      console.log(newTraining2)
+
+      setLocalTraining(newTraining2);
+      for (const date of newTraining.frecuency) {
+
+        console.log(date)
+
+        const formattedDate = new Date(date)
+        const trainingWithDate = {
+          ...newTraining,
+          day: formattedDate,
+          completed: false,
+          trainingItems: []
+        };
+
+        console.log(trainingWithDate)
+
+        addTraining(trainingWithDate);
+        setIsCreateDialogOpen(false)
+      }
     }
   }
 
@@ -606,7 +650,7 @@ export const TrainingDay = () => {
                     <div className="grid grid-cols-4 items-center gap-4">
                       <label htmlFor="trainingName" className="text-right">Name</label>
                       <Input
-                        id="trainingName"
+                        id='trainingName'
                         onChange={(e) => handleChangeCreateTraining('trainingName', e.target.value)}
                         className="col-span-3 w-full" />
                     </div>
@@ -632,6 +676,18 @@ export const TrainingDay = () => {
                         type="time"
                         onChange={(e) => handleChangeCreateTraining('endHour', e.target.value)}
                         className="col-span-3 w-full" />
+                    </div>
+                    <div id="conteiner frecuency" className="m-auto text-center w-max h-max">
+                      <label htmlFor="frecuency" className="">Frecuency</label>
+                      <div className="">
+                        <Calendar
+                          id="frecuency"
+                          selected={newTraining.frecuency}
+                          mode="multiple"
+                          onSelect={(dates) => handleChangeCreateTraining('frecuency', dates as unknown as string)}
+                          className="col-span-3 w-full"
+                        />
+                      </div>
                     </div>
                     <Button
                       onClick={() =>
