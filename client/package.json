@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-avatar": "1.1.0",
     "@radix-ui/react-checkbox": "1.1.1",
     "@radix-ui/react-context-menu": "^2.2.2",
@@ -38,7 +39,8 @@
     "react-router-dom": "6.26.0",
     "tailwind": "4.0.0",
     "tailwind-merge": "2.5.2",
-    "tailwindcss-animate": "1.0.7"
+    "tailwindcss-animate": "1.0.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/jest": "29.5.12",

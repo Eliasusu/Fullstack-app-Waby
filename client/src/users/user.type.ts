@@ -1,7 +1,7 @@
-import { TrainingMethod } from '@/trainingMethods/trainingMethod.type';
+
 import { Training } from '@/trainings/trainings.type';
-import { Exercise } from '@/types/exercise.type';
-import { Mesocycle } from '@/mesocycles/mesocycle.type';
+import { Exercise } from '@/exercises/exercise.type';
+
 
 export interface User { 
     idUser?: string;
@@ -15,8 +15,7 @@ export interface User {
     bodyWeight: number;
     height: number;
     token?: string;
-    trainingMethods?: TrainingMethod[];
+    trainingMethods?: string[];
     trainings?: Training[];
     exercises?: Exercise[];
-    mesocycles?: Mesocycle[];
 }

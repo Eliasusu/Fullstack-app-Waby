@@ -21,7 +21,7 @@ export default function Header() {
   const { logout } = useAuth();
   const user = getUserFromToken()
 
-  const onClick = () => { 
+  const onClick = () => {
     logout();
   }
 
@@ -41,7 +41,7 @@ export default function Header() {
 
   return (
     <header className="flex justify-between items-center bg-background p-4 text-white">
-      <Logo dimensions='w-[30px]'/>
+      <Logo dimensions='w-[30px]' />
       <div className="flex-grow text-center">
         <p className="text-white text-lg">
           <span className="font-light">{greeting}</span>, <span className="font-bold">{user.username}</span>
@@ -57,7 +57,10 @@ export default function Header() {
         <DropdownMenuContent className="w-56 bg-grey-nav border-white/60">
           <DropdownMenuLabel>{user.username}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className='font-light hover:bg-grey-box'>Profile</DropdownMenuItem>
+          <DropdownMenuItem
+            className='font-light hover:bg-grey-box'
+            onClick={() => window.location.href = '/profile'}
+          >Profile</DropdownMenuItem>
           <DropdownMenuItem className='font-light hover:bg-grey-box'>Settings</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className='hover:bg-grey-box' onClick={onClick}>Log out</DropdownMenuItem>
