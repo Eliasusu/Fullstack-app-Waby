@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { getProfileRequest ,registerRequest, loginRequest, verifyTokenRequest, updateProfileRequest, deleteProfileRequest } from "@/users/auth.api.ts";
+import { getProfileRequest, registerRequest, loginRequest, verifyTokenRequest, updateProfileRequest, deleteProfileRequest } from "@/users/auth.api.ts";
 import Cookie from "js-cookie";
 import { User } from "@/users/user.type.ts";
 
@@ -100,6 +100,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const deleteProfile = async (id: string) => {
         try {
             const res = await deleteProfileRequest(id);
+            console.log('res.data', res.data)
             setUser(res.data);
             setIsAuthenticated(true);
         } catch (error) {
