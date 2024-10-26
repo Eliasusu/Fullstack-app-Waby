@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import Logo from './ui/logo.tsx'
 import Cookie from "js-cookie";
 import { useAuth } from '@/users/auth.context.tsx';
+import { useNavigate } from 'react-router-dom';
 //import { get } from 'http';
 
 
@@ -28,6 +29,7 @@ export default function Header() {
     logout();
   }
 
+  const navigate = useNavigate();
   useEffect(() => {
     const updateGreeting = () => {
       const hour = new Date().getHours()
@@ -62,7 +64,7 @@ export default function Header() {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className='font-light hover:bg-grey-box'
-            onClick={() => window.location.href = '/profile'}
+            onClick={() => navigate('/profile')}
           >Profile</DropdownMenuItem>
           <DropdownMenuItem className='font-light hover:bg-grey-box'>Settings</DropdownMenuItem>
           <DropdownMenuSeparator />
