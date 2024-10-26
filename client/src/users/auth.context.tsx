@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest, updateProfileRequest, deleteProfileRequest } from "@/users/auth.api.ts";
+import { getProfileRequest ,registerRequest, loginRequest, verifyTokenRequest, updateProfileRequest, deleteProfileRequest } from "@/users/auth.api.ts";
 import Cookie from "js-cookie";
 import { User } from "@/users/user.type.ts";
 
@@ -11,6 +11,7 @@ interface AuthState {
     logout: () => void;
     updateProfile: (user: User) => void;
     deleteProfile: (id: string) => void;
+    getOneProfile: (id: string) => void;
     isAuthenticated: boolean;
     errors: object | null;
 }
@@ -21,6 +22,7 @@ const initialAuthState: AuthState = {
     signIn: () => { },
     updateProfile: () => { },
     deleteProfile: () => { },
+    getOneProfile: () => { },
     logout: () => { },
     isAuthenticated: false,
     errors: null,
@@ -109,6 +111,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    const getOneProfile = async (id: string) => {
+        try {
+            const res = await getProfileRequest(id);
+            setUser(res.data);
+            setIsAuthenticated(true);
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrors([{ message: error.message }]);
+            } else {
+                setErrors([{ message: "Hubo un problema al obtener el perfil" }]);
+            }
+        }
+    }
+
     useEffect(() => {
         const checkUser = async () => {
             const token = Cookie.get("token");
@@ -132,7 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, signUp, updateProfile, deleteProfile, isAuthenticated, errors, signIn, logout }}>
+        <AuthContext.Provider value={{ user, getOneProfile, signUp, updateProfile, deleteProfile, isAuthenticated, errors, signIn, logout }}>
             {children}
         </AuthContext.Provider>
     );

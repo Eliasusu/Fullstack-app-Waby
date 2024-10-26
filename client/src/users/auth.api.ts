@@ -11,3 +11,5 @@ export const verifyTokenRequest = () => axios.get('auth/verify')
 export const updateProfileRequest = (user: User) => axios.put(`users/${user.idUser}`, user)
 
 export const deleteProfileRequest = (id: string) => axios.delete(`users/${id}`)
+
+export const getProfileRequest = (id: string) => axios.get(`users/${id}`)

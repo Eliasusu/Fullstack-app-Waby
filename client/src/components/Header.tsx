@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import Logo from './ui/logo.tsx'
 import Cookie from "js-cookie";
 import { useAuth } from '@/users/auth.context.tsx';
+//import { get } from 'http';
 
 
 // Funcion que del token extrae los datos del user que se logueo
@@ -16,11 +17,13 @@ const getUserFromToken = () => {
   return data
 }
 
+
+
 export default function Header() {
   const [greeting, setGreeting] = useState('')
   const { logout } = useAuth();
   const user = getUserFromToken()
-
+  
   const onClick = () => {
     logout();
   }
