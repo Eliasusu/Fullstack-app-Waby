@@ -5,7 +5,11 @@ import Cookie from "js-cookie";
 import { User } from "@/users/user.type.ts";
 
 interface AuthState {
-    user: User | null;
+    user: {
+        id: string,
+        username: string
+    } | null;
+    allDataUser: User | null
     signUp: (user: User) => void;
     signIn: (user: User) => void;
     logout: () => void;
@@ -17,12 +21,16 @@ interface AuthState {
 }
 
 const initialAuthState: AuthState = {
-    user: null,
+    user: {
+        id: '',
+        username: ''
+    },
+    allDataUser: null,
     signUp: () => { },
     signIn: () => { },
     updateProfile: () => { },
     deleteProfile: () => { },
-    getOneProfile: () => { },
+    getOneProfile: () => ({} as User),
     logout: () => { },
     isAuthenticated: false,
     errors: null,
@@ -40,6 +48,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState(null);
+    const [allDataUser, setAllDataUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState<{ message: string }[]>([]);
 
@@ -113,9 +122,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const getOneProfile = async (id: string) => {
+        if (!id) return {} as User;
         try {
             const res = await getProfileRequest(id);
-            setUser(res.data);
+            console.log('La respuesta', res.data.data)
+            setAllDataUser(res.data.data);
             setIsAuthenticated(true);
         } catch (error) {
             if (error instanceof Error) {
@@ -123,6 +134,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             } else {
                 setErrors([{ message: "Hubo un problema al obtener el perfil" }]);
             }
+            throw error;
         }
     }
 
@@ -149,7 +161,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, getOneProfile, signUp, updateProfile, deleteProfile, isAuthenticated, errors, signIn, logout }}>
+        <AuthContext.Provider value={{ user, allDataUser, getOneProfile, signUp, updateProfile, deleteProfile, isAuthenticated, errors, signIn, logout }}>
             {children}
         </AuthContext.Provider>
     );
