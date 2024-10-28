@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
-import BoxContainer  from "@/components/ui/BoxConteiner.tsx"
+import BoxContainer from "@/components/ui/BoxConteiner.tsx"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx"
 import { useTraining } from "@/trainings/training.context.tsx"
-interface ActivityDay  {
+interface ActivityDay {
   date: Date;
   completed: boolean
 }
@@ -16,21 +16,13 @@ export default function Activity() {
 
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      getTrainings()
-    }, 60 * 1000)
-
     getTrainings()
-
-    return () => {
-      clearInterval(interval)
-    }
   }, [])
-  
+
 
   useEffect(() => {
     generateActivityData(selectedPeriod)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPeriod])
 
   const generateActivityData = async (period: string) => {
@@ -54,7 +46,7 @@ export default function Activity() {
     }
 
     const newActivityData: ActivityDay[] = []
-    
+
     for (let i = 0; i < daysToGenerate; i++) {
       const date = new Date(startDate)
       date.setDate(startDate.getDate() + i)
@@ -72,7 +64,7 @@ export default function Activity() {
 
   const renderActivityGrid = () => {
     const daysOfWeek = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']
-    
+
     if (selectedPeriod === "Anual") {
       const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
       return (
@@ -112,7 +104,7 @@ export default function Activity() {
   }
 
   return (
-    <BoxContainer  width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding='my-5'>
+    <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding='my-5'>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-medium">Activity</CardTitle>
         <Select
