@@ -1,7 +1,6 @@
 import { User } from '../users/user.entity.js';
-import { Mesocycle } from '../mesocycles/mesocycle.entity.js';
-import { PrimaryKey, Property, ManyToOne, Rel, Entity, OneToMany, Collection, Cascade } from '@mikro-orm/core';
-import { ExerciseTraining } from '../exercises_trainings/exercise_training.entity.js';
+import { PrimaryKey, Property, ManyToOne, Rel, Entity, OneToMany, Collection, Cascade, DateType } from '@mikro-orm/core';
+import { trainingItem } from '../trainingItems/trainingItems.entity.js';
 
 @Entity()
 export class Training{
@@ -12,26 +11,28 @@ export class Training{
     @ManyToOne(() => User, { nullable: false })
     user!: Rel<User>;
 
-    @ManyToOne(() => Mesocycle, { nullable: false })
-    mesocycle!: Mesocycle;
-
     @Property({ nullable: false })
     trainingName!: string;
 
     @Property({ nullable: false })
     trainingType!: string;
 
-    @Property({ nullable: false })
+    @Property({ type: DateType, nullable: false })
     day!: Date;
+    
+    @Property({ nullable: false })
+    startHour!: string;
 
     @Property({ nullable: false })
-    time!: string;
+    endHour!: string;
 
     @Property({ nullable: true })
-    completed?: boolean;
+    completed?: boolean ;
 
-    @OneToMany(() => ExerciseTraining, (exerciseTraining) => exerciseTraining.training, {
+    @OneToMany(() => trainingItem, (trainingItems) => trainingItems.training, {
         cascade: [Cascade.ALL],
+        orphanRemoval: true,
+        
     })
-    exercisesTrainings?: Rel<ExerciseTraining>[];
+    trainingItems?: Rel<trainingItem>[];
 }

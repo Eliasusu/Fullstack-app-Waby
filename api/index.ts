@@ -10,8 +10,7 @@ import { muscleGroupsRouter } from './muscleGroups/muscleGroups.routes.js';
 import { trainingsRouter } from './trainings/trainings.routes.js';
 import { indexRouter } from './routes/index.routes.js';
 import { authRouter } from './auth/auth.routes.js';
-import { routinesRouter } from './exercises_trainings/exercises_trainings.routes.js';
-import { mesocyclesRouter } from './mesocycles/mesocycles.routes.js';
+import { routinesRouter } from './trainingItems/trainingItems.routes.js';
 import { RequestContext } from '@mikro-orm/core';
 import { trainingMethodsRouter } from './trainingMethods/trainingMethod.routes.js';
 import { validateToken } from './middlewares/validateToken.js';
@@ -40,7 +39,6 @@ app.use('/api/v1/exercises/calisthenics/progressions/reps', calisthenicsProgress
 app.use('/api/v1/trainings',validateToken, trainingsRouter);
 app.use('/api/v1/routines',validateToken, routinesRouter);
 app.use('/api/v1/muscleGroups',validateToken, muscleGroupsRouter);
-app.use('/api/v1/mesocycles', validateToken, mesocyclesRouter);
 app.use('/api/v1/trainingMethods',validateToken, trainingMethodsRouter);
 
 

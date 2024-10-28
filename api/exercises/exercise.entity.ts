@@ -1,7 +1,7 @@
 import { Collection, ManyToMany, PrimaryKey, Property, Cascade, ManyToOne, Rel, Entity, OneToMany } from '@mikro-orm/core';
 import { MuscleGroup } from '../muscleGroups/muscleGroup.entity.js';
 import { TrainingMethod } from '../trainingMethods/trainingMethod.entity.js';
-import { ExerciseTraining } from '../exercises_trainings/exercise_training.entity.js';
+import { trainingItem } from '../trainingItems/trainingItems.entity.js';
 import { ProgressionReps } from './calisthenics/reps/progressionReps.entity.js';
 import { ProgressionSec } from './calisthenics/secs/progressionSec.entity.js';
 import { User } from '../users/user.entity.js';
@@ -41,10 +41,10 @@ export class Exercise  {
     @ManyToOne(() => User, { nullable: true }) 
     user!: Rel<User>;
 
-    @OneToMany(() => ExerciseTraining, (exerciseTraining) => exerciseTraining.exercise, {
+    @OneToMany(() => trainingItem, (trainingItem) => trainingItem.exercise, {
         cascade: [Cascade.ALL],
     })
-    exercisesTrainings?: Rel<ExerciseTraining>[];
+    trainingItems?: Rel<trainingItem>[];
 
     @OneToMany(() => ProgressionReps, (progressionReps) => progressionReps.exercise, { 
         cascade: [Cascade.ALL]

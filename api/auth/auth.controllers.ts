@@ -4,6 +4,8 @@ import { validateUser, validateParcialUser } from "../users/users.schema.js";
 import { User } from "../users/user.entity.js";
 import { orm } from "../shared/db/orm.js";
 import { createToken } from "../shared/jwt.js";
+import jwt from 'jsonwebtoken';
+import { KEY } from "../shared/config.js";
 
 const em = orm.em;
 
@@ -16,7 +18,7 @@ async function register(req: Request, res: Response) {
         const bodyWeight = Number(req.body.bodyWeight);
         const user = { ...req.body, height, bodyWeight, trainingMethods };
         const result = validateUser(user);
-        if (result.error) return res.status(400).json({ error: result.error.issues.map((issue: any) => issue.message) });
+        if (result.error) return res.status(400).json(result.error.issues.map((issue: any) => issue.message));
         if (result.success) {
             if (await em.findOne(User, { username: req.body.username })) {
                 return res.status(400).json({ error: ['Username already exists'] });
@@ -28,8 +30,9 @@ async function register(req: Request, res: Response) {
             const user = em.create(User, req.body);
             await em.persistAndFlush(user);
             const token = await createToken({ id: user.idUser, username: user.username });
-            res.cookie('token', token, { httpOnly: true });
-            res.status(201).json({ error: 'User created succesfully' });
+            res.cookie('token', token, { httpOnly: false, sameSite: 'none', secure: true });
+            const userName = user.username;
+            res.status(201).json([userName]);
         } else {
             res.status(400).json({ error: 'User not created' });
         }
@@ -44,12 +47,12 @@ async function login(req: Request, res: Response) {
     try {
         const { username, password } = req.body;
         const user = await em.findOne(User, { username }, { populate: ['password'] });
-        if (!user) return res.status(400).json({ error: ['Username incorrect'] });
+        if (!user) return res.status(400).json(['Username incorrect']);
         const validPassword = bcrypt.compareSync(password, user.password);
-        if (!validPassword) return res.status(400).json({ error: ['Password incorrect'] });
+        if (!validPassword) return res.status(400).json(['Password incorrect'])
         const token = await createToken({ id: user.idUser, username: user.username });
-        res.cookie('token', token, { httpOnly: true });
-        res.status(200).json({ message: 'User logged in succesfully' });
+        res.cookie('token', token, { httpOnly: false, sameSite: 'none', secure: true });
+        res.status(200).json({ message: 'User logged in succesfully', username: user.username, id: user.idUser });
     } catch (error: any) { 
         console.log(error); // --> Eliminar en produccion
         res.status(500).json({ error: 'Error loging in' });
@@ -78,4 +81,19 @@ async function profile(req: Request, res: Response) {
     }
 }
 
-export  { register, login, logout, profile }
+async function verifyToken(req: Request, res: Response) {
+    const { token } = req.cookies;
+    if (!token) return res.status(401).json({ error: 'Access denied' });
+    try {
+        const payload = jwt.verify(token, KEY, (err: any, payload: any) => {
+            if (err) return res.status(401).json({ error: 'Invalid token' });
+            const userFound = em.findOne(User, { idUser: payload.id });
+            if (!userFound) return res.status(401).json({ error: 'User not found' });
+            return res.status(200).json({ id: payload.id, username: payload.username });
+        });
+    } catch (error) {
+        return res.status(400).json({ error: 'Invalid token' });
+    }
+}
+
+export  { register, login, logout, profile, verifyToken }

@@ -14,16 +14,18 @@ async function getAll(req: Request, res: Response) {
     }
 }
 
-//Get one training method by id
+//Get one training method por name
 async function getOne(req: Request, res: Response) {
     try {
-        const idMethod = req.params.idMethod;
-        const trainingMethod = await em.findOneOrFail(TrainingMethod, {idMethod});
+        const name = req.params.nameMethod;
+        const trainingMethod = await em.findOneOrFail(TrainingMethod, {nameMethod: name});
         res.status(200).json({ message: "finded trainingMethod", trainingMethod });
     } catch (err: any) {
         res.status(500).json({ message: err.message });
     }
 }
+
+
 
 //Add a training method
 async function add(req: Request, res: Response) {

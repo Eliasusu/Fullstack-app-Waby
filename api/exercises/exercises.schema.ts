@@ -8,7 +8,7 @@ export const exercisesSchema:any = z.object({
   }),
   trainingMethod: z.string({}), 
   description: z.string({}).optional(),
-  muscleGroups: z.array(z.number()),
+  muscleGroups: z.array(z.number()).optional(),
   difficulty: z.string({
     required_error: 'Difficulty is required',
     invalid_type_error: 'Difficulty must be a string',

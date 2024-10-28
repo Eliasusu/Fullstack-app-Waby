@@ -1,26 +1,30 @@
 import { Router } from "express";
-import { getAll, getOne, add, update, remove } from "./trainings.controllers.js";
-import { add as addExerciseTraining } from "../exercises_trainings/exercises_trainings.controllers.js";
+import { getAll, getOne, add, update, remove} from "./trainings.controllers.js";
+import { add as addExerciseTraining, remove as removeTrainingItem, update as updateTrainingItem} from "../trainingItems/trainingItems.controllers.js";
 
 
 export const trainingsRouter = Router();
 
 //Get all trainings by user
-trainingsRouter.get('/user/:idUser', getAll);
+trainingsRouter.get('/user', getAll);
 
-//Get one training by id
-trainingsRouter.get('/:idTraining/user/:idUser', getOne);
+//Get one training by date
+trainingsRouter.get('/:date/user', getOne);
 
 //Create a new training
 trainingsRouter.post('/', add);
 
-trainingsRouter.post('/:idTraining/exercise', addExerciseTraining);
+trainingsRouter.post('/:idTraining/trainingItem', addExerciseTraining);
 
 //Update a training
-trainingsRouter.put('/:idTraining/user/:idUser', update);
+trainingsRouter.put('/:idTraining/user', update);
+
+trainingsRouter.put('/:idTraining/trainingItem/:idTrainingItem', updateTrainingItem);
 
 //Delete a training
-trainingsRouter.delete('/:idTraining/user/:idUser', remove);
+trainingsRouter.delete('/:idTraining/user', remove);
+
+trainingsRouter.delete('/:idTraining/trainingItem/:idTrainingItem', removeTrainingItem);
 
 
 

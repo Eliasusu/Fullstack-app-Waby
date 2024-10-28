@@ -1,21 +1,39 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
-type ActivityDay = {
+import BoxContainer  from "@/components/ui/BoxConteiner.tsx"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx"
+import { useTraining } from "@/trainings/training.context.tsx"
+interface ActivityDay  {
   date: Date;
-  completed: boolean;
+  completed: boolean
 }
 
-export default function Component() {
+export default function Activity() {
   const [activityData, setActivityData] = useState<ActivityDay[]>([])
   const [selectedPeriod, setSelectedPeriod] = useState("Mensual")
+  const { trainings, getTrainings } = useTraining()
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getTrainings()
+    }, 60 * 1000)
+
+    getTrainings()
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+  
 
   useEffect(() => {
     generateActivityData(selectedPeriod)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPeriod])
 
-  const generateActivityData = (period: string) => {
+  const generateActivityData = async (period: string) => {
     const currentDate = new Date()
     let daysToGenerate = 0
     let startDate = new Date()
@@ -36,13 +54,16 @@ export default function Component() {
     }
 
     const newActivityData: ActivityDay[] = []
-
+    
     for (let i = 0; i < daysToGenerate; i++) {
       const date = new Date(startDate)
       date.setDate(startDate.getDate() + i)
       newActivityData.push({
-        date: date,
-        completed: Math.random() < 0.7 // 70% de probabilidad de completar el entrenamiento
+        date,
+        completed: trainings.some(training => {
+          const trainingDate = new Date(training.day)
+          return trainingDate.toDateString() === date.toDateString() && training.completed
+        })
       })
     }
 
@@ -65,7 +86,7 @@ export default function Component() {
                   .map((day, index) => (
                     <div
                       key={index}
-                      className={`w-2 h-2 rounded-sm ${day.completed ? 'bg-red-500' : 'bg-gray-600'}`}
+                      className={`w-2 h-2 rounded-sm ${day.completed ? 'bg-red' : 'bg-grey-boxActivity'}`}
                     />
                   ))}
               </div>
@@ -83,7 +104,7 @@ export default function Component() {
         {activityData.map((day, index) => (
           <div
             key={index}
-            className={`w-6 h-6 rounded-sm ${day.completed ? 'bg-red-500' : 'bg-gray-600'}`}
+            className={`w-6 h-6 rounded-sm ${day.completed ? 'bg-red' : 'bg-grey-boxActivity'}`}
           />
         ))}
       </div>
@@ -91,17 +112,17 @@ export default function Component() {
   }
 
   return (
-    <Card className="w-full max-w-md bg-gray-900 text-white">
+    <BoxContainer  width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding='my-5'>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Actividad</CardTitle>
+        <CardTitle className="text-2xl font-medium">Activity</CardTitle>
         <Select
           value={selectedPeriod}
           onValueChange={setSelectedPeriod}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[120px] bg-grey-box">
             <SelectValue placeholder="Seleccionar periodo" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-grey-box/80 text-white">
             <SelectItem value="Semanal">Semanal</SelectItem>
             <SelectItem value="Mensual">Mensual</SelectItem>
             <SelectItem value="Anual">Anual</SelectItem>
@@ -112,7 +133,7 @@ export default function Component() {
         {renderActivityGrid()}
         <div className="flex items-center mt-4 text-sm">
           <div className="flex items-center mr-4">
-            <div className="w-4 h-4 bg-red-500 rounded-sm mr-2" />
+            <div className="w-4 h-4 bg-red rounded-sm mr-2" />
             <span>Día entrenado</span>
           </div>
           <div className="flex items-center">
@@ -124,6 +145,6 @@ export default function Component() {
           Cantidad de días: {activityData.filter(day => day.completed).length}
         </div>
       </CardContent>
-    </Card>
+    </BoxContainer>
   )
 }

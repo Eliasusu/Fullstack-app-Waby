@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { validateParcialExercises } from "./exercises.schema.js";
 import { Exercise } from "./exercise.entity.js";
 import { orm } from "../shared/db/orm.js";
+import { MuscleGroup } from "../muscleGroups/muscleGroup.entity.js";
 
 const em = orm.em;
 
@@ -10,11 +11,23 @@ async function getAll(req: Request, res: Response) {
         if (req.params.idMuscleGroup) {
             const idMuscleGroup = Number.parseInt(req.params.idMuscleGroup);
             const exercises = await em.find(Exercise, { muscleGroups: { idMuscleGroup: idMuscleGroup }, user: { idUser: req.body.user.id } }, { populate: ['muscleGroups', 'trainingMethod'] });
-            return res.status(200).json({ message: 'finded all exercises', exercises });
+            const exercisesDestructurized = exercises.map((e) => {
+                return {
+                    idExercise: e.idExercise,
+                    name: e.name,
+                    description: e.description,
+                    muscleGroups: e.muscleGroups.map((muscleGroup) => muscleGroup.nameMuscleGroup),
+                    difficulty: e.difficulty,
+                    typeExercise: e.typeExercise
+                };
+            });
+            return res.status(200).json({ message: 'finded all exercises', exercisesDestructurized});
         }
-        const exercises = await em.find(Exercise, { user: req.body.user.id }, { populate: ['muscleGroups', 'trainingMethod'] });
-        res.status(200).json({ message: 'finded all exercises', exercises });
-    }catch(err:any){
+        else {
+            const exercises = await em.find(Exercise, { user: req.body.user.id }, { populate: ['muscleGroups', 'trainingMethod'] });
+            res.status(200).json({ message: 'finded all exercises', exercises });}
+    
+    } catch (err: any) {
         res.status(500).json({message: err.message}); //Quitar mensaje de error en producción
     }
 }
@@ -34,7 +47,6 @@ async function getOne(req: Request, res: Response) {
 
 async function create(req: Request, res: Response) {
     try {
-        console.log(req.body);
         const exerciseValidation = validateParcialExercises(req.body);
         if (!exerciseValidation.success) {
             res.status(400).json({message: exerciseValidation.error});

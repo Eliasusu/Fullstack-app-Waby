@@ -1,12 +1,12 @@
+
 ## Preguntas ❓
 
-- Es mejor relacionar a los usuarios con los mesociclos y luego los mesociclos se relacionan con entrenamientos? Porque nosotros lo tenemos que los usuarios se relacionan con muchos entrenamientos y esos entrenamientos se relacionan con solo 1 mesociclo o otros
+- Cada vez que un usuario se loguea y ve su actividad, hay que recargar o cambiar de vista para que se refresque y aparezca la informacion real. Si yo me logueo con un usuario, cargo su actividad (Cantidad de entrenamientos realizados en un periodo de tiempo), luego hago un logout y inicia sesion otro usuario, queda cargado el estado anterior y tengo que refrescar para que aparezcan los datos 
 
-- Porque la entidad exercises_trainings no me deja ponerle otra clave primaria que no sea la de la entidad trainings?
+- Como hacemos para que no se generen muchas consultas en la pagina del + a la hora de filtrar los ejercicios por grupos musculares?
 
-- Porque cuando creo un training y le asigno un ejercicio no se me crea un exercise_training con las foraneas de estos 2?
+- Pusimos que la altura sea de 100vh pero en la pagina home nos queda corto, como lo solucionamos?
 
-- Porque no me aparacen las foraneas de progressionsSec y progressionsReps en Exercises?
 
 ## Mensajes para el proximo dev(esclavo) 📨
 
@@ -37,7 +37,7 @@
         <li>- [x] Integrar trainingsMethods </li>
         <li>- [x] Integrar exercises </li>
         <li>- [x] Integrar MuscleGroups </li>
-        <li>- [ ] Integrar exercises_trainings </li>
+        <li>- [x] Integrar exercises_trainings </li>
     </ul>
 </details>
 <details>
@@ -110,16 +110,16 @@
 <details>
     <summary>Testear exercises_trainings</summary>
         <ul>
-            <li>- [ ] Get alls</li>
+            <li>- [x] Get alls</li>
             <li>- [x] Get one </li>
             <li>- [x] Create </li>
-            <li>- [ ] Update </li>
-            <li>- [ ] Delete </li>
+            <li>- [x] Update </li>
+            <li>- [x] Delete </li>
         </ul>
 </details>
 <li>- [ ] Hacer repository y routes, agregar en index.ts de index --> No se que íria dentro del index</li>
-<li>- [ ]  Completar parte del login </li>
-<li>- [ ]  Agregar que se muestren los errores en rojo en la parte del register y el login </li>
+<li>- [x] Completar parte del login </li>
+<li>- [x]  Agregar que se muestren los errores en rojo en la parte del register y el login </li>
 <details>
 <summary>Crear Dashboard o page Dashboard</summary>
     <ul>
@@ -151,7 +151,7 @@ TP
 - [x] 28/6 -> Desarrollar y entregar el código de 1 CRUD x integrante en back-end COMPLETO (con acceso a BD incluido)
 - [x] 28/6 -> Entregar boilerplate del front-end
 - [x] 26/7 -> Desarrollar y entregar el código un GET ALL desde el front-end al back-end ya desarrollado antes (listar múltiples elementos de una colección).
-- [ ] 23/8 -> Desarrollar y entregar 1 CRUD completo front-end + back-end (todas las operaciones de CRUD).
-- [ ] 16/9 -> Desarrollar y entregar todos los CRUD front-end + back-end con alcance de regularidad.
+- [x] 23/8 -> Desarrollar y entregar 1 CRUD completo front-end + back-end (todas las operaciones de CRUD).
+- [x] 16/9 -> Desarrollar y entregar todos los CRUD front-end + back-end con alcance de regularidad.
 - [ ] Durante octubre -> Terminar el TP de desarrollo front-end + backend con alcance de regularidad.
 - [ ] Antes del 14 de Noviembre -> Defensa del TP desarrollo.

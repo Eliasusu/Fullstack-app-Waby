@@ -3,12 +3,13 @@ import { validateTraining, validateParcialTraining } from "./trainings.schema.js
 import { orm } from "../shared/db/orm.js";
 import { Training } from "./training.entity.js";
 import { User } from "../users/user.entity.js";
+import { getDateToday } from "../shared/getDateToday.js";
 
 const em = orm.em;
 
 async function getAll(req: Request, res: Response) {
     try {
-        const trainings = await em.find(Training, { user: req.body.user.id }, { populate: ['user.idUser', 'mesocycle.idMesocycle', 'exercisesTrainings'] });
+        const trainings = await em.find(Training, { user: req.body.user.id }, { populate: ['user.idUser', 'trainingItems.exercise'] });
         res.json(trainings);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -17,25 +18,14 @@ async function getAll(req: Request, res: Response) {
 
 async function getOne(req: Request, res: Response) {
     try {
-        const idTraining = Number.parseInt(req.params.idTraining);
-        const userId = req.body.user?.id;
-        
-        if (isNaN(idTraining)) {
-            return res.status(400).json({ message: 'Invalid training ID' });
-        }
-        
-        if (!userId) {
-            return res.status(400).json({ message: 'User ID is required' });
-        }
 
-        const training = await em.findOneOrFail( Training, { idTraining: idTraining, user: { idUser: userId } }, { populate: ['user', 'mesocycle', 'exercisesTrainings'] });
-        res.json(training);
-
+        const trainingFind = await em.findOne(Training, { user: { idUser: req.body.user.id }, day: req.params.date }, { populate: ['user.idUser', 'trainingItems.exercise.name'] });
+        res.json(trainingFind);
     } catch (error: any) {
         if (error.name === 'EntityNotFoundError') {
             res.status(404).json({ message: 'Training not found' });
         } else {
-            res.status(500).json({ message: 'Internal Server Error', details: error.message });
+            res.status(500).json({ message: 'Internal Server Error'  });
         }
     }
 }
@@ -50,8 +40,16 @@ async function add(req: Request, res: Response) {
         if (!trainingValidation.success) {
             return res.status(400).json({ message: trainingValidation.error });
         }
+
+        let date = new Date(trainingValidation.data.day);
+
+        date.setUTCHours(0, 0, 0, 0); 
+
+        const formatDay = date.toISOString().split('T')[0];
+
         const training = em.create(Training, {
             ...trainingValidation.data,
+            day: formatDay,
             user: user, 
         });
         await em.persistAndFlush(training);
@@ -65,17 +63,19 @@ async function add(req: Request, res: Response) {
 
 
 async function update(req: Request, res: Response) {
-    try{
+    try {
+        console.log(req.body);
         const idTraining = Number.parseInt(req.params.idTraining);
         const userId = req.body.user.id;
         const training = await em.findOneOrFail(Training, {idTraining, user: { idUser: userId }});
         if (!training) {
             return res.status(404).json({ message: 'Training not found' });
         }
-        const trainingValidation = validateTraining(req.body);
+        const trainingValidation = validateParcialTraining(req.body);
         if (!trainingValidation.success) {
             return res.status(400).json({ message: trainingValidation.error });
         }
+        console.log(trainingValidation.data);
         em.assign(training, trainingValidation.data);
         await em.flush();
         res.status(202).json({ message: 'Training updated' });
