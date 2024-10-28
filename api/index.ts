@@ -1,34 +1,48 @@
+import 'reflect-metadata';
 import express from 'express';
 import process from 'process';
-import { usersRouter } from "./routes/users.routes.js";
-import { exercisesRouter } from "./routes/exercises.routes.js";
+import cookieParser from 'cookie-parser';
+import { orm, syncSchema } from './shared/db/orm.js';
+import { usersRouter } from "./users/users.routes.js";
+import { exercisesRouter } from "./exercises/exercises.routes.js";
 import { corsMiddleware } from './middlewares/cors.js';
-import { muscleGroupsRouter } from './routes/muscleGroups.routes.js';
-import { trainingsRouter } from './routes/trainings.routes.js';
-//import { indexRouter } from './routes/index.routes.js';
-import { authRouter } from './routes/auth.routes.js';
-import { routinesRouter } from './routes/exercises_trainings.routes.js';
-import { mesocyclesRouter } from './routes/mesocycles.routes.js';
+import { muscleGroupsRouter } from './muscleGroups/muscleGroups.routes.js';
+import { trainingsRouter } from './trainings/trainings.routes.js';
+import { indexRouter } from './routes/index.routes.js';
+import { authRouter } from './auth/auth.routes.js';
+import { routinesRouter } from './trainingItems/trainingItems.routes.js';
+import { RequestContext } from '@mikro-orm/core';
+import { trainingMethodsRouter } from './trainingMethods/trainingMethod.routes.js';
+import { validateToken } from './middlewares/validateToken.js';
+import { calisthenicsProgressPerRepsRouter } from './exercises/calisthenics/reps/progressionReps.routes.js';
 
 
 
 // eslint-disable-next-line no-undef
 const port = process.env.PORT ?? 3000;
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 app.disable('x-powered-by');
 app.use(corsMiddleware());
+app.use(express.static('client'));
 
-app.use('/api/v1/exercises', exercisesRouter);
-app.use('/api/v1/users', usersRouter);
-app.use('/api/v1/trainings', trainingsRouter);
-//app.use('/index', indexRouter);
-app.use('/api/v1/', authRouter);
-//app.use('/routines', routinesRouter);
-app.use('/api/v1/muscleGroups', muscleGroupsRouter);
-app.use('/api/v1/mesocycles', mesocyclesRouter);
+app.use((req, res, next) => {
+    RequestContext.create(orm.em, next);
+});
+
+app.use('/api/v1/auth', authRouter);
+app.use('api/index/v1', validateToken, indexRouter);
+app.use('/api/v1/users',validateToken, usersRouter);
+app.use('/api/v1/exercises', validateToken, exercisesRouter);
+app.use('/api/v1/exercises/calisthenics/progressions/reps', calisthenicsProgressPerRepsRouter);
+app.use('/api/v1/trainings',validateToken, trainingsRouter);
+app.use('/api/v1/routines',validateToken, routinesRouter);
+app.use('/api/v1/muscleGroups',validateToken, muscleGroupsRouter);
+app.use('/api/v1/trainingMethods',validateToken, trainingMethodsRouter);
 
 
+await syncSchema() //This will create the schema in the database if it doesn't exist yet, no need to run this in production;
 app.listen(port, () => {
     console.log(`Server listening in the port http://localhost:${port}`);
 });
