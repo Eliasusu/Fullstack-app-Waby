@@ -49,11 +49,10 @@ async function login(req: Request, res: Response) {
         const user = await em.findOne(User, { username }, { populate: ['password'] });
         if (!user) return res.status(400).json(['Username incorrect']);
         const validPassword = bcrypt.compareSync(password, user.password);
-        if (!validPassword) return res.status(400).json( ['Password incorrect']);
+        if (!validPassword) return res.status(400).json(['Password incorrect'])
         const token = await createToken({ id: user.idUser, username: user.username });
-        res.cookie('token', token, {  });
-        const userName = user.username;
-        res.status(200).json([userName]);
+        res.cookie('token', token, { httpOnly: false, sameSite: 'none', secure: true });
+        res.status(200).json({ message: 'User logged in succesfully', username: user.username, id: user.idUser });
     } catch (error: any) { 
         console.log(error); // --> Eliminar en produccion
         res.status(500).json({ error: 'Error loging in' });

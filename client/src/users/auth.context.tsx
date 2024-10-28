@@ -4,6 +4,14 @@ import { getProfileRequest, registerRequest, loginRequest, verifyTokenRequest, u
 import Cookie from "js-cookie";
 import { User } from "@/users/user.type.ts";
 
+type userPropsUpdate = {
+    username: string,
+    name: string,
+    phone: string,
+    bodyWeight: number,
+    height: number,
+}
+
 interface AuthState {
     user: {
         id: string,
@@ -13,7 +21,7 @@ interface AuthState {
     signUp: (user: User) => void;
     signIn: (user: User) => void;
     logout: () => void;
-    updateProfile: (user: User) => void;
+    updateProfile: (id: string, data: userPropsUpdate) => void;
     deleteProfile: (id: string) => void;
     getOneProfile: (id: string) => void;
     isAuthenticated: boolean;
@@ -94,9 +102,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
 
-    const updateProfile = async (user: User) => {
+    const updateProfile = async (id: string, data: userPropsUpdate) => {
         try {
-            const res = await updateProfileRequest(user);
+
+            const res = await updateProfileRequest(id, data);
             setUser(res.data);
             setIsAuthenticated(true);
         } catch (error: unknown) {
@@ -125,7 +134,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (!id) return {} as User;
         try {
             const res = await getProfileRequest(id);
-            console.log('La respuesta', res.data.data)
             setAllDataUser(res.data.data);
             setIsAuthenticated(true);
         } catch (error) {

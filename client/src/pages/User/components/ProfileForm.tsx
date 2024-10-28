@@ -6,126 +6,150 @@ import { User } from "@/users/user.type.ts";
 import BoxContainer from "@/components/ui/BoxConteiner.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { Label } from "@/components/ui/label.tsx";
+import { useState } from "react";
 
 export function ProfileForm() {
-    const { allDataUser, updateProfile, deleteProfile, errors: registerErrors } = useAuth();
+    const { allDataUser, updateProfile, deleteProfile, getOneProfile, logout } = useAuth();
     const { handleSubmit } = useForm();
+    const [values, setValues] = useState<User>(allDataUser || {} as User);
 
+    console.log('Data user', allDataUser)
+    console.log('values', values)
 
-    const onSubmit = handleSubmit(async (values) => {
+    const onSubmit = handleSubmit(async () => {
 
-        const user: User = {
+        console.log('El value que llega', values)
+
+        const formatUser = {
             username: values.username,
-            password: values.password,
-            avatar: values.username,
-            email: values.email,
             name: values.name,
-            birthdate: values.birthdate,
+            email: values.email,
             phone: values.phone,
-            bodyWeight: values.bodyWeight,
-            height: values.height,
-        };
-        updateProfile(user);
+            bodyWeight: Number(values.bodyWeight),
+            height: Number(values.height),
+        }
+        updateProfile(allDataUser?.idUser || '', formatUser);
+        getOneProfile(allDataUser?.idUser || '')
         toast({
             title: "Profile updated",
             description: "Your profile has been updated",
-            duration: 5000,
+            duration: 500,
         })
     });
 
     const hangleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         evt.preventDefault()
+        const { name, value } = evt.target
+        setValues({
+            ...values,
+            [name]: value,
+        })
     }
 
     return (
-        <div className="flex justify-center my-8">
-            <BoxContainer width="w-screen mx-3" height="w-[340]" padding="p-5">
-                <h1 className="font-bold text-2xl text-white-text pb-1">Profile</h1>
-                <p className="text-white-text text-sm pb-3">Update your profile</p>
-                <div className="flex flex-col items-center justify-center w-auto">
-                    {
-                        Array.isArray(registerErrors) && (registerErrors).map((error: string, index: number) => (
-                            <div key={index} className="bg-red w-auto p-2 mb-3 text-white text-xs rounded-md " >{error}</div>
-                        ))
+        <>
+            <div className="flex justify-center my-8">
+                <BoxContainer width="w-screen mx-3" height="w-[340]" padding="p-5">
+                    <h1 className="font-bold text-2xl text-white-text pb-1">Profile</h1>
+                    <p className="text-white-text text-sm pb-3">Update your profile</p>
+                    <div className="flex flex-col items-center justify-center w-auto">
+                        <form className="w-full flex flex-col gap-3 pt-1" id="formProfile" action="/profile" method="PUT"
+                            onSubmit={onSubmit}>
+                            <div>
+                                <Label htmlFor="username" className="text-white-text/60">Username</Label>
+                                <Input
+                                    type="text"
+                                    name="username"
+                                    placeholder="Username"
+                                    className="w-full"
+                                    defaultValue={allDataUser?.username}
+                                    onChange={hangleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label className="text-white/60">Full name</Label>
+                                <Input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Name"
+                                    className="w-full"
+                                    defaultValue={allDataUser?.name}
+                                    onChange={hangleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label className="text-white/60">Email</Label>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    placeholder="Email"
+                                    className="w-full"
+                                    defaultValue={allDataUser?.email}
+                                    onChange={hangleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label className="text-white/60">Phone</Label>
+                                <Input
+                                    type="text"
+                                    name="phone"
+                                    placeholder="Phone"
+                                    className="w-full"
+                                    defaultValue={allDataUser?.phone}
+                                    onChange={hangleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label className="text-white/60">Body weight</Label>
+                                <Input
+                                    type="number"
+                                    name="bodyWeight"
+                                    placeholder="Body Weight"
+                                    className="w-full"
+                                    defaultValue={allDataUser?.bodyWeight}
+                                    onChange={hangleChange}
+                                />
+                            </div>
+                            <div>
+                                <Label className="text-white/60">Height</Label>
+                                <Input
+                                    type="number"
+                                    name="height"
+                                    placeholder="Height"
+                                    className="w-full"
+                                    defaultValue={allDataUser?.height}
+                                    onChange={hangleChange}
+                                />
+                            </div>
 
-                    }
-                    <form className="w-full flex flex-col gap-3 pt-1" id="formProfile" action="/profile" method="PUT"
-                        onSubmit={onSubmit}>
-                        <div>
-                            <Input
-                                type="text"
-                                name="username"
-                                placeholder="Username"
-                                className="w-full"
-                                defaultValue={allDataUser?.username}
-                                onChange={hangleChange}
-                            />
-                        </div>
-                        <Input
-                            type="text"
-                            name="name"
-                            placeholder="Name"
-                            className="w-full"
-                            defaultValue={allDataUser?.name}
-                            onChange={hangleChange}
-                        />
-                        <Input
-                            type="text"
-                            name="email"
-                            placeholder="Email"
-                            className="w-full"
-                            defaultValue={allDataUser?.email}
-                            onChange={hangleChange}
-                        />
-                        <Input
-                            type="date"
-                            name="birthdate"
-                            placeholder="Birthdate"
-                            className="w-full"
-                            defaultValue={allDataUser?.birthdate}
-                            onChange={hangleChange}
-                        />
-                        <Input
-                            type="text"
-                            name="phone"
-                            placeholder="Phone"
-                            className="w-full"
-                            defaultValue={allDataUser?.phone}
-                            onChange={hangleChange}
-                        />
-                        <Input
-                            type="text"
-                            name="bodyWeight"
-                            placeholder="Body Weight"
-                            className="w-full"
-                            defaultValue={allDataUser?.bodyWeight}
-                            onChange={hangleChange}
-                        />
-                        <Input
-                            type="text"
-                            name="height"
-                            placeholder="Height"
-                            className="w-full"
-                            defaultValue={allDataUser?.height}
-                            onChange={hangleChange}
-                        />
-                        <Button
-                            type="submit"
-                            className="bg-secondary"
-                        >  Update Profile
-                        </Button>
-                        <Button
-                            type="button"
-                            className=""
-                            onClick={() => {
-                                deleteProfile(allDataUser?.idUser || '')
-                            }}
-                        >  Delete Profile
-                        </Button>
+                            <Button
+                                type="submit"
+                                className="bg-secondary"
+                            >  Update Profile
+                            </Button>
+                            <Button
+                                type="button"
+                                className=""
+                                onClick={() => {
+                                    if (window.confirm("Are you sure you want to delete your profile?")) {
+                                        deleteProfile(allDataUser?.idUser || '')
+                                        logout()
+                                        toast({
+                                            title: "Profile deleted",
+                                            description: "Your profile has been deleted",
+                                            duration: 500,
+                                        })
+                                    }
+                                }}
+                            >
+                                Delete Profile
+                            </Button>
 
-                    </form>
-                </div>
-            </BoxContainer>
-        </div>
+                        </form>
+                    </div>
+                </BoxContainer >
+            </div>
+        </>
     );
 }
