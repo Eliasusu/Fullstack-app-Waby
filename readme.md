@@ -3,6 +3,7 @@
 
 
 ## Mensajes para el proximo dev(esclavo) 📨
+- Dentro de la pagina Profile, en el formulario, cuando quieres cambiar la propiedad phone y le das en update profile, el front hace una request en donde envia tanto el nuevo valor del phone, pero el body weight como el height los envia en null y eso genera un error en zod.
 
 ## ToDo 📃
 
