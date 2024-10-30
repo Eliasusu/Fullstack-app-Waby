@@ -14,21 +14,19 @@ export function ProfileForm() {
     const { handleSubmit } = useForm();
     const [values, setValues] = useState<User>(allDataUser || {} as User);
 
-    console.log('Data user', allDataUser)
-    console.log('values', values)
-
     const onSubmit = handleSubmit(async () => {
 
-        console.log('El value que llega', values)
+        if (!allDataUser) return
 
         const formatUser = {
-            username: values.username,
-            name: values.name,
-            email: values.email,
-            phone: values.phone,
-            bodyWeight: Number(values.bodyWeight),
-            height: Number(values.height),
+            username: values.username || allDataUser.username,
+            name: values.name || allDataUser.name,
+            email: values.email || allDataUser.email,
+            phone: values.phone || allDataUser.phone,
+            bodyWeight: Number(values.bodyWeight || allDataUser?.bodyWeight),
+            height: Number(values.height || allDataUser?.height),
         }
+
         updateProfile(allDataUser?.idUser || '', formatUser);
         getOneProfile(allDataUser?.idUser || '')
         toast({

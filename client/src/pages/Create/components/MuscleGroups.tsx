@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import BoxConteiner from "@/components/ui/BoxConteiner.tsx";
 import ExercisesTable from "@/exercises/components/exercise-table/page.tsx";
 import { useExercise } from "@/exercises/exercise.context.tsx";
-import {useTrainingMethod} from "@/trainingMethods/training-method.context.tsx";
+import { useTrainingMethod } from "@/trainingMethods/training-method.context.tsx";
 import { useMuscleGroup } from "@/muscleGroups/muscle-group.context.tsx";
 
 
@@ -18,15 +18,15 @@ import { useMuscleGroup } from "@/muscleGroups/muscle-group.context.tsx";
 
 //const muscleGroups = ["Legs", "Arms", "Back", "Shoulders", "Chest", "Core"];
 const difficultyLevels = ["Easy", "Medium", "Hard"];
-const exerciseTypes = ["Push", "Pull", "Legs", "Isometric"]; 
+const exerciseTypes = ["Push", "Pull", "Legs", "Isometric"];
 
 
 export default function MuscleGroupExercisesDialog() {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [showAddExercise, setShowAddExercise] = useState(false);
-  const { exercises, getExercises, addExercise } = useExercise();
+  const { exercises, getExercises, addExercise, getAllExercises } = useExercise();
   const { trainingMethods, getAllTrainingMethods } = useTrainingMethod();
- const { muscleGroups, getAllMGS } = useMuscleGroup();
+  const { muscleGroups, getAllMGS } = useMuscleGroup();
 
   const [newExercise, setNewExercise] = useState({
     idExercise: 0,
@@ -39,7 +39,7 @@ export default function MuscleGroupExercisesDialog() {
     //dateCreated: new Date(),
   });
 
-useEffect(() => {
+  useEffect(() => {
     getAllMGS();
     const intervalId = setInterval(() => {
       getAllMGS();
@@ -61,7 +61,7 @@ useEffect(() => {
               })
               break;
             case "Arms":
-              muscleGroups.map((group) => { 
+              muscleGroups.map((group) => {
                 if (group.nameMuscleGroup === "Arms") {
                   getExercises(group.idMuscleGroup.toString());
                 }
@@ -107,15 +107,16 @@ useEffect(() => {
       const intervalId = setInterval(fetchExercises, 180000);
 
       return () => clearInterval(intervalId);
-}}, [openDialog]);
+    }
+  }, [openDialog]);
 
-  
+
 
   useEffect(() => {
     getAllTrainingMethods();
     const intervalId = setInterval(() => {
       getAllTrainingMethods();
-    }, 180000); 
+    }, 180000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -126,6 +127,8 @@ useEffect(() => {
     // De esta forma cuando en la tabla se muestren los ejercicios 
     // Seran solo los del grupo muscular seleccionado
     addExercise(newExercise);
+    getExercises();
+    getAllExercises();
     setShowAddExercise(false);
   };
 
@@ -151,7 +154,7 @@ useEffect(() => {
             <DialogTitle className="text-2xl font-bold">Exercises by muscle group</DialogTitle>
           </DialogHeader>
           <h3 className="text-xl font-semibold">{openDialog}</h3>
-            <ExercisesTable data={exercises} />
+          <ExercisesTable data={exercises} />
           <button
             className="w-full flex items-center justify-center py-0 text-gray-400 hover:text-gray-100 transition-colors"
             onClick={() => setShowAddExercise(true)}

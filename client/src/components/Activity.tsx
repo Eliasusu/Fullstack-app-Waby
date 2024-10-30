@@ -22,8 +22,7 @@ export default function Activity() {
 
   useEffect(() => {
     generateActivityData(selectedPeriod)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPeriod])
+  })
 
   const generateActivityData = async (period: string) => {
     const currentDate = new Date()
@@ -33,22 +32,24 @@ export default function Activity() {
     switch (period) {
       case "Semanal":
         daysToGenerate = 7
-        startDate = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1))
+        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 3)
         break
       case "Mensual":
         daysToGenerate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate()
-        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2)
+        startDate.setDate(startDate.getDate() - startDate.getDay() + 1) // Adjust startDate to the correct day of the week
         break
       case "Anual":
-        daysToGenerate = 365
-        startDate = new Date(currentDate.getFullYear(), 0, 1)
+        daysToGenerate = (currentDate.getFullYear() % 4 === 0 && currentDate.getFullYear() % 100 !== 0) || (currentDate.getFullYear() % 400 === 0) ? 366 : 365
+        startDate = new Date(currentDate.getFullYear(), 0, 2)
         break
     }
 
     const newActivityData: ActivityDay[] = []
 
     for (let i = 0; i < daysToGenerate; i++) {
-      const date = new Date(startDate)
+      const date = new Date(startDate.getTime())
+      console.log
       date.setDate(startDate.getDate() + i)
       newActivityData.push({
         date,
@@ -78,7 +79,7 @@ export default function Activity() {
                   .map((day, index) => (
                     <div
                       key={index}
-                      className={`w-2 h-2 rounded-sm ${day.completed ? 'bg-red' : 'bg-grey-boxActivity'}`}
+                      className={`w-1 h-1 rounded-sm ${day.completed ? 'bg-red' : 'bg-grey-boxActivity'}`}
                     />
                   ))}
               </div>
@@ -88,15 +89,31 @@ export default function Activity() {
       )
     }
 
-    return (
+    const daysOfWeekPerMonth = ['Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom', 'Lun'];
+
+    if (selectedPeriod === "Mensual") {
       <div className="grid grid-cols-7 gap-1 mt-2">
-        {daysOfWeek.map(day => (
+        {daysOfWeekPerMonth.map(day => (
           <div key={day} className="text-xs text-center font-medium">{day}</div>
         ))}
         {activityData.map((day, index) => (
           <div
             key={index}
-            className={`w-6 h-6 rounded-sm ${day.completed ? 'bg-red' : 'bg-grey-boxActivity'}`}
+            className={`w-6 h-6 rounded-sm m-auto ${day.completed ? 'bg-red' : 'bg-grey-boxActivity'}`}
+          />
+        ))}
+      </div>
+    }
+
+    return (
+      <div className="grid grid-cols-7 gap-1 mt-2">
+        {(selectedPeriod === "Mensual" ? daysOfWeekPerMonth : daysOfWeek).map(day => (
+          <div key={day} className="text-xs text-center font-medium">{day}</div>
+        ))}
+        {activityData.map((day, index) => (
+          <div
+            key={index}
+            className={`w-6 h-6 rounded-sm m-auto ${day.completed ? 'bg-red' : 'bg-grey-boxActivity'}`}
           />
         ))}
       </div>

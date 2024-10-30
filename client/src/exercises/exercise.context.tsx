@@ -8,7 +8,7 @@ interface ExerciseState {
     exercises: Exercise[];
     allExercises: Exercise[];
     addExercise: (exercise: Exercise) => void;
-    getExercises: (mg: string) => void;
+    getExercises: (mg?: string) => void;
     editarExercise: (exercise: Exercise) => void;
     getAllExercises: () => void;
     removeExercise: (idExcercise: number) => void;
@@ -46,26 +46,26 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     // Se puede crear otro metodo llamado addExerciseByMg o directamente usamos este 
     // Pero hay que modificarlo y agregarlo en el controller
     const addExercise = async (exercise: Exercise) => {
-    try {
-        await createExercise(exercise);
-        setExercises([...exercises, exercise]);
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            setErrors({ message: error.message });
-        } else {
-            setErrors({ message: "Hubo un problema al guardar el ejercicio" });
+        try {
+            await createExercise(exercise);
+            setExercises([...exercises, exercise]);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setErrors({ message: error.message });
+            } else {
+                setErrors({ message: "Hubo un problema al guardar el ejercicio" });
+            }
         }
-    }
-    };    
-    
+    };
+
     const editarExercise = async (exercise: Exercise) => {
         try {
-            const mg = exercise.muscleGroups[0].toString(); 
+            const mg = exercise.muscleGroups[0].toString();
             const muscleGroupMatch = muscleGroups.find(muscleGroup => muscleGroup.nameMuscleGroup === mg);
             const muscleGroupId = muscleGroupMatch ? muscleGroupMatch.idMuscleGroup : null;
-            const exerciseUpdated = { 
-                ...exercise, 
-                muscleGroups: muscleGroupId !== null ? [muscleGroupId] : [] 
+            const exerciseUpdated = {
+                ...exercise,
+                muscleGroups: muscleGroupId !== null ? [muscleGroupId] : []
             };
             console.log(exerciseUpdated);
             await updateExercise(exerciseUpdated);
@@ -80,22 +80,22 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const getAllExercises = async () => { 
+    const getAllExercises = async () => {
         const res = await getExercisesReq();
         setExercises(res.data.exercises);
         setAllExercises(res.data.exercises);
         return res.data.exercises;
     }
 
-    const getExercises = async (mg: string) => {
+    const getExercises = async (mg?: string) => {
         if (mg) {
             const res = await getExercisesByMg(mg);
             setExercises(res.data.exercisesDestructurized);
-        } else { 
+        } else {
             const res = await getExercisesReq();
             setExercises(res.data.exercises);
         }
-  };
+    };
 
     const removeExercise = async (idExercise: number) => {
         try {
@@ -110,7 +110,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
             }
         }
     };
-    
+
 
     useEffect(() => {
         if (errors) {
@@ -122,7 +122,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <ExerciseContext.Provider value={{ exercises, allExercises,addExercise, editarExercise, getExercises, getAllExercises, removeExercise, errors }}>
+        <ExerciseContext.Provider value={{ exercises, allExercises, addExercise, editarExercise, getExercises, getAllExercises, removeExercise, errors }}>
             {children}
         </ExerciseContext.Provider>
     );
