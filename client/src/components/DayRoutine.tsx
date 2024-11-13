@@ -52,7 +52,8 @@ export const DayRoutine = ({ date }: { date: Date }) => {
 
     fetchTraining();
 
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChangeUpdateTraining = async (field: keyof Training, value: string | boolean) => {
     if (field === 'completed') {

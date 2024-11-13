@@ -8,18 +8,17 @@ import { X, Edit, Check } from 'lucide-react'
 import { useEffect, useState } from "react"
 import { Exercise } from "@/exercises/exercise.type.ts"
 
-
 const difficultyLevels = ["Easy", "Medium", "Hard"];
+const typeExercise = ["Push", "Pull", "Legs", "Isometric"];
 
-export const columns = ({ removeExercise, editarExercise, editingId, setEditingId, editedExercise, setEditedExercise}: { 
-  removeExercise: (idExercise: number) => void, 
+export const columns = ({ removeExercise, editarExercise, editingId, setEditingId, editedExercise, setEditedExercise }: {
+  removeExercise: (idExercise: number) => void,
   editarExercise: (exercise: Exercise) => void,
   editingId: number | null,
   setEditingId: (id: number | null) => void
   editedExercise: Exercise | null,
   setEditedExercise: (exercise: Exercise | null) => void
 }): ColumnDef<Exercise>[] => {
- 
 
   const handleInputChange = (key: keyof Exercise, value: string | number[]) => {
     if (editedExercise) {
@@ -27,7 +26,7 @@ export const columns = ({ removeExercise, editarExercise, editingId, setEditingI
     }
   };
 
-  const createEditableCell = (key: keyof Exercise, type: 'text' | 'select' = 'text') => ({
+  const createEditableCell = (key: keyof Exercise, type: 'text' | 'select' = 'text', options?: string[]) => ({
     accessorKey: key,
     header: key.charAt(0).toUpperCase() + key.slice(1),
     cell: ({ row }: { row: { original: Exercise } }) => {
@@ -41,42 +40,33 @@ export const columns = ({ removeExercise, editarExercise, editingId, setEditingI
       }, [value]);
 
       const handleConfirmEdit = () => {
-      if (editedExercise) {
-        setEditedExercise({ ...editedExercise, [key]: localValue });
-        editarExercise(editedExercise);
-      }
-    };
-
-      
-      console.log("key", key); 
-      console.log("value", value);
-      console.log("localValue", localValue);
-      console.log("isEditing", isEditing);
-      console.log(editedExercise)
+        if (editedExercise) {
+          setEditedExercise({ ...editedExercise, [key]: localValue });
+          editarExercise(editedExercise);
+        }
+      };
 
       if (isEditing && key !== 'idExercise') {
-        if (type === 'select') {
+        if (type === 'select' && options) {
           return (
-            <>
-              <Select
-                value = {localValue as string}
-                onValueChange={(newValue) => {
-                  setLocalValue(newValue);
-                  handleInputChange(key, newValue);
-                }}
-                >
+            <Select
+              value={localValue as string}
+              onValueChange={(newValue) => {
+                setLocalValue(newValue);
+                handleInputChange(key, newValue);
+              }}
+            >
               <SelectTrigger className="bg-grey-box border-gray-600">
-                <SelectValue placeholder="Select difficulty" />
+                <SelectValue placeholder={`Select ${key}`} />
               </SelectTrigger>
               <SelectContent className="bg-grey-boxRoutine">
-                {difficultyLevels.map((level) => (
-                  <SelectItem key={level} className="text-white" value={level}>
-                    {level}
+                {options.map((option) => (
+                  <SelectItem key={option} className="text-white" value={option}>
+                    {option}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            </>
           );
         }
         return (
@@ -100,22 +90,11 @@ export const columns = ({ removeExercise, editarExercise, editingId, setEditingI
       header: 'Muscle Groups',
       cell: ({ row }) => {
         const exercise = row.original;
-        const isEditing = editingId === exercise.idExercise;
-        const value = isEditing && editedExercise ? editedExercise.muscleGroups : exercise.muscleGroups;
-
-        if (isEditing) {
-          return (
-            <Input
-              value={value.join(', ')}
-              onChange={(e) => handleInputChange('muscleGroups', e.target.value.split(',').map(Number))}
-            />
-          );
-        }
-        return value.join(', ');
+        return exercise.muscleGroups.join(', ');
       },
     },
-    createEditableCell('difficulty', 'select'),
-    createEditableCell('typeExercise'),
+    createEditableCell('difficulty', 'select', difficultyLevels),
+    createEditableCell('typeExercise', 'select', typeExercise),
     {
       id: "actions",
       cell: ({ row }) => {

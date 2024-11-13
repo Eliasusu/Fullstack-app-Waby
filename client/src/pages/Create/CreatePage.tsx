@@ -12,7 +12,8 @@ export default function CreatePage() {
 
     useEffect(() => {
         getAllExercises()
-    },)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <>
