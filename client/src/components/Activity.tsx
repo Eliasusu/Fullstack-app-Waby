@@ -32,12 +32,12 @@ export default function Activity() {
     switch (period) {
       case "Semanal":
         daysToGenerate = 7
-        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 3)
+        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 5)
         break
       case "Mensual":
         daysToGenerate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate()
         startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2)
-        startDate.setDate(startDate.getDate() - startDate.getDay() + 1) // Adjust startDate to the correct day of the week
+        startDate.setDate(startDate.getDate() - startDate.getDay() + 1)
         break
       case "Anual":
         daysToGenerate = (currentDate.getFullYear() % 4 === 0 && currentDate.getFullYear() % 100 !== 0) || (currentDate.getFullYear() % 400 === 0) ? 366 : 365
