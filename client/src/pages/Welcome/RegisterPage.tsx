@@ -39,7 +39,6 @@ function RegisterUser() {
             trainingMethods: values.trainingMethods,
             height: values.height,
         };
-        console.log(user)
         signUp(user);
     });
 

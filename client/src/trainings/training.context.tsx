@@ -16,7 +16,7 @@ interface TrainingState {
     updateTraining: (training: Training) => void;
     updateTrainingItem: (trainingItem: TrainingItem, idTraining: number) => void;
     deleteTraining: (id: number) => void;
-    deleteTrainingItem: (id: number, idTraining:number) => void;
+    deleteTrainingItem: (id: number, idTraining: number) => void;
     errors: object | null;
 }
 
@@ -30,10 +30,12 @@ const initialTrainingState: TrainingState = {
         day: new Date(),
         startHour: '',
         endHour: '',
-        trainingItems: [{ exercise: {
-            name: '', trainingMethod: '', description: '', muscleGroups: [0], difficulty: '', typeExercise: '',
-            idExercise: 0
-        }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0}],
+        trainingItems: [{
+            exercise: {
+                name: '', trainingMethod: '', description: '', muscleGroups: [0], difficulty: '', typeExercise: '',
+                idExercise: 0
+            }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0
+        }],
         completed: false,
     }],
     training: {
@@ -44,10 +46,12 @@ const initialTrainingState: TrainingState = {
         day: new Date(),
         startHour: '',
         endHour: '',
-        trainingItems: [{ exercise: {
-            name: '', trainingMethod: '', description: '', muscleGroups: [0], difficulty: '', typeExercise: '',
-            idExercise: 0
-        }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0}],
+        trainingItems: [{
+            exercise: {
+                name: '', trainingMethod: '', description: '', muscleGroups: [0], difficulty: '', typeExercise: '',
+                idExercise: 0
+            }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0
+        }],
         completed: false,
     },
     addTraining: () => { },
@@ -100,12 +104,9 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
                 rest: trainingItem.rest,
                 comment: trainingItem.comment,
             }
-            console.log('refac', refacTrainingItem);
-            console.log('idTraining', idTraining);
             const id = idTraining.toString();
             await createTrainingItemReq(refacTrainingItem, id);
             const updatedTrainings = await getAllTrainings();
-            console.log('updatedTrainings', updatedTrainings);
             setTrainings(updatedTrainings.data.trainings);
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -119,7 +120,6 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     const getTrainingToDay = async (date: Date) => {
         try {
             const dateString = date.toISOString().split("T")[0];
-            console.log('dateString', dateString);
             const res = await getTrainingOfTheDay(dateString);
             setTraining(res.data);
         } catch (error: unknown) {
@@ -141,11 +141,11 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
             } else {
                 setErrors({ message: "Hubo un problema al obtener los ejercicios" });
             }
-    
+
         }
     };
 
-    const updateTraining = async (training: Training) => { 
+    const updateTraining = async (training: Training) => {
         try {
             await updateTrainingReq(training);
             const updatedTrainings = await getAllTrainings();
@@ -161,10 +161,9 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
 
     const updateTrainingItem = async (trainingItem: TrainingItem, idTraining: number) => {
         try {
-            if(trainingItem.idTrainingItem === undefined) return;
+            if (trainingItem.idTrainingItem === undefined) return;
             const id = idTraining.toString();
             const idTItem = trainingItem.idTrainingItem.toString();
-            console.log('completeExercise', trainingItem.completeExercise);
             const refacTrainingItem = {
                 exercise: trainingItem.exercise.idExercise,
                 sets: trainingItem.sets,
@@ -174,7 +173,6 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
                 comment: trainingItem.comment,
                 completeExercise: trainingItem.completeExercise,
             }
-            console.log('trainingItem', refacTrainingItem);
             await updateTrainingItemReq(refacTrainingItem, id, idTItem);
             const updatedTrainings = await getAllTrainings();
             setTrainings(updatedTrainings.data.trainings);
@@ -198,11 +196,11 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
             } else {
                 setErrors({ message: "Hubo un problema al eliminar el entrenamiento" });
             }
-    
+
         }
     };
 
-    const deleteTrainingItem = async (idItem: number, idTraining: number) => { 
+    const deleteTrainingItem = async (idItem: number, idTraining: number) => {
         try {
             const idStr = idItem.toString();
             const idTrainingStr = idTraining.toString();
@@ -228,7 +226,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     }, [errors]);
 
     return (
-        <TrainingContext.Provider value={{ trainings, training ,addTraining, addTrainingItem, updateTraining, updateTrainingItem, getTrainings, getTrainingToDay, deleteTraining, deleteTrainingItem, errors }}>
+        <TrainingContext.Provider value={{ trainings, training, addTraining, addTrainingItem, updateTraining, updateTrainingItem, getTrainings, getTrainingToDay, deleteTraining, deleteTrainingItem, errors }}>
             {children}
         </TrainingContext.Provider>
     );

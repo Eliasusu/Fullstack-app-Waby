@@ -99,7 +99,7 @@ export default function MuscleGroupExercisesDialog() {
               break;
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       };
 

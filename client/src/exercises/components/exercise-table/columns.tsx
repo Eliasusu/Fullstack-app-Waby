@@ -136,7 +136,6 @@ export const columns = ({ removeExercise, editarExercise, editingId, setEditingI
               size="icon"
               onClick={() => {
                 if (window.confirm(`Are you sure you want to delete ${exercise.name}?`)) {
-                  console.log("delete", exercise.idExercise);
                   removeExercise(exercise.idExercise);
                 }
               }}

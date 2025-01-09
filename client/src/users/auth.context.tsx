@@ -118,7 +118,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const deleteProfile = async (id: string) => {
         try {
             const res = await deleteProfileRequest(id);
-            console.log('res.data', res.data)
             setUser(res.data);
             setIsAuthenticated(true);
         } catch (error) {
@@ -152,7 +151,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             if (token) {
                 try {
                     const res = await verifyTokenRequest()
-                    console.log(res);
                     if (res.data) {
                         setIsAuthenticated(true);
                         setUser(res.data);
