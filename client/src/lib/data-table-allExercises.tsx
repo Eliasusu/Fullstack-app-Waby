@@ -30,7 +30,7 @@ export function DataTableExercises<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md border">
+    <div className="border border-white/30 rounded-xl">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -41,9 +41,9 @@ export function DataTableExercises<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 )
               })}
