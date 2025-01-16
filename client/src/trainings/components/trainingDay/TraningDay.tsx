@@ -274,6 +274,7 @@ export const TrainingDay = () => {
 
   return (
     <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
+      <h2 className="text-2xl font-semibold text-white m-5">Training</h2>
       <ContextMenu>
         <ContextMenuTrigger>
           <Calendar
