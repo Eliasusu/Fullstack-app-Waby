@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { validateParcialExercises } from "./exercises.schema.js";
 import { Exercise } from "./exercise.entity.js";
 import { orm } from "../shared/db/orm.js";
-import { MuscleGroup } from "../muscleGroups/muscleGroup.entity.js";
 
 const em = orm.em;
 

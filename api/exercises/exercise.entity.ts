@@ -5,6 +5,7 @@ import { trainingItem } from '../trainingItems/trainingItems.entity.js';
 import { ProgressionReps } from './calisthenics/reps/progressionReps.entity.js';
 import { ProgressionSec } from './calisthenics/secs/progressionSec.entity.js';
 import { User } from '../users/user.entity.js';
+import { ProgressiveOverload } from '../progressiveOverload/progressiveOverload.entity.js';
 
 
 @Entity()
@@ -55,5 +56,10 @@ export class Exercise  {
         cascade: [Cascade.ALL]
     })
     progressionSec = new Collection<ProgressionSec>(this);
+
+    @OneToMany(() => ProgressiveOverload, (progressiveOverload) => progressiveOverload.exercise, {
+        cascade: [Cascade.ALL]
+    }) 
+    progressiveOverload = new Collection<ProgressiveOverload>(this);
 
 };
