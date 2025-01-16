@@ -6,7 +6,7 @@ import LoginPage from '@/pages/Welcome/LoginPage.tsx';
 import Welcome from '@/pages/Welcome/Welcome.tsx';
 import ProtectedRoute from '@/lib/ProtectedRoute.tsx';
 import CreatePage from '@/pages/Create/CreatePage.tsx';
-import CronogramPage from '@/pages/Cronogram/CronogramPAge.tsx';
+import CronogramPage from '@/pages/Cronogram/CronogramPage.tsx';
 import { ExerciseProvider } from '@/exercises/exercise.context.tsx';
 import { TrainingProvider } from '@/trainings/training.context.tsx';
 import { TrainingMethodProvider } from './trainingMethods/training-method.context.tsx';
