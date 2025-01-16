@@ -13,6 +13,7 @@ import { TrainingMethodProvider } from './trainingMethods/training-method.contex
 import { MuscleGroupProvider } from './muscleGroups/muscle-group.context.tsx';
 import Profile from './pages/User/main.tsx';
 import { FormProvider, useForm } from 'react-hook-form';
+import GoalsPage from './pages/Goals/GoalsPage.tsx';
 
 
 
@@ -37,6 +38,7 @@ export function App() {
                         <Route path='/calendar' element={<CronogramPage />} />
                         <Route path='/create' element={<CreatePage />} />
                         <Route path='/profile' element={<Profile />} />
+                        <Route path='/goals' element={<GoalsPage />} />
                       </Route>
                     </Routes>
                   </div>
