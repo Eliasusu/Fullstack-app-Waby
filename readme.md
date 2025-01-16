@@ -14,6 +14,3 @@ Actualmente, el proyecto se encuentra en desarrollo
 3. **Planificar**: La aplicación cuenta con un calendario el cual te permite organizar tus entrenamientos
 4. **Sobrecarga progresiva**: Además puedes por cada ejercicio que te interese, seguir el registro de tu último peso levantado, o repeticiones hechas
 
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
