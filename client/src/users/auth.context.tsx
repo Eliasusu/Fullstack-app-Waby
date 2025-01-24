@@ -3,6 +3,8 @@ import { createContext, ReactNode, useContext, useState, useEffect } from "react
 import { getProfileRequest, registerRequest, loginRequest, verifyTokenRequest, updateProfileRequest, deleteProfileRequest } from "@/users/auth.api.ts";
 import Cookie from "js-cookie";
 import { User } from "@/users/user.type.ts";
+import useErrorHandler from "@/lib/useErrorHandler.tsx";
+
 
 type userPropsUpdate = {
     username: string,
@@ -59,6 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [allDataUser, setAllDataUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState<{ message: string }[]>([]);
+    const handleError = useErrorHandler();
 
     const signUp = async (user: User) => {
         try {
@@ -67,7 +70,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setIsAuthenticated(true);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            setErrors(error.response.data);
+            setErrors(error.response.data)
+            console.log(error.response.data[1])
+            handleError({ code: error.response.status, message: error.response.data });
         }
     };
 
