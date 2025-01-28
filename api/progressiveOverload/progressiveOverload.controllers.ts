@@ -77,5 +77,16 @@ async function remove(req: Request, res: Response) {
     }
 }
 
+async function getAllByExercise(req: Request, res: Response) { 
+    try {
+        const idExercise = Number.parseInt(req.params.idExercise);
+        const progressiveOverloads = await em.find(ProgressiveOverload, { exercise: { idExercise }, user: { idUser: req.body.user.id } });
+        res.status(200).json({ message: 'finded all progressiveOverloads', progressiveOverloads });
+    } catch (err: any) {
+        res.status(500)
+    }
+}
 
-export { getAll, getOne, create, update, remove };
+
+
+export { getAll, getOne, create, update, remove, getAllByExercise };

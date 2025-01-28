@@ -8,7 +8,6 @@ export default function TableProgressiveOverload() {
 
 
 
-
     return (
         <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

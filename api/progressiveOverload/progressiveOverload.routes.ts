@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAll, getOne, create, update, remove } from "./progressiveOverload.controllers.js";
+import { getAll, getOne, create, update, remove, getAllByExercise } from "./progressiveOverload.controllers.js";
 
 export const progressiveOverloadRouter = Router();
 
@@ -17,3 +17,6 @@ progressiveOverloadRouter.put('/:idProgressiveOverload', update);
 
 //Delete of an progressiveOverload
 progressiveOverloadRouter.delete('/:idProgressiveOverload', remove);
+
+//Get all progressiveOverloads by exercise
+progressiveOverloadRouter.get('/progressiveOverload/:idExercise', getAllByExercise);
