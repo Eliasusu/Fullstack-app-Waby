@@ -1,12 +1,20 @@
 import BoxContainer from "@/components/ui/BoxConteiner.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
+import { useProgressiveOverload } from "@/progressiveOverload/progressiveOverload.context.tsx";
+import { useEffect } from "react";
 
 
 export default function TableProgressiveOverload() {
+    const { getAll, progressiveOverloads } = useProgressiveOverload();
 
+    useEffect(() => {
+        getAll();
 
+    }, []);
+
+    console.log("Progressive Overloads", progressiveOverloads);
 
     return (
         <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
@@ -19,15 +27,18 @@ export default function TableProgressiveOverload() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Exercise</TableHead>
+                                <TableHead>Weight</TableHead>
+                                <TableHead>Reps</TableHead>
+                                <TableHead>Secs</TableHead>
                                 <TableHead>Goal</TableHead>
-                                <TableHead>Current</TableHead>
-                                <TableHead>Unit</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {
-                                // Aquí va el map de los progressiveOverload del usuario
-                            }
+                            {progressiveOverloads.map((po) => (
+                                <TableRow key={po.idProgressiveOverload}>
+                                    <TableCell>{po.name}</TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </div>

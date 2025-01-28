@@ -7,8 +7,9 @@ import { Exercise } from "../exercises/exercise.entity.js";
 const em = orm.em;
 
 async function getAll(req: Request, res: Response) { 
+    console.log('entre')
     try {
-        const progressiveOverloads = await em.find(ProgressiveOverload, { user: req.body.user.id });
+        const progressiveOverloads = await em.find(ProgressiveOverload, { user: req.body.user.id }, { populate: ['exercise'] });
         res.status(200).json({ message: 'finded all progressiveOverloads', progressiveOverloads });
     } catch (err: any) {
         res.status(500)

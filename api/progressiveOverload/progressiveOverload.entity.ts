@@ -14,23 +14,23 @@ export class ProgressiveOverload {
     @Property({ nullable: false, type: 'date', defaultRaw: 'current_timestamp()' })
     logDate?: Date;
 
-    @Property({ nullable: false })
-    weightLifted!: string;
+    @Property({ nullable: true })
+    weightLifted?: string;
 
-    @Property({ nullable: false })
-    weightGoal!: string;
+    @Property({ nullable: true })
+    weightGoal?: string;
 
-    @Property({ nullable: false })
-    repsDone!: string;
+    @Property({ nullable: true })
+    repsDone?: string;
 
-    @Property({ nullable: false })
-    repsGoal!: string;
+    @Property({ nullable: true })
+    repsGoal?: string;
 
-    @Property({ nullable: false })
-    secDone!: string;
+    @Property({ nullable: true })
+    secDone?: string;
 
-    @Property({ nullable: false })
-    secGoal!: string;
+    @Property({ nullable: true })
+    secGoal?: string;
 
     @ManyToOne(() => Exercise, { nullable: false })
     exercise!: Rel<Exercise>;
