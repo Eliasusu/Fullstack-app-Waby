@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
 import { validateParcialProgressiveOverload } from "./progressiveOverload.schema.js";
 import { ProgressiveOverload } from "./progressiveOverload.entity.js";
+import { Exercise } from "../exercises/exercise.entity.js";
 
 const em = orm.em;
 
@@ -26,12 +27,15 @@ async function getOne(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
+    console.log(req.body);
     try {
         const progressiveOverloadValidation = validateParcialProgressiveOverload(req.body);
         if (!progressiveOverloadValidation.success) {
             res.status(400).json({ message: progressiveOverloadValidation.error });
             return;
         }
+        const exerciseToOverload = await em.findOneOrFail(Exercise, { idExercise: progressiveOverloadValidation.data.exercise });
+        if (!exerciseToOverload) return res.status(404).json({ message: 'Exercise not found' });
         const progressiveOverload = em.create(ProgressiveOverload, {
             ...progressiveOverloadValidation.data,
             user: req.body.user.id

@@ -18,6 +18,9 @@ export class ProgressiveOverload {
     weightLifted!: string;
 
     @Property({ nullable: false })
+    weightGoal!: string;
+
+    @Property({ nullable: false })
     repsDone!: string;
 
     @Property({ nullable: false })

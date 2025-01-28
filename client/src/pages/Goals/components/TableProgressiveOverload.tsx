@@ -28,7 +28,6 @@ export default function TableProgressiveOverload() {
                         <TableBody>
                             {
                                 // Aquí va el map de los progressiveOverload del usuario
-
                             }
                         </TableBody>
                     </Table>
