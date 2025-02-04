@@ -1,28 +1,26 @@
 import { z } from "zod";
 import { ProgressiveOverload } from "./progressiveOverload.entity.js";
+import { Exercise } from "../exercises/exercise.entity.js";
 
 export const progressiveOverloadSchema: any = z.object({
     name: z.string({
         required_error: 'Name is required',
         invalid_type_error: 'Name must be a string',
-    }).length(50).min(3),
-    logDate: z.date().optional(),
-    weightLifted: z.string({
-        required_error: 'Weight lifted is required',
-        invalid_type_error: 'Weight lifted must be a string',
-    }).length(3).min(1).optional(),
-    repsDone: z.string({
-        required_error: 'Reps done is required',
-        invalid_type_error: 'Reps done must be a string',
-    }).length(1).optional(),
-    repsGoal: z.string({
-        required_error: 'Reps goal is required',
-        invalid_type_error: 'Reps goal must be a string',
-    }).min(1).optional(),
-    exercise: z.string({
-        required_error: 'Exercise is required',
-        invalid_type_error: 'Exercise must be a string',
-    })
+    }).min(3).max(50),
+    logDate: z.string().optional(),
+    typePO: z.string({
+        required_error: 'TypePO is required',
+        invalid_type_error: 'TypePO must be a string',
+    }),
+    done: z.number({
+        required_error: 'Done is required',
+        invalid_type_error: 'Done must be a number',
+    }),
+    goal: z.number({
+        required_error: 'Goal is required',
+        invalid_type_error: 'Goal must be a number',
+    }),
+    exercise: z.object({}),
 });
 
 export function validateProgressiveOverload(progressiveOverload: ProgressiveOverload) {

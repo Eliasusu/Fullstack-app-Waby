@@ -341,10 +341,12 @@ export const TrainingDay = () => {
                 <TableHead className="text-white/90"></TableHead>
                 <TableHead className="text-white/90">Exercise</TableHead>
                 <TableHead className="text-white/90">Comment</TableHead>
-                <TableHead className="text-right text-white/90">Sets</TableHead>
-                <TableHead className="text-right text-white/90">Reps</TableHead>
-                <TableHead className="text-right text-white/90">Weight</TableHead>
-                <TableHead className="text-right text-white/90">Rest</TableHead>
+                <TableHead className="text-center text-white/90">Sets</TableHead>
+                <TableHead className="text-center text-white/90">Reps</TableHead>
+                <TableHead className="text-center text-white/90">Weight</TableHead>
+                <TableHead className="text-center text-white/90">Rest</TableHead>
+                <TableHead className="text-center text-white/90">Delete</TableHead>
+                <TableHead className="text-center text-white/90">Modify</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

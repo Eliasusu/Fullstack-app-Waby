@@ -3,6 +3,7 @@ import { orm } from "../shared/db/orm.js";
 import { validateParcialProgressiveOverload } from "./progressiveOverload.schema.js";
 import { ProgressiveOverload } from "./progressiveOverload.entity.js";
 import { Exercise } from "../exercises/exercise.entity.js";
+import { format } from 'date-fns';
 
 const em = orm.em;
 
@@ -35,11 +36,16 @@ async function create(req: Request, res: Response) {
             res.status(400).json({ message: progressiveOverloadValidation.error });
             return;
         }
-        const exerciseToOverload = await em.findOneOrFail(Exercise, { idExercise: progressiveOverloadValidation.data.exercise });
+         
+        const logDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
+        const exerciseToOverload = await em.findOneOrFail(Exercise, { idExercise: progressiveOverloadValidation.data.exercise.idExercise });
         if (!exerciseToOverload) return res.status(404).json({ message: 'Exercise not found' });
         const progressiveOverload = em.create(ProgressiveOverload, {
             ...progressiveOverloadValidation.data,
-            user: req.body.user.id
+            user: req.body.user.id,
+            exercise: exerciseToOverload,
+            logDate: logDate
         });
         await em.flush();
         res.status(201).json({ message: 'ProgressiveOverload created', progressiveOverload });
@@ -50,15 +56,23 @@ async function create(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
     try {
+        console.log(req.body)
         const idProgressiveOverload = Number.parseInt(req.params.idProgressiveOverload);
-        const progressiveOverload = await em.findOneOrFail(ProgressiveOverload, { idProgressiveOverload, user: { idUser: req.body.user.id } });
+        const progressiveOverload = await em.findOneOrFail(ProgressiveOverload, { idProgressiveOverload, user: { idUser: req.body.user.id }, exercise: { idExercise: req.body.exercise.idExercise} });
         if (!progressiveOverload) return res.status(404).json({ message: 'ProgressiveOverload not found' });
         const progressiveOverloadValidation = validateParcialProgressiveOverload(req.body);
         if (!progressiveOverloadValidation.success) {
             res.status(400).json({ message: progressiveOverloadValidation.error });
             return;
         }
-        em.assign(progressiveOverload, progressiveOverloadValidation.data);
+
+        const logDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
+        em.assign(progressiveOverload, {
+            ...progressiveOverloadValidation.data,
+            exercise: req.body.exercise.idExercise,
+            logDate: logDate
+        });
         await em.flush();
         res.status(200).json({ message: 'ProgressiveOverload updated', progressiveOverload });
     } catch (err: any) {

@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import {createProgressiveOverload, deleteProgressiveOverload, getProgressiveOverloadsReq, getProgressiveOverloadsByExercise, updateProgressiveOverload, getProgressiveOverload} from "@/progressiveOverload/progressiveOverload.api";
+import { createProgressiveOverload, deleteProgressiveOverload, getProgressiveOverloadsReq, getProgressiveOverloadsByExercise, updateProgressiveOverload, getProgressiveOverload } from "@/progressiveOverload/progressiveOverload.api";
 import { ProgressiveOverload } from "@/progressiveOverload/progressiveOverload.type";
 
 interface ProgressiveOverloadState {
@@ -20,12 +20,9 @@ const initialProgressiveOverloadState: ProgressiveOverloadState = {
         name: "",
         exercise: "",
         user: "",
-        weightLifted: "",
-        weightGoal: "",
-        repsDone: "",
-        repsGoal: "",
-        secDone: "",
-        secGoal: "",
+        typePO: "",
+        done: 0,
+        goal: 0,
         logDate: new Date(),
     },
     progressiveOverloads: [],
@@ -55,12 +52,9 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
         name: "",
         exercise: "",
         user: "",
-        weightLifted: "",
-        weightGoal: "",
-        repsDone: "",
-        repsGoal: "",
-        secDone: "",
-        secGoal: "",
+        typePO: "",
+        done: 0,
+        goal: 0,
         logDate: new Date(),
     });
     const [progressiveOverloads, setProgressiveOverloads] = useState<ProgressiveOverload[]>([]);
@@ -75,10 +69,10 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
             if (error instanceof Error) {
                 setErrors({ message: error.message });
             } else {
-                setErrors({ message: "Hubo un problema al guardar el método de entrenamiento" });
+                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
             }
         }
-    }    
+    }
 
     const getAll = async () => {
         try {
@@ -88,7 +82,7 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
             if (error instanceof Error) {
                 setErrors({ message: error.message });
             } else {
-                setErrors({ message: "Hubo un problema al guardar el método de entrenamiento" });
+                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
             }
         }
     }
@@ -102,7 +96,7 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
             if (error instanceof Error) {
                 setErrors({ message: error.message });
             } else {
-                setErrors({ message: "Hubo un problema al guardar el método de entrenamiento" });
+                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
             }
         }
     }
@@ -114,35 +108,37 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
             if (error instanceof Error) {
                 setErrors({ message: error.message });
             } else {
-                setErrors({ message: "Hubo un problema al guardar el método de entrenamiento" });
+                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
             }
         }
     }
 
     const update = async (progressiveOverload: ProgressiveOverload) => {
         try {
+
             await updateProgressiveOverload(progressiveOverload);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setErrors({ message: error.message });
             } else {
-                setErrors({ message: "Hubo un problema al guardar el método de entrenamiento" });
+                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
             }
         }
     }
 
     const remove = async (id: number) => {
+        console.log('entre al remove del context')
         try {
             await deleteProgressiveOverload(id);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setErrors({ message: error.message });
             } else {
-                setErrors({ message: "Hubo un problema al guardar el método de entrenamiento" });
+                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
             }
         }
     }
-    
+
     useEffect(() => {
         if (errors) {
             const timer = setTimeout(() => {
@@ -153,9 +149,9 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
     }, [errors]);
 
     return (
-        <ProgressiveOverloadContext.Provider value={{ progressiveOverload, progressiveOverloads, getOne,getAll, getByExercise, create, update, remove, errors }}>
+        <ProgressiveOverloadContext.Provider value={{ progressiveOverload, progressiveOverloads, getOne, getAll, getByExercise, create, update, remove, errors }}>
             {children}
         </ProgressiveOverloadContext.Provider>
     );
-  
-  }
+
+}
