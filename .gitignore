@@ -23,3 +23,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+api/shared/db/orm.ts

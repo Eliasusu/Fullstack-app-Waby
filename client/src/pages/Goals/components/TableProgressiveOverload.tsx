@@ -28,13 +28,8 @@ export default function TableProgressiveOverload() {
     }, [progressiveOverloads])
 
 
-
-    console.log('Local POs', localPOs)
-
     const handleSubmitDeletePO = (id: number) => {
-        console.log('delete')
         if (localPOs) {
-            console.log(id)
             if (id !== undefined) {
                 remove(id);
                 setLocalPOs({ ...localPOs })
@@ -52,15 +47,32 @@ export default function TableProgressiveOverload() {
         setIsEditedPO(false)
         if (localPOs) {
             update(localPOs[0]);
-            setLocalPOs({ ...localPOs })
+            setLocalPOs(localPOs)
         }
     }
 
     const handleChangeUpdatePO = (po: number, key: keyof ProgressiveOverload, value: string | number) => {
         if (localPOs) {
-            const newPOs = [...localPOs];
-            (newPOs[po][key] as typeof value) = value;
-            setLocalPOs(newPOs);
+            setIsEditedPO(true)
+
+            if (key === "name") {
+                const newPOs = [...localPOs];
+                (newPOs[po][key] as typeof value) = value;
+                setLocalPOs(newPOs);
+                console.log('newPOs', newPOs)
+            }
+            if (key === "done") {
+                const newPOs = [...localPOs];
+                (newPOs[po][key] as typeof value) = value;
+                setLocalPOs(newPOs);
+                console.log('newPOs', newPOs)
+            }
+            if (key === "goal") {
+                const newPOs = [...localPOs];
+                (newPOs[po][key] as typeof value) = value;
+                setLocalPOs(newPOs);
+                console.log('newPOs', newPOs)
+            }
         }
     }
 
@@ -85,7 +97,7 @@ export default function TableProgressiveOverload() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {progressiveOverloads.map((po, index) => (
+                            {localPOs.map((po, index) => (
                                 <TableRow key={po.idProgressiveOverload}>
                                     <TableCell>
                                         <Input
@@ -96,10 +108,71 @@ export default function TableProgressiveOverload() {
 
                                         />
                                     </TableCell>
-                                    <TableCell>{po.typePO === "Weight" ? po.done : "-"}</TableCell>
-                                    <TableCell>{po.typePO === "Reps" ? po.done : "-"}</TableCell>
-                                    <TableCell>{po.typePO === "Secs" ? po.done : "-"}</TableCell>
-                                    <TableCell>{po.goal}</TableCell>
+                                    <TableCell>
+                                        {(po.typePO === "Weight") ? (
+                                            <Input
+                                                type="number"
+                                                className="text-center bg-grey-box border-gray-600"
+                                                value={po.done}
+                                                onChange={(e) => handleChangeUpdatePO(index, "done", parseInt(e.target.value, 10))}
+                                            />
+                                        ) : (
+                                            <Input
+                                                disabled={true}
+                                                type="number"
+                                                className="text-center bg-grey-box border-gray-600"
+                                                value="-"
+                                            />
+                                        )
+
+                                        }
+                                    </TableCell>
+                                    <TableCell>
+                                        {(po.typePO === "Reps") ? (
+                                            <Input
+                                                type="number"
+                                                className="text-center bg-grey-box border-gray-600"
+                                                value={po.done}
+                                                onChange={(e) => handleChangeUpdatePO(index, "done", parseInt(e.target.value, 10))}
+                                            />
+                                        ) : (
+                                            <Input
+                                                disabled={true}
+                                                type="number"
+                                                className="text-center bg-grey-box border-gray-600"
+                                                value="-"
+                                            />
+                                        )
+
+                                        }
+                                    </TableCell>
+                                    <TableCell>
+                                        {(po.typePO === "Secs") ? (
+                                            <Input
+                                                type="number"
+                                                className="text-center bg-grey-box border-gray-600"
+                                                value={po.done}
+                                                onChange={(e) => handleChangeUpdatePO(index, "done", parseInt(e.target.value, 10))}
+                                            />
+                                        ) : (
+                                            <Input
+                                                disabled={true}
+                                                type="number"
+                                                className="text-center bg-grey-box border-gray-600"
+                                                value="-"
+                                            />
+                                        )
+
+                                        }
+                                    </TableCell>
+                                    <TableCell>
+                                        <Input
+                                            type="number"
+                                            className="text-center bg-grey-box border-gray-600"
+                                            value={po.goal}
+                                            onChange={(e) => handleChangeUpdatePO(index, "goal", parseInt(e.target.value, 10))}
+                                        />
+                                    </TableCell>
                                     <TableCell>
                                         <Button
                                             variant="outline"
