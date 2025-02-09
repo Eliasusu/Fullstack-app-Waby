@@ -37,6 +37,7 @@ const initialProgressiveOverloadState: ProgressiveOverloadState = {
 
 export const ProgressiveOverloadContext = createContext(initialProgressiveOverloadState);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useProgressiveOverload = () => {
     const context = useContext(ProgressiveOverloadContext);
 
@@ -77,6 +78,7 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
     const getAll = async () => {
         try {
             const res = await getProgressiveOverloadsReq();
+            console.log('res.data.progressiveOverloads', res.data.progressiveOverloads)
             setProgressiveOverloads(res.data.progressiveOverloads);
         } catch (error: unknown) {
             if (error instanceof Error) {
