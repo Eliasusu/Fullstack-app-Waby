@@ -15,11 +15,11 @@ export const progressiveOverloadSchema: any = z.object({
     done: z.number({
         required_error: 'Done is required',
         invalid_type_error: 'Done must be a number',
-    }),
+    }).positive(),
     goal: z.number({
         required_error: 'Goal is required',
         invalid_type_error: 'Goal must be a number',
-    }),
+    }).positive().min(1),
     exercise: z.object({}),
 });
 

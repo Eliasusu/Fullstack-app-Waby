@@ -33,6 +33,7 @@ async function create(req: Request, res: Response) {
     try {
         const progressiveOverloadValidation = validateParcialProgressiveOverload(req.body);
         if (!progressiveOverloadValidation.success) {
+            console.log(progressiveOverloadValidation)
             res.status(400).json({ message: progressiveOverloadValidation.error });
             return;
         }
@@ -63,7 +64,7 @@ async function update(req: Request, res: Response) {
         const progressiveOverloadValidation = validateParcialProgressiveOverload(req.body);
         if (!progressiveOverloadValidation.success) {
             res.status(400).json({ message: progressiveOverloadValidation.error });
-            return;
+            return progressiveOverloadValidation.error;
         }
 
         const logDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
