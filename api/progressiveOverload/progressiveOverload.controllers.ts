@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 
 const em = orm.em;
 
-async function getAll(req: Request, res: Response) { 
+async function getAll(req: Request, res: Response) {
     console.log('entre')
     try {
         const progressiveOverloads = await em.find(ProgressiveOverload, { user: req.body.user.id }, { populate: ['exercise'] });
@@ -29,15 +29,13 @@ async function getOne(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
-    console.log(req.body);
     try {
+        console.log('entro al create')
         const progressiveOverloadValidation = validateParcialProgressiveOverload(req.body);
         if (!progressiveOverloadValidation.success) {
-            console.log(progressiveOverloadValidation)
-            res.status(400).json({ message: progressiveOverloadValidation.error });
-            return;
+            return res.status(400).json({ message: progressiveOverloadValidation.error });;
         }
-         
+
         const logDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
         const exerciseToOverload = await em.findOneOrFail(Exercise, { idExercise: progressiveOverloadValidation.data.exercise.idExercise });
@@ -59,7 +57,7 @@ async function update(req: Request, res: Response) {
     try {
         console.log(req.body)
         const idProgressiveOverload = Number.parseInt(req.params.idProgressiveOverload);
-        const progressiveOverload = await em.findOneOrFail(ProgressiveOverload, { idProgressiveOverload, user: { idUser: req.body.user.id }, exercise: { idExercise: req.body.exercise.idExercise} });
+        const progressiveOverload = await em.findOneOrFail(ProgressiveOverload, { idProgressiveOverload, user: { idUser: req.body.user.id }, exercise: { idExercise: req.body.exercise.idExercise } });
         if (!progressiveOverload) return res.status(404).json({ message: 'ProgressiveOverload not found' });
         const progressiveOverloadValidation = validateParcialProgressiveOverload(req.body);
         if (!progressiveOverloadValidation.success) {
@@ -93,7 +91,7 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-async function getAllByExercise(req: Request, res: Response) { 
+async function getAllByExercise(req: Request, res: Response) {
     try {
         const idExercise = Number.parseInt(req.params.idExercise);
         const progressiveOverloads = await em.find(ProgressiveOverload, { exercise: { idExercise }, user: { idUser: req.body.user.id } });

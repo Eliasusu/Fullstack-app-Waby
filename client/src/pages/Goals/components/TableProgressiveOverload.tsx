@@ -42,8 +42,6 @@ export default function TableProgressiveOverload() {
         setLocalPOs(progressiveOverloads)
     }, [progressiveOverloads])
 
-    console.log('Local POs', localPOs)
-    console.log('Progressive Overloads', progressiveOverloads)
 
     const handleSubmitDeletePO = (id: number) => {
         if (window.confirm("Are you sure you want to delete this Progressive Overload?")) {
@@ -113,18 +111,27 @@ export default function TableProgressiveOverload() {
         console.log('newPO', newPO)
     }
 
-    const handleSubmitCreatePO = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitCreatePO = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         console.log('create')
         if (newPO) {
-            console.log(newPO)
-            create(newPO)
-            toast({
-                title: "Progressive Overload created",
-                description: "The PO has been created successfully.",
-            })
+            try {
+                await create(newPO);
+            } catch (error: any) {
+                console.log('error', error)
+                for (let index = 0; index < error.length; index++) {
+                    const element = error[index];
+                    toast({
+                        title: "Error",
+                        description: element,
+                        variant: "destructive",
+                    })
+                }
+            }
         }
     }
+
+
 
     return (
         <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">

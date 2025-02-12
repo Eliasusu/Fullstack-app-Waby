@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom';
 
 const errorMessages: Record<number, string> = {
     404: 'Página no encontrada, volvete a tu cueva',
-    400: 'Solicitud incorrecta, escribí bien, HDP',
     500: 'Error interno del servidor, exploto todo',
     403: 'Acceso denegado, vola loquitaaa',
 };
