@@ -5,6 +5,7 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Dialog, DialogHeader, DialogTitle, DialogTrigger, DialogContent } from "@/components/ui/dialog.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
+import { Select, SelectItem } from "@/components/ui/select.tsx";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
 import { useToast } from "@/hooks/use-toast.ts";
 import { useProgressiveOverload } from "@/progressiveOverload/progressiveOverload.context.tsx";
@@ -42,6 +43,18 @@ export default function TableProgressiveOverload() {
         setLocalPOs(progressiveOverloads)
     }, [progressiveOverloads])
 
+
+    useEffect(() => {
+        if (errors) {
+            errors.forEach((error) => {
+                toast({
+                    title: "Error in " + error.path,
+                    description: error.message,
+                    variant: "destructive",
+                })
+            })
+        }
+    }, [errors, toast])
 
     const handleSubmitDeletePO = (id: number) => {
         if (window.confirm("Are you sure you want to delete this Progressive Overload?")) {
@@ -113,21 +126,8 @@ export default function TableProgressiveOverload() {
 
     const handleSubmitCreatePO = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('create')
         if (newPO) {
-            try {
-                await create(newPO);
-            } catch (error: any) {
-                console.log('error', error)
-                for (let index = 0; index < error.length; index++) {
-                    const element = error[index];
-                    toast({
-                        title: "Error",
-                        description: element,
-                        variant: "destructive",
-                    })
-                }
-            }
+            await create(newPO)
         }
     }
 
@@ -217,52 +217,8 @@ export default function TableProgressiveOverload() {
                                                 className="text-center bg-grey-box border-gray-600"
                                                 value="-"
                                             />
-                                        )
+                                        )}
 
-                                        }
-                                        {po.typePO === "Weight" ? (
-                                            <Input
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value={po.typePO === "Weight" ? po.done : ""}
-                                                onChange={(e) => handleChangeUpdatePO(index, "done", Number(e.target.value))}
-                                            />) : (
-                                            <Input
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value={""}
-                                            />
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        {po.typePO === "Reps" ? (
-                                            <Input
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value={po.typePO === "Reps" ? po.done : ""}
-                                                onChange={(e) => handleChangeUpdatePO(index, "done", Number(e.target.value))}
-                                            />) : (
-                                            <Input
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value={""}
-                                            />
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        {po.typePO === "Secs" ? (
-                                            <Input
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value={po.typePO === "Secs" ? po.done : ""}
-                                                onChange={(e) => handleChangeUpdatePO(index, "done", Number(e.target.value))}
-                                            />) : (
-                                            <Input
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value={""}
-                                            />
-                                        )}
                                     </TableCell>
                                     <TableCell>
                                         <Input
@@ -340,13 +296,13 @@ export default function TableProgressiveOverload() {
                                             onChange={(e) => handleChangeCreatePO("name", e.target.value)}
                                         />
                                     </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor='typePO' className="text-right">Type</Label>
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor='goal' className="text-right">Goal</Label>
+                                    </div>
                                     <Button
-                                        onClick={() =>
-                                            toast({
-                                                title: "Progressive Overload created",
-                                                description: "The PO has been created successfully.",
-
-                                            })}
                                     >Create PO</Button>
                                 </form>
                             </div>

@@ -2,6 +2,17 @@ import { createContext, ReactNode, useContext, useState, useEffect } from "react
 import { createProgressiveOverload, deleteProgressiveOverload, getProgressiveOverloadsReq, getProgressiveOverloadsByExercise, updateProgressiveOverload, getProgressiveOverload } from "@/progressiveOverload/progressiveOverload.api";
 import { ProgressiveOverload } from "@/progressiveOverload/progressiveOverload.type";
 
+interface Error {
+    code: string;
+    minimum?: number;
+    type: string;
+    inclusive?: boolean;
+    exact?: boolean;
+    message: string;
+    path: string[];
+    expected?: string;
+    received?: string;
+}
 interface ProgressiveOverloadState {
     progressiveOverload: ProgressiveOverload;
     progressiveOverloads: ProgressiveOverload[];
@@ -11,8 +22,10 @@ interface ProgressiveOverloadState {
     create: (progressiveOverload: object) => void;
     update: (progressiveOverload: ProgressiveOverload) => void;
     remove: (id: number) => void;
-    errors: object | null;
+    errors: Error[] | null;
 }
+
+
 
 const initialProgressiveOverloadState: ProgressiveOverloadState = {
     progressiveOverload: {
@@ -59,33 +72,24 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
         logDate: new Date(),
     });
     const [progressiveOverloads, setProgressiveOverloads] = useState<ProgressiveOverload[]>([]);
-    const [errors, setErrors] = useState<object | null>(null);
+    const [errors, setErrors] = useState<Error[] | null>(null);
 
 
     const getOne = async (id: number) => {
         try {
             const res = await getProgressiveOverload(id);
             setProgressiveOverload(res.data.progressiveOverload);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
-            }
+        } catch (error: any) {
+            setErrors(error.response.data.message.issues)
         }
     }
 
     const getAll = async () => {
         try {
             const res = await getProgressiveOverloadsReq();
-            console.log('res.data.progressiveOverloads', res.data.progressiveOverloads)
             setProgressiveOverloads(res.data.progressiveOverloads);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
-            }
+        } catch (error: any) {
+            setErrors(error.response.data.message.issues)
         }
     }
 
@@ -94,60 +98,38 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
         try {
             const res = await getProgressiveOverloadsByExercise(id);
             setProgressiveOverloads(res.data.progressiveOverloads);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
-            }
+        } catch (error: any) {
+            setErrors(error.response.data.message.issues)
         }
     }
 
     const create = async (progressiveOverload: object) => {
         try {
             await createProgressiveOverload(progressiveOverload);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
-            }
+        } catch (error: any) {
+            const errorMessages = error.response.data.message.issues;
+            setErrors(errorMessages);
         }
     }
 
     const update = async (progressiveOverload: ProgressiveOverload) => {
         try {
-
             await updateProgressiveOverload(progressiveOverload);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
-            }
+        } catch (error: any) {
+            setErrors(error.response.data.message.issues)
         }
     }
 
     const remove = async (id: number) => {
-        console.log('entre al remove del context')
         try {
             await deleteProgressiveOverload(id);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar la sobrecarga progresiva" });
-            }
+        } catch (error: any) {
+            setErrors(error.response.data.message.issues)
         }
     }
 
     useEffect(() => {
-        if (errors) {
-            const timer = setTimeout(() => {
-                setErrors(null);
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
+        console.log('Errors actualizados en useEffect:', errors);
     }, [errors]);
 
     return (
