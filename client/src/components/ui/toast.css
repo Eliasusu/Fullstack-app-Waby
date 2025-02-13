@@ -1,0 +1,9 @@
+.toast-viewport {
+    --stacking-value: 9999;
+}
+
+.toast-container {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+}

@@ -46,12 +46,15 @@ export default function TableProgressiveOverload() {
 
     useEffect(() => {
         if (errors) {
-            errors.forEach((error) => {
-                toast({
-                    title: "Error in " + error.path,
-                    description: error.message,
-                    variant: "destructive",
-                })
+            errors.forEach((error, index) => {
+                setTimeout(() => {
+                    toast({
+                        title: "Error in " + error.path,
+                        description: error.message,
+                        variant: "destructive",
+                        duration: 1000, // 5 seconds
+                    })
+                }, index * 2000) // Delay each toast by 500ms
             })
         }
     }, [errors, toast])
