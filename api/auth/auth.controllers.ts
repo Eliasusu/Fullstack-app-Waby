@@ -18,7 +18,7 @@ async function register(req: Request, res: Response) {
         const bodyWeight = Number(req.body.bodyWeight);
         const user = { ...req.body, height, bodyWeight, trainingMethods };
         const result = validateUser(user);
-        if (result.error) return res.status(400).json(result.error.issues.map((issue: any) => issue.message));
+        if (result.error) return res.status(400).json({ message: result.error.response});
         if (result.success) {
             if (await em.findOne(User, { username: req.body.username })) {
                 return res.status(400).json({ error: ['Username already exists'] });

@@ -3,7 +3,6 @@ import { createContext, ReactNode, useContext, useState, useEffect } from "react
 import { getProfileRequest, registerRequest, loginRequest, verifyTokenRequest, updateProfileRequest, deleteProfileRequest } from "@/users/auth.api.ts";
 import Cookie from "js-cookie";
 import { User } from "@/users/user.type.ts";
-import useErrorHandler from "@/lib/useErrorHandler.tsx";
 
 
 type userPropsUpdate = {
@@ -61,18 +60,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [allDataUser, setAllDataUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState<{ message: string }[]>([]);
-    const handleError = useErrorHandler();
 
     const signUp = async (user: User) => {
         try {
             const res = await registerRequest(user);
             setUser(res.data);
             setIsAuthenticated(true);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            setErrors(error.response.data)
-            console.log(error.response.data[1])
-            handleError({ code: error.response.status, message: error.response.data });
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'response' in error) {
+                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
+            }
         }
     };
 
@@ -81,12 +78,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const res = await loginRequest(user);
             setUser(res.data);
             setIsAuthenticated(true);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            if (Array.isArray(error.response.data)) {
-                return setErrors(error.response.data);
+            
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'response' in error) {
+                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
+                console.log(error);
             }
-            setErrors(error.response.data.message);
         }
 
     }
