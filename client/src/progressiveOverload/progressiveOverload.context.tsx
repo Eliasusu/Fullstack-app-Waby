@@ -13,6 +13,7 @@ interface Error {
     expected?: string;
     received?: string;
 }
+
 interface ProgressiveOverloadState {
     progressiveOverload: ProgressiveOverload;
     progressiveOverloads: ProgressiveOverload[];
@@ -79,8 +80,10 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
         try {
             const res = await getProgressiveOverload(id);
             setProgressiveOverload(res.data.progressiveOverload);
-        } catch (error: any) {
-            setErrors(error.response.data.message.issues)
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'response' in error) {
+                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
+            }
         }
     }
 
@@ -88,8 +91,10 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
         try {
             const res = await getProgressiveOverloadsReq();
             setProgressiveOverloads(res.data.progressiveOverloads);
-        } catch (error: any) {
-            setErrors(error.response.data.message.issues)
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'response' in error) {
+                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
+            }
         }
     }
 
@@ -98,33 +103,41 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
         try {
             const res = await getProgressiveOverloadsByExercise(id);
             setProgressiveOverloads(res.data.progressiveOverloads);
-        } catch (error: any) {
-            setErrors(error.response.data.message.issues)
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'response' in error) {
+                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
+            }
         }
     }
 
     const create = async (progressiveOverload: object) => {
         try {
             await createProgressiveOverload(progressiveOverload);
-        } catch (error: any) {
-            const errorMessages = error.response.data.message.issues;
-            setErrors(errorMessages);
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'response' in error) {
+                const errorMessages = (error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues;
+                setErrors(errorMessages);
+            }
         }
     }
 
     const update = async (progressiveOverload: ProgressiveOverload) => {
         try {
             await updateProgressiveOverload(progressiveOverload);
-        } catch (error: any) {
-            setErrors(error.response.data.message.issues)
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'response' in error) {
+                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
+            }
         }
     }
 
     const remove = async (id: number) => {
         try {
             await deleteProgressiveOverload(id);
-        } catch (error: any) {
-            setErrors(error.response.data.message.issues)
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'response' in error) {
+                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
+            }
         }
     }
 

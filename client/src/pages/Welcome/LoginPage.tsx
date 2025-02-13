@@ -8,7 +8,7 @@ import { User } from "@/users/user.type";
 export default function LoginPage() {
     return (
         <>
-            <div className="m-auto">
+            <div className="h-screen m-auto flex items-center justify-center">
                 <Login />
             </div>
         </>

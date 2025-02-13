@@ -3,14 +3,14 @@ import Logo from "@/components/ui/logo.tsx";
 export default function Welcome() {
     return (
         <>
-            <div className="m-auto">
+            <div className="h-screen m-auto flex flex-col items-center justify-center">
                 <Logo dimensions="w-[50px] h-[50px] m-3" />
                 <div className="lg:mt-5 xs:mt-4">
                     <Slogan textColor='Create' text='your exercises.' />
                     <Slogan textColor='Planned' text='your routines.' />
                 </div>
-                <div className="flex items-center justify-center mt-12">
-                    <a href="/login" className="bg-red text-white-text font-bold text-[20px] py-2 px-4 rounded-lg hover:bg-redHover transition duration-300" >Get Started</a>
+                <div className="flex justify-center mt-12">
+                    <a href="/register" className="bg-red text-white-text font-bold text-[20px] py-2 px-4 rounded-lg hover:bg-redHover transition duration-300" >Get Started</a>
                 </div>
             </div>
         </>

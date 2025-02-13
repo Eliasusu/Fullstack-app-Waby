@@ -5,7 +5,6 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Dialog, DialogHeader, DialogTitle, DialogTrigger, DialogContent } from "@/components/ui/dialog.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
-import { Select, SelectItem } from "@/components/ui/select.tsx";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
 import { useToast } from "@/hooks/use-toast.ts";
 import { useProgressiveOverload } from "@/progressiveOverload/progressiveOverload.context.tsx";
@@ -299,14 +298,7 @@ export default function TableProgressiveOverload() {
                                             onChange={(e) => handleChangeCreatePO("name", e.target.value)}
                                         />
                                     </div>
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor='typePO' className="text-right">Type</Label>
-                                    </div>
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor='goal' className="text-right">Goal</Label>
-                                    </div>
-                                    <Button
-                                    >Create PO</Button>
+                                    <Button type="submit">Create PO</Button>
                                 </form>
                             </div>
                             <DialogTrigger asChild>

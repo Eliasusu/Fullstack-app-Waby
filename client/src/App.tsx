@@ -43,7 +43,11 @@ export function App() {
                           <Route path='/profile' element={<Profile />} />
                           <Route path='/goals' element={<GoalsPage />} />
                         </Route>
-                        <Route path='/error/:code' element={<ErrorPage />} />
+                        <Route path='/error/:code' element={
+                          <ErrorPage 
+                            redirectOnClientError={true} 
+                          />
+                        } />
                         <Route path='*' element={<ErrorPage code={404} />} />
                       </Routes>
                     </div>
