@@ -6,19 +6,23 @@ import { orm } from "../shared/db/orm.js";
 import { createToken } from "../shared/jwt.js";
 import jwt from 'jsonwebtoken';
 import { KEY } from "../shared/config.js";
+import { TrainingMethod } from "../trainingMethods/trainingMethod.entity.js";
 
 const em = orm.em;
 
 //Register user === Add user === Create user 
 async function register(req: Request, res: Response) { 
     try {
-        const trainingMethods = [req.body.trainingMethods];
-        console.log(trainingMethods);
+        console.log('entre');
+        const tm = req.body.trainingMethods;
+        const trainingMethods = await em.findOne(TrainingMethod, { nameMethod: tm });
+        if (!trainingMethods) return res.status(400).json({ error: 'Training method not found' });
         const height = Number(req.body.height);
         const bodyWeight = Number(req.body.bodyWeight);
         const user = { ...req.body, height, bodyWeight, trainingMethods };
+        console.log('user', user);
         const result = validateUser(user);
-        if (result.error) return res.status(400).json({ message: result.error.response});
+        if (result.error) return res.status(400).json({ message: result.error.issues});
         if (result.success) {
             if (await em.findOne(User, { username: req.body.username })) {
                 return res.status(400).json({ error: ['Username already exists'] });
@@ -37,7 +41,6 @@ async function register(req: Request, res: Response) {
             res.status(400).json({ error: 'User not created' });
         }
     } catch (error: any) {
-        console.log(error); // --> Eliminar en produccion
         res.status(500).json({ error: 'Error creating user' });
     }
 }

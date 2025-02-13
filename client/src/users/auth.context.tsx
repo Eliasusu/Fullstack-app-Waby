@@ -13,6 +13,18 @@ type userPropsUpdate = {
     height: number,
 }
 
+interface Error {
+    code: string,
+    expected: string,
+    received: string,
+    path: string[],
+    message: string
+}
+
+const initialError: Error[] = []
+
+
+
 interface AuthState {
     user: {
         id: string,
@@ -26,7 +38,7 @@ interface AuthState {
     deleteProfile: (id: string) => void;
     getOneProfile: (id: string) => void;
     isAuthenticated: boolean;
-    errors: object | null;
+    errors: Error[];
 }
 
 const initialAuthState: AuthState = {
@@ -42,7 +54,7 @@ const initialAuthState: AuthState = {
     getOneProfile: () => ({} as User),
     logout: () => { },
     isAuthenticated: false,
-    errors: null,
+    errors: [],
 };
 
 export const AuthContext = createContext(initialAuthState);
@@ -59,17 +71,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState(null);
     const [allDataUser, setAllDataUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [errors, setErrors] = useState<{ message: string }[]>([]);
+    const [errors, setErrors] = useState<Error[]>(initialError)
+
+    const handleError = (error: unknown) => {
+        if (error && 
+            typeof error === 'object' && 
+            'response' in error &&
+            error.response &&
+            typeof error.response === 'object' &&
+            'data' in error.response &&
+            error.response.data &&
+            typeof error.response.data === 'object' &&
+            'message' in error.response.data) {
+            const errorMessages = (error.response as {data: {message: unknown}}).data.message;
+            if (Array.isArray(errorMessages)) {
+                setErrors(errorMessages.map(err => ({
+                    code: err.code,
+                    expected: err.expected,
+                    received: err.received,
+                    path: err.path,
+                    message: err.message
+                })));
+            }
+        } else {
+            setErrors([{
+                code: 'unknown_error',
+                expected: '',
+                received: '',
+                path: [],
+                message: 'An unexpected error occurred'
+            }]);
+        }
+    };
 
     const signUp = async (user: User) => {
         try {
+            console.log('user en el signUp', user);
             const res = await registerRequest(user);
             setUser(res.data);
             setIsAuthenticated(true);
         } catch (error: unknown) {
-            if (error && typeof error === 'object' && 'response' in error) {
-                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
-            }
+            handleError(error);
         }
     };
 
@@ -111,9 +153,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(res.data);
             setIsAuthenticated(true);
         } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors([{ message: error.message }]);
-            }
+            handleError(error as Error);
         }
     }
 
@@ -123,11 +163,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(res.data);
             setIsAuthenticated(true);
         } catch (error) {
-            if (error instanceof Error) {
-                setErrors([{ message: error.message }]);
-            } else {
-                setErrors([{ message: "Hubo un problema al eliminar el perfil" }]);
-            }
+            handleError(error as Error);
         }
     }
 
@@ -138,11 +174,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setAllDataUser(res.data.data);
             setIsAuthenticated(true);
         } catch (error) {
-            if (error instanceof Error) {
-                setErrors([{ message: error.message }]);
-            } else {
-                setErrors([{ message: "Hubo un problema al obtener el perfil" }]);
-            }
+            handleError(error as Error);
             throw error;
         }
     }

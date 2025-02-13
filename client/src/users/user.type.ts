@@ -15,7 +15,7 @@ export interface User {
     bodyWeight: number;
     height: number;
     token?: string;
-    trainingMethods?: string[];
+    trainingMethods?: string;
     trainings?: Training[];
     exercises?: Exercise[];
 }
