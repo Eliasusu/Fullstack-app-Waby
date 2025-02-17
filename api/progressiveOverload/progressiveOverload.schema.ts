@@ -20,7 +20,7 @@ export const progressiveOverloadSchema: any = z.object({
         required_error: 'Goal is required',
         invalid_type_error: 'Goal must be a number',
     }).positive().min(1),
-    exercise: z.object({}),
+    exercise: z.string({}),
 });
 
 export function validateProgressiveOverload(progressiveOverload: ProgressiveOverload) {

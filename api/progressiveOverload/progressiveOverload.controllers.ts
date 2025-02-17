@@ -31,6 +31,8 @@ async function getOne(req: Request, res: Response) {
 async function create(req: Request, res: Response) {
     try {
         console.log('entro al create')
+        console.log(req.body.exercise.name)
+        console.log(req.body.exercise)
         const progressiveOverloadValidation = validateParcialProgressiveOverload(req.body);
         if (!progressiveOverloadValidation.success) {
             return res.status(400).json({ message: progressiveOverloadValidation.error });;
@@ -38,7 +40,7 @@ async function create(req: Request, res: Response) {
 
         const logDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
-        const exerciseToOverload = await em.findOneOrFail(Exercise, { idExercise: progressiveOverloadValidation.data.exercise.idExercise });
+        const exerciseToOverload = await em.findOneOrFail(Exercise, { name: progressiveOverloadValidation.data.exercise });
         if (!exerciseToOverload) return res.status(404).json({ message: 'Exercise not found' });
         const progressiveOverload = em.create(ProgressiveOverload, {
             ...progressiveOverloadValidation.data,

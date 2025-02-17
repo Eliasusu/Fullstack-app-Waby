@@ -5,7 +5,9 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Dialog, DialogHeader, DialogTitle, DialogTrigger, DialogContent } from "@/components/ui/dialog.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
+import { useExercise } from "@/exercises/exercise.context.tsx";
 import { useToast } from "@/hooks/use-toast.ts";
 import { useProgressiveOverload } from "@/progressiveOverload/progressiveOverload.context.tsx";
 import { ProgressiveOverload } from "@/progressiveOverload/progressiveOverload.type.ts";
@@ -28,6 +30,7 @@ const initialPO: ProgressiveOverload = {
 
 export default function TableProgressiveOverload() {
     const { getAll, remove, update, create, errors, progressiveOverloads } = useProgressiveOverload();
+    const { exercises, getAllExercises } = useExercise()
     const [localPOs, setLocalPOs] = useState<ProgressiveOverload[]>(initialPOs)
     const [isEditedPO, setIsEditedPO] = useState(false)
     const [isAddDialogPO, setIsAddDialogPO] = useState(false)
@@ -37,6 +40,11 @@ export default function TableProgressiveOverload() {
     useEffect(() => {
         getAll();
     }, []);
+
+    useEffect(() => {
+        getAllExercises()
+      }, []);
+    
 
     useEffect(() => {
         setLocalPOs(progressiveOverloads)
@@ -65,7 +73,7 @@ export default function TableProgressiveOverload() {
                 console.log(id)
                 if (id !== undefined) {
                     remove(id);
-                    setLocalPOs({ ...localPOs })
+                    setLocalPOs(localPOs.filter((po) => po.idProgressiveOverload !== id))
                     toast({
                         title: "Progressive Overload deleted",
                         description: "The PO has been deleted successfully.",
@@ -130,6 +138,12 @@ export default function TableProgressiveOverload() {
         e.preventDefault()
         if (newPO) {
             await create(newPO)
+            getAll()
+            toast({
+                title: "Progressive Overload created",
+                description: "The PO has been created successfully.",
+            })
+            setIsAddDialogPO(false)
         }
     }
 
@@ -291,12 +305,71 @@ export default function TableProgressiveOverload() {
                                     }}>
                                     <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor='name' className="text-right">Name</Label>
+                                    
                                         <Input
                                             type="text"
                                             id="name"
                                             value={newPO.name}
                                             onChange={(e) => handleChangeCreatePO("name", e.target.value)}
+                                        />                                       
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor='typePO' className="text-right">Type</Label>
+                                        <Select>
+                                            <SelectTrigger className="w-[180px]">
+                                                <SelectValue placeholder="Select a type of OP" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                <SelectItem value="apple">Weight</SelectItem>
+                                                <SelectItem value="banana">Reps</SelectItem>
+                                                <SelectItem value="blueberry">Secs</SelectItem>
+                                                </SelectGroup>
+                                            </SelectContent>
+                                            </Select>
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor='done' className="text-right">Done</Label>
+                                        <Input
+                                            type="number"
+                                            id="done"
+                                            value={newPO.done}
+                                            onChange={(e) => handleChangeCreatePO("done", parseInt(e.target.value, 10))}
                                         />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor='goal' className="text-right">Goal</Label>
+                                        <Input
+                                            type="number"
+                                            id="goal"
+                                            value={newPO.goal}
+                                            onChange={(e) => handleChangeCreatePO("goal", parseInt(e.target.value, 10))}
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor='exercise' className="text-right">Exercise</Label>
+                                        <Select
+                                            onValueChange={(value) => {
+                                                const selectedExercise = exercises.find(ex => ex.name.toString() === value)
+                                                if (selectedExercise) {
+                                                handleChangeCreatePO('exercise', selectedExercise.name)
+                                                }
+                                            }}
+                                            >
+                                            <SelectTrigger className="">
+                                                <SelectValue placeholder='Select a exercise' />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {exercises.map((exercise) => (
+                                                <SelectItem
+                                                    key={exercise.idExercise}
+                                                    value={exercise.name}
+                                                >
+                                                    {exercise.name}
+                                                </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                     <Button type="submit">Create PO</Button>
                                 </form>
