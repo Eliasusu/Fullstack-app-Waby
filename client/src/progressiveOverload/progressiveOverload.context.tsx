@@ -124,6 +124,8 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
     const update = async (progressiveOverload: ProgressiveOverload) => {
         try {
             await updateProgressiveOverload(progressiveOverload);
+            setProgressiveOverload(progressiveOverload);
+            setErrors(errors)
         } catch (error: unknown) {
             if (error && typeof error === 'object' && 'response' in error) {
                 setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
@@ -142,7 +144,7 @@ export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode 
     }
 
     useEffect(() => {
-        console.log('Errors actualizados en useEffect:', errors);
+        setErrors(errors);
     }, [errors]);
 
     return (

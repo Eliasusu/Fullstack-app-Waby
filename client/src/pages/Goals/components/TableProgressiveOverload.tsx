@@ -11,7 +11,7 @@ import { useExercise } from "@/exercises/exercise.context.tsx";
 import { useToast } from "@/hooks/use-toast.ts";
 import { useProgressiveOverload } from "@/progressiveOverload/progressiveOverload.context.tsx";
 import { ProgressiveOverload } from "@/progressiveOverload/progressiveOverload.type.ts";
-import { Check, Edit, X } from "lucide-react";
+import { Edit, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const initialPOs: ProgressiveOverload[] = []
@@ -32,7 +32,6 @@ export default function TableProgressiveOverload() {
     const { getAll, remove, update, create, errors, progressiveOverloads } = useProgressiveOverload();
     const { exercises, getAllExercises } = useExercise()
     const [localPOs, setLocalPOs] = useState<ProgressiveOverload[]>(initialPOs)
-    const [isEditedPO, setIsEditedPO] = useState(false)
     const [isAddDialogPO, setIsAddDialogPO] = useState(false)
     const [newPO, setNewPO] = useState<ProgressiveOverload>(initialPO)
     const { toast } = useToast()
@@ -43,8 +42,8 @@ export default function TableProgressiveOverload() {
 
     useEffect(() => {
         getAllExercises()
-      }, []);
-    
+    }, []);
+
 
     useEffect(() => {
         setLocalPOs(progressiveOverloads)
@@ -52,18 +51,7 @@ export default function TableProgressiveOverload() {
 
 
     useEffect(() => {
-        if (errors) {
-            errors.forEach((error, index) => {
-                setTimeout(() => {
-                    toast({
-                        title: "Error in " + error.path,
-                        description: error.message,
-                        variant: "destructive",
-                        duration: 1000, // 5 seconds
-                    })
-                }, index * 2000) // Delay each toast by 500ms
-            })
-        }
+
     }, [errors, toast])
 
     const handleSubmitDeletePO = (id: number) => {
@@ -84,47 +72,42 @@ export default function TableProgressiveOverload() {
     }
 
 
-    const handleSubmitUpdatePO = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleSubmitUpdatePO = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setIsEditedPO(false)
         if (localPOs) {
-            update(localPOs[0]);
-            setLocalPOs(localPOs)
-            toast({
-                title: "Progressive Overload updated",
-                description: "The PO has been updated successfully.",
-            })
+            try {
+                await update(localPOs[0]);
+                console.log(errors)
+                if (errors) {
+                    errors.forEach((error, index) => {
+                        setTimeout(() => {
+                            toast({
+                                title: "Error in " + error.path,
+                                description: error.message,
+                                variant: "destructive",
+                                duration: 1000, // 5 seconds
+                            })
+                        }, index * 2000) // Delay each toast by 500ms
+                    })
+                    setLocalPOs(localPOs)
+                    return
+                } else {
+                    setLocalPOs(localPOs)
+                    toast({
+                        title: "Progressive Overload updated",
+                        description: "The PO has been updated successfully.",
+                    })
+                }
+            } catch (error) {
+                console.error("Error updating Progressive Overload:", error);
+            }
+
         }
     }
 
-    const handleChangeUpdatePO = (po: number, key: keyof ProgressiveOverload, value: string | number) => {
-        console.log('handleChange', po, key, value)
-        setIsEditedPO(true)
-        if (key === "done") {
-
-            if (localPOs) {
-                const newPOs = [...localPOs];
-                (newPOs[po][key] as typeof value) = value;
-                setLocalPOs(newPOs);
-            }
-        }
-
-        if (key === "goal") {
-            if (localPOs) {
-                const newPOs = [...localPOs];
-                (newPOs[po][key] as typeof value) = value;
-                setLocalPOs(newPOs);
-            }
-        }
-
-        if (key === "name") {
-            if (localPOs) {
-                const newPOs = [...localPOs];
-                (newPOs[po][key] as typeof value) = value;
-                setLocalPOs(newPOs);
-
-            }
-        }
+    const handleChangeUpdatePO = (key: keyof ProgressiveOverload, value: string | number) => {
+        const addPO = { ...newPO, [key]: value }
+        setNewPO(addPO)
     }
 
 
@@ -138,12 +121,27 @@ export default function TableProgressiveOverload() {
         e.preventDefault()
         if (newPO) {
             await create(newPO)
-            getAll()
-            toast({
-                title: "Progressive Overload created",
-                description: "The PO has been created successfully.",
-            })
-            setIsAddDialogPO(false)
+            if (errors) {
+                errors.forEach((error, index) => {
+                    setTimeout(() => {
+                        toast({
+                            title: "Error in " + error.path,
+                            description: error.message,
+                            variant: "destructive",
+                            duration: 1000, // 5 seconds
+                        })
+                    }, index * 2000) // Delay each toast by 500ms
+                })
+                setIsAddDialogPO(false)
+                return
+            } else {
+                getAll()
+                toast({
+                    title: "Progressive Overload created",
+                    description: "The PO has been created successfully.",
+                })
+                setIsAddDialogPO(false)
+            }
         }
     }
 
@@ -160,10 +158,9 @@ export default function TableProgressiveOverload() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="text-center">Exercise</TableHead>
-                                <TableHead className="text-center">Weight Done</TableHead>
-                                <TableHead className="text-center">Reps Done</TableHead>
-                                <TableHead className="text-center">Secs Done</TableHead>
+                                <TableHead className="text-center">Done</TableHead>
                                 <TableHead className="text-center">Goal</TableHead>
+                                <TableHead className="text-center">Type</TableHead>
                                 <TableHead className="text-center">Delete</TableHead>
                                 <TableHead className="text-center">Edit</TableHead>
                             </TableRow>
@@ -171,79 +168,10 @@ export default function TableProgressiveOverload() {
                         <TableBody>
                             {localPOs.map((po, index) => (
                                 <TableRow key={po.idProgressiveOverload}>
-                                    <TableCell>
-                                        <Input
-                                            type="text"
-                                            className="text-center bg-grey-box border-gray-600"
-                                            value={po.name}
-                                            onChange={(e) => handleChangeUpdatePO(index, "name", e.target.value)}
-
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        {(po.typePO === "Weight") ? (
-                                            <Input
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value={po.done}
-                                                onChange={(e) => handleChangeUpdatePO(index, "done", parseInt(e.target.value, 10))}
-                                            />
-                                        ) : (
-                                            <Input
-                                                disabled={true}
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value="-"
-                                            />
-                                        )
-
-                                        }
-                                    </TableCell>
-                                    <TableCell>
-                                        {(po.typePO === "Reps") ? (
-                                            <Input
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value={po.done}
-                                                onChange={(e) => handleChangeUpdatePO(index, "done", parseInt(e.target.value, 10))}
-                                            />
-                                        ) : (
-                                            <Input
-                                                disabled={true}
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value="-"
-                                            />
-                                        )
-
-                                        }
-                                    </TableCell>
-                                    <TableCell>
-                                        {(po.typePO === "Secs") ? (
-                                            <Input
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value={po.done}
-                                                onChange={(e) => handleChangeUpdatePO(index, "done", parseInt(e.target.value, 10))}
-                                            />
-                                        ) : (
-                                            <Input
-                                                disabled={true}
-                                                type="number"
-                                                className="text-center bg-grey-box border-gray-600"
-                                                value="-"
-                                            />
-                                        )}
-
-                                    </TableCell>
-                                    <TableCell>
-                                        <Input
-                                            type="number"
-                                            className="text-center bg-grey-box border-gray-600"
-                                            value={po.goal}
-                                            onChange={(e) => handleChangeUpdatePO(index, "goal", Number(e.target.value))}
-                                        />
-                                    </TableCell>
+                                    <TableCell>{po.name}</TableCell>
+                                    <TableCell>{po.done}</TableCell>
+                                    <TableCell>{po.goal}</TableCell>
+                                    <TableCell>{po.typePO}</TableCell>
                                     <TableCell>
                                         <Button
                                             variant="outline"
@@ -257,26 +185,79 @@ export default function TableProgressiveOverload() {
                                         </Button>
                                     </TableCell>
                                     <TableCell>
-                                        {isEditedPO ? (
-                                            <Button
-                                                variant="outline"
-                                                size="icon"
-                                                className="h-8 w-8 p-0"
-                                                onClick={(e) => handleSubmitUpdatePO(e)}
-                                            >
-                                                <Check className="h-4 w-4" />
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                variant="outline"
-                                                size="icon"
-                                                className="h-8 w-8 p-0"
-                                                onClick={() => setIsEditedPO(true)}
-                                            >
-                                                <Edit className="h-4 w-4" />
-                                            </Button>
-                                        )
-                                        }
+                                        <Dialog>
+                                            <DialogTrigger asChild>
+                                                <Button
+                                                    variant="outline"
+                                                    size="icon"
+                                                    className="h-8 w-8 p-0"
+                                                    onClick={() => {
+                                                        setLocalPOs((prev) => {
+                                                            const updatedPOs = [...prev]
+                                                            updatedPOs[index] = { ...updatedPOs[index] }
+                                                            return updatedPOs
+                                                        })
+                                                    }}
+                                                >
+                                                    <Edit className="h-4 w-4" />
+                                                </Button>
+                                            </DialogTrigger>
+                                            <DialogContent>
+                                                <DialogHeader>
+                                                    <DialogTitle>Edit Progressive Overload</DialogTitle>
+                                                </DialogHeader>
+                                                <div className="grid gap-4 py-4">
+                                                    <form
+                                                        className="grid gap-4 py-4"
+                                                        onSubmit={(e) => {
+                                                            e.preventDefault()
+                                                            handleSubmitUpdatePO(e)
+                                                        }}>
+                                                        <div className="grid grid-cols-4 items-center gap-4">
+                                                            <Label htmlFor='name' className="text-right">Name</Label>
+
+                                                            <Input
+                                                                type="text"
+                                                                id="name"
+                                                                value={po.name}
+                                                                onChange={(e) => handleChangeUpdatePO("name", e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="grid grid-cols-4 items-center gap-4">
+                                                            <Label htmlFor='weight' className="text-right">Done</Label>
+
+                                                            <Input
+                                                                type="text"
+                                                                id="weight"
+                                                                value={po.done}
+                                                                onChange={(e) => handleChangeUpdatePO("done", e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="grid grid-cols-4 items-center gap-4">
+                                                            <Label htmlFor='goal' className="text-right">Goal</Label>
+
+                                                            <Input
+                                                                type="text"
+                                                                id="goal"
+                                                                value={po.goal}
+                                                                onChange={(e) => handleChangeUpdatePO("goal", e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="grid grid-cols-4 items-center gap-4">
+                                                            <Label htmlFor='type' className="text-right">Type</Label>
+
+                                                            <Input
+                                                                type="text"
+                                                                id="type"
+                                                                value={po.typePO}
+                                                                onChange={(e) => handleChangeUpdatePO("typePO", e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <Button type="submit">Update PO</Button>
+                                                    </form>
+                                                </div>
+                                            </DialogContent>
+                                        </Dialog>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -305,13 +286,13 @@ export default function TableProgressiveOverload() {
                                     }}>
                                     <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor='name' className="text-right">Name</Label>
-                                    
+
                                         <Input
                                             type="text"
                                             id="name"
                                             value={newPO.name}
                                             onChange={(e) => handleChangeCreatePO("name", e.target.value)}
-                                        />                                       
+                                        />
                                     </div>
                                     <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor='typePO' className="text-right">Type</Label>
@@ -321,12 +302,12 @@ export default function TableProgressiveOverload() {
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectGroup>
-                                                <SelectItem value="apple">Weight</SelectItem>
-                                                <SelectItem value="banana">Reps</SelectItem>
-                                                <SelectItem value="blueberry">Secs</SelectItem>
+                                                    <SelectItem value="weight">Weight</SelectItem>
+                                                    <SelectItem value="reps">Reps</SelectItem>
+                                                    <SelectItem value="secs">Secs</SelectItem>
                                                 </SelectGroup>
                                             </SelectContent>
-                                            </Select>
+                                        </Select>
                                     </div>
                                     <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor='done' className="text-right">Done</Label>
@@ -352,21 +333,21 @@ export default function TableProgressiveOverload() {
                                             onValueChange={(value) => {
                                                 const selectedExercise = exercises.find(ex => ex.name.toString() === value)
                                                 if (selectedExercise) {
-                                                handleChangeCreatePO('exercise', selectedExercise.name)
+                                                    handleChangeCreatePO('exercise', selectedExercise.name)
                                                 }
                                             }}
-                                            >
+                                        >
                                             <SelectTrigger className="">
                                                 <SelectValue placeholder='Select a exercise' />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {exercises.map((exercise) => (
-                                                <SelectItem
-                                                    key={exercise.idExercise}
-                                                    value={exercise.name}
-                                                >
-                                                    {exercise.name}
-                                                </SelectItem>
+                                                    <SelectItem
+                                                        key={exercise.idExercise}
+                                                        value={exercise.name}
+                                                    >
+                                                        {exercise.name}
+                                                    </SelectItem>
                                                 ))}
                                             </SelectContent>
                                         </Select>
