@@ -1,27 +1,28 @@
-import { MikroORM } from "@mikro-orm/core";
-import { SqlHighlighter } from "@mikro-orm/sql-highlighter";
+import 'reflect-metadata';
+import { MikroORM } from '@mikro-orm/core';
+import type { MySqlDriver } from '@mikro-orm/mysql';
+import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
+import { env } from '../env.js';
 
-
-export const orm = await MikroORM.init({
+export const orm = await MikroORM.init<MySqlDriver>({
     entities: ['./dist/**/*.entity.js'],
-    entitiesTs: ['./**/*.entity.js'],
-    dbName: 'wabydb',
+    entitiesTs: ['./**/*.entity.ts'],
     type: 'mysql',
-    user: 'admin',
-    password: 'renalessiSql21!',
-    clientUrl: 'mysql://admin:admin@localhost:3306/waby',
+    host: env.DB_HOST,
+    port: env.DB_PORT,
+    dbName: env.dbName,
+    user: env.DB_USER,
+    password: env.DB_PASSWORD,
     highlighter: new SqlHighlighter(),
-    debug: true,
-    schemaGenerator: { //Dont use this in production
+    debug: env.isDev,
+    schemaGenerator: {
         disableForeignKeys: true,
         createForeignKeyConstraints: true,
-        ignoreSchema: [],
     },
 });
 
-export const syncSchema = async () => {
-    const generator = orm.getSchemaGenerator();
-    //await generator.dropSchema();
-    //await generator.createSchema();
-    await generator.updateSchema();
-};
+/** Actualiza el esquema según las entidades. Solo en desarrollo: no hay migraciones (ADR-0003). */
+export async function syncSchema() {
+    if (!env.isDev) return;
+    await orm.getSchemaGenerator().updateSchema();
+}

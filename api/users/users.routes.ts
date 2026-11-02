@@ -1,16 +1,12 @@
-import { Router } from "express";
-import { getAll, getOne, update, remove } from "./users.controllers.js";
+import { Router } from 'express';
+import { asyncHandler } from '../shared/http.js';
+import { requireAdmin } from '../middlewares/auth.js';
+import { deleteMe, getAll, getMe, updateMe } from './users.controllers.js';
 
+/** Montado con `requireAuth`. */
 export const usersRouter = Router();
 
-//Get all users
-usersRouter.get('/', getAll);
-
-//Get one user by id
-usersRouter.get('/:idUser', getOne);
-
-//Update a user
-usersRouter.put('/:idUser', update);
-
-//Delete a user
-usersRouter.delete('/:idUser', remove); 
+usersRouter.get('/me', asyncHandler(getMe));
+usersRouter.patch('/me', asyncHandler(updateMe));
+usersRouter.delete('/me', asyncHandler(deleteMe));
+usersRouter.get('/', requireAdmin, asyncHandler(getAll));

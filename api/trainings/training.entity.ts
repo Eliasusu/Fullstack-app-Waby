@@ -1,38 +1,32 @@
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, type Rel, OptionalProps } from '@mikro-orm/core';
 import { User } from '../users/user.entity.js';
-import { PrimaryKey, Property, ManyToOne, Rel, Entity, OneToMany, Collection, Cascade, DateType } from '@mikro-orm/core';
-import { trainingItem } from '../trainingItems/trainingItems.entity.js';
+import { Mesocycle } from '../mesocycles/mesocycle.entity.js';
+import { TrainingItem } from '../trainingItems/trainingItem.entity.js';
+import { DateOnlyType } from '../shared/db/date-only.type.js';
 
+/** Lo planificado para un día. Si se borra su Mesociclo, queda suelto. */
 @Entity()
-export class Training{
+export class Training {
+    [OptionalProps]?: 'completed';
 
     @PrimaryKey()
-    idTraining?: number;
-    
-    @ManyToOne(() => User, { nullable: false })
+    id!: number;
+
+    @ManyToOne(() => User, { onDelete: 'cascade' })
     user!: Rel<User>;
 
-    @Property({ nullable: false })
-    trainingName!: string;
+    @Property({ length: 100 })
+    name!: string;
 
-    @Property({ nullable: false })
-    trainingType!: string;
+    @Property({ type: DateOnlyType, index: true })
+    day!: string;
 
-    @Property({ type: DateType, nullable: false })
-    day!: Date;
-    
-    @Property({ nullable: false })
-    startHour!: string;
+    @Property()
+    completed: boolean = false;
 
-    @Property({ nullable: false })
-    endHour!: string;
+    @ManyToOne(() => Mesocycle, { nullable: true, onDelete: 'set null' })
+    mesocycle?: Rel<Mesocycle> | null;
 
-    @Property({ nullable: true })
-    completed?: boolean ;
-
-    @OneToMany(() => trainingItem, (trainingItems) => trainingItems.training, {
-        cascade: [Cascade.ALL],
-        orphanRemoval: true,
-        
-    })
-    trainingItems?: Rel<trainingItem>[];
+    @OneToMany(() => TrainingItem, (item) => item.training, { orphanRemoval: true })
+    items = new Collection<TrainingItem>(this);
 }

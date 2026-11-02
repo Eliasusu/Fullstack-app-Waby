@@ -38,3 +38,9 @@ export const ValidationErrorSchema = z.object({
     ),
 });
 export type ValidationError = z.infer<typeof ValidationErrorSchema>;
+
+/** Forma de cualquier otro error de la API (401, 403, 404, 409, 500). */
+export const ApiErrorSchema = z.object({
+    message: z.string(),
+});
+export type ApiError = z.infer<typeof ApiErrorSchema>;

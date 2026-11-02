@@ -1,23 +1,13 @@
-import {Router} from 'express';
-import { getAll, getOne, update, remove, add, getOneByName } from './muscleGroups.controller.js';
+import { Router } from 'express';
+import { asyncHandler } from '../shared/http.js';
+import { requireAdmin } from '../middlewares/auth.js';
+import { create, getAll, getOne, remove, update } from './muscleGroups.controllers.js';
 
-
+/** Montado con `requireAuth`. Escritura solo admin. */
 export const muscleGroupsRouter = Router();
 
-//Get all muscle groups
-muscleGroupsRouter.get('/', getAll);
-
-//Get one muscle group by id
-muscleGroupsRouter.get('/:idMuscleGroup', getOne);
-
-//Add a muscle group
-muscleGroupsRouter.post('/', add);
-
-//Update a muscle group
-muscleGroupsRouter.put('/:idMuscleGroup', update);
-
-//Delete a muscle group
-muscleGroupsRouter.delete('/:idMuscleGroup', remove);
-
-//Get one by name 
-muscleGroupsRouter.get('/name/:name', getOneByName);
+muscleGroupsRouter.get('/', asyncHandler(getAll));
+muscleGroupsRouter.get('/:id', asyncHandler(getOne));
+muscleGroupsRouter.post('/', requireAdmin, asyncHandler(create));
+muscleGroupsRouter.patch('/:id', requireAdmin, asyncHandler(update));
+muscleGroupsRouter.delete('/:id', requireAdmin, asyncHandler(remove));

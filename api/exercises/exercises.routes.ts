@@ -1,20 +1,14 @@
-import { Router } from "express";
-import { getAll, getOne, create, update, remove } from "./exercises.controllers.js";
+import { Router } from 'express';
+import { asyncHandler } from '../shared/http.js';
+import { progressionsRouter } from '../progressions/progressions.routes.js';
+import { create, getAll, getOne, remove, update } from './exercises.controllers.js';
 
+/** Montado con `requireAuth`. Cada usuario ve y modifica solo sus ejercicios. */
 export const exercisesRouter = Router();
 
-//Get all exercises
-exercisesRouter.get('/', getAll);
-exercisesRouter.get('/muscleGroup/:idMuscleGroup', getAll);
-
-//Get one exercise
-exercisesRouter.get('/:idExercise', getOne);
-
-//Create an exercise
-exercisesRouter.post('/', create);
-
-//Update an exercise
-exercisesRouter.put('/:idExercise', update);
-
-//Delete of an exercise
-exercisesRouter.delete('/:idExercise', remove);
+exercisesRouter.get('/', asyncHandler(getAll));
+exercisesRouter.get('/:id', asyncHandler(getOne));
+exercisesRouter.post('/', asyncHandler(create));
+exercisesRouter.patch('/:id', asyncHandler(update));
+exercisesRouter.delete('/:id', asyncHandler(remove));
+exercisesRouter.use('/:id/progressions', progressionsRouter);

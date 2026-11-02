@@ -1,23 +1,17 @@
-import { Collection, ManyToMany, PrimaryKey, Property, Cascade, Entity } from '@mikro-orm/core';
-import { Exercise } from '../exercises/exercise.entity.js';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
+/** Catálogo: lo edita el admin. El M:N con Ejercicio lo maneja Exercise. */
 @Entity()
 export class MuscleGroup {
     @PrimaryKey()
-    idMuscleGroup?: number;
+    id!: number;
 
-    @Property({ nullable: false })
-    nameMuscleGroup!: string;
+    @Property({ unique: true, length: 50 })
+    name!: string;
 
-    @Property({ nullable: false })
+    @Property({ length: 500 })
     description!: string;
 
-    @Property({ nullable: true })
-    imageMuscleGroup?: string;
-
-    @ManyToMany(() => Exercise, (exercise) => exercise.muscleGroups, {
-        cascade: [Cascade.ALL],
-        owner: true,
-    })
-    exercises? = new Collection<Exercise>(this);
+    @Property({ type: 'string', nullable: true })
+    image?: string | null;
 }
