@@ -54,7 +54,7 @@ Documentación de la API REST del backend (`@waby/api`). Los cuerpos de request 
 | POST | `/auth/login` | Público | `LoginSchema` | 200 `User` + cookie | 400, 401 |
 | POST | `/auth/logout` | Público | — | 204, y borra la cookie | — |
 
-Todo usuario nuevo tiene rol `USER`. El primer admin lo crea el seed (`pnpm --filter @waby/api seed`).
+Todo usuario nuevo tiene rol `USER`. El primer admin lo crea el seed (`pnpm seed`, que también carga un usuario demo con datos para recorrer la app).
 
 ## Usuarios
 

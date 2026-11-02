@@ -29,6 +29,7 @@ pnpm typecheck            # tsc --noEmit en todos los paquetes
 pnpm lint                 # ESLint del client
 pnpm build                # build de todos los paquetes
 pnpm test                 # tests de integración de la API contra waby_test (borra y recrea esa base)
+pnpm seed                 # borra y recrea la base waby con datos de demo (usuarios admin y demo, ver .env)
 pnpm --filter @waby/api add <pkg>   # agregar una dependencia a un paquete
 ```
 

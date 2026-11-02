@@ -10,7 +10,8 @@
     "build": "pnpm clean && tsc -p ./tsconfig.json",
     "dev:server": "pnpm clean && tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/index.js\"",
     "typecheck": "tsc --noEmit -p ./tsconfig.json",
-    "test": "pnpm build && node --test --test-concurrency=1 \"dist/test/**/*.test.js\""
+    "test": "pnpm build && node --test --test-concurrency=1 \"dist/test/**/*.test.js\"",
+    "seed": "pnpm build && node dist/scripts/seed.js"
   },
   "dependencies": {
     "@mikro-orm/core": "5.8.10",

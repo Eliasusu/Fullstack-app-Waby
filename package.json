@@ -13,6 +13,7 @@
     "build:client": "pnpm build:shared && pnpm --filter @waby/client build",
     "typecheck": "pnpm build:shared && pnpm -r typecheck",
     "lint": "pnpm --filter @waby/client lint",
-    "test": "pnpm build:shared && pnpm --filter @waby/api test"
+    "test": "pnpm build:shared && pnpm --filter @waby/api test",
+    "seed": "pnpm build:shared && pnpm --filter @waby/api seed"
   }
 }
