@@ -23,3 +23,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Workspace / entorno
+.pnpm-store
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+
+# Vault personal (symlink al second-brain de cada uno)
+.vault

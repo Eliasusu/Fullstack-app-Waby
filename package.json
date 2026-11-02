@@ -1,0 +1,15 @@
+{
+  "name": "waby",
+  "private": true,
+  "description": "Waby: app para crear rutinas, planificar entrenamientos y seguir la sobrecarga progresiva",
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "dev:api": "pnpm --filter @waby/api dev:server",
+    "dev:client": "pnpm --filter @waby/client dev:client",
+    "build": "pnpm -r build",
+    "build:api": "pnpm --filter @waby/api build",
+    "build:client": "pnpm --filter @waby/client build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm --filter @waby/client lint"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "waby",
+  "name": "@waby/api",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
     "dev:server": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/index.js\"",
-    "dev:test": "node --watch ./dist/index.js"
+    "dev:test": "node --watch ./dist/index.js",
+    "typecheck": "tsc --noEmit -p ./tsconfig.json"
   },
   "dependencies": {
     "@mikro-orm/core": "5.8.10",
