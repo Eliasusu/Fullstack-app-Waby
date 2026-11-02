@@ -8,9 +8,9 @@ export default function CronogramPage() {
 
     return (
         <>
-        <Header />
-        <TrainingDay /> 
-        <NavBar /> 
+            <Header />
+            <TrainingDay />
+            <NavBar />
         </>
     );
 }

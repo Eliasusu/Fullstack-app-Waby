@@ -15,6 +15,7 @@ import { RequestContext } from '@mikro-orm/core';
 import { trainingMethodsRouter } from './trainingMethods/trainingMethod.routes.js';
 import { validateToken } from './middlewares/validateToken.js';
 import { calisthenicsProgressPerRepsRouter } from './exercises/calisthenics/reps/progressionReps.routes.js';
+import { progressiveOverloadRouter } from './progressiveOverload/progressiveOverload.routes.js';
 
 
 
@@ -32,14 +33,15 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/v1/auth', authRouter);
-app.use('api/index/v1', validateToken, indexRouter);
+app.use('/api/index/v1', validateToken, indexRouter);
 app.use('/api/v1/users',validateToken, usersRouter);
 app.use('/api/v1/exercises', validateToken, exercisesRouter);
 app.use('/api/v1/exercises/calisthenics/progressions/reps', calisthenicsProgressPerRepsRouter);
 app.use('/api/v1/trainings',validateToken, trainingsRouter);
 app.use('/api/v1/routines',validateToken, routinesRouter);
 app.use('/api/v1/muscleGroups',validateToken, muscleGroupsRouter);
-app.use('/api/v1/trainingMethods',validateToken, trainingMethodsRouter);
+app.use('/api/v1/trainingMethods', validateToken, trainingMethodsRouter);
+app.use('/api/v1/progressiveOverload', validateToken, progressiveOverloadRouter);
 
 
 await syncSchema() //This will create the schema in the database if it doesn't exist yet, no need to run this in production;
