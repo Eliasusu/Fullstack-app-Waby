@@ -27,7 +27,8 @@ export default function ExercisesTable2() {
     return {
       name: exercise.name,
       description: exercise.description,
-      muscleGroups: exercise.muscleGroups.map((idMuscleGroup) => idMuscleGroup.nameMuscleGroup),
+      // TODO: GET /exercises manda objetos y el tipo dice number[]. Se reemplaza por el tipo de @waby/shared (nota 110, paso 7).
+      muscleGroups: (exercise.muscleGroups as unknown as { nameMuscleGroup: string }[]).map((muscleGroup) => muscleGroup.nameMuscleGroup),
       difficulty: exercise.difficulty,
       typeExercise: exercise.typeExercise,
     }

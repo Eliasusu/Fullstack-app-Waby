@@ -1,4 +1,4 @@
-import { Exercise } from '@/types/exercise.type.ts';
+import { Exercise } from '@/exercises/exercise.type.ts';
 
 export interface ProgressionRep { 
     idProgressoion: number;
