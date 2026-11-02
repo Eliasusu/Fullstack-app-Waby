@@ -21,4 +21,11 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  overrides: [
+    {
+      // Componentes generados por shadcn/ui: exportan variantes junto al componente.
+      files: ['src/components/ui/**'],
+      rules: { 'react-refresh/only-export-components': 'off' },
+    },
+  ],
 }
