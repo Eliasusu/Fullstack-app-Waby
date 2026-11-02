@@ -19,6 +19,9 @@ importers:
       '@mikro-orm/sql-highlighter':
         specifier: 1.0.1
         version: 1.0.1
+      '@waby/shared':
+        specifier: workspace:*
+        version: link:../shared
       bcryptjs:
         specifier: 2.4.3
         version: 2.4.3
@@ -119,6 +122,9 @@ importers:
       '@tanstack/react-table':
         specifier: 8.20.5
         version: 8.20.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@waby/shared':
+        specifier: workspace:*
+        version: link:../shared
       axios:
         specifier: 1.7.4
         version: 1.7.4
@@ -222,6 +228,16 @@ importers:
       vite:
         specifier: 5.3.2
         version: 5.3.2(@types/node@22.5.1)
+
+  shared:
+    dependencies:
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+    devDependencies:
+      typescript:
+        specifier: 5.5.2
+        version: 5.5.2
 
 packages:
 

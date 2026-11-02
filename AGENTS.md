@@ -8,6 +8,7 @@ Monorepo con **pnpm workspaces**:
 
 | Paquete | Carpeta | Stack |
 |---|---|---|
+| `@waby/shared` | `shared/` | Contrato de la API: esquemas Zod, tipos y enums que usan la API y el client (ADR-0002) |
 | `@waby/api` | `api/` | Node + Express 4 + TypeScript, MikroORM 5 sobre MySQL |
 | `@waby/client` | `client/` | React 18 + Vite 5 + TypeScript, Tailwind + shadcn/ui, React Router 6 |
 
@@ -19,6 +20,7 @@ Monorepo con **pnpm workspaces**:
 
 ```bash
 pnpm install              # instala todos los paquetes (un solo pnpm-lock.yaml en la raíz)
+pnpm dev:shared           # recompila @waby/shared al guardar (dejalo corriendo si tocás el contrato)
 pnpm dev:api              # API en modo watch (http://localhost:3000)
 pnpm dev:client           # front con Vite (http://localhost:5173)
 pnpm typecheck            # tsc --noEmit en todos los paquetes
@@ -45,3 +47,4 @@ La base de datos de desarrollo es MySQL 8. En `dump/` hay un dump de octubre de 
 - Backend organizado por feature (`users/`, `exercises/`, `trainings/`...), cada una con `*.entity.ts`, `*.schema.ts` (Zod), `*.controllers.ts` y `*.routes.ts`.
 - Imports en la API con extensión `.js` (ESM en Node).
 - En el client, alias `@/` apunta a `client/src/`.
+- Tipos y validaciones de lo que viaja entre la API y el client se importan de `@waby/shared`. No se redefinen entidades en `api/` ni en `client/`. Si cambia la forma de un request o una respuesta, se cambia en `shared/` primero.

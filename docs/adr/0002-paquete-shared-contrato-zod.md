@@ -41,4 +41,6 @@ Crear un paquete del workspace, `shared/` (`@waby/shared`), con el **contrato** 
 - Hay una sola definición por entidad. Si cambia la forma de una respuesta, `pnpm typecheck` falla en el client.
 - Mandar ids en los requests corta la asignación masiva y la búsqueda de Ejercicios por nombre.
 - Cambiar el contrato obliga a tocar la API y el client en el mismo cambio.
-- Queda pendiente: cómo consume la API el paquete (fuente TS o build previo). Se define al armar el scaffold y se anota acá.
+- **El paquete se compila** con su propio `tsc` a `shared/dist`, con JS y `.d.ts`, y la API y el client consumen esa salida (`exports` en `shared/package.json`). No se puede consumir como fuente TS: el `tsc` de la API lo compilaría como parte de su propio proyecto, cambiaría la estructura de `dist/` y `node ./dist/index.js` dejaría de encontrar los archivos.
+- Los scripts de la raíz `dev:api`, `dev:client`, `build:*` y `typecheck` compilan `@waby/shared` antes. Para trabajar sobre el contrato con la API levantada está `pnpm dev:shared` (`tsc --watch`).
+- Las reglas que dependen del `metricType` del Ejercicio (`volumeError`, `isGoalTargetTypeValidFor`) no entran en un esquema Zod, porque necesitan el Ejercicio guardado. Viven en `shared/src/rules.ts` como funciones, y las usan la API y el client.
