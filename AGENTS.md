@@ -19,6 +19,8 @@ Monorepo con **pnpm workspaces**:
 ## Comandos (desde la raíz)
 
 ```bash
+cp .env.example .env      # la primera vez: completar valores (JWT_SECRET, contraseñas)
+docker compose up -d      # MySQL 8 con las bases waby (desarrollo) y waby_test (tests)
 pnpm install              # instala todos los paquetes (un solo pnpm-lock.yaml en la raíz)
 pnpm dev:shared           # recompila @waby/shared al guardar (dejalo corriendo si tocás el contrato)
 pnpm dev:api              # API en modo watch (http://localhost:3000)
@@ -26,10 +28,13 @@ pnpm dev:client           # front con Vite (http://localhost:5173)
 pnpm typecheck            # tsc --noEmit en todos los paquetes
 pnpm lint                 # ESLint del client
 pnpm build                # build de todos los paquetes
+pnpm test                 # tests de integración de la API contra waby_test (borra y recrea esa base)
 pnpm --filter @waby/api add <pkg>   # agregar una dependencia a un paquete
 ```
 
-La base de datos de desarrollo es MySQL 8. En `dump/` hay un dump de octubre de 2024 con datos de ejemplo.
+La base de datos es MySQL 8 y la levanta `docker-compose.yml` con los valores de `.env`. En desarrollo, la API actualiza el esquema al arrancar (`updateSchema`, sin migraciones: ADR-0003). Los dumps de `dump/` son del modelo viejo y ya no sirven.
+
+Los scripts de `api/` corren con el Node 22 que instala la devDependency `node`. Con Node 26, `jsonwebtoken` no carga (`SlowBuffer`), así que no corras `node dist/index.js` a mano: usá los scripts de pnpm.
 
 ## Reglas
 
@@ -44,7 +49,14 @@ La base de datos de desarrollo es MySQL 8. En `dump/` hay un dump de octubre de 
 
 - Código e identificadores en inglés. Docs, issues y textos de la UI en español.
 - Commits con Conventional Commits y scope: `fix(api): ...`, `feat(client): ...`, `chore: ...`, `docs: ...`.
-- Backend organizado por feature (`users/`, `exercises/`, `trainings/`...), cada una con `*.entity.ts`, `*.schema.ts` (Zod), `*.controllers.ts` y `*.routes.ts`.
+- Backend organizado por feature (`users/`, `exercises/`, `trainings/`...), cada una con:
+  - `*.entity.ts`: entidad de MikroORM.
+  - `*.mapper.ts`: entidad → respuesta con la forma del contrato de `@waby/shared`.
+  - `*.service.ts` (si hace falta): búsquedas compartidas, por ejemplo `findOwnExercise`.
+  - `*.controllers.ts` y `*.routes.ts`. Los handlers van envueltos en `asyncHandler`, y los errores se tiran (`notFound`, `conflict`, `invalid`) para que los traduzca `errorHandler` (`api/shared/http.ts`).
+- La validación usa los esquemas de `@waby/shared`. No hay `*.schema.ts` en la API.
+- Propiedad: toda consulta de datos de usuario filtra por `currentUserId(req)`. Un recurso ajeno responde 404.
+- Contrato de la API: `docs/api.md`. Cada cambio de endpoint actualiza ese archivo y los tests de `api/test/`.
 - Imports en la API con extensión `.js` (ESM en Node).
 - En el client, alias `@/` apunta a `client/src/`.
 - Tipos y validaciones de lo que viaja entre la API y el client se importan de `@waby/shared`. No se redefinen entidades en `api/` ni en `client/`. Si cambia la forma de un request o una respuesta, se cambia en `shared/` primero.
