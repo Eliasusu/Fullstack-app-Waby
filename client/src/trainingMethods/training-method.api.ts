@@ -1,5 +1,5 @@
 import axios from '@/lib/axios';
+import type { TrainingMethod } from '@waby/shared';
 
-export const getOneTrainingMethod = (id: string) => axios.get(`/trainingMethods/${id}`)
-
-export const getTrainingMethods = () => axios.get('/trainingMethods')
+/** Público: lo usa el registro antes de que haya sesión. */
+export const getTrainingMethods = () => axios.get<TrainingMethod[]>('/training-methods')

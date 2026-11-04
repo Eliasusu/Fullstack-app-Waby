@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
+import type { CreateExerciseInput, Difficulty, MetricType, MovementPattern, MuscleGroup } from "@waby/shared";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PlusIcon } from "lucide-react";
@@ -12,124 +13,59 @@ import ExercisesTable from "@/exercises/components/exercise-table/page.tsx";
 import { useExercise } from "@/exercises/exercise.context.tsx";
 import { useTrainingMethod } from "@/trainingMethods/training-method.context.tsx";
 import { useMuscleGroup } from "@/muscleGroups/muscle-group.context.tsx";
+import { difficultyLabels, metricTypeLabels, movementPatternLabels, options } from "@/lib/labels.ts";
+import { notifyResult } from "@/lib/notify.ts";
 
+type NewExercise = {
+  name: string;
+  description: string;
+  trainingMethodId?: number;
+  muscleGroupId?: number;
+  difficulty?: Difficulty;
+  movementPattern?: MovementPattern;
+  metricType?: MetricType;
+};
 
-
-
-//const muscleGroups = ["Legs", "Arms", "Back", "Shoulders", "Chest", "Core"];
-const difficultyLevels = ["Easy", "Medium", "Hard"];
-const exerciseTypes = ["Push", "Pull", "Legs", "Isometric"];
-
+const emptyExercise: NewExercise = { name: "", description: "" };
 
 export default function MuscleGroupExercisesDialog() {
-  const [openDialog, setOpenDialog] = useState<string | null>(null);
+  const [openGroup, setOpenGroup] = useState<MuscleGroup | null>(null);
   const [showAddExercise, setShowAddExercise] = useState(false);
-  const { exercises, getExercises, addExercise, getAllExercises } = useExercise();
+  const { exercises, getExercises, addExercise } = useExercise();
   const { trainingMethods, getAllTrainingMethods } = useTrainingMethod();
   const { muscleGroups, getAllMGS } = useMuscleGroup();
+  const [newExercise, setNewExercise] = useState<NewExercise>(emptyExercise);
 
-  const [newExercise, setNewExercise] = useState({
-    idExercise: 0,
-    name: "",
-    trainingMethod: "",
-    description: "",
-    muscleGroups: [] as number[],
-    difficulty: "",
-    typeExercise: "",
-    //dateCreated: new Date(),
-  });
-
+  // Los catálogos se cargan una vez: no cambian mientras la pantalla está abierta (nota 89).
   useEffect(() => {
     getAllMGS();
-    const intervalId = setInterval(() => {
-      getAllMGS();
-    }, 180000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    if (openDialog) {
-      const fetchExercises = () => {
-        try {
-          switch (openDialog) {
-            case "Legs":
-              muscleGroups.map((group) => {
-                if (group.nameMuscleGroup === "Legs") {
-                  getExercises(group.idMuscleGroup.toString());
-                }
-              })
-              break;
-            case "Arms":
-              muscleGroups.map((group) => {
-                if (group.nameMuscleGroup === "Arms") {
-                  getExercises(group.idMuscleGroup.toString());
-                }
-              });
-              break;
-            case "Back":
-              muscleGroups.map((group) => {
-                if (group.nameMuscleGroup === "Back") {
-                  getExercises(group.idMuscleGroup.toString());
-                }
-              });
-              break;
-            case "Shoulders":
-              muscleGroups.map((group) => {
-                if (group.nameMuscleGroup === "Shoulders") {
-                  getExercises(group.idMuscleGroup.toString());
-                }
-              });
-              break;
-            case "Chest":
-              muscleGroups.map((group) => {
-                if (group.nameMuscleGroup === "Chest") {
-                  getExercises(group.idMuscleGroup.toString());
-                }
-              });
-              break;
-            case "Core":
-              muscleGroups.map((group) => {
-                if (group.nameMuscleGroup === "Core") {
-                  getExercises(group.idMuscleGroup.toString());
-                }
-              });
-              break;
-            default:
-              break;
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      fetchExercises();
-      const intervalId = setInterval(fetchExercises, 180000);
-
-      return () => clearInterval(intervalId);
-    }
-  }, [openDialog]);
-
-
-
-  useEffect(() => {
     getAllTrainingMethods();
-    const intervalId = setInterval(() => {
-      getAllTrainingMethods();
-    }, 180000);
-
-    return () => clearInterval(intervalId);
   }, []);
 
-  const handleAddExercise = () => {
-    //Agregar en exercise context un nuevo metodo que
-    // Agregue un nuevo ejercicio pero por grupo muscular
-    // De esta forma cuando en la tabla se muestren los ejercicios 
-    // Seran solo los del grupo muscular seleccionado
-    addExercise(newExercise);
-    getExercises();
-    getAllExercises();
-    setShowAddExercise(false);
+  // Cualquier grupo muscular, también uno creado por el admin, carga sus ejercicios por id.
+  useEffect(() => {
+    if (openGroup) getExercises(openGroup.id);
+  }, [openGroup]);
+
+  const openAddExercise = () => {
+    setNewExercise({ ...emptyExercise, muscleGroupId: openGroup?.id });
+    setShowAddExercise(true);
+  };
+
+  const handleAddExercise = async () => {
+    const { name, description, trainingMethodId, muscleGroupId, difficulty, movementPattern, metricType } = newExercise;
+    const data = {
+      name,
+      ...(description ? { description } : {}),
+      trainingMethodId,
+      muscleGroupIds: muscleGroupId ? [muscleGroupId] : [],
+      difficulty,
+      movementPattern,
+      metricType,
+    } as CreateExerciseInput; // Si falta algo, la API responde 400 con los campos y se muestra en el toast.
+    if (notifyResult(await addExercise(data), { title: "Exercise created", description: `${name} was added.` })) {
+      setShowAddExercise(false);
+    }
   };
 
   return (
@@ -138,26 +74,26 @@ export default function MuscleGroupExercisesDialog() {
       <div className="grid grid-cols-3 md:grid-cols-3 gap-5 m-0 p">
         {muscleGroups.map((group) => (
           <Card
-            key={group.idMuscleGroup}
+            key={group.id}
             className="bg-gray-box2 h-24 border-white/40 transition-all duration-300 hover:bg-grey-boxActivity hover:scale-105 cursor-pointer"
-            onClick={() => setOpenDialog(group.nameMuscleGroup)}
+            onClick={() => setOpenGroup(group)}
           >
             <CardContent className="p-4 flex items-center justify-center h-24">
-              <p className="text-lg font-medium text-gray-100">{group.nameMuscleGroup}</p>
+              <p className="text-lg font-medium text-gray-100">{group.name}</p>
             </CardContent>
           </Card>
         ))}
       </div>
-      <Dialog open={openDialog !== null} onOpenChange={() => setOpenDialog(null)}>
+      <Dialog open={openGroup !== null} onOpenChange={() => setOpenGroup(null)}>
         <DialogContent className="bg-grey-bg text-gray-100 min-w-full">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Exercises by muscle group</DialogTitle>
           </DialogHeader>
-          <h3 className="text-xl font-semibold">{openDialog}</h3>
+          <h3 className="text-xl font-semibold">{openGroup?.name}</h3>
           <ExercisesTable data={exercises} />
           <button
             className="w-full flex items-center justify-center py-0 text-gray-400 hover:text-gray-100 transition-colors"
-            onClick={() => setShowAddExercise(true)}
+            onClick={openAddExercise}
           >
             <PlusIcon className="mr-2" />
             Add Exercise
@@ -187,16 +123,14 @@ export default function MuscleGroupExercisesDialog() {
             </div>
             <div>
               <Label htmlFor="method">Método</Label>
-              <Select
-                onValueChange={(value) => setNewExercise({ ...newExercise, trainingMethod: value })}
-              >
+              <Select onValueChange={(value) => setNewExercise({ ...newExercise, trainingMethodId: Number(value) })}>
                 <SelectTrigger className="bg-grey-box border-gray-600">
                   <SelectValue placeholder="Select method" />
                 </SelectTrigger>
                 <SelectContent className="bg-grey-boxRoutine">
                   {trainingMethods.map((method) => (
-                    <SelectItem key={method.idMethod} className="text-white" value={method.idMethod}>
-                      {method.nameMethod}
+                    <SelectItem key={method.id} className="text-white" value={method.id.toString()}>
+                      {method.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -214,17 +148,16 @@ export default function MuscleGroupExercisesDialog() {
             <div>
               <Label htmlFor="muscleGroup">Grupo Muscular</Label>
               <Select
-                onValueChange={(value) =>
-                  setNewExercise({ ...newExercise, muscleGroups: [Number(value)] })
-                }
+                value={newExercise.muscleGroupId?.toString()}
+                onValueChange={(value) => setNewExercise({ ...newExercise, muscleGroupId: Number(value) })}
               >
                 <SelectTrigger className="bg-grey-box border-gray-600">
                   <SelectValue placeholder="Select muscle group" />
                 </SelectTrigger>
                 <SelectContent className="bg-grey-boxRoutine">
                   {muscleGroups.map((group) => (
-                    <SelectItem key={group.idMuscleGroup} className="text-white" value={group.idMuscleGroup.toString()}>
-                      {group.nameMuscleGroup}
+                    <SelectItem key={group.id} className="text-white" value={group.id.toString()}>
+                      {group.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -232,33 +165,44 @@ export default function MuscleGroupExercisesDialog() {
             </div>
             <div>
               <Label htmlFor="difficulty">Dificultad</Label>
-              <Select
-                onValueChange={(value) => setNewExercise({ ...newExercise, difficulty: value })}
-              >
+              <Select onValueChange={(value) => setNewExercise({ ...newExercise, difficulty: value as Difficulty })}>
                 <SelectTrigger className="bg-grey-box border-gray-600">
                   <SelectValue placeholder="Select difficulty" />
                 </SelectTrigger>
                 <SelectContent className="bg-grey-boxRoutine">
-                  {difficultyLevels.map((level) => (
-                    <SelectItem key={level} className="text-white" value={level}>
-                      {level}
+                  {options(difficultyLabels).map((option) => (
+                    <SelectItem key={option.value} className="text-white" value={option.value}>
+                      {option.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label htmlFor="exerciseType">Tipo ejercicio</Label>
-              <Select
-                onValueChange={(value) => setNewExercise({ ...newExercise, typeExercise: value })}
-              >
+              <Label htmlFor="movementPattern">Patrón de movimiento</Label>
+              <Select onValueChange={(value) => setNewExercise({ ...newExercise, movementPattern: value as MovementPattern })}>
                 <SelectTrigger className="bg-grey-box border-gray-600">
-                  <SelectValue placeholder="Select exercise type" />
+                  <SelectValue placeholder="Select movement pattern" />
                 </SelectTrigger>
                 <SelectContent className="bg-grey-boxRoutine">
-                  {exerciseTypes.map((type) => (
-                    <SelectItem key={type} className="text-white" value={type}>
-                      {type}
+                  {options(movementPatternLabels).map((option) => (
+                    <SelectItem key={option.value} className="text-white" value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="metricType">Se mide por</Label>
+              <Select onValueChange={(value) => setNewExercise({ ...newExercise, metricType: value as MetricType })}>
+                <SelectTrigger className="bg-grey-box border-gray-600">
+                  <SelectValue placeholder="Repeticiones o tiempo" />
+                </SelectTrigger>
+                <SelectContent className="bg-grey-boxRoutine">
+                  {options(metricTypeLabels).map((option) => (
+                    <SelectItem key={option.value} className="text-white" value={option.value}>
+                      {option.label}
                     </SelectItem>
                   ))}
                 </SelectContent>

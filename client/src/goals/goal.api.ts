@@ -1,14 +1,10 @@
 import axios from '@/lib/axios';
-import { ProgressiveOverload } from './progressiveOverload.type';
+import type { CreateGoalInput, Goal, UpdateGoalInput } from '@waby/shared';
 
-export const createProgressiveOverload = (progressiveOverload: object) => axios.post('/progressiveOverload', progressiveOverload)
+export const getGoalsReq = () => axios.get<Goal[]>('/goals')
 
-export const getProgressiveOverloadsReq = () => axios.get('/progressiveOverload')
+export const createGoalReq = (data: CreateGoalInput) => axios.post<Goal>('/goals', data)
 
-export const getProgressiveOverload = (id: number) => axios.get(`/progressiveOverload/${id}`)
+export const updateGoalReq = (id: number, data: UpdateGoalInput) => axios.patch<Goal>(`/goals/${id}`, data)
 
-export const deleteProgressiveOverload = (id: number) => axios.delete(`/progressiveOverload/${id}`)
-
-export const updateProgressiveOverload = (progressiveOverload: ProgressiveOverload) => axios.put(`/progressiveOverload/${progressiveOverload.idProgressiveOverload}`, progressiveOverload)
-
-export const getProgressiveOverloadsByExercise = (id: number) => axios.get(`/progressiveOverload/exercise/${id}`)
+export const deleteGoalReq = (id: number) => axios.delete(`/goals/${id}`)

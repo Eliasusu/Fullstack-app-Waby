@@ -1,12 +1,13 @@
 import axios from "@/lib/axios";
-import { Training } from "./trainings.type.ts";
+import type { CreateTrainingInput, Training, TrainingWithItems, UpdateTrainingInput } from "@waby/shared";
 
-export const getTrainingOfTheDay = (date: string) => axios.get(`/trainings/${date}/user`);
+/** Entrenamientos entre dos fechas `YYYY-MM-DD` (inclusive). Sin rango, todos. */
+export const getTrainingsReq = (range: { from?: string; to?: string } = {}) => axios.get<Training[]>("/trainings", { params: range });
 
-export const getAllTrainings = () => axios.get("/trainings/user");
+export const getTrainingReq = (id: number) => axios.get<TrainingWithItems>(`/trainings/${id}`);
 
-export const createTraining = (training: Training) => axios.post("/trainings", training);
+export const createTrainingReq = (data: CreateTrainingInput) => axios.post<TrainingWithItems>("/trainings", data);
 
-export const updateTrainingReq = (training: Training) => axios.put(`/trainings/${training.idTraining}/user`, training);
+export const updateTrainingReq = (id: number, data: UpdateTrainingInput) => axios.patch<TrainingWithItems>(`/trainings/${id}`, data);
 
-export const deleteTrainingReq = (id: number) => axios.delete(`/trainings/${id}/user`);
+export const deleteTrainingReq = (id: number) => axios.delete(`/trainings/${id}`);

@@ -1,14 +1,15 @@
 import axios from '@/lib/axios.ts';
+import type { LoginInput, RegisterInput, UpdateUserInput, User } from '@waby/shared';
 
+export const registerRequest = (data: RegisterInput) => axios.post<User>('auth/register', data)
 
-export const registerRequest = (user: object) => axios.post('auth/register', user)
+export const loginRequest = (data: LoginInput) => axios.post<User>('auth/login', data)
 
-export const loginRequest = (user: object) => axios.post('auth/login', user)
+export const logoutRequest = () => axios.post('auth/logout')
 
-export const verifyTokenRequest = () => axios.get('auth/verify') 
+/** Usuario de la sesión. 401 si no hay sesión: así se verifica al recargar. */
+export const getMeRequest = () => axios.get<User>('users/me')
 
-export const updateProfileRequest = (id: string, user: object) => axios.put(`users/${id}`, user)
+export const updateMeRequest = (data: UpdateUserInput) => axios.patch<User>('users/me', data)
 
-export const deleteProfileRequest = (id: string) => axios.delete(`users/${id}`)
-
-export const getProfileRequest = (id: string) => axios.get(`users/${id}`)
+export const deleteMeRequest = () => axios.delete('users/me')

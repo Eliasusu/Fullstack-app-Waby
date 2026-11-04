@@ -1,156 +1,58 @@
-import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { createProgressiveOverload, deleteProgressiveOverload, getProgressiveOverloadsReq, getProgressiveOverloadsByExercise, updateProgressiveOverload, getProgressiveOverload } from "@/progressiveOverload/progressiveOverload.api";
-import { ProgressiveOverload } from "@/progressiveOverload/progressiveOverload.type";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, ReactNode, useContext, useState } from "react";
+import type { CreateGoalInput, Goal, UpdateGoalInput } from "@waby/shared";
+import { createGoalReq, deleteGoalReq, getGoalsReq, updateGoalReq } from "@/goals/goal.api.ts";
+import { attempt, type Result } from "@/lib/result.ts";
 
-interface Error {
-    code: string;
-    minimum?: number;
-    type: string;
-    inclusive?: boolean;
-    exact?: boolean;
-    message: string;
-    path: string[];
-    expected?: string;
-    received?: string;
+interface GoalState {
+    goals: Goal[];
+    getAll: () => Promise<void>;
+    create: (data: CreateGoalInput) => Promise<Result>;
+    update: (id: number, data: UpdateGoalInput) => Promise<Result>;
+    remove: (id: number) => Promise<Result>;
 }
 
-interface ProgressiveOverloadState {
-    progressiveOverload: ProgressiveOverload;
-    progressiveOverloads: ProgressiveOverload[];
-    getAll: () => void;
-    getByExercise: (id: number) => void;
-    getOne: (id: number) => void;
-    create: (progressiveOverload: object) => void;
-    update: (progressiveOverload: ProgressiveOverload) => void;
-    remove: (id: number) => void;
-    errors: Error[] | null;
-}
+const notReady = async () => ({ ok: false as const, errors: ['GoalProvider no está montado'] });
 
+export const GoalContext = createContext<GoalState>({
+    goals: [],
+    getAll: async () => { },
+    create: notReady,
+    update: notReady,
+    remove: notReady,
+});
 
+export const useGoals = () => useContext(GoalContext);
 
-const initialProgressiveOverloadState: ProgressiveOverloadState = {
-    progressiveOverload: {
-        idProgressiveOverload: 0,
-        name: "",
-        exercise: "",
-        user: "",
-        typePO: "",
-        done: 0,
-        goal: 0,
-        logDate: new Date(),
-    },
-    progressiveOverloads: [],
-    getAll: () => { },
-    getOne: () => { },
-    getByExercise: () => { },
-    create: () => { },
-    update: () => { },
-    remove: () => { },
-    errors: null,
-};
-
-export const ProgressiveOverloadContext = createContext(initialProgressiveOverloadState);
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const useProgressiveOverload = () => {
-    const context = useContext(ProgressiveOverloadContext);
-
-    if (!context) {
-        throw new Error("useProgressiveOverload must be used within an ProgressiveOverloadProvider");
-    }
-    return context;
-}
-
-export const ProgressiveOverloadProvider = ({ children }: { children: ReactNode }) => {
-    const [progressiveOverload, setProgressiveOverload] = useState<ProgressiveOverload>({
-        idProgressiveOverload: 0,
-        name: "",
-        exercise: "",
-        user: "",
-        typePO: "",
-        done: 0,
-        goal: 0,
-        logDate: new Date(),
-    });
-    const [progressiveOverloads, setProgressiveOverloads] = useState<ProgressiveOverload[]>([]);
-    const [errors, setErrors] = useState<Error[] | null>(null);
-
-
-    const getOne = async (id: number) => {
-        try {
-            const res = await getProgressiveOverload(id);
-            setProgressiveOverload(res.data.progressiveOverload);
-        } catch (error: unknown) {
-            if (error && typeof error === 'object' && 'response' in error) {
-                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
-            }
-        }
-    }
+export const GoalProvider = ({ children }: { children: ReactNode }) => {
+    const [goals, setGoals] = useState<Goal[]>([]);
 
     const getAll = async () => {
-        try {
-            const res = await getProgressiveOverloadsReq();
-            setProgressiveOverloads(res.data.progressiveOverloads);
-        } catch (error: unknown) {
-            if (error && typeof error === 'object' && 'response' in error) {
-                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
-            }
-        }
-    }
+        const res = await getGoalsReq();
+        setGoals(res.data);
+    };
 
+    const create = (data: CreateGoalInput) =>
+        attempt(async () => {
+            await createGoalReq(data);
+            await getAll();
+        });
 
-    const getByExercise = async (id: number) => {
-        try {
-            const res = await getProgressiveOverloadsByExercise(id);
-            setProgressiveOverloads(res.data.progressiveOverloads);
-        } catch (error: unknown) {
-            if (error && typeof error === 'object' && 'response' in error) {
-                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
-            }
-        }
-    }
+    const update = (id: number, data: UpdateGoalInput) =>
+        attempt(async () => {
+            await updateGoalReq(id, data);
+            await getAll();
+        });
 
-    const create = async (progressiveOverload: object) => {
-        try {
-            await createProgressiveOverload(progressiveOverload);
-        } catch (error: unknown) {
-            if (error && typeof error === 'object' && 'response' in error) {
-                const errorMessages = (error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues;
-                setErrors(errorMessages);
-            }
-        }
-    }
-
-    const update = async (progressiveOverload: ProgressiveOverload) => {
-        try {
-            await updateProgressiveOverload(progressiveOverload);
-            setProgressiveOverload(progressiveOverload);
-            setErrors(errors)
-        } catch (error: unknown) {
-            if (error && typeof error === 'object' && 'response' in error) {
-                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
-            }
-        }
-    }
-
-    const remove = async (id: number) => {
-        try {
-            await deleteProgressiveOverload(id);
-        } catch (error: unknown) {
-            if (error && typeof error === 'object' && 'response' in error) {
-                setErrors((error as { response: { data: { message: { issues: Error[] } } } }).response.data.message.issues);
-            }
-        }
-    }
-
-    useEffect(() => {
-        setErrors(errors);
-    }, [errors]);
+    const remove = (id: number) =>
+        attempt(async () => {
+            await deleteGoalReq(id);
+            await getAll();
+        });
 
     return (
-        <ProgressiveOverloadContext.Provider value={{ progressiveOverload, progressiveOverloads, getOne, getAll, getByExercise, create, update, remove, errors }}>
+        <GoalContext.Provider value={{ goals, getAll, create, update, remove }}>
             {children}
-        </ProgressiveOverloadContext.Provider>
+        </GoalContext.Provider>
     );
-
 }

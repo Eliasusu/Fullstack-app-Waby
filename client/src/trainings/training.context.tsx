@@ -1,232 +1,119 @@
-import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { getTrainingOfTheDay, getAllTrainings, createTraining, deleteTrainingReq, updateTrainingReq } from "@/trainings/training.api.ts";
-import { Training } from "@/trainings/trainings.type";
-import { TrainingItem } from "@/trainingItem/trainingItems.type";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, ReactNode, useContext, useState } from "react";
+import type {
+    CreateTrainingInput,
+    CreateTrainingItemInput,
+    Training,
+    TrainingWithItems,
+    UpdateTrainingInput,
+    UpdateTrainingItemInput,
+} from "@waby/shared";
+import { createTrainingReq, deleteTrainingReq, getTrainingReq, getTrainingsReq, updateTrainingReq } from "@/trainings/training.api.ts";
 import { createTrainingItemReq, deleteTrainingItemReq, updateTrainingItemReq } from "@/trainingItem/trainingItem.api.ts";
-
-
+import { toDateOnly } from "@/lib/dates.ts";
+import { attempt, type Result } from "@/lib/result.ts";
 
 interface TrainingState {
+    /** Listado (sin ítems), para la actividad y el calendario. */
     trainings: Training[];
-    training: Training | undefined;
-    addTraining: (training: Training) => void;
-    addTrainingItem: (trainingItem: TrainingItem, idTraining: number) => void;
-    getTrainings: () => void;
-    getTrainingToDay: (date: Date) => object;
-    updateTraining: (training: Training) => void;
-    updateTrainingItem: (trainingItem: TrainingItem, idTraining: number) => void;
-    deleteTraining: (id: number) => void;
-    deleteTrainingItem: (id: number, idTraining: number) => void;
-    errors: object | null;
+    /** Entrenamiento del día seleccionado, con sus ítems. */
+    training: TrainingWithItems | undefined;
+    getTrainings: () => Promise<void>;
+    /**
+     * Carga el entrenamiento del día. La API admite varios por día (nota 28); esta pantalla
+     * todavía muestra el primero (nota 64).
+     */
+    getTrainingToDay: (date: Date) => Promise<void>;
+    addTraining: (data: CreateTrainingInput) => Promise<Result<TrainingWithItems>>;
+    updateTraining: (id: number, data: UpdateTrainingInput) => Promise<Result>;
+    deleteTraining: (id: number) => Promise<Result>;
+    addTrainingItem: (trainingId: number, data: CreateTrainingItemInput) => Promise<Result>;
+    updateTrainingItem: (trainingId: number, itemId: number, data: UpdateTrainingItemInput) => Promise<Result>;
+    deleteTrainingItem: (trainingId: number, itemId: number) => Promise<Result>;
 }
 
+const notReady = async () => ({ ok: false as const, errors: ['TrainingProvider no está montado'] });
 
-const initialTrainingState: TrainingState = {
-    trainings: [{
-        idTraining: 0,
-        user: '',
-        trainingName: '',
-        trainingType: '',
-        day: new Date(),
-        startHour: '',
-        endHour: '',
-        trainingItems: [{
-            exercise: {
-                name: '', trainingMethod: '', description: '', muscleGroups: [0], difficulty: '', typeExercise: '',
-                idExercise: 0
-            }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0
-        }],
-        completed: false,
-    }],
-    training: {
-        idTraining: 0,
-        user: '',
-        trainingName: '',
-        trainingType: '',
-        day: new Date(),
-        startHour: '',
-        endHour: '',
-        trainingItems: [{
-            exercise: {
-                name: '', trainingMethod: '', description: '', muscleGroups: [0], difficulty: '', typeExercise: '',
-                idExercise: 0
-            }, sets: 0, reps: 0, weight: '', rest: '', idTrainingItem: 0
-        }],
-        completed: false,
-    },
-    addTraining: () => { },
-    addTrainingItem: () => { },
-    getTrainings: () => { },
-    getTrainingToDay: () => ({}),
-    updateTraining: () => { },
-    updateTrainingItem: () => { },
-    deleteTraining: () => { },
-    deleteTrainingItem: () => { },
-    errors: null,
-};
-export const TrainingContext = createContext(initialTrainingState);
+export const TrainingContext = createContext<TrainingState>({
+    trainings: [],
+    training: undefined,
+    getTrainings: async () => { },
+    getTrainingToDay: async () => { },
+    addTraining: notReady,
+    updateTraining: notReady,
+    deleteTraining: notReady,
+    addTrainingItem: notReady,
+    updateTrainingItem: notReady,
+    deleteTrainingItem: notReady,
+});
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useTraining = () => {
-    const context = useContext(TrainingContext);
-
-    if (!context) {
-        throw new Error("useTraining must be used within an TrainingProvider");
-    }
-    return context;
-};
+export const useTraining = () => useContext(TrainingContext);
 
 export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     const [trainings, setTrainings] = useState<Training[]>([]);
-    const [training, setTraining] = useState<Training>();
-    const [errors, setErrors] = useState<object | null>(null);
+    const [training, setTraining] = useState<TrainingWithItems>();
 
-    const addTraining = async (training: Training) => {
-        try {
-            await createTraining(training);
-            setTrainings([...trainings, training]);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar el ejercicio" });
-            }
-        }
-    };
-
-    const addTrainingItem = async (trainingItem: TrainingItem, idTraining: number) => {
-        try {
-            const refacTrainingItem = {
-                exercise: trainingItem.exercise.idExercise,
-                sets: trainingItem.sets,
-                reps: trainingItem.reps,
-                weight: trainingItem.weight,
-                rest: trainingItem.rest,
-                comment: trainingItem.comment,
-            }
-            const id = idTraining.toString();
-            await createTrainingItemReq(refacTrainingItem, id);
-            const updatedTrainings = await getAllTrainings();
-            setTrainings(updatedTrainings.data.trainings);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al actualizar el entrenamiento" });
-            }
-        }
+    const getTrainings = async () => {
+        const res = await getTrainingsReq();
+        setTrainings(res.data);
     };
 
     const getTrainingToDay = async (date: Date) => {
-        try {
-            const dateString = date.toISOString().split("T")[0];
-            const res = await getTrainingOfTheDay(dateString);
+        const day = toDateOnly(date);
+        const res = await getTrainingsReq({ from: day, to: day });
+        const first = res.data[0];
+        setTraining(first ? (await getTrainingReq(first.id)).data : undefined);
+    };
+
+    /** Después de cada cambio se recargan el listado y el entrenamiento abierto (notas 63 y 68). */
+    const refresh = async (trainingId?: number) => {
+        await getTrainings();
+        if (trainingId !== undefined) {
+            const res = await getTrainingReq(trainingId);
             setTraining(res.data);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al obtener el entrenamiento" });
-            }
         }
     };
 
-    const getTrainings = async () => {
-        try {
-            const res = await getAllTrainings();
-            setTrainings(res.data);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al obtener los ejercicios" });
-            }
+    const addTraining = (data: CreateTrainingInput) =>
+        attempt(async () => {
+            const res = await createTrainingReq(data);
+            await getTrainings();
+            return res.data;
+        });
 
-        }
-    };
+    const updateTraining = (id: number, data: UpdateTrainingInput) =>
+        attempt(async () => {
+            await updateTrainingReq(id, data);
+            await refresh(training?.id === id ? id : undefined);
+        });
 
-    const updateTraining = async (training: Training) => {
-        try {
-            await updateTrainingReq(training);
-            const updatedTrainings = await getAllTrainings();
-            setTrainings(updatedTrainings.data.trainings);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al actualizar el entrenamiento" });
-            }
-        }
-    };
-
-    const updateTrainingItem = async (trainingItem: TrainingItem, idTraining: number) => {
-        try {
-            if (trainingItem.idTrainingItem === undefined) return;
-            const id = idTraining.toString();
-            const idTItem = trainingItem.idTrainingItem.toString();
-            const refacTrainingItem = {
-                exercise: trainingItem.exercise.idExercise,
-                sets: trainingItem.sets,
-                reps: trainingItem.reps,
-                weight: trainingItem.weight,
-                rest: trainingItem.rest,
-                comment: trainingItem.comment,
-                completeExercise: trainingItem.completeExercise,
-            }
-            await updateTrainingItemReq(refacTrainingItem, id, idTItem);
-            const updatedTrainings = await getAllTrainings();
-            setTrainings(updatedTrainings.data.trainings);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al actualizar el entrenamiento" });
-            }
-        }
-    };
-
-
-    const deleteTraining = async (id: number) => {
-        try {
+    const deleteTraining = (id: number) =>
+        attempt(async () => {
             await deleteTrainingReq(id);
-            setTrainings(trainings.filter((training) => training.idTraining !== id));
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al eliminar el entrenamiento" });
-            }
+            if (training?.id === id) setTraining(undefined);
+            await getTrainings();
+        });
 
-        }
-    };
+    const addTrainingItem = (trainingId: number, data: CreateTrainingItemInput) =>
+        attempt(async () => {
+            await createTrainingItemReq(trainingId, data);
+            await refresh(trainingId);
+        });
 
-    const deleteTrainingItem = async (idItem: number, idTraining: number) => {
-        try {
-            const idStr = idItem.toString();
-            const idTrainingStr = idTraining.toString();
-            await deleteTrainingItemReq(idStr, idTrainingStr);
-            const updatedTrainings = await getAllTrainings();
-            setTrainings(updatedTrainings.data.trainings);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al eliminar el entrenamiento" });
-            }
-        }
-    }
+    const updateTrainingItem = (trainingId: number, itemId: number, data: UpdateTrainingItemInput) =>
+        attempt(async () => {
+            await updateTrainingItemReq(trainingId, itemId, data);
+            await refresh(trainingId);
+        });
 
-    useEffect(() => {
-        if (errors) {
-            const timer = setTimeout(() => {
-                setErrors(null);
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [errors]);
+    const deleteTrainingItem = (trainingId: number, itemId: number) =>
+        attempt(async () => {
+            await deleteTrainingItemReq(trainingId, itemId);
+            await refresh(trainingId);
+        });
 
     return (
-        <TrainingContext.Provider value={{ trainings, training, addTraining, addTrainingItem, updateTraining, updateTrainingItem, getTrainings, getTrainingToDay, deleteTraining, deleteTrainingItem, errors }}>
+        <TrainingContext.Provider value={{ trainings, training, getTrainings, getTrainingToDay, addTraining, updateTraining, deleteTraining, addTrainingItem, updateTrainingItem, deleteTrainingItem }}>
             {children}
         </TrainingContext.Provider>
     );

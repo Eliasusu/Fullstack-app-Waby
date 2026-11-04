@@ -4,6 +4,7 @@ import BoxContainer from "@/components/ui/BoxConteiner.tsx"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx"
 import { useTraining } from "@/trainings/training.context.tsx"
+import { toDateOnly } from "@/lib/dates.ts"
 interface ActivityDay {
   date: Date;
   completed: boolean
@@ -49,14 +50,11 @@ export default function Activity() {
 
     for (let i = 0; i < daysToGenerate; i++) {
       const date = new Date(startDate.getTime())
-      console.log
       date.setDate(startDate.getDate() + i)
       newActivityData.push({
         date,
-        completed: trainings.some(training => {
-          const trainingDate = new Date(training.day)
-          return trainingDate.toDateString() === date.toDateString() && training.completed
-        })
+        // `day` viene como YYYY-MM-DD: se compara como texto, sin pasar por Date (zona horaria).
+        completed: trainings.some(training => training.day === toDateOnly(date) && training.completed)
       })
     }
 
