@@ -1,11 +1,10 @@
 import type { Request, Response } from 'express';
-import { CreateTrainingMethodSchema, UpdateTrainingMethodSchema, type TrainingMethod as TrainingMethodDto } from '@waby/shared';
+import { CreateTrainingMethodSchema, UpdateTrainingMethodSchema } from '@waby/shared';
 import { orm } from '../shared/db/orm.js';
 import { conflict, idParam, notFound, parse } from '../shared/http.js';
 import { Exercise } from '../exercises/exercise.entity.js';
 import { TrainingMethod } from './trainingMethod.entity.js';
-
-const toDto = ({ id, name, description }: TrainingMethod): TrainingMethodDto => ({ id, name, description });
+import { toTrainingMethodDto } from './trainingMethod.mapper.js';
 
 async function findOr404(id: number) {
     const method = await orm.em.findOne(TrainingMethod, { id });
@@ -21,11 +20,11 @@ async function assertNameFree(name: string | undefined, exceptId?: number) {
 
 export async function getAll(_req: Request, res: Response) {
     const methods = await orm.em.find(TrainingMethod, {}, { orderBy: { name: 'asc' } });
-    res.json(methods.map(toDto));
+    res.json(methods.map(toTrainingMethodDto));
 }
 
 export async function getOne(req: Request, res: Response) {
-    res.json(toDto(await findOr404(idParam(req))));
+    res.json(toTrainingMethodDto(await findOr404(idParam(req))));
 }
 
 export async function create(req: Request, res: Response) {
@@ -33,7 +32,7 @@ export async function create(req: Request, res: Response) {
     await assertNameFree(data.name);
     const method = orm.em.create(TrainingMethod, data);
     await orm.em.flush();
-    res.status(201).json(toDto(method));
+    res.status(201).json(toTrainingMethodDto(method));
 }
 
 export async function update(req: Request, res: Response) {
@@ -42,7 +41,7 @@ export async function update(req: Request, res: Response) {
     await assertNameFree(data.name, method.id);
     orm.em.assign(method, data);
     await orm.em.flush();
-    res.json(toDto(method));
+    res.json(toTrainingMethodDto(method));
 }
 
 export async function remove(req: Request, res: Response) {

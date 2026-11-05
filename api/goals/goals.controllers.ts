@@ -3,22 +3,15 @@ import { CreateGoalSchema, isGoalTargetTypeValidFor, UpdateGoalSchema, type Goal
 import { orm } from '../shared/db/orm.js';
 import { idParam, invalid, notFound, parse } from '../shared/http.js';
 import { currentUserId } from '../middlewares/auth.js';
-import { toExerciseRef } from '../exercises/exercise.mapper.js';
 import { findOwnExerciseForReference } from '../exercises/exercises.service.js';
 import type { Exercise } from '../exercises/exercise.entity.js';
 import { Goal } from './goal.entity.js';
 import { computeGoalProgress } from './goal-progress.js';
+import { toGoalDto } from './goal.mapper.js';
 
-async function toDto(goal: Goal): Promise<GoalDto> {
-    return {
-        id: goal.id,
-        exercise: toExerciseRef(goal.exercise),
-        targetType: goal.targetType,
-        targetValue: goal.targetValue,
-        startDate: goal.startDate,
-        endDate: goal.endDate ?? null,
-        ...(await computeGoalProgress(orm.em, goal)),
-    };
+/** Calcula el progreso (consulta la base) y arma la respuesta. */
+async function withProgress(goal: Goal): Promise<GoalDto> {
+    return toGoalDto(goal, await computeGoalProgress(orm.em, goal));
 }
 
 function assertTargetType(exercise: Exercise, targetType: GoalTargetType) {
@@ -35,11 +28,11 @@ async function findOwnGoal(req: Request) {
 
 export async function getAll(req: Request, res: Response) {
     const goals = await orm.em.find(Goal, { user: currentUserId(req) }, { populate: ['exercise'], orderBy: { startDate: 'asc', id: 'asc' } });
-    res.json(await Promise.all(goals.map(toDto)));
+    res.json(await Promise.all(goals.map(withProgress)));
 }
 
 export async function getOne(req: Request, res: Response) {
-    res.json(await toDto(await findOwnGoal(req)));
+    res.json(await withProgress(await findOwnGoal(req)));
 }
 
 export async function create(req: Request, res: Response) {
@@ -49,7 +42,7 @@ export async function create(req: Request, res: Response) {
     assertTargetType(exercise, data.targetType);
     const goal = orm.em.create(Goal, { ...data, endDate: data.endDate ?? null, exercise, user: userId });
     await orm.em.flush();
-    res.status(201).json(await toDto(goal));
+    res.status(201).json(await withProgress(goal));
 }
 
 export async function update(req: Request, res: Response) {
@@ -63,7 +56,7 @@ export async function update(req: Request, res: Response) {
     orm.em.assign(goal, data);
     goal.exercise = exercise;
     await orm.em.flush();
-    res.json(await toDto(goal));
+    res.json(await withProgress(goal));
 }
 
 export async function remove(req: Request, res: Response) {

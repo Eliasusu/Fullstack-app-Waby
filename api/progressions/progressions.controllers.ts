@@ -1,21 +1,12 @@
 import type { Request, Response } from 'express';
-import { CreateProgressionSchema, UpdateProgressionSchema, volumeError, volumeFieldFor, type Progression as ProgressionDto } from '@waby/shared';
+import { CreateProgressionSchema, UpdateProgressionSchema, volumeError, volumeFieldFor } from '@waby/shared';
 import { orm } from '../shared/db/orm.js';
 import { conflict, idParam, invalid, notFound, parse } from '../shared/http.js';
 import { currentUserId } from '../middlewares/auth.js';
 import { findOwnExercise } from '../exercises/exercises.service.js';
 import type { Exercise } from '../exercises/exercise.entity.js';
 import { Progression } from './progression.entity.js';
-
-const toDto = (p: Progression): ProgressionDto => ({
-    id: p.id,
-    exerciseId: p.exercise.id,
-    order: p.order,
-    name: p.name,
-    sets: p.sets,
-    reps: p.reps ?? null,
-    seconds: p.seconds ?? null,
-});
+import { toProgressionDto } from './progression.mapper.js';
 
 const ownExercise = (req: Request) => findOwnExercise(orm.em, currentUserId(req), idParam(req), false);
 
@@ -38,7 +29,7 @@ async function assertUniqueInExercise(exercise: Exercise, data: { name?: string;
 export async function getAll(req: Request, res: Response) {
     const exercise = await ownExercise(req);
     const progressions = await orm.em.find(Progression, { exercise: exercise.id }, { orderBy: { order: 'asc' } });
-    res.json(progressions.map(toDto));
+    res.json(progressions.map(toProgressionDto));
 }
 
 export async function create(req: Request, res: Response) {
@@ -48,7 +39,7 @@ export async function create(req: Request, res: Response) {
     await assertUniqueInExercise(exercise, data);
     const progression = orm.em.create(Progression, { ...data, reps: data.reps ?? null, seconds: data.seconds ?? null, exercise });
     await orm.em.flush();
-    res.status(201).json(toDto(progression));
+    res.status(201).json(toProgressionDto(progression));
 }
 
 async function findProgression(req: Request) {
@@ -65,7 +56,7 @@ export async function update(req: Request, res: Response) {
     await assertUniqueInExercise(exercise, data, progression.id);
     orm.em.assign(progression, data);
     await orm.em.flush();
-    res.json(toDto(progression));
+    res.json(toProgressionDto(progression));
 }
 
 export async function remove(req: Request, res: Response) {

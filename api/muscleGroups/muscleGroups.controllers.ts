@@ -1,11 +1,10 @@
 import type { Request, Response } from 'express';
-import { CreateMuscleGroupSchema, UpdateMuscleGroupSchema, type MuscleGroup as MuscleGroupDto } from '@waby/shared';
+import { CreateMuscleGroupSchema, UpdateMuscleGroupSchema } from '@waby/shared';
 import { orm } from '../shared/db/orm.js';
 import { conflict, idParam, notFound, parse } from '../shared/http.js';
 import { Exercise } from '../exercises/exercise.entity.js';
 import { MuscleGroup } from './muscleGroup.entity.js';
-
-const toDto = ({ id, name, description, image }: MuscleGroup): MuscleGroupDto => ({ id, name, description, image: image ?? null });
+import { toMuscleGroupDto } from './muscleGroup.mapper.js';
 
 async function findOr404(id: number) {
     const group = await orm.em.findOne(MuscleGroup, { id });
@@ -21,11 +20,11 @@ async function assertNameFree(name: string | undefined, exceptId?: number) {
 
 export async function getAll(_req: Request, res: Response) {
     const groups = await orm.em.find(MuscleGroup, {}, { orderBy: { name: 'asc' } });
-    res.json(groups.map(toDto));
+    res.json(groups.map(toMuscleGroupDto));
 }
 
 export async function getOne(req: Request, res: Response) {
-    res.json(toDto(await findOr404(idParam(req))));
+    res.json(toMuscleGroupDto(await findOr404(idParam(req))));
 }
 
 export async function create(req: Request, res: Response) {
@@ -33,7 +32,7 @@ export async function create(req: Request, res: Response) {
     await assertNameFree(data.name);
     const group = orm.em.create(MuscleGroup, { ...data, image: data.image ?? null });
     await orm.em.flush();
-    res.status(201).json(toDto(group));
+    res.status(201).json(toMuscleGroupDto(group));
 }
 
 export async function update(req: Request, res: Response) {
@@ -42,7 +41,7 @@ export async function update(req: Request, res: Response) {
     await assertNameFree(data.name, group.id);
     orm.em.assign(group, data);
     await orm.em.flush();
-    res.json(toDto(group));
+    res.json(toMuscleGroupDto(group));
 }
 
 export async function remove(req: Request, res: Response) {
