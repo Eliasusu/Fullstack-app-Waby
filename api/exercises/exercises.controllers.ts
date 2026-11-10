@@ -1,103 +1,99 @@
-import { Request, Response } from "express";
-import { validateParcialExercises } from "./exercises.schema.js";
-import { Exercise } from "./exercise.entity.js";
-import { orm } from "../shared/db/orm.js";
+import type { Request, Response } from 'express';
+import { PopulateHint } from '@mikro-orm/core';
+import { z } from 'zod';
+import { CreateExerciseSchema, IdParamSchema, UpdateExerciseSchema } from '@waby/shared';
+import { orm } from '../shared/db/orm.js';
+import { conflict, idParam, parse } from '../shared/http.js';
+import { currentUserId } from '../middlewares/auth.js';
+import { TrainingItem } from '../trainingItems/trainingItem.entity.js';
+import { Goal } from '../goals/goal.entity.js';
+import { Progression } from '../progressions/progression.entity.js';
+import { Exercise } from './exercise.entity.js';
+import { toExerciseDto } from './exercise.mapper.js';
+import { findMuscleGroups, findOwnExercise, findTrainingMethod } from './exercises.service.js';
 
-const em = orm.em;
+const ListQuerySchema = z.object({
+    muscleGroupId: IdParamSchema.optional(),
+    trainingMethodId: IdParamSchema.optional(),
+});
 
-async function getAll(req: Request, res: Response) {
-    try {
-        if (req.params.idMuscleGroup) {
-            const idMuscleGroup = Number.parseInt(req.params.idMuscleGroup);
-            const exercises = await em.find(Exercise, { muscleGroups: { idMuscleGroup: idMuscleGroup }, user: { idUser: req.body.user.id } }, { populate: ['muscleGroups', 'trainingMethod'] });
-            const exercisesDestructurized = exercises.map((e) => {
-                return {
-                    idExercise: e.idExercise,
-                    name: e.name,
-                    description: e.description,
-                    muscleGroups: e.muscleGroups.map((muscleGroup) => muscleGroup.nameMuscleGroup),
-                    difficulty: e.difficulty,
-                    typeExercise: e.typeExercise
-                };
-            });
-            return res.status(200).json({ message: 'finded all exercises', exercisesDestructurized});
+async function assertNameFree(userId: number, name: string | undefined, exceptId?: number) {
+    if (!name) return;
+    const other = await orm.em.findOne(Exercise, { user: userId, name });
+    if (other && other.id !== exceptId) throw conflict('Ya tenés un ejercicio con ese nombre');
+}
+
+async function isInUse(exerciseId: number) {
+    const [items, goals] = await Promise.all([
+        orm.em.count(TrainingItem, { exercise: exerciseId }),
+        orm.em.count(Goal, { exercise: exerciseId }),
+    ]);
+    return items + goals > 0;
+}
+
+export async function getAll(req: Request, res: Response) {
+    const { muscleGroupId, trainingMethodId } = parse(ListQuerySchema, req.query);
+    const exercises = await orm.em.find(
+        Exercise,
+        {
+            user: currentUserId(req),
+            ...(muscleGroupId ? { muscleGroups: muscleGroupId } : {}),
+            ...(trainingMethodId ? { trainingMethod: trainingMethodId } : {}),
+        },
+        { populate: ['trainingMethod', 'muscleGroups'], populateWhere: PopulateHint.ALL, orderBy: { name: 'asc' } },
+    );
+    res.json(exercises.map(toExerciseDto));
+}
+
+export async function getOne(req: Request, res: Response) {
+    res.json(toExerciseDto(await findOwnExercise(orm.em, currentUserId(req), idParam(req))));
+}
+
+export async function create(req: Request, res: Response) {
+    const em = orm.em;
+    const userId = currentUserId(req);
+    const { trainingMethodId, muscleGroupIds, ...data } = parse(CreateExerciseSchema, req.body);
+    await assertNameFree(userId, data.name);
+    const trainingMethod = await findTrainingMethod(em, trainingMethodId);
+    const muscleGroups = await findMuscleGroups(em, muscleGroupIds);
+
+    const exercise = em.create(Exercise, {
+        ...data,
+        description: data.description ?? null,
+        image: data.image ?? null,
+        user: userId,
+        trainingMethod,
+    });
+    exercise.muscleGroups.set(muscleGroups);
+    await em.flush();
+    res.status(201).json(toExerciseDto(exercise));
+}
+
+export async function update(req: Request, res: Response) {
+    const em = orm.em;
+    const userId = currentUserId(req);
+    const exercise = await findOwnExercise(em, userId, idParam(req));
+    const { trainingMethodId, muscleGroupIds, ...data } = parse(UpdateExerciseSchema, req.body);
+
+    if (data.metricType && data.metricType !== exercise.metricType) {
+        const progressions = await em.count(Progression, { exercise: exercise.id });
+        if (progressions > 0 || (await isInUse(exercise.id))) {
+            throw conflict('No se puede cambiar la forma de medir de un ejercicio que ya tiene ítems, progresiones o metas');
         }
-        else {
-            const exercises = await em.find(Exercise, { user: req.body.user.id }, { populate: ['muscleGroups', 'trainingMethod'] });
-            res.status(200).json({ message: 'finded all exercises', exercises });}
-    
-    } catch (err: any) {
-        res.status(500).json({message: err.message}); //Quitar mensaje de error en producción
     }
+    await assertNameFree(userId, data.name, exercise.id);
+    if (trainingMethodId) exercise.trainingMethod = await findTrainingMethod(em, trainingMethodId);
+    if (muscleGroupIds) exercise.muscleGroups.set(await findMuscleGroups(em, muscleGroupIds));
+    em.assign(exercise, data);
+    await em.flush();
+    res.json(toExerciseDto(exercise));
 }
 
-
-
-async function getOne(req: Request, res: Response) {
-    try{
-        const idExercise = Number.parseInt(req.params.idExercise);
-        const exercise = await em.findOneOrFail(Exercise, { idExercise, user: { idUser: req.body.user.id } }, { populate: ['muscleGroups', 'trainingMethod'] });
-        if(!exercise) return res.status(404).json({message: 'Exercise not found'});
-        res.status(200).json({ message: 'finded exercise', exercise });
-    }catch(err:any){
-        res.status(500).json({message: err.message});
+export async function remove(req: Request, res: Response) {
+    const exercise = await findOwnExercise(orm.em, currentUserId(req), idParam(req), false);
+    if (await isInUse(exercise.id)) {
+        throw conflict('El ejercicio está en entrenamientos o metas: no se puede borrar');
     }
+    await orm.em.nativeDelete(Exercise, { id: exercise.id });
+    res.status(204).end();
 }
-
-async function create(req: Request, res: Response) {
-    try {
-        const exerciseValidation = validateParcialExercises(req.body);
-        if (!exerciseValidation.success) {
-            res.status(400).json({message: exerciseValidation.error});
-            return;
-        }
-        const exercise = em.create(Exercise, {
-            ...exerciseValidation.data,
-                user: req.body.user.id
-            });
-        await em.flush();
-        res.status(201).json({message: 'Exercise created', exercise});
-    }catch(err:any){
-        res.status(500).json({message: err.message});
-    }
-}
-
-async function update(req: Request, res: Response) {
-    try {
-        const idExercise = Number.parseInt(req.params.idExercise);
-        const exerciseFind = await em.findOne(Exercise, { idExercise, user: { idUser: req.body.user.id }  }, { populate: ['muscleGroups', 'trainingMethod' ] });
-        if (exerciseFind !== undefined) {
-            const result = validateParcialExercises(req.body);
-            if (result.error) return res.status(400).json(result.error);
-            if (result.success) {
-                const exerciseUpdated = em.getReference(Exercise, idExercise as never);
-                em.assign(exerciseUpdated, result.data);
-                await em.flush();
-                res.status(202).json({ message: 'Exercise updated succesfully' });
-            } else {
-                res.status(400).json({ error: 'Exercise not updated' });
-            }
-        } else {
-            res.status(404).json({ error: 'Exercise not found' });
-        }
-    }   
-    catch(err:any){
-        res.status(500).json({message: err.message});
-    }
-}
-
-async function remove(req: Request, res: Response) {
-    try {
-        const idExercise = Number.parseInt(req.params.idExercise);
-        const exerciseFind = await em.findOne(Exercise, { idExercise, user: { idUser: req.body.user.id } });
-        if(!exerciseFind) return res.status(404).json({message: 'Exercise not found'});
-        const exercise = em.getReference(Exercise, idExercise as never);
-        em.removeAndFlush(exercise);
-        return res.status(200).json(exercise);
-    } catch (error: any) { 
-        console.log(error); // --> Eliminar en produccion
-        res.status(500).json({ error: 'Error deleting exercise' });
-    }
-}
-
-export { getAll, getOne, create, update, remove };

@@ -1,12 +1,11 @@
 import axios from '@/lib/axios';
-import { Exercise } from './exercise.type';
+import type { CreateExerciseInput, Exercise, UpdateExerciseInput } from '@waby/shared';
 
-export const createExercise = (exercise: object) => axios.post('/exercises', exercise)
+export const getExercisesReq = (filters: { muscleGroupId?: number; trainingMethodId?: number } = {}) =>
+    axios.get<Exercise[]>('/exercises', { params: filters })
 
-export const getExercisesReq = () => axios.get('/exercises')
+export const createExerciseReq = (data: CreateExerciseInput) => axios.post<Exercise>('/exercises', data)
 
-export const getExercisesByMg = (mg: string) => axios.get(`/exercises/muscleGroup/${mg}`)
+export const updateExerciseReq = (id: number, data: UpdateExerciseInput) => axios.patch<Exercise>(`/exercises/${id}`, data)
 
-export const deleteExercise = (id: number) => axios.delete(`/exercises/${id}`)
-
-export const updateExercise = (exercise: Exercise) => axios.put(`/exercises/${exercise.idExercise}`, exercise)
+export const deleteExerciseReq = (id: number) => axios.delete(`/exercises/${id}`)

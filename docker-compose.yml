@@ -1,0 +1,26 @@
+# Entorno local: MySQL 8 con una base para desarrollo y otra para los tests.
+# Uso: docker compose up -d   (lee las variables de .env en la raíz)
+services:
+  db:
+    image: mysql:8.0
+    container_name: waby-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Falta DB_ROOT_PASSWORD en .env}
+      MYSQL_DATABASE: ${DB_NAME:-waby}
+      MYSQL_USER: ${DB_USER:-waby}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env}
+      DB_TEST_NAME: ${DB_TEST_NAME:-waby_test}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - waby-db-data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  waby-db-data:

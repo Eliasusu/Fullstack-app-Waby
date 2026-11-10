@@ -1,14 +1,6 @@
-
 import { ColumnDef } from "@tanstack/react-table"
-
-export type Exercise = {
-    name: string,
-    description: string,
-    muscleGroups: string[],
-    difficulty: string,
-    typeExercise: string,
-}
-
+import type { Exercise } from "@waby/shared"
+import { difficultyLabels, metricTypeLabels, movementPatternLabels } from "@/lib/labels.ts"
 
 export const columns: ColumnDef<Exercise>[] = [
   {
@@ -22,14 +14,21 @@ export const columns: ColumnDef<Exercise>[] = [
   {
     accessorKey: "muscleGroups",
     header: "Muscle Groups",
-  },
-  { 
-    accessorKey: "difficulty",
-    header: "Difficulty",
+    cell: ({ row }) => row.original.muscleGroups.map((group) => group.name).join(', '),
   },
   {
-    accessorKey: "typeExercise",
-    header: "Type Exercise",
+    accessorKey: "difficulty",
+    header: "Difficulty",
+    cell: ({ row }) => difficultyLabels[row.original.difficulty],
   },
-    
+  {
+    accessorKey: "movementPattern",
+    header: "Pattern",
+    cell: ({ row }) => movementPatternLabels[row.original.movementPattern],
+  },
+  {
+    accessorKey: "metricType",
+    header: "Measured by",
+    cell: ({ row }) => metricTypeLabels[row.original.metricType],
+  },
 ]

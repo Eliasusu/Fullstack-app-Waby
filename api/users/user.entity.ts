@@ -1,62 +1,60 @@
-import { generateId } from '../shared/generateId.js';
-import { Collection, Entity, ManyToMany, PrimaryKey, Property, Cascade, OneToMany } from '@mikro-orm/core';
+import { Collection, Entity, Enum, ManyToMany, OneToMany, PrimaryKey, Property, OptionalProps } from '@mikro-orm/core';
+import type { Role } from '@waby/shared';
+import { DateOnlyType } from '../shared/db/date-only.type.js';
 import { TrainingMethod } from '../trainingMethods/trainingMethod.entity.js';
-import { Training } from '../trainings/training.entity.js';
 import { Exercise } from '../exercises/exercise.entity.js';
-import { ProgressiveOverload } from '../progressiveOverload/progressiveOverload.entity.js';
+import { Training } from '../trainings/training.entity.js';
+import { Mesocycle } from '../mesocycles/mesocycle.entity.js';
+import { Goal } from '../goals/goal.entity.js';
 
 @Entity()
 export class User {
-    @PrimaryKey()
-    idUser!: string;
+    [OptionalProps]?: 'role';
 
-    @Property({ nullable: false, unique: true })
+    @PrimaryKey()
+    id!: number;
+
+    @Property({ unique: true, length: 30 })
     username!: string;
 
-    @Property({ nullable: false, unique: true })
-    password!: string;
-
-    @Property({ nullable: false, unique: true })
+    @Property({ unique: true })
     email!: string;
 
-    @Property({ nullable: false })
+    /** Hash de bcrypt. Nunca sale en una respuesta. */
+    @Property({ hidden: true })
+    password!: string;
+
+    @Property({ length: 100 })
     name!: string;
 
-    @Property({ nullable: false })
-    birthdate!: Date;
+    @Property({ type: DateOnlyType })
+    birthdate!: string;
 
-    @Property({ nullable: true, unique: true })
-    phone?: string;
+    @Property({ type: 'string', nullable: true, length: 30 })
+    phone?: string | null;
 
-    @Property({ nullable: false })
-    bodyWeight!: number;
+    @Property({ type: 'double' })
+    bodyWeightKg!: number;
 
-    @Property({ nullable: false })
-    height!: number;
+    @Property({ type: 'double' })
+    heightCm!: number;
 
-    @ManyToMany(() => TrainingMethod, (trainingMethod) => trainingMethod.users, {
-        cascade: [Cascade.ALL],
-        owner: true,
-    })
-    trainingMethods!: TrainingMethod[];
+    @Enum({ items: ['USER', 'ADMIN'], default: 'USER' })
+    role: Role = 'USER';
 
-    @OneToMany(() => Training, (training) => training.user, {
-        cascade: [Cascade.ALL],
-    })
-    trainings? = new Collection<Training>(this);
+    /** Sin cascade: los catálogos no se tocan al guardar un usuario (nota 37). */
+    @ManyToMany(() => TrainingMethod, undefined, { owner: true })
+    trainingMethods = new Collection<TrainingMethod>(this);
 
-    @OneToMany(() => Exercise, (exercise) => exercise.user, {
-        cascade: [Cascade.ALL],
-    })
-    exercises? = new Collection<Exercise>(this);
+    @OneToMany(() => Exercise, (exercise) => exercise.user)
+    exercises = new Collection<Exercise>(this);
 
-    @OneToMany(() => ProgressiveOverload, (progressiveOverload) => progressiveOverload.user, {
-        cascade: [Cascade.ALL],
-    })
-    progressiveOverloads? = new Collection<ProgressiveOverload>(this);
-        
-    constructor() {
-        this.idUser = generateId();
-    }
+    @OneToMany(() => Training, (training) => training.user)
+    trainings = new Collection<Training>(this);
+
+    @OneToMany(() => Mesocycle, (mesocycle) => mesocycle.user)
+    mesocycles = new Collection<Mesocycle>(this);
+
+    @OneToMany(() => Goal, (goal) => goal.user)
+    goals = new Collection<Goal>(this);
 }
-

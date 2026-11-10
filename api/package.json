@@ -6,15 +6,18 @@
   "description": "Waby API",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -p ./tsconfig.json",
-    "dev:server": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/index.js\"",
-    "dev:test": "node --watch ./dist/index.js",
-    "typecheck": "tsc --noEmit -p ./tsconfig.json"
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "pnpm clean && tsc -p ./tsconfig.json",
+    "dev:server": "pnpm clean && tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/index.js\"",
+    "typecheck": "tsc --noEmit -p ./tsconfig.json",
+    "test": "pnpm build && node --test --test-concurrency=1 \"dist/test/**/*.test.js\"",
+    "seed": "pnpm build && node dist/scripts/seed.js"
   },
   "dependencies": {
     "@mikro-orm/core": "5.8.10",
     "@mikro-orm/mysql": "5.8.10",
     "@mikro-orm/sql-highlighter": "1.0.1",
+    "@waby/shared": "workspace:*",
     "bcryptjs": "2.4.3",
     "cookie-parser": "1.4.6",
     "cors": "2.8.5",
@@ -28,7 +31,7 @@
     "@types/cors": "2.8.17",
     "@types/express": "4.17.21",
     "@types/jsonwebtoken": "9.0.6",
-    "@types/node": "17.0.15",
+    "@types/node": "22.10.2",
     "jsonwebtoken": "9.0.2",
     "node": "22.3.0",
     "react-dom": "18.2.0",

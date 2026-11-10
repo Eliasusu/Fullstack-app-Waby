@@ -1,13 +1,11 @@
 import axios from "@/lib/axios";
+import type { CreateTrainingItemInput, TrainingItem, UpdateTrainingItemInput } from "@waby/shared";
 
-import { TrainingItemProps } from "@/trainingItem/trainingItems.type.ts";
+export const createTrainingItemReq = (trainingId: number, data: CreateTrainingItemInput) =>
+    axios.post<TrainingItem>(`/trainings/${trainingId}/items`, data);
 
+export const updateTrainingItemReq = (trainingId: number, itemId: number, data: UpdateTrainingItemInput) =>
+    axios.patch<TrainingItem>(`/trainings/${trainingId}/items/${itemId}`, data);
 
-
-export const getTrainingItem = (id: string) => axios.get(`/trainings/${id}/trainingItem/${id}`);
-
-export const createTrainingItemReq = (trainingItem: TrainingItemProps, idTraining: string) => axios.post(`/trainings/${idTraining}/trainingItem`, trainingItem);
-
-export const updateTrainingItemReq = (trainingItem: TrainingItemProps, idTraining: string, idTItem: string ) => axios.put(`/trainings/${idTraining}/trainingItem/${idTItem}`, trainingItem);
-
-export const deleteTrainingItemReq = (id: string, idTraining: string) => axios.delete(`/trainings/${idTraining}/trainingItem/${id}`);
+export const deleteTrainingItemReq = (trainingId: number, itemId: number) =>
+    axios.delete(`/trainings/${trainingId}/items/${itemId}`);

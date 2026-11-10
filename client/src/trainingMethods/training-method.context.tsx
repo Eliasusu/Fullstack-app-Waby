@@ -1,89 +1,30 @@
-import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { getOneTrainingMethod, getTrainingMethods } from "@/trainingMethods/training-method.api.ts";
-import { TrainingMethod } from "@/trainingMethods/trainingMethod.type";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, ReactNode, useContext, useState } from "react";
+import type { TrainingMethod } from "@waby/shared";
+import { getTrainingMethods } from "@/trainingMethods/training-method.api.ts";
 
 interface TrainingMethodState {
-    trainingMethod: TrainingMethod;
     trainingMethods: TrainingMethod[];
-    getTraining: (id: string) => void;
-    getAllTrainingMethods: () => void;
-    errors: object | null;
+    getAllTrainingMethods: () => Promise<void>;
 }
 
-const initialTrainingMethodState: TrainingMethodState = {
-    trainingMethod: {
-        idMethod: "",
-        nameMethod: "",
-        description: "",
-        users: [],
-    },
+export const TrainingMethodContext = createContext<TrainingMethodState>({
     trainingMethods: [],
-    getTraining: () => { },
-    errors: null,
-    getAllTrainingMethods: () => { },
-};
+    getAllTrainingMethods: async () => { },
+});
 
-export const TrainingMethodContext = createContext(initialTrainingMethodState);
-
-// eslint-disable-next-line react-refresh/only-export-components
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const useTrainingMethod = () => {
-    const context = useContext(TrainingMethodContext);
-
-    if (!context) {
-        throw new Error("useTrainingMethod must be used within an TrainingMethodProvider");
-    }
-    return context;
-};
+export const useTrainingMethod = () => useContext(TrainingMethodContext);
 
 export const TrainingMethodProvider = ({ children }: { children: ReactNode }) => {
-    const [trainingMethod, setTrainingMethod] = useState<TrainingMethod>({
-        idMethod: "",
-        nameMethod: "",
-        description: "",
-        users: [],
-    });
     const [trainingMethods, setTrainingMethods] = useState<TrainingMethod[]>([]);
-    const [errors, setErrors] = useState<object | null>(null);
-
-    const getTraining = async (name: string) => {
-        try {
-            const res = await getOneTrainingMethod(name);
-            setTrainingMethod(res.data.trainingMethod);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar el método de entrenamiento" });
-            }
-        }
-    };
 
     const getAllTrainingMethods = async () => {
-        try {
-            const res = await getTrainingMethods();
-            setTrainingMethods(res.data.trainingMethods);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al obtener los métodos de entrenamiento" });
-            }
-        }
-    }
-
-    useEffect(() => {
-        if (errors) {
-            const timer = setTimeout(() => {
-                setErrors(null);
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [errors]);
+        const res = await getTrainingMethods();
+        setTrainingMethods(res.data);
+    };
 
     return (
-        <TrainingMethodContext.Provider value={{ trainingMethod, trainingMethods, getTraining, getAllTrainingMethods, errors }}>
+        <TrainingMethodContext.Provider value={{ trainingMethods, getAllTrainingMethods }}>
             {children}
         </TrainingMethodContext.Provider>
     );

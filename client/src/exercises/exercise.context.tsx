@@ -1,128 +1,76 @@
-import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { createExercise, getExercisesReq, getExercisesByMg, deleteExercise, updateExercise } from "@/exercises/exercise.api.ts";
-import { Exercise } from "@/exercises/exercise.type.ts";
-import { useMuscleGroup } from "@/muscleGroups/muscle-group.context.tsx";
-
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, ReactNode, useContext, useState } from "react";
+import type { CreateExerciseInput, Exercise, UpdateExerciseInput } from "@waby/shared";
+import { createExerciseReq, deleteExerciseReq, getExercisesReq, updateExerciseReq } from "@/exercises/exercise.api.ts";
+import { attempt, type Result } from "@/lib/result.ts";
 
 interface ExerciseState {
+    /** Ejercicios del filtro actual (por ejemplo, de un grupo muscular). */
     exercises: Exercise[];
+    /** Todos los ejercicios del usuario. */
     allExercises: Exercise[];
-    addExercise: (exercise: Exercise) => void;
-    getExercises: (mg?: string) => void;
-    editarExercise: (exercise: Exercise) => void;
-    getAllExercises: () => void;
-    removeExercise: (idExcercise: number) => void;
-    errors: object | null;
+    getExercises: (muscleGroupId?: number) => Promise<void>;
+    getAllExercises: () => Promise<void>;
+    addExercise: (data: CreateExerciseInput) => Promise<Result<Exercise>>;
+    editarExercise: (id: number, data: UpdateExerciseInput) => Promise<Result<Exercise>>;
+    removeExercise: (id: number) => Promise<Result>;
 }
 
-const initialExerciseState: ExerciseState = {
+const notReady = async () => ({ ok: false as const, errors: ['ExerciseProvider no está montado'] });
+
+export const ExerciseContext = createContext<ExerciseState>({
     exercises: [],
     allExercises: [],
-    addExercise: () => { },
-    getExercises: () => { },
-    editarExercise: () => { },
-    getAllExercises: () => { },
-    removeExercise: () => { },
-    errors: null,
-};
-export const ExerciseContext = createContext(initialExerciseState);
+    getExercises: async () => { },
+    getAllExercises: async () => { },
+    addExercise: notReady,
+    editarExercise: notReady,
+    removeExercise: notReady,
+});
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useExercise = () => {
-    const context = useContext(ExerciseContext);
-
-    if (!context) {
-        throw new Error("useExercise must be used within an ExerciseProvider");
-    }
-    return context;
-};
+export const useExercise = () => useContext(ExerciseContext);
 
 export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [allExercises, setAllExercises] = useState<Exercise[]>([]);
-    const [errors, setErrors] = useState<object | null>(null);
-    const { muscleGroups } = useMuscleGroup();
+    const [filter, setFilter] = useState<number | undefined>(undefined);
 
-    // Se puede crear otro metodo llamado addExerciseByMg o directamente usamos este 
-    // Pero hay que modificarlo y agregarlo en el controller
-    const addExercise = async (exercise: Exercise) => {
-        try {
-            await createExercise(exercise);
-            setExercises([...exercises, exercise]);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar el ejercicio" });
-            }
-        }
-    };
-
-    const editarExercise = async (exercise: Exercise) => {
-        try {
-            const mg = exercise.muscleGroups[0].toString();
-            const muscleGroupMatch = muscleGroups.find(muscleGroup => muscleGroup.nameMuscleGroup === mg);
-            const muscleGroupId = muscleGroupMatch ? muscleGroupMatch.idMuscleGroup : null;
-            const exerciseUpdated = {
-                ...exercise,
-                muscleGroups: muscleGroupId !== null ? [muscleGroupId] : []
-            };
-            console.log(exerciseUpdated);
-            await updateExercise(exerciseUpdated);
-            const updatedExercises = await getExercisesByMg(muscleGroupId?.toString() || "");
-            setExercises(updatedExercises.data.exercisesDestructurized);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al guardar el ejercicio" });
-            }
-        }
+    const getExercises = async (muscleGroupId?: number) => {
+        setFilter(muscleGroupId);
+        const res = await getExercisesReq(muscleGroupId ? { muscleGroupId } : {});
+        setExercises(res.data);
     };
 
     const getAllExercises = async () => {
         const res = await getExercisesReq();
-        setExercises(res.data.exercises);
-        setAllExercises(res.data.exercises);
-        return res.data.exercises;
-    }
-
-    const getExercises = async (mg?: string) => {
-        if (mg) {
-            const res = await getExercisesByMg(mg);
-            setExercises(res.data.exercisesDestructurized);
-        } else {
-            const res = await getExercisesReq();
-            setExercises(res.data.exercises);
-        }
+        setAllExercises(res.data);
     };
 
-    const removeExercise = async (idExercise: number) => {
-        try {
-            await deleteExercise(idExercise);
-            const updatedExercises = await getExercisesReq();
-            setExercises(updatedExercises.data.exercises);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors({ message: error.message });
-            } else {
-                setErrors({ message: "Hubo un problema al eliminar el ejercicio" });
-            }
-        }
-    };
+    /** Después de cada cambio se recargan las dos listas desde la API (nota 72). */
+    const refresh = () => Promise.all([getExercises(filter), getAllExercises()]);
 
+    const addExercise = (data: CreateExerciseInput) =>
+        attempt(async () => {
+            const res = await createExerciseReq(data);
+            await refresh();
+            return res.data;
+        });
 
-    useEffect(() => {
-        if (errors) {
-            const timer = setTimeout(() => {
-                setErrors(null);
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [errors]);
+    const editarExercise = (id: number, data: UpdateExerciseInput) =>
+        attempt(async () => {
+            const res = await updateExerciseReq(id, data);
+            await refresh();
+            return res.data;
+        });
+
+    const removeExercise = (id: number) =>
+        attempt(async () => {
+            await deleteExerciseReq(id);
+            await refresh();
+        });
 
     return (
-        <ExerciseContext.Provider value={{ exercises, allExercises, addExercise, editarExercise, getExercises, getAllExercises, removeExercise, errors }}>
+        <ExerciseContext.Provider value={{ exercises, allExercises, getExercises, getAllExercises, addExercise, editarExercise, removeExercise }}>
             {children}
         </ExerciseContext.Provider>
     );

@@ -15,7 +15,7 @@ import Profile from './pages/User/main.tsx';
 import { FormProvider, useForm } from 'react-hook-form';
 import GoalsPage from './pages/Goals/GoalsPage.tsx';
 import ErrorPage from './pages/Errors/ErrorPage.tsx';
-import { ProgressiveOverloadProvider } from './progressiveOverload/progressiveOverload.context.tsx';
+import { GoalProvider } from './goals/goal.context.tsx';
 
 
 
@@ -30,7 +30,7 @@ export function App() {
             <TrainingMethodProvider>
               <TrainingProvider>
                 <ExerciseProvider>
-                  <ProgressiveOverloadProvider>
+                  <GoalProvider>
                     <div className="flex flex-col h-full">
                       <Routes>
                         <Route path='/' element={<Welcome />} />
@@ -51,7 +51,7 @@ export function App() {
                         <Route path='*' element={<ErrorPage code={404} />} />
                       </Routes>
                     </div>
-                  </ProgressiveOverloadProvider>
+                  </GoalProvider>
                 </ExerciseProvider>
               </TrainingProvider>
             </TrainingMethodProvider>

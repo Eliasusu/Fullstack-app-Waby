@@ -1,173 +1,80 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { getProfileRequest, registerRequest, loginRequest, verifyTokenRequest, updateProfileRequest, deleteProfileRequest } from "@/users/auth.api.ts";
-import Cookie from "js-cookie";
-import { User } from "@/users/user.type.ts";
-
-type userPropsUpdate = {
-    username: string,
-    name: string,
-    phone: string,
-    bodyWeight: number,
-    height: number,
-}
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import type { LoginInput, RegisterInput, UpdateUserInput, User } from "@waby/shared";
+import { deleteMeRequest, getMeRequest, loginRequest, logoutRequest, registerRequest, updateMeRequest } from "@/users/auth.api.ts";
+import { attempt, type Result } from "@/lib/result.ts";
 
 interface AuthState {
-    user: {
-        id: string,
-        username: string
-    } | null;
-    allDataUser: User | null
-    signUp: (user: User) => void;
-    signIn: (user: User) => void;
-    logout: () => void;
-    updateProfile: (id: string, data: userPropsUpdate) => void;
-    deleteProfile: (id: string) => void;
-    getOneProfile: (id: string) => void;
+    /** Usuario de la sesión, completo (sin contraseña). */
+    user: User | null;
     isAuthenticated: boolean;
-    errors: object | null;
+    /** true mientras se verifica la sesión al cargar la app. */
+    isLoading: boolean;
+    signUp: (data: RegisterInput) => Promise<Result>;
+    signIn: (data: LoginInput) => Promise<Result>;
+    logout: () => Promise<void>;
+    updateProfile: (data: UpdateUserInput) => Promise<Result>;
+    deleteProfile: () => Promise<Result>;
 }
 
-const initialAuthState: AuthState = {
-    user: {
-        id: '',
-        username: ''
-    },
-    allDataUser: null,
-    signUp: () => { },
-    signIn: () => { },
-    updateProfile: () => { },
-    deleteProfile: () => { },
-    getOneProfile: () => ({} as User),
-    logout: () => { },
+const notReady = async (): Promise<Result> => ({ ok: false, errors: ['AuthProvider no está montado'] });
+
+export const AuthContext = createContext<AuthState>({
+    user: null,
     isAuthenticated: false,
-    errors: null,
-};
+    isLoading: true,
+    signUp: notReady,
+    signIn: notReady,
+    logout: async () => { },
+    updateProfile: notReady,
+    deleteProfile: notReady,
+});
 
-export const AuthContext = createContext(initialAuthState);
-
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
-}
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState(null);
-    const [allDataUser, setAllDataUser] = useState(null)
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [errors, setErrors] = useState<{ message: string }[]>([]);
+    const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const signUp = async (user: User) => {
-        try {
-            const res = await registerRequest(user);
-            setUser(res.data);
-            setIsAuthenticated(true);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            setErrors(error.response.data);
-        }
-    };
-
-    const signIn = async (user: User) => {
-        try {
-            const res = await loginRequest(user);
-            setUser(res.data);
-            setIsAuthenticated(true);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            if (Array.isArray(error.response.data)) {
-                return setErrors(error.response.data);
-            }
-            setErrors(error.response.data.message);
-        }
-
-    }
-
-    const logout = () => {
-        Cookie.remove("token");
-        setUser(null);
-        setIsAuthenticated(false);
-    }
-
+    // La cookie de sesión es httpOnly: la única forma de saber si hay sesión es preguntarle a la API.
     useEffect(() => {
-        if (errors.length > 0) {
-            const timer = setTimeout(() => {
-                setErrors([]);
-            }, 3000);
-            return () => clearTimeout(timer)
-        }
-    }, [errors]);
-
-
-    const updateProfile = async (id: string, data: userPropsUpdate) => {
-        try {
-
-            const res = await updateProfileRequest(id, data);
-            setUser(res.data);
-            setIsAuthenticated(true);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setErrors([{ message: error.message }]);
-            }
-        }
-    }
-
-    const deleteProfile = async (id: string) => {
-        try {
-            const res = await deleteProfileRequest(id);
-            setUser(res.data);
-            setIsAuthenticated(true);
-        } catch (error) {
-            if (error instanceof Error) {
-                setErrors([{ message: error.message }]);
-            } else {
-                setErrors([{ message: "Hubo un problema al eliminar el perfil" }]);
-            }
-        }
-    }
-
-    const getOneProfile = async (id: string) => {
-        if (!id) return {} as User;
-        try {
-            const res = await getProfileRequest(id);
-            setAllDataUser(res.data.data);
-            setIsAuthenticated(true);
-        } catch (error) {
-            if (error instanceof Error) {
-                setErrors([{ message: error.message }]);
-            } else {
-                setErrors([{ message: "Hubo un problema al obtener el perfil" }]);
-            }
-            throw error;
-        }
-    }
-
-    useEffect(() => {
-        const checkUser = async () => {
-            const token = Cookie.get("token");
-            if (token) {
-                try {
-                    const res = await verifyTokenRequest()
-                    if (res.data) {
-                        setIsAuthenticated(true);
-                        setUser(res.data);
-                    }
-                } catch (error) {
-                    setIsAuthenticated(false);
-                    setUser(null);
-                }
-            }
-        }
-        checkUser();
+        getMeRequest()
+            .then((res) => setUser(res.data))
+            .catch(() => setUser(null))
+            .finally(() => setIsLoading(false));
     }, []);
 
+    const signUp = (data: RegisterInput) =>
+        attempt(async () => {
+            const res = await registerRequest(data);
+            setUser(res.data);
+        });
 
+    const signIn = (data: LoginInput) =>
+        attempt(async () => {
+            const res = await loginRequest(data);
+            setUser(res.data);
+        });
+
+    const logout = async () => {
+        await logoutRequest().catch(() => undefined);
+        setUser(null);
+    };
+
+    const updateProfile = (data: UpdateUserInput) =>
+        attempt(async () => {
+            const res = await updateMeRequest(data);
+            setUser(res.data);
+        });
+
+    const deleteProfile = () =>
+        attempt(async () => {
+            await deleteMeRequest();
+            setUser(null);
+        });
 
     return (
-        <AuthContext.Provider value={{ user, allDataUser, getOneProfile, signUp, updateProfile, deleteProfile, isAuthenticated, errors, signIn, logout }}>
+        <AuthContext.Provider value={{ user, isAuthenticated: user !== null, isLoading, signUp, signIn, logout, updateProfile, deleteProfile }}>
             {children}
         </AuthContext.Provider>
     );

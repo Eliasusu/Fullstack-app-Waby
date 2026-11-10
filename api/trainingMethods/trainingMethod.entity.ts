@@ -1,24 +1,14 @@
-import { Collection, Entity, ManyToMany, PrimaryKey, Property, Cascade } from '@mikro-orm/core';
-import { generateId } from '../shared/generateId.js';
-import { User } from '../users/user.entity.js'; 
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
+/** Catálogo: lo edita el admin. */
 @Entity()
 export class TrainingMethod {
-  @PrimaryKey()
-  idMethod?: string;
+    @PrimaryKey()
+    id!: number;
 
-  @Property({ nullable: false, unique: true })
-  nameMethod!: string;
+    @Property({ unique: true, length: 50 })
+    name!: string;
 
-  @Property({ nullable: false })
-  description!: string;
-  
-  @ManyToMany(() => User, (user) => user.trainingMethods, {
-    cascade: [Cascade.ALL],
-  })
-  users?= new Collection<User>(this);
-  
-  constructor() {
-    this.idMethod = generateId();
-  }
+    @Property({ length: 500 })
+    description!: string;
 }

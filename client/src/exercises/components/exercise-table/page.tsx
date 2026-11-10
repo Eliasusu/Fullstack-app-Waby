@@ -1,30 +1,36 @@
 import { columns } from "./columns"
 import { DataTable } from "@/lib/data-table"
-import { ColumnDef } from "@tanstack/react-table"
 import { useExercise } from "@/exercises/exercise.context.tsx"
 import { useState } from 'react'
-
-interface Exercise {
-  idExercise: number,
-  name: string,
-  description: string,
-  muscleGroups: number[],
-  difficulty: string,
-  typeExercise: string
-  trainingMethod: string
-}
+import type { Exercise } from "@waby/shared"
+import { notifyResult } from "@/lib/notify.ts"
 
 interface Props {
   data: Exercise[]
 }
 
-export default function ExercisesTable({data}: Props) {
+export default function ExercisesTable({ data }: Props) {
   const { removeExercise, editarExercise } = useExercise();
   const [editingId, setEditingId] = useState<number | null>(null);
-   const [editedExercise, setEditedExercise] = useState<Exercise | null>(null);
+  const [editedExercise, setEditedExercise] = useState<Exercise | null>(null);
 
-  const exerciseColumns = columns({ removeExercise, editarExercise, editingId, setEditingId, editedExercise, setEditedExercise });
+  const saveExercise = async (exercise: Exercise) => {
+    const result = await editarExercise(exercise.id, {
+      name: exercise.name,
+      ...(exercise.description ? { description: exercise.description } : {}),
+      difficulty: exercise.difficulty,
+      movementPattern: exercise.movementPattern,
+      metricType: exercise.metricType,
+    });
+    notifyResult(result, { title: "Exercise updated" });
+  };
+
+  const deleteExercise = async (exercise: Exercise) => {
+    notifyResult(await removeExercise(exercise.id), { title: "Exercise deleted", description: `${exercise.name} was deleted.` });
+  };
+
+  const exerciseColumns = columns({ removeExercise: deleteExercise, saveExercise, editingId, setEditingId, editedExercise, setEditedExercise });
   return (
-      <DataTable columns={exerciseColumns as ColumnDef<Exercise, unknown>[]} data={data} />
+    <DataTable columns={exerciseColumns} data={data} />
   )
 }

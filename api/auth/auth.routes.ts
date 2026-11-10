@@ -1,21 +1,9 @@
-import { Router } from "express";
-import { register, login, logout, profile, verifyToken } from "./auth.controllers.js";
-import { validateToken } from "../middlewares/validateToken.js";
+import { Router } from 'express';
+import { asyncHandler } from '../shared/http.js';
+import { login, logout, register } from './auth.controllers.js';
 
 export const authRouter = Router();
 
-//Register user 
-authRouter.post('/register', register);
-
-//Login user 
-authRouter.post('/login', login);
-
-//Logout user
-authRouter.post('/logout', logout);
-
-//Protected route
-authRouter.get('/verify', verifyToken);
-
-authRouter.get('/profile', validateToken ,profile);
-
-
+authRouter.post('/register', asyncHandler(register));
+authRouter.post('/login', asyncHandler(login));
+authRouter.post('/logout', asyncHandler(logout));

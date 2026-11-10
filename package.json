@@ -4,12 +4,16 @@
   "description": "Waby: app para crear ejercicios, planificar entrenamientos y seguir la sobrecarga progresiva",
   "packageManager": "pnpm@9.15.9",
   "scripts": {
-    "dev:api": "pnpm --filter @waby/api dev:server",
-    "dev:client": "pnpm --filter @waby/client dev:client",
+    "dev:shared": "pnpm --filter @waby/shared dev",
+    "dev:api": "pnpm build:shared && pnpm --filter @waby/api dev:server",
+    "dev:client": "pnpm build:shared && pnpm --filter @waby/client dev:client",
     "build": "pnpm -r build",
-    "build:api": "pnpm --filter @waby/api build",
-    "build:client": "pnpm --filter @waby/client build",
-    "typecheck": "pnpm -r typecheck",
-    "lint": "pnpm --filter @waby/client lint"
+    "build:shared": "pnpm --filter @waby/shared build",
+    "build:api": "pnpm build:shared && pnpm --filter @waby/api build",
+    "build:client": "pnpm build:shared && pnpm --filter @waby/client build",
+    "typecheck": "pnpm build:shared && pnpm -r typecheck",
+    "lint": "pnpm --filter @waby/client lint",
+    "test": "pnpm build:shared && pnpm --filter @waby/api test",
+    "seed": "pnpm build:shared && pnpm --filter @waby/api seed"
   }
 }

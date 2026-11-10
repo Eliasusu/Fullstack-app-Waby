@@ -1,10 +1,10 @@
-import { Router } from "express";
-import { getOne, add, update, remove } from "./trainingItems.controllers.js";
+import { Router } from 'express';
+import { asyncHandler } from '../shared/http.js';
+import { create, remove, update } from './trainingItems.controllers.js';
 
-export const routinesRouter = Router();
+/** Montado en `/trainings/:id/items` (hereda `requireAuth` y el `:id` del Entrenamiento). */
+export const trainingItemsRouter = Router({ mergeParams: true });
 
-routinesRouter.get('/:idTrainingItem', getOne);
-
-routinesRouter.put('/:idTrainingItem', update);
-
-routinesRouter.delete('/:idTrainingItem', remove);
+trainingItemsRouter.post('/', asyncHandler(create));
+trainingItemsRouter.patch('/:itemId', asyncHandler(update));
+trainingItemsRouter.delete('/:itemId', asyncHandler(remove));

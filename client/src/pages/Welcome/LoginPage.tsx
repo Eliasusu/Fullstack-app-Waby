@@ -2,8 +2,9 @@ import BoxContainer from "@/components/ui/BoxConteiner.tsx";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/users/auth.context.tsx";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { User } from "@/users/user.type";
+import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema, type LoginInput } from "@waby/shared";
 
 export default function LoginPage() {
     return (
@@ -16,26 +17,17 @@ export default function LoginPage() {
 }
 
 function Login() {
-    const { handleSubmit, register, formState: { errors } } = useForm();
-    const { signIn, isAuthenticated, errors: registerErrors } = useAuth();
+    const { handleSubmit, register, formState: { errors } } = useForm<LoginInput>({ resolver: zodResolver(LoginSchema) });
+    const { signIn, isAuthenticated } = useAuth();
+    const [registerErrors, setRegisterErrors] = useState<string[]>([]);
     const navigate = useNavigate();
     useEffect(() => {
         if (isAuthenticated) navigate('/home');
     }, [isAuthenticated, navigate]);
 
     const onSubmit = handleSubmit(async (values) => {
-        const user: User = {
-            username: values.username,
-            avatar: values.username,
-            password: values.password,
-            email: values.email,
-            name: values.name,
-            birthdate: values.birthdate,
-            phone: values.phone,
-            bodyWeight: values.bodyWeight,
-            height: values.height,
-        };
-        signIn(user);
+        const result = await signIn(values);
+        setRegisterErrors(result.ok ? [] : result.errors);
     });
 
     return (
@@ -43,12 +35,12 @@ function Login() {
             <BoxContainer width="w-[285px]" height="w-[340]" padding="p-5">
                 <div className="flex flex-col items-center justify-center w-auto">
                     {
-                        Array.isArray(registerErrors) && (registerErrors).map((error: string, index: number) => (
+                        registerErrors.map((error, index) => (
                             <div key={index} className="bg-red w-auto p-2 mb-3 text-white text-xs rounded-md " >{error}</div>
                         ))
 
                     }
-                    <form className="w-full flex flex-col gap-3 pt-1" id="formLogin" action="/login" method="POST" onSubmit={onSubmit}>
+                    <form className="w-full flex flex-col gap-3 pt-1" id="formLogin" onSubmit={onSubmit} noValidate>
                         <h1 className="font-bold text-3xl text-white-text pb-1">Welcome!</h1>
                         <div>
                             <input className="w-full h-10 border-[1px] rounded-xl border-white/60 bg-grey-login p-2 font-normal text-sm caret-redHover focus:outline-none" type="text" placeholder="Username"
