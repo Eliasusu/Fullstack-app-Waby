@@ -30,28 +30,28 @@ export default function NavBar() {
           }
 
           }>
-          <img src="calendar.svg" alt="calendar" className="w-[20px] h-[20px] m-auto" />
+          <img src="/calendar.svg" alt="calendar" className="w-[20px] h-[20px] m-auto" />
         </div>
         <div className={`cursor-pointer ${active === 2 ? 'bg-primary' : ''} w-[35px] h-[35px] rounded-xl p-2 transition duration-150`}
           onClick={() => {
             setActive(2)
             navigate('/home')
           }}>
-          <img src="home.svg" alt="home" className="w-[20px] h-[20px] m-auto" />
+          <img src="/home.svg" alt="home" className="w-[20px] h-[20px] m-auto" />
         </div>
         <div className={`cursor-pointer ${active === 3 ? 'bg-primary' : ''} w-[35px] h-[35px] rounded-xl p-2 transition duration-150`}
           onClick={() => {
             setActive(3)
             navigate('/create')
           }}>
-          <img src="newRoutine.svg" alt="new" className="w-[20px] h-[20px] m-auto" />
+          <img src="/newRoutine.svg" alt="new" className="w-[20px] h-[20px] m-auto" />
         </div>
         <div className={`cursor-pointer ${active === 4 ? 'bg-primary' : ''} w-[35px] h-[35px] rounded-xl p-2 transition duration-150`}
           onClick={() => {
             setActive(4)
             navigate('/goals')
           }}>
-          <img src="goals.svg" alt="goals" className="w-[20px] h-[]" />
+          <img src="/goals.svg" alt="goals" className="w-[20px] h-[20px] m-auto" />
         </div>
       </nav>
     </div>
