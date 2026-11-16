@@ -53,7 +53,7 @@ export function ProfileForm() {
     return (
         <>
             <div className="flex justify-center my-8">
-                <BoxContainer width="w-screen mx-3" height="w-[340]" padding="p-5">
+                <BoxContainer width="w-full mx-3" height="w-[340]" padding="p-5">
                     <h1 className="font-bold text-2xl text-white-text pb-1">Profile</h1>
                     <p className="text-white-text text-sm pb-3">Update your profile</p>
                     <div className="flex flex-col items-center justify-center w-auto">
