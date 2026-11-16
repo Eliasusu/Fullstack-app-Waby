@@ -1,7 +1,7 @@
 import BoxContainer from "@/components/ui/BoxConteiner.tsx";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/users/auth.context.tsx";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, type LoginInput } from "@waby/shared";
@@ -18,12 +18,14 @@ export default function LoginPage() {
 
 function Login() {
     const { handleSubmit, register, formState: { errors } } = useForm<LoginInput>({ resolver: zodResolver(LoginSchema) });
-    const { signIn, isAuthenticated } = useAuth();
+    const { signIn, isAuthenticated, sessionExpired } = useAuth();
     const [registerErrors, setRegisterErrors] = useState<string[]>([]);
     const navigate = useNavigate();
+    // Si llegó desde una pantalla protegida (por ejemplo, porque venció la sesión), vuelve ahí.
+    const from = (useLocation().state as { from?: string } | null)?.from ?? '/home';
     useEffect(() => {
-        if (isAuthenticated) navigate('/home');
-    }, [isAuthenticated, navigate]);
+        if (isAuthenticated) navigate(from, { replace: true });
+    }, [isAuthenticated, navigate, from]);
 
     const onSubmit = handleSubmit(async (values) => {
         const result = await signIn(values);
@@ -34,6 +36,9 @@ function Login() {
         <div className="flex justify-center my-16">
             <BoxContainer width="w-[285px]" height="w-[340]" padding="p-5">
                 <div className="flex flex-col items-center justify-center w-auto">
+                    {sessionExpired && (
+                        <div role="status" className="bg-grey-login border-[1px] border-white/60 w-auto p-2 mb-3 text-white text-xs rounded-md">Tu sesión venció. Volvé a iniciar sesión para seguir.</div>
+                    )}
                     {
                         registerErrors.map((error, index) => (
                             <div key={index} className="bg-red w-auto p-2 mb-3 text-white text-xs rounded-md " >{error}</div>
