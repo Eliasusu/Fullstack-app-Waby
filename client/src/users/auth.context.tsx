@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import type { LoginInput, RegisterInput, UpdateUserInput, User } from "@waby/shared";
 import { deleteMeRequest, getMeRequest, loginRequest, logoutRequest, registerRequest, updateMeRequest } from "@/users/auth.api.ts";
 import { attempt, type Result } from "@/lib/result.ts";
@@ -31,6 +31,23 @@ export const AuthContext = createContext<AuthState>({
 });
 
 export const useAuth = () => useContext(AuthContext);
+
+/**
+ * Llama a `reset` cuando cambia el usuario de la sesión (logout, login con otra cuenta, perfil borrado),
+ * para que los contextos con datos del usuario no muestren los del anterior (nota 53).
+ */
+export function useResetOnUserChange(reset: () => void) {
+    const { user } = useAuth();
+    const userId = user?.id ?? null;
+    const previous = useRef(userId);
+    const resetRef = useRef(reset);
+    resetRef.current = reset;
+    useEffect(() => {
+        if (previous.current === userId) return;
+        previous.current = userId;
+        resetRef.current();
+    }, [userId]);
+}
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);

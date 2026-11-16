@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useContext, useState } from "react";
+import { useResetOnUserChange } from "@/users/auth.context.tsx";
 import type { CreateExerciseInput, Exercise, UpdateExerciseInput } from "@waby/shared";
 import { createExerciseReq, deleteExerciseReq, getExercisesReq, updateExerciseReq } from "@/exercises/exercise.api.ts";
 import { attempt, type Result } from "@/lib/result.ts";
@@ -34,6 +35,11 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [allExercises, setAllExercises] = useState<Exercise[]>([]);
     const [filter, setFilter] = useState<number | undefined>(undefined);
+    useResetOnUserChange(() => {
+        setExercises([]);
+        setAllExercises([]);
+        setFilter(undefined);
+    });
 
     const getExercises = async (muscleGroupId?: number) => {
         setFilter(muscleGroupId);

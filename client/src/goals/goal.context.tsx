@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useContext, useState } from "react";
+import { useResetOnUserChange } from "@/users/auth.context.tsx";
 import type { CreateGoalInput, Goal, UpdateGoalInput } from "@waby/shared";
 import { createGoalReq, deleteGoalReq, getGoalsReq, updateGoalReq } from "@/goals/goal.api.ts";
 import { attempt, type Result } from "@/lib/result.ts";
@@ -26,6 +27,7 @@ export const useGoals = () => useContext(GoalContext);
 
 export const GoalProvider = ({ children }: { children: ReactNode }) => {
     const [goals, setGoals] = useState<Goal[]>([]);
+    useResetOnUserChange(() => setGoals([]));
 
     const getAll = async () => {
         const res = await getGoalsReq();
