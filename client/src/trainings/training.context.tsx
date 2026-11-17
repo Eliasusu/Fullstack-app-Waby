@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, ReactNode, useContext, useState } from "react";
+import { useResetOnUserChange } from "@/users/auth.context.tsx";
 import type {
     CreateTrainingInput,
     CreateTrainingItemInput,
@@ -52,6 +53,10 @@ export const useTraining = () => useContext(TrainingContext);
 export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     const [trainings, setTrainings] = useState<Training[]>([]);
     const [training, setTraining] = useState<TrainingWithItems>();
+    useResetOnUserChange(() => {
+        setTrainings([]);
+        setTraining(undefined);
+    });
 
     const getTrainings = async () => {
         const res = await getTrainingsReq();

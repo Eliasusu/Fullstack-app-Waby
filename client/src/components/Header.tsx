@@ -53,7 +53,6 @@ export default function Header() {
             className='font-light hover:bg-grey-box'
             onClick={() => navigate('/profile')}
           >Profile</DropdownMenuItem>
-          <DropdownMenuItem className='font-light hover:bg-grey-box'>Settings</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className='hover:bg-grey-box' onClick={onClick}>Log out</DropdownMenuItem>
         </DropdownMenuContent>

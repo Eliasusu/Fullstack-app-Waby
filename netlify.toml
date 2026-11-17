@@ -1,0 +1,13 @@
+# Deploy del client en Netlify (nota 85). La API se despliega aparte.
+[build]
+  command = "pnpm build:client"
+  publish = "client/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# SPA con React Router: cualquier ruta sirve index.html, así /home o /profile no dan 404 al recargar.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
