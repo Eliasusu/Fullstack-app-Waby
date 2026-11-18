@@ -1,16 +1,12 @@
-import cors from 'cors'
+import cors from 'cors';
+import { env } from '../shared/env.js';
 
-export const corsMiddleware = () => cors({
-    origin: (origin, callback) => {
-        const ACCEPTED_ORIGINS = [
-            'http://localhost:3000', 
-            'http://localhost:3001',
-            'http://localhost:5173',
-        ]
-    if (!origin || ACCEPTED_ORIGINS.includes(origin)) {
-        return callback(null, true)
-    }
-    return callback(new Error('Not allowed by CORS'))
-    },
-    credentials: true
-});
+/** Solo los orígenes de `CORS_ORIGINS` pueden llamar a la API con credenciales (nota 08, #21). */
+export const corsMiddleware = () =>
+    cors({
+        origin: (origin, callback) => {
+            if (!origin || env.CORS_ORIGINS.includes(origin)) return callback(null, true);
+            return callback(new Error('Not allowed by CORS'));
+        },
+        credentials: true,
+    });
