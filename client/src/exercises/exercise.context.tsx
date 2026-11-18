@@ -4,12 +4,15 @@ import { useResetOnUserChange } from "@/users/auth.context.tsx";
 import type { CreateExerciseInput, Exercise, UpdateExerciseInput } from "@waby/shared";
 import { createExerciseReq, deleteExerciseReq, getExercisesReq, updateExerciseReq } from "@/exercises/exercise.api.ts";
 import { attempt, type Result } from "@/lib/result.ts";
+import { useLoader } from "@/lib/load.ts";
 
 interface ExerciseState {
     /** Ejercicios del filtro actual (por ejemplo, de un grupo muscular). */
     exercises: Exercise[];
     /** Todos los ejercicios del usuario. */
     allExercises: Exercise[];
+    /** true mientras se cargan ejercicios. */
+    loading: boolean;
     getExercises: (muscleGroupId?: number) => Promise<void>;
     getAllExercises: () => Promise<void>;
     addExercise: (data: CreateExerciseInput) => Promise<Result<Exercise>>;
@@ -22,6 +25,7 @@ const notReady = async () => ({ ok: false as const, errors: ['ExerciseProvider n
 export const ExerciseContext = createContext<ExerciseState>({
     exercises: [],
     allExercises: [],
+    loading: false,
     getExercises: async () => { },
     getAllExercises: async () => { },
     addExercise: notReady,
@@ -41,19 +45,29 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
         setFilter(undefined);
     });
 
-    const getExercises = async (muscleGroupId?: number) => {
+    const { loading, run } = useLoader();
+
+    const fetchExercises = async (muscleGroupId?: number) => {
         setFilter(muscleGroupId);
         const res = await getExercisesReq(muscleGroupId ? { muscleGroupId } : {});
         setExercises(res.data);
     };
 
-    const getAllExercises = async () => {
+    const fetchAllExercises = async () => {
         const res = await getExercisesReq();
         setAllExercises(res.data);
     };
 
-    /** Después de cada cambio se recargan las dos listas desde la API (nota 72). */
-    const refresh = () => Promise.all([getExercises(filter), getAllExercises()]);
+    // Las pantallas usan estas: si la carga falla avisan con un toast (nota 63).
+    const getExercises = async (muscleGroupId?: number) => {
+        await run(() => fetchExercises(muscleGroupId));
+    };
+    const getAllExercises = async () => {
+        await run(fetchAllExercises);
+    };
+
+    /** Después de cada cambio se recargan las dos listas desde la API (nota 72). Si falla, lo informa la acción. */
+    const refresh = () => Promise.all([fetchExercises(filter), fetchAllExercises()]);
 
     const addExercise = (data: CreateExerciseInput) =>
         attempt(async () => {
@@ -76,7 +90,7 @@ export const ExerciseProvider = ({ children }: { children: ReactNode }) => {
         });
 
     return (
-        <ExerciseContext.Provider value={{ exercises, allExercises, getExercises, getAllExercises, addExercise, editarExercise, removeExercise }}>
+        <ExerciseContext.Provider value={{ exercises, allExercises, loading, getExercises, getAllExercises, addExercise, editarExercise, removeExercise }}>
             {children}
         </ExerciseContext.Provider>
     );
