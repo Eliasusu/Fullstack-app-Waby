@@ -31,9 +31,9 @@ const emptyExercise: NewExercise = { name: "", description: "" };
 export default function MuscleGroupExercisesDialog() {
   const [openGroup, setOpenGroup] = useState<MuscleGroup | null>(null);
   const [showAddExercise, setShowAddExercise] = useState(false);
-  const { exercises, getExercises, addExercise } = useExercise();
+  const { exercises, getExercises, addExercise, loading: loadingExercises } = useExercise();
   const { trainingMethods, getAllTrainingMethods } = useTrainingMethod();
-  const { muscleGroups, getAllMGS } = useMuscleGroup();
+  const { muscleGroups, getAllMGS, loading: loadingGroups } = useMuscleGroup();
   const [newExercise, setNewExercise] = useState<NewExercise>(emptyExercise);
 
   // Los catálogos se cargan una vez: no cambian mientras la pantalla está abierta (nota 89).
@@ -71,6 +71,7 @@ export default function MuscleGroupExercisesDialog() {
   return (
     <BoxConteiner width="w-[400px] md:w-[500px] lg:w-[600px]" height="h-[300px] p-5" padding="my-5">
       <h2 className="text-2xl font-medium mb-4 text-gray-100">Grupos musculares</h2>
+      {loadingGroups && muscleGroups.length === 0 && <p className="text-white-text/70">Cargando…</p>}
       <div className="grid grid-cols-3 md:grid-cols-3 gap-5 m-0 p">
         {muscleGroups.map((group) => (
           <Card
@@ -90,7 +91,7 @@ export default function MuscleGroupExercisesDialog() {
             <DialogTitle className="text-2xl font-bold">Exercises by muscle group</DialogTitle>
           </DialogHeader>
           <h3 className="text-xl font-semibold">{openGroup?.name}</h3>
-          <ExercisesTable data={exercises} />
+          <ExercisesTable data={exercises} loading={loadingExercises} />
           <button
             className="w-full flex items-center justify-center py-0 text-gray-400 hover:text-gray-100 transition-colors"
             onClick={openAddExercise}

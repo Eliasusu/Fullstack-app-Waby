@@ -1,44 +1,44 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useAuth } from '@/users/auth.context.tsx';
 
-const errorMessages: Record<number, string> = {
-    404: 'Página no encontrada',
-    500: 'Error interno del servidor',
-    403: 'Acceso denegado',
+const errorMessages: Record<number, { title: string; description: string }> = {
+    403: {
+        title: 'No tenés permiso para ver esta página',
+        description: 'Esta sección es solo para administradores.',
+    },
+    404: {
+        title: 'Página no encontrada',
+        description: 'La dirección no existe o se movió.',
+    },
+    500: {
+        title: 'Algo salió mal',
+        description: 'Ocurrió un error inesperado al mostrar esta pantalla. Probá volver al inicio.',
+    },
 };
 
 interface ErrorPageProps {
     code?: number;
-    redirectOnClientError?: boolean;
 }
 
-const ErrorPage = ({ code, redirectOnClientError = false }: ErrorPageProps) => {
+/** Página de error con un mensaje que se entiende y una forma de volver (nota 82). */
+const ErrorPage = ({ code }: ErrorPageProps) => {
     const params = useParams();
-    const navigate = useNavigate();
-    
-    const errorCode = code || Number(params.code);
-
-    useEffect(() => {
-        // Si es un error 4xx (cliente) y redirectOnClientError es true
-        if (redirectOnClientError && errorCode >= 400 && errorCode < 500) {
-            // Regresar a la página anterior
-            navigate(-1);
-        }
-    }, [errorCode, redirectOnClientError, navigate]);
-
-    // Si es un error 4xx y redirectOnClientError es true, no renderizar nada
-    // mientras se procesa la redirección
-    if (redirectOnClientError && errorCode >= 400 && errorCode < 500) {
-        return null;
-    }
-
-    const errorMessage = errorMessages[errorCode] || 'Ocurrió un error inesperado';
+    const { isAuthenticated } = useAuth();
+    const errorCode = code ?? (Number(params.code) || 500);
+    const { title, description } = errorMessages[errorCode] ?? errorMessages[500];
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
-            <h1 className="text-4xl font-bold text-red-500">{errorCode}</h1>
-            <p className="text-xl mt-4">{errorMessage}</p>
-        </div>
+        <main className="flex flex-col items-center justify-center min-h-screen gap-4 px-4 text-center">
+            <p className="text-5xl font-bold text-red">{errorCode}</p>
+            <h1 className="text-xl font-semibold text-white-text">{title}</h1>
+            <p className="text-sm text-white-text/70 max-w-sm">{description}</p>
+            <Link
+                to={isAuthenticated ? '/home' : '/'}
+                className="mt-2 rounded-xl bg-red px-4 py-2 font-bold hover:bg-redHover transition"
+            >
+                {isAuthenticated ? 'Volver al inicio' : 'Ir a la página principal'}
+            </Link>
+        </main>
     );
 };
 

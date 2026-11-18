@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Register from '@/pages/Welcome/RegisterPage.tsx';
 import { AuthProvider } from './users/auth.context.tsx';
 import Index from '@/pages/Home/HomePage.tsx';
@@ -16,8 +16,30 @@ import { FormProvider, useForm } from 'react-hook-form';
 import GoalsPage from './pages/Goals/GoalsPage.tsx';
 import ErrorPage from './pages/Errors/ErrorPage.tsx';
 import { GoalProvider } from './goals/goal.context.tsx';
+import ErrorBoundary from './components/ErrorBoundary.tsx';
 
-
+/** Rutas de la app. El ErrorBoundary se reinicia al cambiar de ruta (key = pathname), así un error no queda pegado (nota 82). */
+function AppRoutes() {
+  const location = useLocation();
+  return (
+    <ErrorBoundary key={location.pathname}>
+      <Routes>
+        <Route path='/' element={<Welcome />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/register' element={<Register />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path='/home' element={<Index />} />
+          <Route path='/calendar' element={<CronogramPage />} />
+          <Route path='/create' element={<CreatePage />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/goals' element={<GoalsPage />} />
+        </Route>
+        <Route path='/error/:code' element={<ErrorPage />} />
+        <Route path='*' element={<ErrorPage code={404} />} />
+      </Routes>
+    </ErrorBoundary>
+  );
+}
 
 export function App() {
   const methods = useForm();
@@ -32,24 +54,7 @@ export function App() {
                 <ExerciseProvider>
                   <GoalProvider>
                     <div className="flex flex-col h-full">
-                      <Routes>
-                        <Route path='/' element={<Welcome />} />
-                        <Route path='/login' element={<LoginPage />} />
-                        <Route path='/register' element={<Register />} />
-                        <Route element={<ProtectedRoute />}>
-                          <Route path='/home' element={<Index />} />
-                          <Route path='/calendar' element={<CronogramPage />} />
-                          <Route path='/create' element={<CreatePage />} />
-                          <Route path='/profile' element={<Profile />} />
-                          <Route path='/goals' element={<GoalsPage />} />
-                        </Route>
-                        <Route path='/error/:code' element={
-                          <ErrorPage 
-                            redirectOnClientError={true} 
-                          />
-                        } />
-                        <Route path='*' element={<ErrorPage code={404} />} />
-                      </Routes>
+                      <AppRoutes />
                     </div>
                   </GoalProvider>
                 </ExerciseProvider>

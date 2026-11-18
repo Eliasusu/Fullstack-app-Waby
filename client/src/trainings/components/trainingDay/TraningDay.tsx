@@ -87,7 +87,7 @@ const itemPayload = (draft: ItemDraft, metricType: Exercise['metricType']) => ({
 })
 
 export const TrainingDay = () => {
-  const { training, getTrainingToDay, updateTraining, deleteTraining, addTraining, updateTrainingItem, addTrainingItem, deleteTrainingItem } = useTraining()
+  const { training, loadingDay, getTrainingToDay, updateTraining, deleteTraining, addTraining, updateTrainingItem, addTrainingItem, deleteTrainingItem } = useTraining()
   const { allExercises, getAllExercises } = useExercise()
 
   const [date, setDate] = useState<Date>(new Date())
@@ -242,7 +242,7 @@ export const TrainingDay = () => {
             disabled={!training}
             onClick={handleToggleCompleted}
           />
-          <CardTitle className="text-xl font-medium">{training?.name || 'Empty'}</CardTitle>
+          <CardTitle className="text-xl font-medium">{loadingDay ? 'Cargando…' : training?.name || 'Sin entrenamiento'}</CardTitle>
         </div>
         <div id="day" className="font-light text-white/75 text-xs">
           <p>{formatDay(date)}</p>
@@ -349,7 +349,8 @@ export const TrainingDay = () => {
             </TableBody>
           </Table>
         </div>
-        {training ? (
+        {/* Mientras carga el día no se ofrece crear: todavía no se sabe si ya tiene entrenamiento (nota 82). */}
+        {loadingDay ? null : training ? (
           <>
             <Dialog open={isAddItemDialogOpen} onOpenChange={setIsAddItemDialogOpen}>
               <DialogTrigger asChild>

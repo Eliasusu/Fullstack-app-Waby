@@ -6,7 +6,7 @@ import BoxConteiner from "@/components/ui/BoxConteiner.tsx"
 import { useEffect } from "react"
 
 export default function ExercisesTable2() {
-  const { allExercises, getAllExercises } = useExercise()
+  const { allExercises, getAllExercises, loading } = useExercise()
 
   useEffect(() => {
     getAllExercises()
@@ -15,7 +15,7 @@ export default function ExercisesTable2() {
   return (
     <BoxConteiner width="w-[400px] md:w-[500px] lg:w-[600px]" height="p-5" padding="my-5">
       <h2 className="text-2xl font-medium mb-4 text-gray-100">Tus ejercicios</h2>
-      <DataTableExercises columns={columns} data={allExercises} />
+      <DataTableExercises columns={columns} data={allExercises} loading={loading} />
     </BoxConteiner>
   )
 }

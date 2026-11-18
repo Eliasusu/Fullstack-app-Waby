@@ -112,7 +112,7 @@ const toPayload = (draft: GoalDraft) => ({
 });
 
 export default function GoalsTable() {
-    const { goals, getAll, create, update, remove } = useGoals();
+    const { goals, loading, getAll, create, update, remove } = useGoals();
     const { allExercises, getAllExercises } = useExercise();
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [newGoal, setNewGoal] = useState<GoalDraft>(emptyDraft());
@@ -204,6 +204,13 @@ export default function GoalsTable() {
                                     </TableCell>
                                 </TableRow>
                             ))}
+                            {goals.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="h-16 text-center text-white-text/70">
+                                        {loading ? 'Cargando…' : 'Todavía no tenés metas.'}
+                                    </TableCell>
+                                </TableRow>
+                            )}
                         </TableBody>
                     </Table>
                 </div>

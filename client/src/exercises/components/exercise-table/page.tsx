@@ -7,9 +7,10 @@ import { notifyResult } from "@/lib/notify.ts"
 
 interface Props {
   data: Exercise[]
+  loading?: boolean
 }
 
-export default function ExercisesTable({ data }: Props) {
+export default function ExercisesTable({ data, loading = false }: Props) {
   const { removeExercise, editarExercise } = useExercise();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editedExercise, setEditedExercise] = useState<Exercise | null>(null);
@@ -31,6 +32,6 @@ export default function ExercisesTable({ data }: Props) {
 
   const exerciseColumns = columns({ removeExercise: deleteExercise, saveExercise, editingId, setEditingId, editedExercise, setEditedExercise });
   return (
-    <DataTable columns={exerciseColumns} data={data} />
+    <DataTable columns={exerciseColumns} data={data} loading={loading} />
   )
 }

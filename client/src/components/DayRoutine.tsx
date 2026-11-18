@@ -16,7 +16,7 @@ import { notifyErrors } from "@/lib/notify.ts"
 
 
 export const DayRoutine = ({ date }: { date: Date }) => {
-  const { training, getTrainingToDay, updateTraining } = useTraining()
+  const { training, loadingDay, getTrainingToDay, updateTraining } = useTraining()
 
   useEffect(() => {
     getTrainingToDay(date);
@@ -39,7 +39,7 @@ export const DayRoutine = ({ date }: { date: Date }) => {
             disabled={!training}
             onClick={toggleCompleted}
           />
-          <CardTitle className="text-xl font-medium">{training?.name || 'Empty'}</CardTitle>
+          <CardTitle className="text-xl font-medium">{loadingDay ? 'Cargando…' : training?.name || 'Sin entrenamiento'}</CardTitle>
         </div>
         <div id="day" className="font-light text-white/75 text-xs">
           <p>{formatDay(date)}</p>

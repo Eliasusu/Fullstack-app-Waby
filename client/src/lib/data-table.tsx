@@ -18,11 +18,14 @@ import { ScrollArea } from "@radix-ui/react-scroll-area"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  /** Mientras carga se muestra "Cargando…" en vez de "Sin resultados" (nota 82). */
+  loading?: boolean
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  loading = false,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -69,7 +72,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {loading ? 'Cargando…' : 'Sin resultados.'}
               </TableCell>
             </TableRow>
           )}
