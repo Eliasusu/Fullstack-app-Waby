@@ -20,9 +20,16 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const apiDir = resolve(root, 'api');
 const clientDir = resolve(root, 'client');
 const clientOutDir = resolve(root, 'e2e', '.client-dist');
-/** Node 22 de las devDependencies de la API: con Node 26 `jsonwebtoken` no carga (ver AGENTS.md). */
-const apiNode = resolve(apiDir, 'node_modules', '.bin', 'node');
-const vite = resolve(clientDir, 'node_modules', '.bin', 'vite');
+/**
+ * Node 22 de las devDependencies de la API: con Node 26 `jsonwebtoken` no carga (ver AGENTS.md).
+ * En Windows `.bin/node` es un `.CMD`, que `spawn` no puede ejecutar sin shell: se usa el `node.exe` del paquete.
+ */
+const apiNode =
+    process.platform === 'win32'
+        ? resolve(apiDir, 'node_modules', 'node', 'bin', 'node.exe')
+        : resolve(apiDir, 'node_modules', '.bin', 'node');
+/** Vite se corre con el Node actual y su script JS, así funciona igual en Windows (sin `.bin/vite.CMD`). */
+const viteBin = resolve(clientDir, 'node_modules', 'vite', 'bin', 'vite.js');
 
 const log = (message: string) => console.log(`[e2e] ${message}`);
 
@@ -123,7 +130,7 @@ export default async function globalSetup() {
     log('Seed y build del client...');
     await Promise.all([
         run(apiNode, ['dist/scripts/seed.js'], { cwd: apiDir, env: apiEnv }),
-        run(vite, ['build', '--outDir', clientOutDir, '--emptyOutDir', '--logLevel', 'warn'], {
+        run(process.execPath, [viteBin, 'build', '--outDir', clientOutDir, '--emptyOutDir', '--logLevel', 'warn'], {
             cwd: clientDir,
             env: { ...process.env, VITE_API_URL: `${apiUrl}/api/v1/` },
         }),
@@ -131,7 +138,7 @@ export default async function globalSetup() {
 
     log('API y client...');
     const api = start(apiNode, ['dist/index.js'], { cwd: apiDir, env: apiEnv });
-    const client = start(vite, ['preview', '--outDir', clientOutDir, '--port', String(clientPort), '--strictPort'], {
+    const client = start(process.execPath, [viteBin, 'preview', '--outDir', clientOutDir, '--port', String(clientPort), '--strictPort'], {
         cwd: clientDir,
         env: process.env,
     });
