@@ -1,5 +1,5 @@
 # Entorno local: MySQL 8 con una base para desarrollo y otra para los tests.
-# Uso: docker compose up -d   (lee las variables de .env en la raíz)
+# Uso: pnpm db:up / pnpm db:down   (lee las variables de .env en la raíz)
 services:
   db:
     image: mysql:8.0

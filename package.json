@@ -14,6 +14,8 @@
     "typecheck": "pnpm build:shared && pnpm -r typecheck",
     "lint": "pnpm --filter @waby/client lint",
     "test": "pnpm build:shared && pnpm --filter @waby/api test",
-    "seed": "pnpm build:shared && pnpm --filter @waby/api seed"
+    "seed": "pnpm build:shared && pnpm --filter @waby/api seed",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down"
   }
 }
