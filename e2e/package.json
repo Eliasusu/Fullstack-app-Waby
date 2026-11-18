@@ -1,0 +1,19 @@
+{
+  "name": "@waby/e2e",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Smoke tests end-to-end de Waby: client y API reales contra un MySQL efímero (testcontainers)",
+  "scripts": {
+    "test": "playwright test",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit -p ./tsconfig.json"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@testcontainers/mysql": "12.2.1",
+    "@types/node": "22.10.2",
+    "testcontainers": "12.2.1",
+    "typescript": "5.5.2"
+  }
+}

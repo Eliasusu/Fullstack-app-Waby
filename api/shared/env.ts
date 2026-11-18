@@ -23,6 +23,11 @@ const EnvSchema = z.object({
     DB_USER: z.string().min(1),
     DB_PASSWORD: z.string().min(1),
     JWT_SECRET: z.string().min(32, 'JWT_SECRET tiene que tener al menos 32 caracteres'),
+    /** Orígenes que pueden llamar a la API con la cookie de sesión, separados por comas. */
+    CORS_ORIGINS: z
+        .string()
+        .default('http://localhost:3000,http://localhost:3001,http://localhost:5173')
+        .transform((value) => value.split(',').map((origin) => origin.trim()).filter(Boolean)),
 });
 
 const parsed = EnvSchema.safeParse(process.env);

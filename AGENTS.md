@@ -11,6 +11,7 @@ Monorepo con **pnpm workspaces**:
 | `@waby/shared` | `shared/` | Contrato de la API: esquemas Zod, tipos y enums que usan la API y el client (ADR-0002) |
 | `@waby/api` | `api/` | Node + Express 4 + TypeScript, MikroORM 5 sobre MySQL |
 | `@waby/client` | `client/` | React 18 + Vite 5 + TypeScript, Tailwind + shadcn/ui, React Router 6 |
+| `@waby/e2e` | `e2e/` | Smoke tests end-to-end con Playwright y testcontainers (MySQL efímero) |
 
 - Glosario y modelo de dominio: `CONTEXT.md`.
 - Decisiones de arquitectura: `docs/adr/`.
@@ -30,6 +31,7 @@ pnpm typecheck            # tsc --noEmit en todos los paquetes
 pnpm lint                 # ESLint del client
 pnpm build                # build de todos los paquetes
 pnpm test                 # tests de integración de la API contra waby_test (borra y recrea esa base)
+pnpm test:e2e             # smoke tests con Playwright: client + API + MySQL efímero (testcontainers), ver e2e/README.md
 pnpm seed                 # borra y recrea la base waby con datos de demo (usuarios admin y demo, ver .env)
 pnpm --filter @waby/api add <pkg>   # agregar una dependencia a un paquete
 ```
