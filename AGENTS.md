@@ -20,7 +20,8 @@ Monorepo con **pnpm workspaces**:
 
 ```bash
 cp .env.example .env      # la primera vez: completar valores (JWT_SECRET, contraseñas)
-docker compose up -d      # MySQL 8 con las bases waby (desarrollo) y waby_test (tests)
+pnpm db:up                # MySQL 8 en Docker con las bases waby (desarrollo) y waby_test (tests); espera a que esté lista
+pnpm db:down              # baja el contenedor de MySQL (los datos quedan en el volumen)
 pnpm install              # instala todos los paquetes (un solo pnpm-lock.yaml en la raíz)
 pnpm dev:shared           # recompila @waby/shared al guardar (dejalo corriendo si tocás el contrato)
 pnpm dev:api              # API en modo watch (http://localhost:3000)
@@ -33,7 +34,7 @@ pnpm seed                 # borra y recrea la base waby con datos de demo (usuar
 pnpm --filter @waby/api add <pkg>   # agregar una dependencia a un paquete
 ```
 
-La base de datos es MySQL 8 y la levanta `docker-compose.yml` con los valores de `.env`. En desarrollo, la API actualiza el esquema al arrancar (`updateSchema`, sin migraciones: ADR-0003). Los dumps de `dump/` son del modelo viejo y ya no sirven.
+La base de datos es MySQL 8 y la levanta `compose.yaml` con los valores de `.env`. En desarrollo, la API actualiza el esquema al arrancar (`updateSchema`, sin migraciones: ADR-0003).
 
 Los scripts de `api/` corren con el Node 22 que instala la devDependency `node`. Con Node 26, `jsonwebtoken` no carga (`SlowBuffer`), así que no corras `node dist/index.js` a mano: usá los scripts de pnpm.
 
