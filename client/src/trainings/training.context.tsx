@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { useResetOnUserChange } from "@/users/auth.context.tsx";
 import type {
     CreateTrainingInput,
@@ -67,6 +67,8 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
 
     const listLoader = useLoader();
     const dayLoader = useLoader();
+    /** Número del último pedido de día: las respuestas de pedidos anteriores se descartan (nota 62). */
+    const dayRequest = useRef(0);
 
     const fetchTrainings = async () => {
         const res = await getTrainingsReq();
@@ -79,20 +81,27 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const getTrainingToDay = async (date: Date) => {
+        const request = ++dayRequest.current;
+        const isLatest = () => request === dayRequest.current;
+        // Mientras carga no se muestra el entrenamiento de otro día; si falla, queda vacío (nota 62).
+        setTraining(undefined);
         await dayLoader.run(async () => {
             const day = toDateOnly(date);
             const res = await getTrainingsReq({ from: day, to: day });
             const first = res.data[0];
-            setTraining(first ? (await getTrainingReq(first.id)).data : undefined);
+            const detail = first ? (await getTrainingReq(first.id)).data : undefined;
+            if (isLatest()) setTraining(detail);
         });
     };
 
     /** Después de cada cambio se recargan el listado y el entrenamiento abierto (notas 63 y 68). */
     const refresh = async (trainingId?: number) => {
+        const request = dayRequest.current;
         await fetchTrainings();
         if (trainingId !== undefined) {
             const res = await getTrainingReq(trainingId);
-            setTraining(res.data);
+            // Si mientras tanto se eligió otro día, no se vuelve a mostrar este (nota 62).
+            if (request === dayRequest.current) setTraining(res.data);
         }
     };
 
