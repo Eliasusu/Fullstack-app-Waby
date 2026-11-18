@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
-import type { CreateExerciseInput, Difficulty, MetricType, MovementPattern, MuscleGroup } from "@waby/shared";
+import { CreateExerciseSchema, type Difficulty, type MetricType, type MovementPattern, type MuscleGroup } from "@waby/shared";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PlusIcon } from "lucide-react";
@@ -15,6 +15,8 @@ import { useTrainingMethod } from "@/trainingMethods/training-method.context.tsx
 import { useMuscleGroup } from "@/muscleGroups/muscle-group.context.tsx";
 import { difficultyLabels, metricTypeLabels, movementPatternLabels, options } from "@/lib/labels.ts";
 import { notifyResult } from "@/lib/notify.ts";
+import { validate, type FieldErrors } from "@/lib/validation.ts";
+import FieldError from "@/components/FieldError.tsx";
 
 type NewExercise = {
   name: string;
@@ -35,6 +37,7 @@ export default function MuscleGroupExercisesDialog() {
   const { trainingMethods, getAllTrainingMethods } = useTrainingMethod();
   const { muscleGroups, getAllMGS, loading: loadingGroups } = useMuscleGroup();
   const [newExercise, setNewExercise] = useState<NewExercise>(emptyExercise);
+  const [errors, setErrors] = useState<FieldErrors>({});
 
   // Los catálogos se cargan una vez: no cambian mientras la pantalla está abierta (nota 89).
   useEffect(() => {
@@ -49,21 +52,28 @@ export default function MuscleGroupExercisesDialog() {
 
   const openAddExercise = () => {
     setNewExercise({ ...emptyExercise, muscleGroupId: openGroup?.id });
+    setErrors({});
     setShowAddExercise(true);
   };
 
   const handleAddExercise = async () => {
     const { name, description, trainingMethodId, muscleGroupId, difficulty, movementPattern, metricType } = newExercise;
-    const data = {
+    // Se valida con el mismo esquema que la API: si falta algo, se muestra junto al campo y no se envía (nota 66).
+    const validation = validate(CreateExerciseSchema, {
       name,
-      ...(description ? { description } : {}),
+      ...(description.trim() ? { description } : {}),
       trainingMethodId,
       muscleGroupIds: muscleGroupId ? [muscleGroupId] : [],
       difficulty,
       movementPattern,
       metricType,
-    } as CreateExerciseInput; // Si falta algo, la API responde 400 con los campos y se muestra en el toast.
-    if (notifyResult(await addExercise(data), { title: "Exercise created", description: `${name} was added.` })) {
+    });
+    if (!validation.ok) {
+      setErrors(validation.errors);
+      return;
+    }
+    setErrors({});
+    if (notifyResult(await addExercise(validation.data), { title: "Exercise created", description: `${name} was added.` })) {
       setShowAddExercise(false);
     }
   };
@@ -121,6 +131,7 @@ export default function MuscleGroupExercisesDialog() {
                 value={newExercise.name}
                 onChange={(e) => setNewExercise({ ...newExercise, name: e.target.value })}
               />
+              <FieldError message={errors.name} />
             </div>
             <div>
               <Label htmlFor="method">Método</Label>
@@ -136,6 +147,7 @@ export default function MuscleGroupExercisesDialog() {
                   ))}
                 </SelectContent>
               </Select>
+              <FieldError message={errors.trainingMethodId} />
             </div>
             <div>
               <Label htmlFor="description">Descripción</Label>
@@ -145,6 +157,7 @@ export default function MuscleGroupExercisesDialog() {
                 value={newExercise.description}
                 onChange={(e) => setNewExercise({ ...newExercise, description: e.target.value })}
               />
+              <FieldError message={errors.description} />
             </div>
             <div>
               <Label htmlFor="muscleGroup">Grupo Muscular</Label>
@@ -163,6 +176,7 @@ export default function MuscleGroupExercisesDialog() {
                   ))}
                 </SelectContent>
               </Select>
+              <FieldError message={errors.muscleGroupIds} />
             </div>
             <div>
               <Label htmlFor="difficulty">Dificultad</Label>
@@ -178,6 +192,7 @@ export default function MuscleGroupExercisesDialog() {
                   ))}
                 </SelectContent>
               </Select>
+              <FieldError message={errors.difficulty} />
             </div>
             <div>
               <Label htmlFor="movementPattern">Patrón de movimiento</Label>
@@ -193,6 +208,7 @@ export default function MuscleGroupExercisesDialog() {
                   ))}
                 </SelectContent>
               </Select>
+              <FieldError message={errors.movementPattern} />
             </div>
             <div>
               <Label htmlFor="metricType">Se mide por</Label>
@@ -208,6 +224,7 @@ export default function MuscleGroupExercisesDialog() {
                   ))}
                 </SelectContent>
               </Select>
+              <FieldError message={errors.metricType} />
             </div>
             <Button type="submit" className="w-full bg-red hover:bg-redHover">
               Cargar

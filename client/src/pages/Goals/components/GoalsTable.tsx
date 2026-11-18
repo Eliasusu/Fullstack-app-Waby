@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { Edit, X } from "lucide-react";
-import { goalTargetTypesFor, type Exercise, type Goal, type GoalTargetType } from "@waby/shared";
+import { CreateGoalSchema, UpdateGoalSchema, goalTargetTypesFor, type Exercise, type Goal, type GoalTargetType } from "@waby/shared";
 import BoxContainer from "@/components/ui/BoxConteiner.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
@@ -14,7 +14,9 @@ import { useExercise } from "@/exercises/exercise.context.tsx";
 import { useGoals } from "@/goals/goal.context.tsx";
 import { formatDay, toDateOnly } from "@/lib/dates.ts";
 import { goalTargetTypeLabels, goalTargetUnit } from "@/lib/labels.ts";
-import { notifyErrors, notifyResult } from "@/lib/notify.ts";
+import { notifyResult } from "@/lib/notify.ts";
+import { validate, type FieldErrors } from "@/lib/validation.ts";
+import FieldError from "@/components/FieldError.tsx";
 
 type GoalDraft = {
     exerciseId?: number;
@@ -29,11 +31,13 @@ const emptyDraft = (): GoalDraft => ({ targetValue: '', startDate: toDateOnly(ne
 const formatValue = (value: number | null, type: GoalTargetType) => (value == null ? '—' : `${value} ${goalTargetUnit[type]}`);
 
 /** Formulario de Meta: el tipo de objetivo se elige entre los que admite el ejercicio. */
-function GoalForm({ draft, setDraft, exercises, lockExercise }: {
+function GoalForm({ draft, setDraft, exercises, lockExercise, errors }: {
     draft: GoalDraft;
     setDraft: (draft: GoalDraft) => void;
     exercises: Exercise[];
     lockExercise?: boolean;
+    /** Errores por campo (nota 66). */
+    errors: FieldErrors;
 }) {
     const exercise = exercises.find((e) => e.id === draft.exerciseId);
     const targetTypes = exercise ? goalTargetTypesFor(exercise.metricType) : [];
@@ -62,6 +66,7 @@ function GoalForm({ draft, setDraft, exercises, lockExercise }: {
                         </SelectContent>
                     </Select>
                 </div>
+                <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.exerciseId} /></div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Type</Label>
@@ -83,21 +88,25 @@ function GoalForm({ draft, setDraft, exercises, lockExercise }: {
                         </SelectContent>
                     </Select>
                 </div>
+                <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.targetType} /></div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="targetValue" className="text-right">Goal</Label>
                 <Input id="targetValue" type="number" step="0.5" className="col-span-3" value={draft.targetValue}
                     onChange={(e) => setDraft({ ...draft, targetValue: e.target.value })} />
+                <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.targetValue} /></div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="startDate" className="text-right">From</Label>
                 <Input id="startDate" type="date" className="col-span-3" value={draft.startDate}
                     onChange={(e) => setDraft({ ...draft, startDate: e.target.value })} />
+                <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.startDate} /></div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="endDate" className="text-right">To</Label>
                 <Input id="endDate" type="date" className="col-span-3" value={draft.endDate}
                     onChange={(e) => setDraft({ ...draft, endDate: e.target.value })} />
+                <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.endDate} /></div>
             </div>
         </>
     );
@@ -118,6 +127,8 @@ export default function GoalsTable() {
     const [newGoal, setNewGoal] = useState<GoalDraft>(emptyDraft());
     const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
     const [editDraft, setEditDraft] = useState<GoalDraft>(emptyDraft());
+    const [createErrors, setCreateErrors] = useState<FieldErrors>({});
+    const [editErrors, setEditErrors] = useState<FieldErrors>({});
 
     useEffect(() => {
         getAll();
@@ -131,9 +142,11 @@ export default function GoalsTable() {
 
     const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Si falta algo, la API responde 400 con los campos y se muestran en el toast.
-        const result = await create(toPayload(newGoal) as Parameters<typeof create>[0]);
-        if (notifyResult(result, { title: "Goal created" })) {
+        // Se valida con el esquema de la API antes de enviar (nota 66).
+        const validation = validate(CreateGoalSchema, toPayload(newGoal));
+        setCreateErrors(validation.ok ? {} : validation.errors);
+        if (!validation.ok) return;
+        if (notifyResult(await create(validation.data), { title: "Goal created" })) {
             setNewGoal(emptyDraft());
             setIsAddDialogOpen(false);
         }
@@ -141,6 +154,7 @@ export default function GoalsTable() {
 
     const startEditing = (goal: Goal) => {
         setEditingGoal(goal);
+        setEditErrors({});
         setEditDraft({
             exerciseId: goal.exercise.id,
             targetType: goal.targetType,
@@ -155,12 +169,13 @@ export default function GoalsTable() {
         if (!editingGoal) return;
         // El ejercicio de una Meta no se cambia desde acá: se manda el resto.
         const { targetType, targetValue, startDate, endDate } = toPayload(editDraft);
-        const data = { targetType, targetValue, startDate, ...(endDate ? { endDate } : {}) };
-        if (data.targetValue === undefined) {
-            notifyErrors(['El objetivo es obligatorio']);
-            return;
-        }
-        if (notifyResult(await update(editingGoal.id, data), { title: "Goal updated" })) {
+        const validation = validate(UpdateGoalSchema, { targetType, targetValue, startDate, ...(endDate ? { endDate } : {}) });
+        const errors: FieldErrors = validation.ok ? {} : validation.errors;
+        // UpdateGoalSchema es parcial: el objetivo se exige acá para no mandar una Meta sin valor.
+        if (targetValue === undefined) errors.targetValue = 'Este campo es obligatorio';
+        setEditErrors(errors);
+        if (!validation.ok || Object.keys(errors).length > 0) return;
+        if (notifyResult(await update(editingGoal.id, validation.data), { title: "Goal updated" })) {
             setEditingGoal(null);
         }
     };
@@ -220,7 +235,7 @@ export default function GoalsTable() {
                             <DialogTitle>Edit goal</DialogTitle>
                         </DialogHeader>
                         <form className="grid gap-4 py-4" onSubmit={handleUpdate}>
-                            <GoalForm draft={editDraft} setDraft={setEditDraft} exercises={allExercises} lockExercise />
+                            <GoalForm draft={editDraft} setDraft={setEditDraft} exercises={allExercises} lockExercise errors={editErrors} />
                             <Button type="submit">Update goal</Button>
                         </form>
                     </DialogContent>
@@ -239,7 +254,7 @@ export default function GoalsTable() {
                             <DialogTitle>New goal</DialogTitle>
                         </DialogHeader>
                         <form className="grid gap-4 py-4" onSubmit={handleCreate}>
-                            <GoalForm draft={newGoal} setDraft={setNewGoal} exercises={allExercises} />
+                            <GoalForm draft={newGoal} setDraft={setNewGoal} exercises={allExercises} errors={createErrors} />
                             <Button type="submit">Create goal</Button>
                         </form>
                     </DialogContent>
