@@ -17,6 +17,8 @@ import GoalsPage from './pages/Goals/GoalsPage.tsx';
 import ErrorPage from './pages/Errors/ErrorPage.tsx';
 import { GoalProvider } from './goals/goal.context.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
+import AdminRoute from './lib/AdminRoute.tsx';
+import AdminPage from './pages/Admin/AdminPage.tsx';
 
 /** Rutas de la app. El ErrorBoundary se reinicia al cambiar de ruta (key = pathname), así un error no queda pegado (nota 82). */
 function AppRoutes() {
@@ -33,6 +35,9 @@ function AppRoutes() {
           <Route path='/create' element={<CreatePage />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/goals' element={<GoalsPage />} />
+          <Route element={<AdminRoute />}>
+            <Route path='/admin' element={<AdminPage />} />
+          </Route>
         </Route>
         <Route path='/error/:code' element={<ErrorPage />} />
         <Route path='*' element={<ErrorPage code={404} />} />
