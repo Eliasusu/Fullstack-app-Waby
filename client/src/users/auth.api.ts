@@ -13,3 +13,6 @@ export const getMeRequest = () => axios.get<User>('users/me')
 export const updateMeRequest = (data: UpdateUserInput) => axios.patch<User>('users/me', data)
 
 export const deleteMeRequest = () => axios.delete('users/me')
+
+/** Todos los usuarios. Solo admin: la API responde 403 a un usuario común (nota 76). */
+export const getUsersRequest = () => axios.get<User[]>('users')

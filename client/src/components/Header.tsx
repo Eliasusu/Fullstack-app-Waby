@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
   const [greeting, setGreeting] = useState('')
-  const { user, logout } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
   const username = user?.username ?? ''
 
@@ -47,12 +47,22 @@ export default function Header() {
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56 bg-grey-nav border-white/60">
-          <DropdownMenuLabel>{username}</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            {username}
+            {isAdmin && <span className="ml-2 rounded bg-red px-1.5 py-0.5 text-xs font-normal">Admin</span>}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className='font-light hover:bg-grey-box'
             onClick={() => navigate('/profile')}
           >Profile</DropdownMenuItem>
+          {/* Solo un admin ve el acceso a Administración (nota 76). */}
+          {isAdmin && (
+            <DropdownMenuItem
+              className='font-light hover:bg-grey-box'
+              onClick={() => navigate('/admin')}
+            >Administración</DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem className='hover:bg-grey-box' onClick={onClick}>Log out</DropdownMenuItem>
         </DropdownMenuContent>

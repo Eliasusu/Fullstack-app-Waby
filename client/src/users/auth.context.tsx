@@ -9,6 +9,8 @@ interface AuthState {
     /** Usuario de la sesión, completo (sin contraseña). */
     user: User | null;
     isAuthenticated: boolean;
+    /** true si el usuario de la sesión es admin (nota 76). Sale de GET /users/me, así que sobrevive al F5. */
+    isAdmin: boolean;
     /** true mientras se verifica la sesión al cargar la app. */
     isLoading: boolean;
     /** true si la sesión se cerró porque venció (para avisarlo en el login). */
@@ -25,6 +27,7 @@ const notReady = async (): Promise<Result> => ({ ok: false, errors: ['AuthProvid
 export const AuthContext = createContext<AuthState>({
     user: null,
     isAuthenticated: false,
+    isAdmin: false,
     isLoading: true,
     sessionExpired: false,
     signUp: notReady,
@@ -108,7 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         });
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated: user !== null, isLoading, sessionExpired, signUp, signIn, logout, updateProfile, deleteProfile }}>
+        <AuthContext.Provider value={{ user, isAuthenticated: user !== null, isAdmin: user?.role === 'ADMIN', isLoading, sessionExpired, signUp, signIn, logout, updateProfile, deleteProfile }}>
             {children}
         </AuthContext.Provider>
     );

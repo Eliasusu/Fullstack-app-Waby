@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { X, Edit, Check } from 'lucide-react'
-import type { Exercise, TrainingItem } from "@waby/shared"
+import { CreateTrainingItemSchema, CreateTrainingSchema, UpdateTrainingItemSchema, UpdateTrainingSchema, type Exercise, type TrainingItem } from "@waby/shared"
 import {
   Table,
   TableBody,
@@ -53,6 +53,8 @@ import { useExercise } from "@/exercises/exercise.context.tsx"
 import { Calendar } from "@/components/ui/calendar"
 import { formatDay, toDateOnly } from "@/lib/dates.ts"
 import { notifyErrors, notifyResult } from "@/lib/notify.ts"
+import { errorList, numberOrUndefined, validate, type FieldErrors } from "@/lib/validation.ts"
+import FieldError from "@/components/FieldError.tsx"
 
 /** Fila editable: los números se editan como texto y se convierten al guardar. */
 type ItemDraft = {
@@ -75,19 +77,28 @@ const toDraft = (item: TrainingItem): ItemDraft => ({
   restSeconds: item.restSeconds != null ? String(item.restSeconds) : '',
 })
 
-const optionalNumber = (value: string) => (value.trim() === '' ? undefined : Number(value))
-
-/** Datos de un ítem para la API: `reps` o `seconds` según cómo se mide el ejercicio. */
+/**
+ * Datos de un ítem para validar y mandar: `reps` o `seconds` según cómo se mide el ejercicio.
+ * Un campo vacío queda `undefined` (no 0 ni NaN), así la validación dice que es obligatorio (nota 66).
+ */
 const itemPayload = (draft: ItemDraft, metricType: Exercise['metricType']) => ({
-  sets: Number(draft.sets),
-  ...(metricType === 'REPS' ? { reps: Number(draft.volume) } : { seconds: Number(draft.volume) }),
-  ...(optionalNumber(draft.weightKg) !== undefined ? { weightKg: optionalNumber(draft.weightKg) } : {}),
-  ...(optionalNumber(draft.restSeconds) !== undefined ? { restSeconds: optionalNumber(draft.restSeconds) } : {}),
+  sets: numberOrUndefined(draft.sets),
+  ...(metricType === 'REPS' ? { reps: numberOrUndefined(draft.volume) } : { seconds: numberOrUndefined(draft.volume) }),
+  ...(numberOrUndefined(draft.weightKg) !== undefined ? { weightKg: numberOrUndefined(draft.weightKg) } : {}),
+  ...(numberOrUndefined(draft.restSeconds) !== undefined ? { restSeconds: numberOrUndefined(draft.restSeconds) } : {}),
   ...(draft.comment.trim() ? { comment: draft.comment.trim() } : {}),
 })
 
+/** `reps` y `seconds` se editan en el mismo campo ("volume"). */
+const withVolume = (errors: FieldErrors): FieldErrors => {
+  const { reps, seconds, ...rest } = errors
+  return { ...rest, ...(reps || seconds ? { volume: reps ?? seconds } : {}) }
+}
+
+const itemLabels = { exerciseId: 'Ejercicio', sets: 'Sets', volume: 'Reps / segundos', weightKg: 'Peso', restSeconds: 'Descanso', comment: 'Comentario' }
+
 export const TrainingDay = () => {
-  const { training, getTrainingToDay, updateTraining, deleteTraining, addTraining, updateTrainingItem, addTrainingItem, deleteTrainingItem } = useTraining()
+  const { training, loadingDay, getTrainingToDay, updateTraining, deleteTraining, addTraining, updateTrainingItem, addTrainingItem, deleteTrainingItem } = useTraining()
   const { allExercises, getAllExercises } = useExercise()
 
   const [date, setDate] = useState<Date>(new Date())
@@ -102,6 +113,10 @@ export const TrainingDay = () => {
   /** Ítem que se está editando en la tabla y sus valores (nota 65: se guarda ese, no el primero). */
   const [editingItemId, setEditingItemId] = useState<number | null>(null)
   const [itemDraft, setItemDraft] = useState<ItemDraft | null>(null)
+  /** Errores por campo de cada formulario (nota 66). */
+  const [createErrors, setCreateErrors] = useState<FieldErrors>({})
+  const [modifyErrors, setModifyErrors] = useState<FieldErrors>({})
+  const [itemErrors, setItemErrors] = useState<FieldErrors>({})
 
   useEffect(() => {
     getAllExercises()
@@ -125,7 +140,10 @@ export const TrainingDay = () => {
   const handleSubmitUpdateTraining = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!training) return
-    if (notifyResult(await updateTraining(training.id, { name: trainingName }), { title: "Cambios guardados", description: "Los cambios se han guardado correctamente." })) {
+    const validation = validate(UpdateTrainingSchema, { name: trainingName })
+    setModifyErrors(validation.ok ? {} : validation.errors)
+    if (!validation.ok) return
+    if (notifyResult(await updateTraining(training.id, validation.data), { title: "Cambios guardados", description: "Los cambios se han guardado correctamente." })) {
       setIsModifyDialogOpen(false)
     }
   }
@@ -133,11 +151,13 @@ export const TrainingDay = () => {
   /** Crea un entrenamiento por cada día elegido en el calendario. */
   const handleSubmitCreateTraining = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (newTrainingDates.length === 0) {
-      notifyErrors(['Elegí al menos un día en el calendario'])
-      return
-    }
-    const results = await Promise.all(newTrainingDates.map((day) => addTraining({ name: newTrainingName, day: toDateOnly(day) })))
+    // El nombre se valida con el esquema de la API, y además tiene que haber días elegidos (nota 66).
+    const validation = validate(CreateTrainingSchema.pick({ name: true }), { name: newTrainingName })
+    const errors: FieldErrors = validation.ok ? {} : validation.errors
+    if (newTrainingDates.length === 0) errors.days = 'Elegí al menos un día en el calendario'
+    setCreateErrors(errors)
+    if (Object.keys(errors).length > 0) return
+    const results = await Promise.all(newTrainingDates.map((day) => addTraining({ name: newTrainingName.trim(), day: toDateOnly(day) })))
     const failed = results.flatMap((result) => (result.ok ? [] : result.errors))
     if (failed.length) {
       notifyErrors([...new Set(failed)])
@@ -169,7 +189,18 @@ export const TrainingDay = () => {
 
   const handleSubmitUpdateItem = async (item: TrainingItem) => {
     if (!training || !itemDraft) return
-    const result = await updateTrainingItem(training.id, item.id, itemPayload(itemDraft, item.exercise.metricType))
+    // En la tabla no hay lugar por campo: los errores van al toast, y no se envía nada (nota 66).
+    const payload = itemPayload(itemDraft, item.exercise.metricType)
+    const volume = 'reps' in payload ? payload.reps : payload.seconds
+    const validation = validate(UpdateTrainingItemSchema, payload)
+    const errors = withVolume(validation.ok ? {} : validation.errors)
+    if (payload.sets === undefined) errors.sets = 'Este campo es obligatorio'
+    if (volume === undefined) errors.volume = 'Este campo es obligatorio'
+    if (!validation.ok || Object.keys(errors).length > 0) {
+      notifyErrors(errorList(errors, itemLabels))
+      return
+    }
+    const result = await updateTrainingItem(training.id, item.id, validation.data)
     if (notifyResult(result, { title: "Exercise updated" })) {
       setEditingItemId(null)
       setItemDraft(null)
@@ -184,13 +215,16 @@ export const TrainingDay = () => {
   const handleSubmitCreateItem = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!training) return
-    if (!newItemExercise) {
-      notifyErrors(['Elegí un ejercicio'])
-      return
-    }
-    const result = await addTrainingItem(training.id, { exerciseId: newItemExercise.id, ...itemPayload(newItem, newItemExercise.metricType) })
+    const validation = validate(CreateTrainingItemSchema, {
+      exerciseId: newItemExercise?.id,
+      ...itemPayload(newItem, newItemExercise?.metricType ?? 'REPS'),
+    })
+    setItemErrors(validation.ok ? {} : withVolume(validation.errors))
+    if (!validation.ok) return
+    const result = await addTrainingItem(training.id, validation.data)
     if (notifyResult(result, { title: "Exercise added", description: "The exercise has been added successfully." })) {
       setNewItem(emptyNewItem)
+      setItemErrors({})
       setIsAddItemDialogOpen(false)
     }
   }
@@ -242,7 +276,7 @@ export const TrainingDay = () => {
             disabled={!training}
             onClick={handleToggleCompleted}
           />
-          <CardTitle className="text-xl font-medium">{training?.name || 'Empty'}</CardTitle>
+          <CardTitle className="text-xl font-medium">{loadingDay ? 'Cargando…' : training?.name || 'Sin entrenamiento'}</CardTitle>
         </div>
         <div id="day" className="font-light text-white/75 text-xs">
           <p>{formatDay(date)}</p>
@@ -349,7 +383,8 @@ export const TrainingDay = () => {
             </TableBody>
           </Table>
         </div>
-        {training ? (
+        {/* Mientras carga el día no se ofrece crear: todavía no se sabe si ya tiene entrenamiento (nota 82). */}
+        {loadingDay ? null : training ? (
           <>
             <Dialog open={isAddItemDialogOpen} onOpenChange={setIsAddItemDialogOpen}>
               <DialogTrigger asChild>
@@ -380,6 +415,7 @@ export const TrainingDay = () => {
                           ))}
                         </SelectContent>
                       </Select>
+                      <FieldError message={itemErrors.exerciseId} />
                     </div>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -389,6 +425,7 @@ export const TrainingDay = () => {
                       value={newItem.comment}
                       onChange={(e) => setNewItem({ ...newItem, comment: e.target.value })}
                       className="col-span-3 bg-grey-box border-gray-600 w-full" />
+                    <div className="col-span-3 col-start-2 -mt-3"><FieldError message={itemErrors.comment} /></div>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <label htmlFor="sets" className="text-right">Sets</label>
@@ -398,6 +435,7 @@ export const TrainingDay = () => {
                       value={newItem.sets}
                       onChange={(e) => setNewItem({ ...newItem, sets: e.target.value })}
                       className="col-span-3 bg-grey-box border-gray-600 w-full" />
+                    <div className="col-span-3 col-start-2 -mt-3"><FieldError message={itemErrors.sets} /></div>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <label htmlFor="volume" className="text-right">{newItemExercise?.metricType === 'TIME' ? 'Seconds' : 'Reps'}</label>
@@ -407,6 +445,7 @@ export const TrainingDay = () => {
                       value={newItem.volume}
                       onChange={(e) => setNewItem({ ...newItem, volume: e.target.value })}
                       className="col-span-3 bg-grey-box border-gray-600 w-full" />
+                    <div className="col-span-3 col-start-2 -mt-3"><FieldError message={itemErrors.volume} /></div>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4 ">
                     <label htmlFor="weight" className="text-right">Weight (kg)</label>
@@ -418,6 +457,7 @@ export const TrainingDay = () => {
                       value={newItem.weightKg}
                       onChange={(e) => setNewItem({ ...newItem, weightKg: e.target.value })}
                       className="col-span-3 bg-grey-box border-gray-600 w-full" />
+                    <div className="col-span-3 col-start-2 -mt-3"><FieldError message={itemErrors.weightKg} /></div>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <label htmlFor="rest" className="text-right">Rest (s)</label>
@@ -427,6 +467,7 @@ export const TrainingDay = () => {
                       value={newItem.restSeconds}
                       onChange={(e) => setNewItem({ ...newItem, restSeconds: e.target.value })}
                       className="col-span-3 bg-grey-box border-gray-600 w-full" />
+                    <div className="col-span-3 col-start-2 -mt-3"><FieldError message={itemErrors.restSeconds} /></div>
                   </div>
                   <Button type="submit">Add Exercise</Button>
                 </form>
@@ -453,6 +494,7 @@ export const TrainingDay = () => {
                       value={trainingName}
                       onChange={(e) => setTrainingName(e.target.value)}
                       className="col-span-3 w-full" />
+                    <div className="col-span-3 col-start-2 -mt-3"><FieldError message={modifyErrors.name} /></div>
                   </div>
                   <Button type="submit" variant={"outline"}>Save Changes</Button>
                 </form>
@@ -481,6 +523,7 @@ export const TrainingDay = () => {
                     value={newTrainingName}
                     onChange={(e) => setNewTrainingName(e.target.value)}
                     className="col-span-3 w-full" />
+                  <div className="col-span-3 col-start-2 -mt-3"><FieldError message={createErrors.name} /></div>
                 </div>
                 <div id="conteiner frecuency" className="m-auto text-center w-max h-max">
                   <label htmlFor="frecuency" className="">Frecuency</label>
@@ -493,6 +536,7 @@ export const TrainingDay = () => {
                       className="col-span-3 w-full"
                     />
                   </div>
+                  <FieldError message={createErrors.days} />
                 </div>
                 <Button type="submit">Create Training</Button>
               </form>
