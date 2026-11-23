@@ -49,26 +49,16 @@ export default function Activity() {
       )
     }
 
-    const daysOfWeekPerMonth = ['Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom', 'Lun'];
-
-    if (selectedPeriod === "Mensual") {
-      <div className="grid grid-cols-7 gap-1 mt-2">
-        {daysOfWeekPerMonth.map(day => (
-          <div key={day} className="text-xs text-center font-medium">{day}</div>
-        ))}
-        {activityData.map((day, index) => (
-          <div
-            key={index}
-            className={`w-6 h-6 rounded-sm m-auto ${day.completed ? 'bg-red' : 'bg-grey-boxActivity'}`}
-          />
-        ))}
-      </div>
-    }
+    // Las semanas empiezan en lunes: celdas vacías hasta la columna del primer día.
+    const leadingBlanks = activityData.length > 0 ? mondayBasedWeekday(activityData[0].date) : 0
 
     return (
       <div className="grid grid-cols-7 gap-1 mt-2">
-        {(selectedPeriod === "Mensual" ? daysOfWeekPerMonth : daysOfWeek).map(day => (
+        {daysOfWeek.map(day => (
           <div key={day} className="text-xs text-center font-medium">{day}</div>
+        ))}
+        {Array.from({ length: leadingBlanks }, (_, index) => (
+          <div key={`blank-${index}`} />
         ))}
         {activityData.map((day, index) => (
           <div
@@ -118,38 +108,39 @@ export default function Activity() {
   )
 }
 
+/** Día de la semana con el lunes como 0 y el domingo como 6. */
+function mondayBasedWeekday(date: Date): number {
+  return (date.getDay() + 6) % 7
+}
+
+/** Días del período que contiene a hoy: la semana (lunes a domingo), el mes o el año. */
 function buildActivityData(period: string, trainings: Training[]): ActivityDay[] {
-  const currentDate = new Date()
-  let daysToGenerate = 0
-  let startDate = new Date()
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = today.getMonth()
+  let start: Date
+  let end: Date
 
   switch (period) {
     case "Semanal":
-      daysToGenerate = 7
-      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 5)
-      break
-    case "Mensual":
-      daysToGenerate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate()
-      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2)
-      startDate.setDate(startDate.getDate() - startDate.getDay() + 1)
+      start = new Date(year, month, today.getDate() - mondayBasedWeekday(today))
+      end = new Date(year, month, start.getDate() + 6)
       break
     case "Anual":
-      daysToGenerate = (currentDate.getFullYear() % 4 === 0 && currentDate.getFullYear() % 100 !== 0) || (currentDate.getFullYear() % 400 === 0) ? 366 : 365
-      startDate = new Date(currentDate.getFullYear(), 0, 2)
+      start = new Date(year, 0, 1)
+      end = new Date(year, 11, 31)
       break
+    default: // "Mensual"
+      start = new Date(year, month, 1)
+      end = new Date(year, month + 1, 0)
   }
 
-  const newActivityData: ActivityDay[] = []
+  // `day` viene como YYYY-MM-DD: se compara como texto, sin pasar por Date (zona horaria).
+  const trainedDays = new Set(trainings.filter(training => training.completed).map(training => training.day))
 
-  for (let i = 0; i < daysToGenerate; i++) {
-    const date = new Date(startDate.getTime())
-    date.setDate(startDate.getDate() + i)
-    newActivityData.push({
-      date,
-      // `day` viene como YYYY-MM-DD: se compara como texto, sin pasar por Date (zona horaria).
-      completed: trainings.some(training => training.day === toDateOnly(date) && training.completed)
-    })
+  const days: ActivityDay[] = []
+  for (let date = start; date <= end; date = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)) {
+    days.push({ date, completed: trainedDays.has(toDateOnly(date)) })
   }
-
-  return newActivityData
+  return days
 }
