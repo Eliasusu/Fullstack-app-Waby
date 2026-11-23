@@ -6,7 +6,10 @@ export default function GoalsPage() {
     return (
         <>
             <Header />
-            <GoalsTable />
+            {/* pb-24 deja lugar para la NavBar fija (nota 75). */}
+            <main className="pb-24">
+                <GoalsTable />
+            </main>
             <NavBar />
         </>
     )

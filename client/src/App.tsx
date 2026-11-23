@@ -19,6 +19,9 @@ import { GoalProvider } from './goals/goal.context.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import AdminRoute from './lib/AdminRoute.tsx';
 import AdminPage from './pages/Admin/AdminPage.tsx';
+import MesocyclesPage from './pages/Mesocycles/MesocyclesPage.tsx';
+import MesocycleDetailPage from './pages/Mesocycles/MesocycleDetailPage.tsx';
+import { MesocycleProvider } from './mesocycles/mesocycle.context.tsx';
 
 /** Rutas de la app. El ErrorBoundary se reinicia al cambiar de ruta (key = pathname), así un error no queda pegado (nota 82). */
 function AppRoutes() {
@@ -35,6 +38,8 @@ function AppRoutes() {
           <Route path='/create' element={<CreatePage />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/goals' element={<GoalsPage />} />
+          <Route path='/mesocycles' element={<MesocyclesPage />} />
+          <Route path='/mesocycles/:id' element={<MesocycleDetailPage />} />
           <Route element={<AdminRoute />}>
             <Route path='/admin' element={<AdminPage />} />
           </Route>
@@ -58,9 +63,11 @@ export function App() {
               <TrainingProvider>
                 <ExerciseProvider>
                   <GoalProvider>
-                    <div className="flex flex-col h-full">
-                      <AppRoutes />
-                    </div>
+                    <MesocycleProvider>
+                      <div className="flex flex-col h-full">
+                        <AppRoutes />
+                      </div>
+                    </MesocycleProvider>
                   </GoalProvider>
                 </ExerciseProvider>
               </TrainingProvider>

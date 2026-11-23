@@ -51,10 +51,13 @@ import {
 } from "@/components/ui/context-menu"
 import { useExercise } from "@/exercises/exercise.context.tsx"
 import { Calendar } from "@/components/ui/calendar"
-import { formatDay, toDateOnly } from "@/lib/dates.ts"
+import { useSearchParams } from "react-router-dom"
+import { useMesocycles } from "@/mesocycles/mesocycle.context.tsx"
+import { formatDay, fromDateOnly, toDateOnly } from "@/lib/dates.ts"
 import { notifyErrors, notifyResult } from "@/lib/notify.ts"
 import { errorList, numberOrUndefined, validate, type FieldErrors } from "@/lib/validation.ts"
 import FieldError from "@/components/FieldError.tsx"
+import { boxWidth } from "@/lib/layout.ts"
 
 /** Fila editable: los números se editan como texto y se convierten al guardar. */
 type ItemDraft = {
@@ -100,14 +103,22 @@ const itemLabels = { exerciseId: 'Ejercicio', sets: 'Sets', volume: 'Reps / segu
 export const TrainingDay = () => {
   const { training, loadingDay, getTrainingToDay, updateTraining, deleteTraining, addTraining, updateTrainingItem, addTrainingItem, deleteTrainingItem } = useTraining()
   const { allExercises, getAllExercises } = useExercise()
+  const { mesocycles, getMesocycles } = useMesocycles()
 
-  const [date, setDate] = useState<Date>(new Date())
+  // "Ver en el calendario" desde un Mesociclo abre en ese día: /calendar?date=YYYY-MM-DD (nota 79).
+  const [searchParams] = useSearchParams()
+  const [date, setDate] = useState<Date>(() => {
+    const day = searchParams.get('date')
+    return day && /^\d{4}-\d{2}-\d{2}$/.test(day) ? fromDateOnly(day) : new Date()
+  })
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [isAddItemDialogOpen, setIsAddItemDialogOpen] = useState(false)
   const [isModifyDialogOpen, setIsModifyDialogOpen] = useState(false)
 
   const [newTrainingName, setNewTrainingName] = useState('')
   const [newTrainingDates, setNewTrainingDates] = useState<Date[]>([])
+  /** Mesociclo al que pertenece el Entrenamiento nuevo ('' = suelto). Nota 79. */
+  const [newMesocycleId, setNewMesocycleId] = useState('')
   const [trainingName, setTrainingName] = useState('')
   const [newItem, setNewItem] = useState<NewItem>(emptyNewItem)
   /** Ítem que se está editando en la tabla y sus valores (nota 65: se guarda ese, no el primero). */
@@ -120,6 +131,7 @@ export const TrainingDay = () => {
 
   useEffect(() => {
     getAllExercises()
+    getMesocycles()
     getTrainingToDay(date)
   }, [])
 
@@ -155,9 +167,20 @@ export const TrainingDay = () => {
     const validation = validate(CreateTrainingSchema.pick({ name: true }), { name: newTrainingName })
     const errors: FieldErrors = validation.ok ? {} : validation.errors
     if (newTrainingDates.length === 0) errors.days = 'Elegí al menos un día en el calendario'
+    // Si va a un Mesociclo, los días tienen que caer dentro de su rango (nota 79).
+    const mesocycle = mesocycles.find((m) => String(m.id) === newMesocycleId)
+    if (mesocycle && newTrainingDates.some((day) => toDateOnly(day) < mesocycle.startDate || toDateOnly(day) > mesocycle.endDate)) {
+      errors.days = `Los días tienen que estar dentro del Mesociclo (${formatDay(mesocycle.startDate)} – ${formatDay(mesocycle.endDate)})`
+    }
     setCreateErrors(errors)
     if (Object.keys(errors).length > 0) return
-    const results = await Promise.all(newTrainingDates.map((day) => addTraining({ name: newTrainingName.trim(), day: toDateOnly(day) })))
+    const results = await Promise.all(newTrainingDates.map((day) => addTraining({
+      name: newTrainingName.trim(),
+      day: toDateOnly(day),
+      ...(mesocycle ? { mesocycleId: mesocycle.id } : {}),
+    })))
+    // La cantidad de Entrenamientos de cada Mesociclo es derivada: se recarga.
+    if (mesocycle) getMesocycles()
     const failed = results.flatMap((result) => (result.ok ? [] : result.errors))
     if (failed.length) {
       notifyErrors([...new Set(failed)])
@@ -166,6 +189,7 @@ export const TrainingDay = () => {
     notifyResult({ ok: true, data: undefined }, { title: "Training created", description: "The training has been created successfully." })
     setNewTrainingName('')
     setNewTrainingDates([])
+    setNewMesocycleId('')
     setIsCreateDialogOpen(false)
     await getTrainingToDay(date)
   }
@@ -248,13 +272,14 @@ export const TrainingDay = () => {
   }
 
   return (
-    <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
+    <BoxContainer width={boxWidth} height="" padding="my-5">
       <h2 className="text-2xl font-semibold text-white m-5">Training</h2>
       <ContextMenu>
         <ContextMenuTrigger>
           <Calendar
             mode="single"
             selected={date}
+            defaultMonth={date}
             onSelect={(newDate) => {
               if (newDate) setDate(newDate)
             }}
@@ -524,6 +549,22 @@ export const TrainingDay = () => {
                     onChange={(e) => setNewTrainingName(e.target.value)}
                     className="col-span-3 w-full" />
                   <div className="col-span-3 col-start-2 -mt-3"><FieldError message={createErrors.name} /></div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <label htmlFor="newTrainingMesocycle" className="text-right">Mesociclo</label>
+                  <select
+                    id="newTrainingMesocycle"
+                    value={newMesocycleId}
+                    onChange={(e) => setNewMesocycleId(e.target.value)}
+                    className="col-span-3 w-full h-10 rounded-md border border-input bg-grey-box px-3 text-sm"
+                  >
+                    <option value="">Ninguno (Entrenamiento suelto)</option>
+                    {mesocycles.map((mesocycle) => (
+                      <option key={mesocycle.id} value={mesocycle.id}>
+                        {mesocycle.name} ({formatDay(mesocycle.startDate)} – {formatDay(mesocycle.endDate)})
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div id="conteiner frecuency" className="m-auto text-center w-max h-max">
                   <label htmlFor="frecuency" className="">Frecuency</label>

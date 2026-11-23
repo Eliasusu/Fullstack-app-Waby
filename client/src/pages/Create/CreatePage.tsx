@@ -18,8 +18,11 @@ export default function CreatePage() {
     return (
         <>
             <Header />
-            <MuscleGroups />
-            <ExercisesTable2 />
+            {/* pb-24 deja lugar para la NavBar fija (nota 75). */}
+            <main className="pb-24">
+                <MuscleGroups />
+                <ExercisesTable2 />
+            </main>
             <NavBar />
         </>
     )

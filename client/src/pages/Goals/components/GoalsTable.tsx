@@ -17,6 +17,7 @@ import { goalTargetTypeLabels, goalTargetUnit } from "@/lib/labels.ts";
 import { notifyResult } from "@/lib/notify.ts";
 import { validate, type FieldErrors } from "@/lib/validation.ts";
 import FieldError from "@/components/FieldError.tsx";
+import { boxWidth } from "@/lib/layout.ts"
 
 type GoalDraft = {
     exerciseId?: number;
@@ -181,7 +182,7 @@ export default function GoalsTable() {
     };
 
     return (
-        <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
+        <BoxContainer width={boxWidth} height="" padding="my-5">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-2xl font-medium mb-5">Goals</CardTitle>
             </CardHeader>
