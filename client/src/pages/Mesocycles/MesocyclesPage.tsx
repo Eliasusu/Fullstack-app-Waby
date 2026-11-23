@@ -13,6 +13,7 @@ import { formatDay, toDateOnly } from "@/lib/dates.ts";
 import { mesocycleTypeLabels, options } from "@/lib/labels.ts";
 import { notifyResult } from "@/lib/notify.ts";
 import { numberOrUndefined, validate, type FieldErrors } from "@/lib/validation.ts";
+import { boxWidth } from "@/lib/layout.ts";
 
 type MesocycleDraft = { name: string; type: MesocycleType | ''; startDate: string; weeks: string };
 
@@ -142,7 +143,7 @@ export default function MesocyclesPage() {
         <>
             <Header />
             <div className="pb-24 flex flex-col items-center">
-                <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="my-5 p-5">
+                <BoxContainer width={boxWidth} height="" padding="my-5 p-5">
                     <h1 className="text-2xl font-semibold text-white-text">Mesociclos</h1>
                     <p className="text-sm text-white-text/70 mb-4">
                         Un Mesociclo es un bloque de varias semanas que agrupa tus Entrenamientos.
@@ -150,7 +151,7 @@ export default function MesocyclesPage() {
                     <MesocycleForm draft={newDraft} setDraft={setNewDraft} errors={newErrors} submitLabel="Crear Mesociclo" onSubmit={handleCreate} />
                 </BoxContainer>
 
-                <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="mb-5 p-5">
+                <BoxContainer width={boxWidth} height="" padding="mb-5 p-5">
                     <h2 className="text-xl font-semibold text-white-text mb-3">Tus Mesociclos</h2>
                     <ul className="flex flex-col gap-3">
                         {mesocycles.length === 0 && (

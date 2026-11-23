@@ -9,7 +9,10 @@ export default function CronogramPage() {
     return (
         <>
             <Header />
-            <TrainingDay />
+            {/* pb-24 deja lugar para la NavBar fija (nota 75). */}
+            <main className="pb-24">
+                <TrainingDay />
+            </main>
             <NavBar />
         </>
     );

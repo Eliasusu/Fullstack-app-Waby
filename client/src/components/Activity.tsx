@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useTraining } from "@/trainings/training.context.tsx"
 import { toDateOnly } from "@/lib/dates.ts"
 import type { Training } from "@waby/shared"
+import { gridBoxWidth } from "@/lib/layout.ts"
 interface ActivityDay {
   date: Date;
   completed: boolean
@@ -80,7 +81,7 @@ export default function Activity() {
   }
 
   return (
-    <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding='my-5'>
+    <BoxContainer width={gridBoxWidth} height="" padding='my-5'>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-medium">Activity</CardTitle>
         <Select

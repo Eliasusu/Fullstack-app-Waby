@@ -13,6 +13,7 @@ import BoxContainer from "@/components/ui/BoxConteiner.tsx"
 import { useTraining } from "@/trainings/training.context.tsx"
 import { formatDay } from "@/lib/dates.ts"
 import { notifyErrors } from "@/lib/notify.ts"
+import { gridBoxWidth } from "@/lib/layout.ts"
 
 
 export const DayRoutine = ({ date }: { date: Date }) => {
@@ -30,7 +31,7 @@ export const DayRoutine = ({ date }: { date: Date }) => {
   }
 
   return (
-    <BoxContainer width="w-[400px] md:w-[500px] lg:w-[600px]" height="" padding="my-5">
+    <BoxContainer width={gridBoxWidth} height="" padding="my-5">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center space-x-2">
           <Checkbox

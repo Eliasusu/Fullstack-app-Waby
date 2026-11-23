@@ -10,6 +10,7 @@ import { useMuscleGroup } from "@/muscleGroups/muscle-group.context.tsx";
 import { useTrainingMethod } from "@/trainingMethods/training-method.context.tsx";
 import { useLoader } from "@/lib/load.ts";
 import { notifyResult } from "@/lib/notify.ts";
+import { boxWidth } from "@/lib/layout.ts";
 
 const roleLabels: Record<User['role'], string> = { USER: 'Usuario', ADMIN: 'Admin' };
 
@@ -38,12 +39,12 @@ export default function AdminPage() {
         <>
             <Header />
             <div className="pb-24 flex flex-col items-center">
-                <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="my-5 p-5">
+                <BoxContainer width={boxWidth} height="" padding="my-5 p-5">
                     <h1 className="text-2xl font-semibold text-white-text">Administración</h1>
                     <p className="text-sm text-white-text/70">Catálogos que usan todos los usuarios y usuarios registrados.</p>
                 </BoxContainer>
 
-                <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="mb-5 p-5">
+                <BoxContainer width={boxWidth} height="" padding="mb-5 p-5">
                     <CatalogEditor
                         title="Grupos musculares"
                         items={muscleGroups.muscleGroups}
@@ -55,7 +56,7 @@ export default function AdminPage() {
                     />
                 </BoxContainer>
 
-                <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="mb-5 p-5">
+                <BoxContainer width={boxWidth} height="" padding="mb-5 p-5">
                     <CatalogEditor
                         title="Métodos de entrenamiento"
                         items={trainingMethods.trainingMethods}
@@ -67,7 +68,7 @@ export default function AdminPage() {
                     />
                 </BoxContainer>
 
-                <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="mb-5 p-5">
+                <BoxContainer width={boxWidth} height="" padding="mb-5 p-5">
                     <h2 className="text-xl font-semibold text-white-text mb-3">Usuarios</h2>
                     <div className="border border-white/30 rounded-xl overflow-x-auto">
                         <Table>

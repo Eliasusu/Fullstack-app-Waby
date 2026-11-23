@@ -17,6 +17,7 @@ import { difficultyLabels, metricTypeLabels, movementPatternLabels, options } fr
 import { notifyResult } from "@/lib/notify.ts";
 import { validate, type FieldErrors } from "@/lib/validation.ts";
 import FieldError from "@/components/FieldError.tsx";
+import { boxWidth } from "@/lib/layout.ts"
 
 type NewExercise = {
   name: string;
@@ -79,10 +80,10 @@ export default function MuscleGroupExercisesDialog() {
   };
 
   return (
-    <BoxConteiner width="w-[400px] md:w-[500px] lg:w-[600px]" height="h-[300px] p-5" padding="my-5">
+    <BoxConteiner width={boxWidth} height="p-5" padding="my-5">
       <h2 className="text-2xl font-medium mb-4 text-gray-100">Grupos musculares</h2>
       {loadingGroups && muscleGroups.length === 0 && <p className="text-white-text/70">Cargando…</p>}
-      <div className="grid grid-cols-3 md:grid-cols-3 gap-5 m-0 p">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-5">
         {muscleGroups.map((group) => (
           <Card
             key={group.id}
@@ -96,7 +97,7 @@ export default function MuscleGroupExercisesDialog() {
         ))}
       </div>
       <Dialog open={openGroup !== null} onOpenChange={() => setOpenGroup(null)}>
-        <DialogContent className="bg-grey-bg text-gray-100 min-w-full">
+        <DialogContent className="bg-grey-bg text-gray-100 sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Exercises by muscle group</DialogTitle>
           </DialogHeader>
@@ -112,7 +113,7 @@ export default function MuscleGroupExercisesDialog() {
         </DialogContent>
       </Dialog>
       <Dialog open={showAddExercise} onOpenChange={() => setShowAddExercise(false)}>
-        <DialogContent className="bg-grey-bg text-gray-100 min-w-full">
+        <DialogContent className="bg-grey-bg text-gray-100 sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Add an exercise</DialogTitle>
           </DialogHeader>

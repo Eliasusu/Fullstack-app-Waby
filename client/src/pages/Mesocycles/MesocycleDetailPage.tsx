@@ -18,6 +18,7 @@ import { formatDay, fromDateOnly, toDateOnly } from "@/lib/dates.ts";
 import { mesocycleTypeLabels } from "@/lib/labels.ts";
 import { notifyErrors, notifyResult } from "@/lib/notify.ts";
 import { validate, type FieldErrors } from "@/lib/validation.ts";
+import { boxWidth } from "@/lib/layout.ts";
 
 type LoadState = 'loading' | 'ready' | 'not-found' | 'error';
 
@@ -92,7 +93,7 @@ export default function MesocycleDetailPage() {
             <>
                 <Header />
                 <div className="pb-24 flex justify-center">
-                    <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="my-5 p-5">
+                    <BoxContainer width={boxWidth} height="" padding="my-5 p-5">
                         <p className="text-white-text">
                             {state === 'not-found' ? 'Este Mesociclo no existe o no es tuyo.' : 'No se pudo cargar el Mesociclo.'}
                         </p>
@@ -108,7 +109,7 @@ export default function MesocycleDetailPage() {
         <>
             <Header />
             <div className="pb-24 flex flex-col items-center">
-                <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="my-5 p-5">
+                <BoxContainer width={boxWidth} height="" padding="my-5 p-5">
                     <Link to="/mesocycles" className="text-sm text-white-text/70 underline">← Mesociclos</Link>
                     {mesocycle ? (
                         <>
@@ -125,7 +126,7 @@ export default function MesocycleDetailPage() {
                     )}
                 </BoxContainer>
 
-                <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="mb-5 p-5">
+                <BoxContainer width={boxWidth} height="" padding="mb-5 p-5">
                     <h2 className="text-xl font-semibold text-white-text mb-3">Entrenamientos</h2>
                     <ul className="flex flex-col divide-y divide-white/20 rounded-xl border border-white/30">
                         {trainings.length === 0 && (
@@ -150,7 +151,7 @@ export default function MesocycleDetailPage() {
                 </BoxContainer>
 
                 {mesocycle && (
-                    <BoxContainer width="w-full mx-3 max-w-3xl" height="" padding="mb-5 p-5">
+                    <BoxContainer width={boxWidth} height="" padding="mb-5 p-5">
                         <h2 className="text-xl font-semibold text-white-text">Agregar Entrenamientos</h2>
                         <p className="text-sm text-white-text/70 mb-3">
                             Elegí uno o más días dentro del Mesociclo. Después cargale los ejercicios a cada uno desde el calendario.
