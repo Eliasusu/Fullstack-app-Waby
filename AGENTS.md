@@ -31,6 +31,7 @@ pnpm typecheck            # tsc --noEmit en todos los paquetes
 pnpm lint                 # ESLint del client
 pnpm build                # build de todos los paquetes
 pnpm test                 # tests de integración de la API contra waby_test (borra y recrea esa base)
+pnpm test:client          # tests unitarios del client con Vitest y Testing Library (jsdom)
 pnpm test:e2e             # smoke tests con Playwright: client + API + MySQL efímero (testcontainers), ver e2e/README.md
 pnpm seed                 # borra y recrea la base waby con datos de demo (usuarios admin y demo, ver .env)
 pnpm --filter @waby/api add <pkg>   # agregar una dependencia a un paquete
