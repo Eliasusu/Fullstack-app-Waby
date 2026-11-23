@@ -1,4 +1,5 @@
 import { useEffect, useId, useState } from "react";
+import { Link } from "react-router-dom";
 import { CreateMesocycleSchema, type Mesocycle, type MesocycleType } from "@waby/shared";
 import Header from "@/components/Header.tsx";
 import NavBar from "@/components/NavBar.tsx";
@@ -191,6 +192,10 @@ export default function MesocyclesPage() {
                                             </div>
                                         ) : (
                                             <div className="flex gap-2">
+                                                {/* El detalle muestra sus Entrenamientos y permite armarlos (nota 79). */}
+                                                <Button asChild className="bg-red hover:bg-redHover">
+                                                    <Link to={`/mesocycles/${mesocycle.id}`} aria-label={`Ver ${mesocycle.name}`}>Ver</Link>
+                                                </Button>
                                                 <Button type="button" variant="outline" aria-label={`Editar ${mesocycle.name}`} onClick={() => startEditing(mesocycle)}>Editar</Button>
                                                 <Button type="button" variant="outline" aria-label={`Borrar ${mesocycle.name}`} onClick={() => { setEditingId(null); setDeletingId(mesocycle.id); }}>Borrar</Button>
                                             </div>
