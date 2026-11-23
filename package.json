@@ -7,6 +7,7 @@
     "dev:shared": "pnpm --filter @waby/shared dev",
     "dev:api": "pnpm build:shared && pnpm --filter @waby/api dev:server",
     "dev:client": "pnpm build:shared && pnpm --filter @waby/client dev:client",
+    "start": "pnpm --filter @waby/api start",
     "build": "pnpm -r build",
     "build:shared": "pnpm --filter @waby/shared build",
     "build:api": "pnpm build:shared && pnpm --filter @waby/api build",

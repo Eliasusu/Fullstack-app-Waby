@@ -16,6 +16,7 @@ Monorepo con **pnpm workspaces**:
 - Glosario y modelo de dominio: `CONTEXT.md`.
 - Decisiones de arquitectura: `docs/adr/`.
 - Investigaciones y análisis: `docs/research/`.
+- Índice de la documentación de la entrega: `docs/README.md`. Tests y su evidencia: `docs/tests.md`.
 
 ## Comandos (desde la raíz)
 
@@ -30,6 +31,7 @@ pnpm dev:client           # front con Vite (http://localhost:5173)
 pnpm typecheck            # tsc --noEmit en todos los paquetes
 pnpm lint                 # ESLint del client
 pnpm build                # build de todos los paquetes
+pnpm start                # arranca la API compilada (api/dist) con el Node 22 de la API; no compila, corré pnpm build antes
 pnpm test                 # tests de integración de la API contra waby_test (borra y recrea esa base)
 pnpm test:client          # tests unitarios del client con Vitest y Testing Library (jsdom)
 pnpm test:e2e             # smoke tests con Playwright: client + API + MySQL efímero (testcontainers), ver e2e/README.md
