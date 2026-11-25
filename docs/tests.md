@@ -29,7 +29,38 @@ pnpm test:e2e          # end-to-end: Playwright
 
 ## Evidencia de la última corrida
 
-Se completa sobre el commit de entrega, con la salida real de cada comando. Formato:
+Salida real de cada comando, sobre el commit indicado. Se vuelve a correr y se reemplaza si cambia el código antes de la entrega.
+
+```text
+Fecha:  2026-11-25
+Commit: e7f3703 (main)
+
+$ pnpm typecheck
+OK (api, client, e2e, shared)
+
+$ pnpm lint
+OK (0 errores, 0 warnings)
+
+$ pnpm test
+# tests 85
+# suites 13
+# pass 85
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 36309.698734
+
+$ pnpm test:client
+ Test Files  3 passed (3)
+      Tests  19 passed (19)
+   Duration  6.27s
+
+$ pnpm test:e2e
+  10 passed (1.1m)
+```
+
+Formato para una corrida nueva:
 
 ```text
 Fecha:  AAAA-MM-DD
@@ -45,4 +76,3 @@ $ pnpm test:e2e
 <resumen de Playwright: passed, failed, duración>
 ```
 
-Todavía no hay corrida registrada.
