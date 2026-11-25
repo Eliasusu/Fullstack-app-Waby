@@ -6,7 +6,7 @@ Punto de entrada a la documentación de la entrega de Waby 1.0. Lo que todavía 
 
 | Contenido | Dónde |
 |---|---|
-| Proposal actualizada y links a los PRs | Pendiente (#90, #91) |
+| Proposal actualizada | [`proposal.md`](proposal.md) (#90) |
 | Instrucciones de instalación | [README del repo](../readme.md) (#87) |
 | Minutas y tracking | Pendiente (#89) |
 | Documentación de la API | [`api.md`](api.md) |
