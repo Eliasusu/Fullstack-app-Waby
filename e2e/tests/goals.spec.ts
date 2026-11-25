@@ -14,6 +14,8 @@ test('lista las Metas del seed', async ({ page }) => {
 
 test('crear una Meta la suma a la tabla', async ({ page }) => {
     const rows = page.getByRole('row').filter({ has: page.getByRole('cell', { name: 'Flexiones', exact: true }) });
+    // count() no espera: antes de contar, que la tabla haya cargado.
+    await expect(page.getByRole('cell', { name: 'Dominadas lastradas', exact: true })).toBeVisible();
     const before = await rows.count();
 
     await page.getByRole('button', { name: 'Add new goal' }).click();

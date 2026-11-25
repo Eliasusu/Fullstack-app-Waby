@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { Edit, X } from "lucide-react";
 import { CreateGoalSchema, UpdateGoalSchema, goalTargetTypesFor, type Exercise, type Goal, type GoalTargetType, type Mesocycle } from "@waby/shared";
 import BoxContainer from "@/components/ui/BoxConteiner.tsx";
@@ -36,7 +36,7 @@ const formatValue = (value: number | null, type: GoalTargetType) => (value == nu
  */
 function GoalForm({ draft, setDraft, exercises, mesocycles, lockExercise, errors }: {
     draft: GoalDraft;
-    setDraft: (draft: GoalDraft) => void;
+    setDraft: Dispatch<SetStateAction<GoalDraft>>;
     exercises: Exercise[];
     mesocycles: Mesocycle[];
     lockExercise?: boolean;
@@ -53,11 +53,11 @@ function GoalForm({ draft, setDraft, exercises, mesocycles, lockExercise, errors
                 <div className="col-span-3">
                     <Select
                         disabled={lockExercise}
-                        value={draft.exerciseId?.toString()}
+                        value={draft.exerciseId?.toString() ?? ""}
                         onValueChange={(value) => {
                             const selected = exercises.find((e) => e.id === Number(value));
                             const types = selected ? goalTargetTypesFor(selected.metricType) : [];
-                            setDraft({ ...draft, exerciseId: Number(value), targetType: types.length === 1 ? types[0] : undefined });
+                            setDraft((prev) => ({ ...prev, exerciseId: Number(value), targetType: types.length === 1 ? types[0] : undefined }));
                         }}
                     >
                         <SelectTrigger>
@@ -77,8 +77,8 @@ function GoalForm({ draft, setDraft, exercises, mesocycles, lockExercise, errors
                 <div className="col-span-3">
                     <Select
                         disabled={!exercise}
-                        value={draft.targetType}
-                        onValueChange={(value) => setDraft({ ...draft, targetType: value as GoalTargetType })}
+                        value={draft.targetType ?? ""}
+                        onValueChange={(value) => setDraft((prev) => ({ ...prev, targetType: value as GoalTargetType }))}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select a goal type" />
@@ -97,15 +97,15 @@ function GoalForm({ draft, setDraft, exercises, mesocycles, lockExercise, errors
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="targetValue" className="text-right">Goal</Label>
                 <Input id="targetValue" type="number" step="0.5" className="col-span-3" value={draft.targetValue}
-                    onChange={(e) => setDraft({ ...draft, targetValue: e.target.value })} />
+                    onChange={(e) => { const targetValue = e.target.value; setDraft((prev) => ({ ...prev, targetValue })); }} />
                 <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.targetValue} /></div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Mesocycle</Label>
                 <div className="col-span-3">
                     <Select
-                        value={draft.mesocycleId?.toString()}
-                        onValueChange={(value) => setDraft({ ...draft, mesocycleId: Number(value) })}
+                        value={draft.mesocycleId?.toString() ?? ""}
+                        onValueChange={(value) => setDraft((prev) => ({ ...prev, mesocycleId: Number(value) }))}
                     >
                         <SelectTrigger aria-label="Mesocycle">
                             <SelectValue placeholder={mesocycles.length ? "Select a mesocycle" : "Create a mesocycle first"} />
