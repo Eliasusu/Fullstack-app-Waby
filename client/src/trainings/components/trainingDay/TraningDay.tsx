@@ -128,6 +128,9 @@ export const TrainingDay = () => {
   const [createErrors, setCreateErrors] = useState<FieldErrors>({})
   const [modifyErrors, setModifyErrors] = useState<FieldErrors>({})
   const [itemErrors, setItemErrors] = useState<FieldErrors>({})
+  // Borrar el Entrenamiento: confirmación inline, como en Mesociclos (#68).
+  const [confirmingDelete, setConfirmingDelete] = useState(false)
+  const [deletingTraining, setDeletingTraining] = useState(false)
 
   useEffect(() => {
     getAllExercises()
@@ -255,7 +258,10 @@ export const TrainingDay = () => {
 
   const handleDeleteTraining = async () => {
     if (!training) return
-    notifyResult(await deleteTraining(training.id), { title: "Training deleted", description: "The training has been deleted successfully." })
+    setDeletingTraining(true)
+    const deleted = notifyResult(await deleteTraining(training.id), { title: "Entrenamiento borrado", description: `Se borró ${training.name}.` })
+    setDeletingTraining(false)
+    if (deleted) setConfirmingDelete(false)
   }
 
   const draftInput = (field: keyof ItemDraft, item: TrainingItem, className: string, type: 'text' | 'number' = 'number') => {
@@ -283,13 +289,13 @@ export const TrainingDay = () => {
             onSelect={(newDate) => {
               if (newDate) setDate(newDate)
             }}
-            onDayClick={(day) => getTrainingToDay(day)}
+            onDayClick={(day) => { setConfirmingDelete(false); getTrainingToDay(day) }}
             className="rounded-md shadow"
           />
         </ContextMenuTrigger>
         {training && (
           <ContextMenuContent>
-            <ContextMenuItem onClick={handleDeleteTraining}>Delete Training</ContextMenuItem>
+            <ContextMenuItem onClick={() => setConfirmingDelete(true)}>Borrar entrenamiento</ContextMenuItem>
           </ContextMenuContent>
         )}
       </ContextMenu>
@@ -525,6 +531,27 @@ export const TrainingDay = () => {
                 </form>
               </DialogContent>
             </Dialog>
+            {confirmingDelete ? (
+              <div className="mt-4 flex flex-col gap-2">
+                <span className="text-sm">¿Borrar {training.name}? Se borran también sus ejercicios.</span>
+                <div className="flex gap-2">
+                  <Button type="button" className="bg-red hover:bg-redHover" disabled={deletingTraining} onClick={handleDeleteTraining}>
+                    {deletingTraining ? 'Borrando…' : 'Sí, borrar'}
+                  </Button>
+                  <Button type="button" variant="outline" disabled={deletingTraining} onClick={() => setConfirmingDelete(false)}>Cancelar</Button>
+                </div>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                variant="outline"
+                aria-label={`Borrar ${training.name}`}
+                className="w-full mt-4"
+                onClick={() => setConfirmingDelete(true)}
+              >
+                Borrar
+              </Button>
+            )}
           </>
         ) : (
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>

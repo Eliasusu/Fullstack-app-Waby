@@ -87,7 +87,8 @@ function RegisterUser() {
                             {errors.heightCm && <span className="text-red text-xs">{errors.heightCm.message}</span>}
                         </div>
                         <div>
-                            <select className="w-full h-10 border-[1px] rounded-xl border-white/60 bg-grey-login p-2 font-normal text-sm" {...register('trainingMethodId')}>
+                            <select className="w-full h-10 border-[1px] rounded-xl border-white/60 bg-grey-login p-2 font-normal text-sm" defaultValue="" {...register('trainingMethodId')}>
+                                <option value="" disabled>Elegí un método</option>
                                 {trainingMethods.map((method) => (
                                     <option key={method.id} value={method.id}>{method.name}</option>
                                 ))}
