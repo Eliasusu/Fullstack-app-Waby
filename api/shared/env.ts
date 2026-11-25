@@ -28,6 +28,8 @@ const EnvSchema = z.object({
         .string()
         .default('http://localhost:3000,http://localhost:3001,http://localhost:5173')
         .transform((value) => value.split(',').map((origin) => origin.trim()).filter(Boolean)),
+    /** Cookie de sesión solo por HTTPS. Si no se define, `true` en producción. `pnpm app:up` la pone en `false` porque sirve por HTTP. */
+    COOKIE_SECURE: z.enum(['true', 'false']).optional(),
 });
 
 const parsed = EnvSchema.safeParse(process.env);
@@ -43,4 +45,5 @@ export const env = {
     isDev: parsed.data.NODE_ENV === 'development',
     isTest: parsed.data.NODE_ENV === 'test',
     isProd: parsed.data.NODE_ENV === 'production',
+    cookieSecure: parsed.data.COOKIE_SECURE ? parsed.data.COOKIE_SECURE === 'true' : parsed.data.NODE_ENV === 'production',
 };

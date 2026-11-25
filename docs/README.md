@@ -12,7 +12,7 @@ Punto de entrada a la documentación de la entrega de Waby 1.0. Lo que todavía 
 | Documentación de la API | [`api.md`](api.md) |
 | Evidencia de los tests | [`tests.md`](tests.md) (#43) |
 | Video | Pendiente (#86) |
-| Deploy | Pendiente (#85) |
+| Deploy | Con Docker, un comando: [`pnpm app:up`](../readme.md#con-un-comando-docker) (#85) |
 
 ## Proceso y decisiones
 

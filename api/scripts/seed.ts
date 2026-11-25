@@ -41,6 +41,8 @@ const seedEnv = z
         SEED_DEMO_USERNAME: z.string().min(3),
         SEED_DEMO_EMAIL: z.string().email(),
         SEED_DEMO_PASSWORD: z.string().min(8),
+        /** `true`: si la base ya tiene usuarios, no la toca. Lo usa `pnpm app:up` para no borrar la base de desarrollo. */
+        SEED_IF_EMPTY: z.enum(['true', 'false']).default('false'),
     })
     .parse(process.env);
 
@@ -62,6 +64,15 @@ const MESOCYCLE_WEEKS = 4;
 // --- Seed -------------------------------------------------------------------------------
 
 orm.config.getLogger().setDebugMode(false);
+if (seedEnv.SEED_IF_EMPTY === 'true') {
+    // Si la tabla no existe todavía, la base está vacía.
+    const users = await orm.em.fork().count(User).catch(() => 0);
+    if (users > 0) {
+        console.log(`La base "${env.dbName}" ya tiene datos: el seed no la toca (SEED_IF_EMPTY=true).`);
+        await orm.close(true);
+        process.exit(0);
+    }
+}
 console.log(`Recreando la base "${env.dbName}"...`);
 await orm.getSchemaGenerator().refreshDatabase();
 const em = orm.em.fork();

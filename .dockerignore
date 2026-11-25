@@ -1,0 +1,13 @@
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+.env
+.env.*
+**/.env
+**/.env.*
+.vault
+.git
+e2e
+docs
+**/*.log
+client/.client-dist

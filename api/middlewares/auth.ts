@@ -19,13 +19,13 @@ export function setSessionCookie(res: Response, session: SessionPayload) {
     res.cookie(COOKIE, signSession(session), {
         httpOnly: true,
         sameSite: 'lax',
-        secure: env.isProd,
+        secure: env.cookieSecure,
         maxAge: SESSION_MAX_AGE_MS,
     });
 }
 
 export function clearSessionCookie(res: Response) {
-    res.clearCookie(COOKIE, { httpOnly: true, sameSite: 'lax', secure: env.isProd });
+    res.clearCookie(COOKIE, { httpOnly: true, sameSite: 'lax', secure: env.cookieSecure });
 }
 
 /** Exige sesión válida (401). El rol sale del token, que dura 1 hora. */

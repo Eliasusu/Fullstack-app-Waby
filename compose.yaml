@@ -1,5 +1,8 @@
 # Entorno local: MySQL 8 con una base para desarrollo y otra para los tests.
 # Uso: pnpm db:up / pnpm db:down   (lee las variables de .env en la raíz)
+#
+# Profile `app`: la app completa (MySQL, seed, API y client) con un comando.
+# Uso: pnpm app:up / pnpm app:down   (client en http://localhost:8080, API en http://localhost:3000)
 services:
   db:
     image: mysql:8.0
@@ -21,6 +24,70 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
+
+  # Carga los datos de demo solo si la base está vacía: no pisa la base de desarrollo.
+  seed:
+    profiles: [app]
+    build: { context: ., dockerfile: api/Dockerfile }
+    image: waby-api
+    env_file: .env
+    environment:
+      NODE_ENV: development
+      DB_HOST: db
+      DB_PORT: 3306
+      SEED_IF_EMPTY: "true"
+      TZ: ${TZ:-America/Argentina/Buenos_Aires}
+    command: ["node", "dist/scripts/seed.js"]
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    profiles: [app]
+    build: { context: ., dockerfile: api/Dockerfile }
+    image: waby-api
+    container_name: waby-api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 3306
+      CORS_ORIGINS: http://localhost:${CLIENT_PORT:-8080}
+      # Se sirve por HTTP: con `secure` el navegador no guardaría la cookie de sesión fuera de localhost.
+      COOKIE_SECURE: "false"
+      TZ: ${TZ:-America/Argentina/Buenos_Aires}
+    ports:
+      - "${API_PORT:-3000}:3000"
+    healthcheck:
+      # Cualquier respuesta (401 sin sesión) significa que la API está arriba.
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/v1/users/me').then(() => process.exit(0), () => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    depends_on:
+      db:
+        condition: service_healthy
+      seed:
+        condition: service_completed_successfully
+
+  client:
+    profiles: [app]
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+      args:
+        VITE_API_URL: http://localhost:${API_PORT:-3000}/api/v1/
+    image: waby-client
+    container_name: waby-client
+    restart: unless-stopped
+    ports:
+      - "${CLIENT_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
 
 volumes:
   waby-db-data:

@@ -19,6 +19,8 @@
     "test:e2e": "pnpm build:api && pnpm --filter @waby/e2e test",
     "seed": "pnpm build:shared && pnpm --filter @waby/api seed",
     "db:up": "docker compose up -d --wait",
-    "db:down": "docker compose down"
+    "db:down": "docker compose down",
+    "app:up": "docker compose --profile app up -d --build --wait",
+    "app:down": "docker compose --profile app down"
   }
 }

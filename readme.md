@@ -25,7 +25,22 @@ El punto de entrada de la documentación de la entrega es [`docs/README.md`](doc
 - [pnpm](https://pnpm.io/) 9. Con Node instalado alcanza con `corepack enable`, que toma la versión de `package.json`.
 - La API corre con su propio Node 22 (lo instala `pnpm install`), así que sirve cualquier versión de Node para pnpm. Si tu Node no es 22, pnpm muestra un aviso `Unsupported engine` para `api`: se puede ignorar, los scripts usan el Node 22 de la API.
 
-### Pasos
+### Con un comando (Docker)
+
+Levanta MySQL, carga los datos de demo, y arranca la API y el client en contenedores. Solo hace falta Docker; no hace falta Node ni pnpm si usás `docker compose` directo.
+
+```bash
+cp .env.example .env   # completar JWT_SECRET (el archivo trae el comando para generarlo) y las contraseñas
+pnpm app:up            # o: docker compose --profile app up -d --build --wait
+```
+
+- Client: http://localhost:8080 · API: http://localhost:3000/api/v1
+- Usuarios de demo: los de `.env` (`SEED_DEMO_*` y `SEED_ADMIN_*`). Se entra con el nombre de usuario, no con el email. Con el `.env.example` sin cambiar: `demo` / `cambiame-demo` y `admin` / `cambiame-admin`.
+- El seed corre solo si la base está vacía, así que no pisa una base de desarrollo que ya tenga datos. Para volver a los datos de demo: `pnpm seed`.
+- `pnpm app:down` baja todo. Los datos quedan en el volumen de Docker.
+- Puertos: `CLIENT_PORT` y `API_PORT` en `.env` (por defecto 8080 y 3000).
+
+### Para desarrollar
 
 ```bash
 cp .env.example .env   # completar JWT_SECRET (el archivo trae el comando para generarlo) y las contraseñas
@@ -65,7 +80,7 @@ La API elige el ambiente con `NODE_ENV` (en `.env`; ver `api/shared/env.ts`):
 | Base de datos | `DB_NAME` (`waby`) | `DB_TEST_NAME` (`waby_test`) | `DB_NAME` |
 | Esquema | se actualiza al arrancar la API (`updateSchema`) | lo recrean los tests en cada archivo | no se toca al arrancar: tiene que existir (no hay migraciones, ADR-0003) |
 | Log de SQL | sí | no | no |
-| Cookie de sesión | `secure: false` | `secure: false` | `secure: true` (solo viaja por HTTPS) |
+| Cookie de sesión | `secure: false` | `secure: false` | `secure: true` (solo viaja por HTTPS), salvo `COOKIE_SECURE=false` |
 | `pnpm seed` | borra y recrea la base | — | se niega a correr |
 
 - `pnpm test` fuerza `NODE_ENV=test` por su cuenta, así que el `.env` puede quedar en `development`.
@@ -86,4 +101,4 @@ Qué cubre cada suite y la evidencia de la última corrida: [`docs/tests.md`](do
 
 ## Deploy
 
-Pendiente (#85).
+No hay deploy público: la app se entrega para correr con Docker (`pnpm app:up`, ver [Con un comando](#con-un-comando-docker)). La API corre en `NODE_ENV=production` con `COOKIE_SECURE=false`, porque se sirve por HTTP en localhost.
