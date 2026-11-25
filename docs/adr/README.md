@@ -9,4 +9,5 @@ Una decisión por archivo: `NNNN-titulo-en-kebab-case.md`, numeradas en orden. C
 |---|---|---|
 | [0001](0001-monorepo-pnpm-workspaces.md) | Monorepo con pnpm workspaces | Aceptado |
 | [0002](0002-paquete-shared-contrato-zod.md) | Paquete `@waby/shared` con el contrato de la API en Zod | Aceptado |
-| [0003](0003-modelo-de-dominio-1-0.md) | Modelo de dominio de Waby 1.0 | Aceptado |
+| [0003](0003-modelo-de-dominio-1-0.md) | Modelo de dominio de Waby 1.0 | Aceptado (la Meta, reemplazada por 0004) |
+| [0004](0004-la-meta-pertenece-a-un-mesociclo.md) | La Meta pertenece a un Mesociclo | Aceptado |

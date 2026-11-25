@@ -216,10 +216,10 @@ training(toDateOnly(addDays(mesocycleStart, -3)), 'Movilidad y técnica', [
     { exercise: plank, sets: 3, seconds: 40 },
 ], false);
 
-// Metas sobre las fechas del Mesociclo
+// Metas del Mesociclo: avanzan con los Ítems completados de sus Entrenamientos (ADR-0004)
 const mesocycleEnd = mesocycleEndDate(toDateOnly(mesocycleStart), MESOCYCLE_WEEKS);
 const goal = (target: Exercise, targetType: 'REPS' | 'WEIGHT' | 'SECONDS', targetValue: number) =>
-    em.create(Goal, { user: demo, exercise: target, targetType, targetValue, startDate: toDateOnly(mesocycleStart), endDate: mesocycleEnd });
+    em.create(Goal, { user: demo, exercise: target, mesocycle, targetType, targetValue });
 goal(pullUps, 'WEIGHT', 12.5);
 goal(frontLever, 'SECONDS', 12);
 goal(dips, 'REPS', 12);

@@ -128,7 +128,7 @@ Los listados son públicos porque el registro los necesita antes de que haya ses
 | DELETE | `/mesocycles/:id` | Usuario | — | 204 | 401, 404 |
 
 - **Derivados:** `endDate` y `trainingsCount` se calculan, no se guardan.
-- **Borrado:** al borrar un Mesociclo, sus Entrenamientos quedan sueltos (`mesocycle: null`) y no se borran.
+- **Borrado:** al borrar un Mesociclo, sus Entrenamientos y sus Metas quedan sin él (`mesocycle: null`) y no se borran.
 - **Asociación:** un Entrenamiento se asocia a un Mesociclo con `mesocycleId` al crearlo o editarlo.
 
 ## Entrenamientos
@@ -168,9 +168,10 @@ Los listados son públicos porque el registro los necesita antes de que haya ses
 | DELETE | `/goals/:id` | Usuario | — | 204 | 401, 404 |
 
 - **Ejercicio:** `exerciseId` tiene que ser un Ejercicio del usuario. Si no, responde 400.
+- **Mesociclo (ADR-0004):** `mesocycleId` es obligatorio al crear y tiene que ser un Mesociclo del usuario. Si no, responde 400. Al editar se puede cambiar por otro, pero no mandar `null` (400). Si se borra el Mesociclo, la Meta queda con `mesocycle: null` y sin progreso.
 - **`targetType`:** tiene que ser compatible con el `metricType` del Ejercicio (`isGoalTargetTypeValidFor`). `REPS` admite `REPS` y `WEIGHT`, y `TIME` admite `SECONDS`. Si no, responde 400.
 - **`currentValue` y `achieved`:** son derivados.
-  - `currentValue` es el mejor valor entre los Ítems **completados** del Ejercicio con día entre `startDate` y `endDate`.
-  - Qué valor cuenta depende de `targetType`: reps, `weightKg` o segundos.
-  - Si no hay Ítems completados, es `null`.
-  - `achieved` es `currentValue >= targetValue`.
+  - `currentValue` es el mejor valor entre los Ítems **completados** del Ejercicio en los Entrenamientos que pertenecen al Mesociclo de la Meta. Las fechas no se miran.
+  - Qué valor cuenta depende de `targetType`: reps, `weightKg` o segundos. Los Ítems sin ese valor se ignoran.
+  - Si no hay Ítems que cuenten, o la Meta no tiene Mesociclo, es `null`.
+  - `achieved` es `currentValue >= targetValue` (`false` si `currentValue` es `null`).

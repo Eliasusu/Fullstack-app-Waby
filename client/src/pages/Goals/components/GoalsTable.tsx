@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { Edit, X } from "lucide-react";
-import { CreateGoalSchema, UpdateGoalSchema, goalTargetTypesFor, type Exercise, type Goal, type GoalTargetType } from "@waby/shared";
+import { CreateGoalSchema, UpdateGoalSchema, goalTargetTypesFor, type Exercise, type Goal, type GoalTargetType, type Mesocycle } from "@waby/shared";
 import BoxContainer from "@/components/ui/BoxConteiner.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
 import { useExercise } from "@/exercises/exercise.context.tsx";
 import { useGoals } from "@/goals/goal.context.tsx";
-import { formatDay, toDateOnly } from "@/lib/dates.ts";
+import { useMesocycles } from "@/mesocycles/mesocycle.context.tsx";
 import { goalTargetTypeLabels, goalTargetUnit } from "@/lib/labels.ts";
 import { notifyResult } from "@/lib/notify.ts";
 import { validate, type FieldErrors } from "@/lib/validation.ts";
@@ -21,21 +21,24 @@ import { boxWidth } from "@/lib/layout.ts"
 
 type GoalDraft = {
     exerciseId?: number;
+    mesocycleId?: number;
     targetType?: GoalTargetType;
     targetValue: string;
-    startDate: string;
-    endDate: string;
 };
 
-const emptyDraft = (): GoalDraft => ({ targetValue: '', startDate: toDateOnly(new Date()), endDate: '' });
+const emptyDraft = (): GoalDraft => ({ targetValue: '' });
 
 const formatValue = (value: number | null, type: GoalTargetType) => (value == null ? '—' : `${value} ${goalTargetUnit[type]}`);
 
-/** Formulario de Meta: el tipo de objetivo se elige entre los que admite el ejercicio. */
-function GoalForm({ draft, setDraft, exercises, lockExercise, errors }: {
+/**
+ * Formulario de Meta: el tipo de objetivo se elige entre los que admite el ejercicio, y la Meta
+ * pertenece a un Mesociclo, que es de donde sale su progreso (ADR-0004).
+ */
+function GoalForm({ draft, setDraft, exercises, mesocycles, lockExercise, errors }: {
     draft: GoalDraft;
     setDraft: (draft: GoalDraft) => void;
     exercises: Exercise[];
+    mesocycles: Mesocycle[];
     lockExercise?: boolean;
     /** Errores por campo (nota 66). */
     errors: FieldErrors;
@@ -98,16 +101,23 @@ function GoalForm({ draft, setDraft, exercises, lockExercise, errors }: {
                 <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.targetValue} /></div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="startDate" className="text-right">From</Label>
-                <Input id="startDate" type="date" className="col-span-3" value={draft.startDate}
-                    onChange={(e) => setDraft({ ...draft, startDate: e.target.value })} />
-                <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.startDate} /></div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="endDate" className="text-right">To</Label>
-                <Input id="endDate" type="date" className="col-span-3" value={draft.endDate}
-                    onChange={(e) => setDraft({ ...draft, endDate: e.target.value })} />
-                <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.endDate} /></div>
+                <Label className="text-right">Mesocycle</Label>
+                <div className="col-span-3">
+                    <Select
+                        value={draft.mesocycleId?.toString()}
+                        onValueChange={(value) => setDraft({ ...draft, mesocycleId: Number(value) })}
+                    >
+                        <SelectTrigger aria-label="Mesocycle">
+                            <SelectValue placeholder={mesocycles.length ? "Select a mesocycle" : "Create a mesocycle first"} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {mesocycles.map((m) => (
+                                <SelectItem key={m.id} value={m.id.toString()}>{m.name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="col-span-3 col-start-2 -mt-3"><FieldError message={errors.mesocycleId} /></div>
             </div>
         </>
     );
@@ -115,15 +125,15 @@ function GoalForm({ draft, setDraft, exercises, lockExercise, errors }: {
 
 const toPayload = (draft: GoalDraft) => ({
     exerciseId: draft.exerciseId,
+    mesocycleId: draft.mesocycleId,
     targetType: draft.targetType,
     targetValue: draft.targetValue === '' ? undefined : Number(draft.targetValue),
-    startDate: draft.startDate,
-    ...(draft.endDate ? { endDate: draft.endDate } : {}),
 });
 
 export default function GoalsTable() {
     const { goals, loading, getAll, create, update, remove } = useGoals();
     const { allExercises, getAllExercises } = useExercise();
+    const { mesocycles, getMesocycles } = useMesocycles();
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [newGoal, setNewGoal] = useState<GoalDraft>(emptyDraft());
     const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
@@ -134,6 +144,7 @@ export default function GoalsTable() {
     useEffect(() => {
         getAll();
         getAllExercises();
+        getMesocycles();
     }, []);
 
     const handleDelete = async (goal: Goal) => {
@@ -158,10 +169,9 @@ export default function GoalsTable() {
         setEditErrors({});
         setEditDraft({
             exerciseId: goal.exercise.id,
+            mesocycleId: goal.mesocycle?.id,
             targetType: goal.targetType,
             targetValue: String(goal.targetValue),
-            startDate: goal.startDate,
-            endDate: goal.endDate ?? '',
         });
     };
 
@@ -169,8 +179,9 @@ export default function GoalsTable() {
         e.preventDefault();
         if (!editingGoal) return;
         // El ejercicio de una Meta no se cambia desde acá: se manda el resto.
-        const { targetType, targetValue, startDate, endDate } = toPayload(editDraft);
-        const validation = validate(UpdateGoalSchema, { targetType, targetValue, startDate, ...(endDate ? { endDate } : {}) });
+        // Si la Meta quedó sin Mesociclo (se borró) y no se elige otro, no se manda.
+        const { mesocycleId, targetType, targetValue } = toPayload(editDraft);
+        const validation = validate(UpdateGoalSchema, { targetType, targetValue, ...(mesocycleId ? { mesocycleId } : {}) });
         const errors: FieldErrors = validation.ok ? {} : validation.errors;
         // UpdateGoalSchema es parcial: el objetivo se exige acá para no mandar una Meta sin valor.
         if (targetValue === undefined) errors.targetValue = 'Este campo es obligatorio';
@@ -194,7 +205,7 @@ export default function GoalsTable() {
                                 <TableHead className="text-center">Exercise</TableHead>
                                 <TableHead className="text-center">Current</TableHead>
                                 <TableHead className="text-center">Goal</TableHead>
-                                <TableHead className="text-center">Dates</TableHead>
+                                <TableHead className="text-center">Mesocycle</TableHead>
                                 <TableHead className="text-center">Delete</TableHead>
                                 <TableHead className="text-center">Edit</TableHead>
                             </TableRow>
@@ -206,7 +217,7 @@ export default function GoalsTable() {
                                     <TableCell className="text-center">{formatValue(goal.currentValue, goal.targetType)}</TableCell>
                                     <TableCell className="text-center">{formatValue(goal.targetValue, goal.targetType)}</TableCell>
                                     <TableCell className="text-center text-xs">
-                                        {formatDay(goal.startDate)}{goal.endDate ? ` – ${formatDay(goal.endDate)}` : ''}
+                                        {goal.mesocycle?.name ?? <span className="text-white-text/70">Sin Mesociclo</span>}
                                     </TableCell>
                                     <TableCell className="text-center">
                                         <Button variant="outline" size="icon" onClick={() => handleDelete(goal)} className="h-8 w-8 p-0">
@@ -236,7 +247,7 @@ export default function GoalsTable() {
                             <DialogTitle>Edit goal</DialogTitle>
                         </DialogHeader>
                         <form className="grid gap-4 py-4" onSubmit={handleUpdate}>
-                            <GoalForm draft={editDraft} setDraft={setEditDraft} exercises={allExercises} lockExercise errors={editErrors} />
+                            <GoalForm draft={editDraft} setDraft={setEditDraft} exercises={allExercises} mesocycles={mesocycles} lockExercise errors={editErrors} />
                             <Button type="submit">Update goal</Button>
                         </form>
                     </DialogContent>
@@ -255,7 +266,7 @@ export default function GoalsTable() {
                             <DialogTitle>New goal</DialogTitle>
                         </DialogHeader>
                         <form className="grid gap-4 py-4" onSubmit={handleCreate}>
-                            <GoalForm draft={newGoal} setDraft={setNewGoal} exercises={allExercises} errors={createErrors} />
+                            <GoalForm draft={newGoal} setDraft={setNewGoal} exercises={allExercises} mesocycles={mesocycles} errors={createErrors} />
                             <Button type="submit">Create goal</Button>
                         </form>
                     </DialogContent>

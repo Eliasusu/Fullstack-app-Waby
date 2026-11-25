@@ -24,6 +24,9 @@ test('crear una Meta la suma a la tabla', async ({ page }) => {
     await dialog.getByRole('combobox').nth(1).click();
     await page.getByRole('option').first().click();
     await dialog.getByLabel('Goal').fill('30');
+    // La Meta pertenece a un Mesociclo (ADR-0004): se elige el del seed.
+    await dialog.getByRole('combobox', { name: 'Mesocycle' }).click();
+    await page.getByRole('option', { name: 'Bloque de fuerza' }).click();
     await dialog.getByRole('button', { name: 'Create goal' }).click();
 
     await expect(dialog).toBeHidden();

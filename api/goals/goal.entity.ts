@@ -2,9 +2,12 @@ import { Entity, Enum, ManyToOne, PrimaryKey, Property, type Rel } from '@mikro-
 import type { GoalTargetType } from '@waby/shared';
 import { User } from '../users/user.entity.js';
 import { Exercise } from '../exercises/exercise.entity.js';
-import { DateOnlyType } from '../shared/db/date-only.type.js';
+import { Mesocycle } from '../mesocycles/mesocycle.entity.js';
 
-/** Meta sobre un Ejercicio. El progreso no se guarda: se deriva de los Ítems completados. */
+/**
+ * Meta sobre un Ejercicio dentro de un Mesociclo (ADR-0004). El progreso no se guarda:
+ * se deriva de los Ítems completados en los Entrenamientos del Mesociclo.
+ */
 @Entity()
 export class Goal {
     @PrimaryKey()
@@ -17,15 +20,13 @@ export class Goal {
     @ManyToOne(() => Exercise, { onDelete: 'cascade' })
     exercise!: Rel<Exercise>;
 
+    /** Obligatorio al crear (CreateGoalSchema). Si se borra el Mesociclo, la Meta queda sin él y sin progreso. */
+    @ManyToOne(() => Mesocycle, { nullable: true, onDelete: 'set null' })
+    mesocycle?: Rel<Mesocycle> | null;
+
     @Enum({ items: ['REPS', 'WEIGHT', 'SECONDS'] })
     targetType!: GoalTargetType;
 
     @Property({ type: 'double' })
     targetValue!: number;
-
-    @Property({ type: DateOnlyType })
-    startDate!: string;
-
-    @Property({ type: DateOnlyType, nullable: true })
-    endDate?: string | null;
 }

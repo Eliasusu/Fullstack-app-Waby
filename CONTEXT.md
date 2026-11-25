@@ -23,8 +23,8 @@ El objetivo de este repo es **Waby 1.0**: la app web (React + Express) terminada
 | **Mesociclo** | `Mesocycle` | Bloque de entrenamiento de varias semanas, de tipo Fuerza, Hipertrofia o Descarga, que agrupa Entrenamientos. |
 | **Entrenamiento** | `Training` | Lo planificado para un día: nombre, fecha y si se completó. Puede pertenecer a un Mesociclo o estar suelto. |
 | **Ítem de entrenamiento** | `TrainingItem` | Un Ejercicio dentro de un Entrenamiento: series, reps o segundos, peso opcional en kg, descanso y comentario. Es plan. Completarlo significa que se hizo tal cual. |
-| **Meta** | `Goal` | Objetivo sobre un Ejercicio (reps, peso o segundos) con fecha de inicio y, opcionalmente, de fin. |
-| **Sobrecarga progresiva** | (derivado) | El progreso de una Meta: el mejor valor entre los Ítems completados de su Ejercicio dentro de sus fechas. No se guarda. |
+| **Meta** | `Goal` | Objetivo sobre un Ejercicio (reps, peso o segundos) dentro de un Mesociclo (ADR-0004). |
+| **Sobrecarga progresiva** | (derivado) | El progreso de una Meta: el mejor valor entre los Ítems completados de su Ejercicio en los Entrenamientos de su Mesociclo. No se guarda. |
 
 ## Términos que no se usan
 

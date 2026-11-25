@@ -1,6 +1,6 @@
 # ADR-0003: Modelo de dominio de Waby 1.0
 
-- **Estado**: Aceptado
+- **Estado**: Aceptado. La Meta y su progreso quedan reemplazados por [ADR-0004](0004-la-meta-pertenece-a-un-mesociclo.md)
 - **Fecha**: 2026-11-02
 - **Autores**: Elias Palamidessi
 
@@ -31,7 +31,7 @@ Una revisión moderada del modelo: se corrigen los bugs, se separan los ejes de 
 | `Mesocycle` | `user`, `name`, `type: STRENGTH \| HYPERTROPHY \| DELOAD`, `startDate` y `weeks`. La fecha de fin y la cantidad de Entrenamientos se derivan |
 | `Training` | `user`, `name`, `day` (`YYYY-MM-DD`), `completed` y `mesocycle?`. Si se borra el Mesociclo, el Entrenamiento queda suelto |
 | `TrainingItem` | `training`, `exercise`, `sets ≥ 1`, `reps?` o `seconds?` según `metricType`, `weightKg?` (vacío = peso corporal), `restSeconds?`, `comment?` y `completed` |
-| `Goal` | `user`, `exercise`, `targetType: REPS \| WEIGHT \| SECONDS` (validado contra `metricType`), `targetValue`, `startDate` y `endDate?`. Reemplaza `ProgressiveOverload` |
+| `Goal` | `user`, `exercise`, `targetType: REPS \| WEIGHT \| SECONDS` (validado contra `metricType`), `targetValue`, `startDate` y `endDate?`. Reemplaza `ProgressiveOverload`. *Reemplazado por ADR-0004: createMesocyclesin fechas, con `mesocycle?`* |
 
 Reglas transversales:
 
@@ -39,7 +39,7 @@ Reglas transversales:
 - **Nombres:** `id`, `name`, `description` e `image`, iguales en todas.
 - **Sin cascada a catálogos:** ninguna relación hacia un catálogo usa `cascade: ALL`.
 - **Plan, no registro:** un Ítem de entrenamiento es plan. `completed` significa "se hizo tal cual estaba planificado".
-- **Progreso derivado:** el progreso de una Meta no se guarda. Es el mejor valor entre los Ítems completados de su Ejercicio dentro de sus fechas, y la Meta está lograda cuando ese valor llega al objetivo.
+- **Progreso derivado:** el progreso de una Meta no se guarda. Es el mejor valor entre los Ítems completados de su Ejercicio dentro de sus fechas, y la Meta está lograda cuando ese valor llega al objetivo. *Reemplazado por ADR-0004: los Ítems salen de los Entrenamientos de su Mesociclo.*
 - **Sin Rutina:** "Rutina" deja de existir en el código. El caso de uso "Crear rutina para un mesociclo" es armar los Entrenamientos de un Mesociclo.
 - **Se van del Entrenamiento:** `trainingType`, `startHour` y `endHour`. El tipo de bloque (Fuerza, Hipertrofia, Descarga) pasa al Mesociclo.
 
@@ -66,5 +66,5 @@ Rutas:
 - **Base de datos:** el dump de 2024 deja de servir. Como el esquema se genera con `updateSchema()` y no hay migraciones, se arma de cero y un seed carga los datos de demo.
 - **Client:** se adapta a nombres de campos, tipos y rutas nuevos.
 - **Calendario:** sin horario, muestra los Entrenamientos como eventos de día completo.
-- **Relación entre los dos casos de uso:** queda implícita. Los Entrenamientos del Mesociclo son los que mueven la Meta, siempre que las fechas coincidan.
+- **Relación entre los dos casos de uso:** queda implícita. Los Entrenamientos del Mesociclo son los que mueven la Meta, siempre que las fechas coincidan. *Reemplazado por ADR-0004: la relación es explícita.*
 - **Pendiente:** definir quién implementa el cálculo del progreso de la Meta y la asociación de Entrenamientos a un Mesociclo. Son los núcleos de los dos casos de uso.

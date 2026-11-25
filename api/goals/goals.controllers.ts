@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { CreateGoalSchema, isGoalTargetTypeValidFor, UpdateGoalSchema, type Goal as GoalDto, type GoalTargetType } from '@waby/shared';
 import { orm } from '../shared/db/orm.js';
 import { idParam, invalid, notFound, parse } from '../shared/http.js';
+import { findOwnMesocycleForReference } from '../mesocycles/mesocycles.service.js';
 import { currentUserId } from '../middlewares/auth.js';
 import { findOwnExerciseForReference } from '../exercises/exercises.service.js';
 import type { Exercise } from '../exercises/exercise.entity.js';
@@ -21,13 +22,13 @@ function assertTargetType(exercise: Exercise, targetType: GoalTargetType) {
 }
 
 async function findOwnGoal(req: Request) {
-    const goal = await orm.em.findOne(Goal, { id: idParam(req), user: currentUserId(req) }, { populate: ['exercise'] });
+    const goal = await orm.em.findOne(Goal, { id: idParam(req), user: currentUserId(req) }, { populate: ['exercise', 'mesocycle'] });
     if (!goal) throw notFound('La meta no existe');
     return goal;
 }
 
 export async function getAll(req: Request, res: Response) {
-    const goals = await orm.em.find(Goal, { user: currentUserId(req) }, { populate: ['exercise'], orderBy: { startDate: 'asc', id: 'asc' } });
+    const goals = await orm.em.find(Goal, { user: currentUserId(req) }, { populate: ['exercise', 'mesocycle'], orderBy: { id: 'asc' } });
     res.json(await Promise.all(goals.map(withProgress)));
 }
 
@@ -37,22 +38,22 @@ export async function getOne(req: Request, res: Response) {
 
 export async function create(req: Request, res: Response) {
     const userId = currentUserId(req);
-    const { exerciseId, ...data } = parse(CreateGoalSchema, req.body);
+    const { exerciseId, mesocycleId, ...data } = parse(CreateGoalSchema, req.body);
     const exercise = await findOwnExerciseForReference(orm.em, userId, exerciseId);
+    const mesocycle = await findOwnMesocycleForReference(orm.em, userId, mesocycleId);
     assertTargetType(exercise, data.targetType);
-    const goal = orm.em.create(Goal, { ...data, endDate: data.endDate ?? null, exercise, user: userId });
+    const goal = orm.em.create(Goal, { ...data, exercise, mesocycle, user: userId });
     await orm.em.flush();
     res.status(201).json(await withProgress(goal));
 }
 
 export async function update(req: Request, res: Response) {
+    const userId = currentUserId(req);
     const goal = await findOwnGoal(req);
-    const { exerciseId, ...data } = parse(UpdateGoalSchema, req.body);
-    const exercise = exerciseId ? await findOwnExerciseForReference(orm.em, currentUserId(req), exerciseId) : goal.exercise;
+    const { exerciseId, mesocycleId, ...data } = parse(UpdateGoalSchema, req.body);
+    const exercise = exerciseId ? await findOwnExerciseForReference(orm.em, userId, exerciseId) : goal.exercise;
     assertTargetType(exercise, data.targetType ?? goal.targetType);
-    const startDate = data.startDate ?? goal.startDate;
-    const endDate = data.endDate ?? goal.endDate;
-    if (endDate && endDate < startDate) throw invalid('endDate', 'La fecha de fin no puede ser anterior a la de inicio');
+    if (mesocycleId) goal.mesocycle = await findOwnMesocycleForReference(orm.em, userId, mesocycleId);
     orm.em.assign(goal, data);
     goal.exercise = exercise;
     await orm.em.flush();
